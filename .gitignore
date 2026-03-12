@@ -14,6 +14,7 @@ venv/
 .serena/
 ai-kit-bmad-lite-round2-upgrade/
 ai-kit-bmad-lite-round3-upgrade/
+ai-kit-bmad-lite-round4-upgrade/
 
 # OS junk
 .DS_Store
