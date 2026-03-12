@@ -10,6 +10,8 @@ from .registry import (
     ARTIFACT_CONTRACTS,
     CLEANUP_SKILLS,
     CORE_SKILLS,
+    contracts_for_bundle,
+    doc_names_for_bundle,
     LEGACY_ROLE_MAP,
     NATIVE_SUPPORT_SKILLS,
     ORCHESTRATOR_SKILLS,
@@ -89,9 +91,9 @@ def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
     return written
 
 
-def emit_contracts(project_path: Path) -> List[Path]:
+def emit_contracts(project_path: Path, bundle: str) -> List[Path]:
     written: List[Path] = []
-    for contract in ARTIFACT_CONTRACTS.values():
+    for contract in contracts_for_bundle(bundle):
         output = project_path / contract.path
         if contract.name == "workflow-state":
             content = render_workflow_state()
@@ -113,7 +115,7 @@ def emit_reference_templates(project_path: Path) -> List[Path]:
     return written
 
 
-def emit_docs(project_path: Path) -> List[Path]:
+def emit_docs(project_path: Path, bundle: str) -> List[Path]:
     docs_dir = project_path / ".ai-kit" / "docs"
     docs_dir.mkdir(parents=True, exist_ok=True)
 
@@ -144,7 +146,7 @@ Recommended runtime layout:
     support_map_lines = [
         "# native-support-skills",
         "",
-        "Round 3 keeps the round 2 support skills as living reference skills.",
+        "The v3 orchestration layer keeps the native support skills as living reference skills.",
         "",
         "| Skill | Writes to | Primary consumers |",
         "|---|---|---|",
@@ -157,32 +159,21 @@ Recommended runtime layout:
         "Treat these as living reference skills. Refresh them when the codebase changes materially.",
     ]
 
+    doc_payloads = {
+        "legacy-role-map.md": "\n".join(role_map_lines).rstrip() + "\n",
+        "folder-structure.md": structure,
+        "native-support-skills.md": "\n".join(support_map_lines).rstrip() + "\n",
+        "layer-model.md": render_layer_model(),
+        "hub-mesh.md": render_hub_mesh(),
+        "orchestrator-rules.md": render_orchestrator_rules(),
+        "round3-changelog.md": render_round3_changelog(),
+    }
+
     written = []
-    role_map_path = docs_dir / "legacy-role-map.md"
-    structure_path = docs_dir / "folder-structure.md"
-    support_path = docs_dir / "native-support-skills.md"
-    layer_model_path = docs_dir / "layer-model.md"
-    hub_mesh_path = docs_dir / "hub-mesh.md"
-    orchestrator_rules_path = docs_dir / "orchestrator-rules.md"
-    changelog_path = docs_dir / "round3-changelog.md"
-
-    write_text(role_map_path, "\n".join(role_map_lines).rstrip() + "\n")
-    write_text(structure_path, structure)
-    write_text(support_path, "\n".join(support_map_lines).rstrip() + "\n")
-    write_text(layer_model_path, render_layer_model())
-    write_text(hub_mesh_path, render_hub_mesh())
-    write_text(orchestrator_rules_path, render_orchestrator_rules())
-    write_text(changelog_path, render_round3_changelog())
-
-    written.extend([
-        role_map_path,
-        structure_path,
-        support_path,
-        layer_model_path,
-        hub_mesh_path,
-        orchestrator_rules_path,
-        changelog_path,
-    ])
+    for name in doc_names_for_bundle(bundle):
+        output = docs_dir / name
+        write_text(output, doc_payloads[name])
+        written.append(output)
     return written
 
 
@@ -190,11 +181,11 @@ def create_bmad_upgrade(project_path: str, ai: str, bundle: str, with_contracts:
     base = Path(project_path).resolve()
     written = emit_core_skills(base, ai, bundle)
     if with_contracts:
-        written.extend(emit_contracts(base))
+        written.extend(emit_contracts(base, bundle))
     if with_reference_templates:
         written.extend(emit_reference_templates(base))
     if with_docs:
-        written.extend(emit_docs(base))
+        written.extend(emit_docs(base, bundle))
     return written
 
 

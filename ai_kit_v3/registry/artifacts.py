@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Dict, Iterable, List
 
 
 @dataclass(frozen=True)
@@ -212,6 +212,48 @@ SECTION_HINTS = {
         "Recommended next move": "Hand off to fix-hub, test-hub, or back to planning if scope drift is present.",
     },
 }
+
+
+ROUND3_BUNDLES = frozenset(
+    {
+        "orchestrators",
+        "workflow-hubs",
+        "role-core",
+        "round3-core",
+        "round3",
+    }
+)
+
+ROUND3_ONLY_CONTRACTS = frozenset({"investigation-notes", "team-board"})
+BASE_DOC_NAMES = (
+    "legacy-role-map.md",
+    "folder-structure.md",
+    "native-support-skills.md",
+)
+ROUND3_ONLY_DOC_NAMES = (
+    "layer-model.md",
+    "hub-mesh.md",
+    "orchestrator-rules.md",
+    "round3-changelog.md",
+)
+
+
+def supports_round3_topology(bundle: str) -> bool:
+    return bundle in ROUND3_BUNDLES
+
+
+def contracts_for_bundle(bundle: str) -> Iterable[ArtifactContract]:
+    for contract in ARTIFACT_CONTRACTS.values():
+        if contract.name in ROUND3_ONLY_CONTRACTS and not supports_round3_topology(bundle):
+            continue
+        yield contract
+
+
+def doc_names_for_bundle(bundle: str) -> List[str]:
+    names = list(BASE_DOC_NAMES)
+    if supports_round3_topology(bundle):
+        names.extend(ROUND3_ONLY_DOC_NAMES)
+    return names
 
 
 def render_artifact(contract: ArtifactContract) -> str:

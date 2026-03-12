@@ -1,4 +1,10 @@
-from .artifacts import ARTIFACT_CONTRACTS, render_artifact
+from .artifacts import (
+    ARTIFACT_CONTRACTS,
+    contracts_for_bundle,
+    doc_names_for_bundle,
+    render_artifact,
+    supports_round3_topology,
+)
 from .skills import (
     ALL_V3_SKILLS,
     CLEANUP_SKILLS,
@@ -16,7 +22,10 @@ from .workflows import COMPLEXITY_LADDER, TRACKS, render_team_board, render_work
 
 __all__ = [
     "ARTIFACT_CONTRACTS",
+    "contracts_for_bundle",
+    "doc_names_for_bundle",
     "render_artifact",
+    "supports_round3_topology",
     "ALL_V3_SKILLS",
     "CORE_SKILLS",
     "ORCHESTRATOR_SKILLS",
