@@ -856,6 +856,151 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
 }
 
 
+def utility_provider_spec(name: str, description: str, outputs: list[str], references: list[str], next_steps: list[str], mission: str, tasks: list[str], rules: list[str]) -> SkillSpec:
+    body_lines = [
+        "# Mission",
+        mission,
+        "",
+        "## Default outputs",
+    ]
+    body_lines.extend([f"- {item}" for item in outputs])
+    body_lines.extend([
+        "",
+        "## Typical tasks",
+    ])
+    body_lines.extend([f"- {item}" for item in tasks])
+    body_lines.extend([
+        "",
+        "## Working rules",
+    ])
+    body_lines.extend([f"- {item}" for item in rules])
+    return SkillSpec(
+        name=name,
+        description=description,
+        role="utility-provider",
+        layer="layer-3-utility-providers",
+        inputs=["active hub or orchestrator request", "current authoritative artifact", "only the evidence relevant to this pass"],
+        outputs=outputs,
+        references=references,
+        next_steps=next_steps,
+        body="\n".join(body_lines).strip(),
+    )
+
+
+UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
+    "research": utility_provider_spec(
+        name="research",
+        description="stateless research utility for product, market, technical, or domain questions. use when a hub needs fresh evidence but should retain ownership of the lane.",
+        outputs=["evidence bullets appended to the active artifact", "assumption checks or citations for the current decision"],
+        references=["Do not own the plan; feed findings back to the current hub.", "Prefer current evidence over generic opinions."],
+        next_steps=["brainstorm-hub", "plan-hub", "workflow-router"],
+        mission="Gather the minimum useful research needed for the next decision, then hand control back immediately.",
+        tasks=["Summarize current market, technical, or domain evidence.", "Highlight which assumptions are confirmed, unconfirmed, or contradicted.", "Recommend the smallest next question if uncertainty remains high."],
+        rules=["Write into `product-brief.md`, `PRD.md`, or the active artifact instead of creating a side quest.", "Separate evidence from recommendation.", "Name the source or provenance whenever possible."],
+    ),
+    "docs-seeker": utility_provider_spec(
+        name="docs-seeker",
+        description="stateless docs retrieval utility. use when a hub needs exact docs fragments, file paths, or source references before deciding.",
+        outputs=["doc pointers, file paths, or citations appended to the active artifact"],
+        references=["Return exact doc pointers, not vague summaries.", "Prefer repo-local docs and code comments before broader sources when the task is codebase-specific."],
+        next_steps=["scout-hub", "review-hub", "workflow-router"],
+        mission="Find the smallest set of authoritative documentation fragments needed to unblock the lane.",
+        tasks=["Locate the most relevant local docs or code comments.", "Quote or summarize only the load-bearing fragments.", "Flag contradictions between docs and implementation."],
+        rules=["Citations and file paths are more valuable than long summaries.", "Hand the result back to the current hub quickly.", "If docs disagree, say so explicitly."],
+    ),
+    "sequential-thinking": utility_provider_spec(
+        name="sequential-thinking",
+        description="stepwise reasoning utility for debugging, planning, or decomposition. use when a hub needs structured thought without changing ownership.",
+        outputs=["ordered reasoning steps added to investigation-notes or the active artifact"],
+        references=["Break work into explicit steps and checkpoints.", "Reasoning should support a decision, not become the decision owner."],
+        next_steps=["debug-hub", "plan-hub", "fix-hub"],
+        mission="Turn a messy question into a short sequence of evidence-backed steps.",
+        tasks=["Decompose the problem into checkpoints.", "Identify what must be known before acting.", "Recommend the next most informative test or observation."],
+        rules=["Keep the sequence short and testable.", "Tie each step to an artifact or evidence source.", "Do not claim completion for the lane."],
+    ),
+    "problem-solving": utility_provider_spec(
+        name="problem-solving",
+        description="option-generation and root-cause utility. use when a hub needs hypotheses, trade-offs, or resolution paths grounded in current evidence.",
+        outputs=["options, hypotheses, and trade-offs appended to the active artifact"],
+        references=["Root cause beats guess-and-patch.", "Surface trade-offs before implementation starts."],
+        next_steps=["debug-hub", "plan-hub", "review-hub"],
+        mission="Turn evidence into plausible options and ranked next moves.",
+        tasks=["Generate root-cause hypotheses.", "Compare implementation or mitigation options.", "Call out the cheapest validating experiment."],
+        rules=["Ground every option in evidence already collected.", "State uncertainty instead of bluffing.", "Recommend escalation if the issue is really a planning problem."],
+    ),
+    "ai-multimodal": utility_provider_spec(
+        name="ai-multimodal",
+        description="multimodal evidence utility. use when screenshots, diagrams, rendered UIs, or media artifacts contain important clues.",
+        outputs=["visual or media observations appended to the active artifact"],
+        references=["Describe what is visible and why it matters.", "Feed observations back to the owning hub."],
+        next_steps=["debug-hub", "test-hub", "review-hub"],
+        mission="Translate visual or media evidence into concrete observations the active lane can use.",
+        tasks=["Inspect screenshots, diagrams, or logs embedded as images.", "Summarize what changed between before/after artifacts.", "Call out ambiguous areas that need manual confirmation."],
+        rules=["Do not over-interpret weak signals.", "Tie observations to UI states, logs, or acceptance criteria.", "Keep the output compact and actionable."],
+    ),
+    "chrome-devtools": utility_provider_spec(
+        name="chrome-devtools",
+        description="browser evidence utility. use when the active hub needs console, network, DOM, or performance observations from a web flow.",
+        outputs=["browser-side evidence appended to investigation-notes or qa-report"],
+        references=["Collect evidence first, then suggest the next move.", "Capture the smallest reproducible browser path."],
+        next_steps=["debug-hub", "test-hub", "review-hub"],
+        mission="Collect browser-native evidence that narrows a web issue fast.",
+        tasks=["Inspect console, network, layout, and performance clues.", "Note the exact page state and reproduction path.", "Return the evidence to the owning hub."],
+        rules=["Prefer reproducible steps and specific requests over general browsing notes.", "Link evidence to the failing acceptance criterion or symptom.", "Do not claim the fix; supply the evidence."],
+    ),
+    "repomix": utility_provider_spec(
+        name="repomix",
+        description="repo-map utility. use when a hub needs a quick dependency map, file tree slice, or entrypoint overview before acting.",
+        outputs=["repo map notes appended to project-context or architecture"],
+        references=["Good for unfamiliar areas and dependency direction.", "Use it to orient the lane, not to replace design thinking."],
+        next_steps=["scout-hub", "plan-hub", "review-hub"],
+        mission="Produce a compact map of the code area the lane is about to touch.",
+        tasks=["List key entrypoints and modules.", "Show likely dependency direction.", "Highlight hotspots or choke points."],
+        rules=["Prefer concrete paths and modules.", "Keep the map small enough for the next skill to use.", "Flag uncertainty when ownership is fuzzy."],
+    ),
+    "context-engineering": utility_provider_spec(
+        name="context-engineering",
+        description="context-pack utility. use when the next skill needs a tighter, more relevant context handoff than the current artifact already provides.",
+        outputs=["focused context pack notes added to workflow-state, story, or handoff-log"],
+        references=["Minimize irrelevant context.", "Package only what the receiving skill needs to act safely."],
+        next_steps=["workflow-router", "team", "cook", "developer"],
+        mission="Prepare the smallest complete context pack for the next handoff.",
+        tasks=["Select the minimum set of files, artifacts, and rules needed.", "State why each item matters.", "Name what was deliberately excluded."],
+        rules=["Context quality beats context quantity.", "Use authoritative artifacts over memory.", "Update handoff-log when the receiving skill changes."],
+    ),
+    "mermaidjs-v11": utility_provider_spec(
+        name="mermaidjs-v11",
+        description="diagramming utility. use when architecture, flow, or sequencing should be expressed as a quick mermaid diagram inside an artifact.",
+        outputs=["mermaid snippets inserted into architecture, project-context, or docs"],
+        references=["Prefer diagrams that clarify ownership, flow, or sequencing.", "Diagrams should serve the artifact, not replace it."],
+        next_steps=["plan-hub", "architect", "review-hub"],
+        mission="Make complex flow or structure easier to reason about with a compact diagram.",
+        tasks=["Draw module boundaries or request flows.", "Show sequence or state transitions.", "Keep the diagram synchronized with the surrounding text."],
+        rules=["Use only the detail level needed for the current decision.", "Avoid giant diagrams.", "Explain trade-offs in text when the diagram alone is insufficient."],
+    ),
+    "ui-ux-pro-max": utility_provider_spec(
+        name="ui-ux-pro-max",
+        description="ux framing utility. use when product work has meaningful user-facing impact and a hub needs flow, copy, or interaction guidance.",
+        outputs=["ux notes appended to product-brief, PRD, architecture, or qa-report"],
+        references=["Useful for journeys, friction points, and interaction trade-offs.", "Return notes to the owning hub rather than taking over the project."],
+        next_steps=["brainstorm-hub", "plan-hub", "review-hub"],
+        mission="Contribute user-experience structure without stealing ownership from product or implementation lanes.",
+        tasks=["Outline the user journey or interaction flow.", "Call out friction, edge cases, and copy concerns.", "Recommend small UX validations."],
+        rules=["Tie UX comments to a specific screen or step.", "Balance UX gains with implementation cost.", "Keep notes focused on the current slice."],
+    ),
+    "media-processing": utility_provider_spec(
+        name="media-processing",
+        description="media handling utility. use when screenshots, assets, or content files need transformation or evidence extraction for the current lane.",
+        outputs=["media processing notes or asset instructions appended to the active artifact"],
+        references=["Useful for evidence packaging and asset-heavy workflows.", "Should stay stateless and task-scoped."],
+        next_steps=["test-hub", "review-hub", "ui-ux-pro-max"],
+        mission="Handle media-specific steps that support the current lane without creating a parallel project.",
+        tasks=["Prepare screenshots or assets for evidence.", "Describe required transforms or formats.", "Hand back what the next skill needs to continue."],
+        rules=["Keep transformations reversible when possible.", "Name exact asset sources and outputs.", "Route any broader UX or product decisions back to the owning hub."],
+    ),
+}
+
+
 ROUND2_CORE_ORDER = [
     "workflow-router",
     "analyst",
@@ -873,6 +1018,7 @@ ALL_V3_SKILLS: Dict[str, SkillSpec] = {}
 ALL_V3_SKILLS.update(ORCHESTRATOR_SKILLS)
 ALL_V3_SKILLS.update(WORKFLOW_HUB_SKILLS)
 ALL_V3_SKILLS.update(ROLE_SKILLS)
+ALL_V3_SKILLS.update(UTILITY_PROVIDER_SKILLS)
 ALL_V3_SKILLS.update(CLEANUP_SKILLS)
 ALL_V3_SKILLS.update(NATIVE_SUPPORT_SKILLS)
 

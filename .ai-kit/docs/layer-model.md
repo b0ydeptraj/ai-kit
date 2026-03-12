@@ -1,6 +1,6 @@
 # layer-model
 
-This repo now follows a 4-layer hub-and-spoke topology so orchestration and execution are separate concerns.
+This repo follows a 4-layer hub-and-spoke topology so orchestration and execution are separate concerns.
 
 ## layer-1-orchestrators
 Coordinate the whole system, choose the active lane, and keep shared state current.
@@ -11,7 +11,7 @@ Coordinate the whole system, choose the active lane, and keep shared state curre
 - cook
 
 ## layer-2-workflow-hubs
-Run repeatable multi-step workflows and hand off to the right specialist or support skill.
+Run repeatable multi-step workflows and hand off to the right specialist or utility provider.
 
 - brainstorm-hub
 - scout-hub
@@ -22,9 +22,9 @@ Run repeatable multi-step workflows and hand off to the right specialist or supp
 - review-hub
 
 ## layer-3-utility-providers
-Stateless capabilities and analysis helpers. These should be called by hubs when present rather than acting as top-level entrypoints.
+Stateless capabilities and analysis helpers. These should be called by hubs or orchestrators rather than acting as long-lived owners of work.
 
-- research-expert
+- research
 - docs-seeker
 - sequential-thinking
 - problem-solving
@@ -37,7 +37,7 @@ Stateless capabilities and analysis helpers. These should be called by hubs when
 - media-processing
 
 ## layer-4-specialists-and-standalones
-Role specialists and native support skills that actually produce architecture, stories, code, and quality evidence.
+Role specialists, native support skills, and domain standalones that actually produce architecture, stories, code, and quality evidence.
 
 - analyst
 - pm

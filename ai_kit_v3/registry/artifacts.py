@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Iterable, List
+from typing import Dict, List
 
 
 @dataclass(frozen=True)
@@ -143,35 +143,30 @@ ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     "workflow-state": ArtifactContract(
         name="workflow-state",
         path=".ai-kit/state/workflow-state.md",
-        purpose="Keep phase, chosen track, active orchestrator, active hub, current specialist, next recommended skill, and blockers visible across sessions.",
-        sections=[
-            "Current request",
-            "Active lane",
-            "Active orchestration",
-            "Complexity level",
-            "Chosen track",
-            "Completed artifacts",
-            "Next skill",
-            "Known blockers",
-            "Escalation triggers noticed",
-            "Notes",
-        ],
+        purpose="Keep phase, chosen track, active orchestrator, active hub, current specialist, active utility providers, and blockers visible across sessions.",
+        sections=[],
         used_by=["workflow-router", "team", "cook", "all hubs"],
     ),
     "team-board": ArtifactContract(
         name="team-board",
         path=".ai-kit/state/team-board.md",
         purpose="Coordinate parallel lanes, artifact ownership, merge order, and shared blockers during multi-session or multi-agent work.",
-        sections=[
-            "Shared objective",
-            "Active orchestrator",
-            "Lanes",
-            "Shared artifacts that must stay authoritative",
-            "Merge order",
-            "Conflict risks",
-            "Decision log",
-        ],
+        sections=[],
         used_by=["team", "cook", "workflow-router"],
+    ),
+    "lane-registry": ArtifactContract(
+        name="lane-registry",
+        path=".ai-kit/state/lane-registry.md",
+        purpose="Track every lane, its owner, claimed artifact lock, target hub, and merge preconditions so parallel work stays safe.",
+        sections=[],
+        used_by=["team", "cook", "workflow-router", "review-hub"],
+    ),
+    "handoff-log": ArtifactContract(
+        name="handoff-log",
+        path=".ai-kit/state/handoff-log.md",
+        purpose="Keep a durable log of handoffs between orchestrators, hubs, utility providers, and specialists.",
+        sections=[],
+        used_by=["workflow-router", "team", "cook", "all hubs", "developer", "qa-governor"],
     ),
 }
 
@@ -214,46 +209,27 @@ SECTION_HINTS = {
 }
 
 
-ROUND3_BUNDLES = frozenset(
-    {
-        "orchestrators",
-        "workflow-hubs",
-        "role-core",
-        "round3-core",
-        "round3",
-    }
-)
+ROUND2_BASE_CONTRACTS = [
+    "product-brief",
+    "prd",
+    "architecture",
+    "epics",
+    "story",
+    "project-context",
+    "qa-report",
+    "tech-spec",
+    "workflow-state",
+]
 
-ROUND3_ONLY_CONTRACTS = frozenset({"investigation-notes", "team-board"})
-BASE_DOC_NAMES = (
-    "legacy-role-map.md",
-    "folder-structure.md",
-    "native-support-skills.md",
-)
-ROUND3_ONLY_DOC_NAMES = (
-    "layer-model.md",
-    "hub-mesh.md",
-    "orchestrator-rules.md",
-    "round3-changelog.md",
-)
+ROUND3_EXTRA_CONTRACTS = [
+    "investigation-notes",
+    "team-board",
+]
 
-
-def supports_round3_topology(bundle: str) -> bool:
-    return bundle in ROUND3_BUNDLES
-
-
-def contracts_for_bundle(bundle: str) -> Iterable[ArtifactContract]:
-    for contract in ARTIFACT_CONTRACTS.values():
-        if contract.name in ROUND3_ONLY_CONTRACTS and not supports_round3_topology(bundle):
-            continue
-        yield contract
-
-
-def doc_names_for_bundle(bundle: str) -> List[str]:
-    names = list(BASE_DOC_NAMES)
-    if supports_round3_topology(bundle):
-        names.extend(ROUND3_ONLY_DOC_NAMES)
-    return names
+ROUND4_EXTRA_CONTRACTS = [
+    "lane-registry",
+    "handoff-log",
+]
 
 
 def render_artifact(contract: ArtifactContract) -> str:

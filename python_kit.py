@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Python Kit v3 - registry-driven BMAD-lite upgrade for ai-kit.
+"""Python Kit v3.2 - registry-driven BMAD-lite hardening for ai-kit.
 
 How to adopt with minimal breakage:
 1. Keep the old generator as `python_kit_legacy.py`.
 2. Use this file plus the `ai_kit_v3/` package as the active entrypoint.
 3. Keep using legacy kits for project-specific analysis/template generation.
-4. Use the new bundles to generate orchestrators, workflow hubs, artifact contracts,
-   reference templates, and cleaned runtime skills.
+4. Use the new bundles to generate orchestrators, workflow hubs, utility providers,
+   artifact contracts, topology docs, and cleaned runtime skills.
 """
 
 from __future__ import annotations
@@ -47,13 +47,13 @@ def list_everything(repo_root: Path) -> None:
 def parse_args(repo_root: Path) -> argparse.Namespace:
     _, legacy = legacy_kits(repo_root)
     parser = argparse.ArgumentParser(
-        description="Python Kit v3 - BMAD-lite orchestrators + workflow hubs + native support skills + legacy compatibility",
+        description="Python Kit v3.2 - BMAD-lite hardening with orchestrators, workflow hubs, utility providers, bundle gating, and legacy compatibility",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python python_kit.py /path/to/project --bundle round3 --ai all --emit-contracts --emit-docs --emit-reference-templates
-  python python_kit.py /path/to/project --bundle round3-core --ai claude
-  python python_kit.py /path/to/project --bundle workflow-hubs --ai codex
+  python python_kit.py /path/to/project --bundle round4 --ai all --emit-contracts --emit-docs --emit-reference-templates
+  python python_kit.py /path/to/project --bundle utility-providers --ai codex --emit-docs
+  python python_kit.py /path/to/project --bundle round3 --ai claude --emit-contracts --emit-docs
   python python_kit.py /path/to/project --legacy-kit python --ai claude
   python python_kit.py --list-skills
         """,
@@ -62,7 +62,7 @@ Examples:
     parser.add_argument("--ai", choices=["claude", "gemini", "codex", "all", "generic"], default="claude")
     parser.add_argument("--bundle", choices=sorted(BUNDLES.keys()), help="Generate new registry-native skills")
     parser.add_argument("--emit-contracts", action="store_true", help="Write artifact contracts into .ai-kit/contracts/ and .ai-kit/state/")
-    parser.add_argument("--emit-docs", action="store_true", help="Write topology, migration, and runtime docs into .ai-kit/docs/")
+    parser.add_argument("--emit-docs", action="store_true", help="Write topology, migration, gating, and runtime docs into .ai-kit/docs/")
     parser.add_argument("--emit-reference-templates", action="store_true", help="Write living reference templates into .ai-kit/references/")
     parser.add_argument("--legacy-kit", choices=legacy or None, help="Run an old skill set through python_kit_legacy.py")
     parser.add_argument("--skills", nargs="+", metavar="SKILL", help="Pass specific legacy skills through python_kit_legacy.py")

@@ -58,7 +58,7 @@ Can hand off to:
 ### brainstorm-hub
 - analyst
 - pm
-- research-expert
+- research
 - ui-ux-pro-max
 
 ### scout-hub
@@ -76,16 +76,17 @@ Can hand off to:
 - pm
 - architect
 - scrum-master
-- research-expert
+- research
 - ui-ux-pro-max
+- mermaidjs-v11
 
 ### debug-hub
 - developer
 - testing-patterns
-- systematic-debugging
 - problem-solving
 - sequential-thinking
 - chrome-devtools
+- ai-multimodal
 
 ### fix-hub
 - developer
@@ -93,16 +94,18 @@ Can hand off to:
 - project-architecture
 - api-integration
 - data-persistence
-- refactoring-expert
+- context-engineering
 
 ### test-hub
 - qa-governor
 - testing-patterns
 - agentic-loop
-- systematic-debugging
+- ai-multimodal
+- media-processing
 
 ### review-hub
 - qa-governor
 - testing-patterns
-- code-review
 - project-architecture
+- docs-seeker
+- mermaidjs-v11

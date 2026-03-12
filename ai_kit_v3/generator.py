@@ -7,22 +7,22 @@ from typing import Dict, List, Optional
 from .adapters import ensure_dirs, targets_for
 from .registry import (
     ALL_V3_SKILLS,
-    ARTIFACT_CONTRACTS,
+    BUNDLE_DOC_NAMES,
     CLEANUP_SKILLS,
     CORE_SKILLS,
-    contracts_for_bundle,
-    doc_names_for_bundle,
+    DOC_RENDERERS,
     LEGACY_ROLE_MAP,
     NATIVE_SUPPORT_SKILLS,
     ORCHESTRATOR_SKILLS,
+    REFERENCE_NAMES_FOR_BUNDLE,
     ROLE_SKILLS,
     SUPPORT_REFERENCES,
+    UTILITY_PROVIDER_SKILLS,
     WORKFLOW_HUB_SKILLS,
+    contract_names_for_bundle,
     render_artifact,
-    render_hub_mesh,
-    render_layer_model,
-    render_orchestrator_rules,
-    render_round3_changelog,
+    render_handoff_log,
+    render_lane_registry,
     render_skill,
     render_support_reference,
     render_team_board,
@@ -41,6 +41,16 @@ BUNDLES: Dict[str, List[str]] = {
     "role-core": list(ROLE_SKILLS.keys()),
     "round3-core": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()),
     "round3": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()) + list(NATIVE_SUPPORT_SKILLS.keys()),
+    "utility-providers": list(UTILITY_PROVIDER_SKILLS.keys()),
+    "round4-core": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()),
+    "round4": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()) + list(NATIVE_SUPPORT_SKILLS.keys()),
+}
+
+
+DOC_STATIC_BUILDERS = {
+    "legacy-role-map": lambda: _render_legacy_role_map(),
+    "folder-structure": lambda: _render_folder_structure(),
+    "native-support-skills": lambda: _render_native_support_map(),
 }
 
 
@@ -56,13 +66,16 @@ def load_legacy_module(repo_root: Path):
     return module
 
 
+
 def write_text(path: Path, content: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(content, encoding="utf-8")
 
 
+
 def spec_for(name: str):
     return ALL_V3_SKILLS.get(name)
+
 
 
 def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
@@ -91,14 +104,22 @@ def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
     return written
 
 
+
 def emit_contracts(project_path: Path, bundle: str) -> List[Path]:
+    from .registry import ARTIFACT_CONTRACTS
+
     written: List[Path] = []
-    for contract in contracts_for_bundle(bundle):
+    for contract_name in contract_names_for_bundle(bundle):
+        contract = ARTIFACT_CONTRACTS[contract_name]
         output = project_path / contract.path
         if contract.name == "workflow-state":
             content = render_workflow_state()
         elif contract.name == "team-board":
             content = render_team_board()
+        elif contract.name == "lane-registry":
+            content = render_lane_registry()
+        elif contract.name == "handoff-log":
+            content = render_handoff_log()
         else:
             content = render_artifact(contract)
         write_text(output, content)
@@ -106,19 +127,19 @@ def emit_contracts(project_path: Path, bundle: str) -> List[Path]:
     return written
 
 
-def emit_reference_templates(project_path: Path) -> List[Path]:
+
+def emit_reference_templates(project_path: Path, bundle: str) -> List[Path]:
     written: List[Path] = []
-    for reference in SUPPORT_REFERENCES.values():
+    for reference_name in REFERENCE_NAMES_FOR_BUNDLE.get(bundle, []):
+        reference = SUPPORT_REFERENCES[reference_name]
         output = project_path / reference.path
         write_text(output, render_support_reference(reference))
         written.append(output)
     return written
 
 
-def emit_docs(project_path: Path, bundle: str) -> List[Path]:
-    docs_dir = project_path / ".ai-kit" / "docs"
-    docs_dir.mkdir(parents=True, exist_ok=True)
 
+def _render_legacy_role_map() -> str:
     role_map_lines = [
         "# legacy-role-map",
         "",
@@ -129,24 +150,31 @@ def emit_docs(project_path: Path, bundle: str) -> List[Path]:
         role_map_lines.append(f"## {role}")
         role_map_lines.extend([f"- {skill}" for skill in skills])
         role_map_lines.append("")
+    return "\n".join(role_map_lines).rstrip() + "\n"
 
-    structure = """# folder-structure
+
+
+def _render_folder_structure() -> str:
+    return """# folder-structure
 
 Recommended runtime layout:
 
 - `.ai-kit/contracts/` -> stable artifact contracts shared across roles and hubs
-- `.ai-kit/state/` -> workflow-state, team-board, and other runtime breadcrumbs
+- `.ai-kit/state/` -> workflow-state, team-board, lane-registry, handoff-log, and other runtime breadcrumbs
 - `.ai-kit/references/` -> living support references for architecture, APIs, persistence, and testing
-- `.ai-kit/docs/` -> topology docs, migration notes, and orchestration rules
+- `.ai-kit/docs/` -> topology docs, migration notes, gating rules, and orchestration rules
 - `.claude/skills/`, `.agent/skills/`, `.codex/skills/` -> adapter-specific runtime skill folders
 - `python_kit_legacy.py` -> renamed old generator, still used for legacy analysis/template kits
-- `python_kit.py` -> new v3 entrypoint that adds orchestration, routing, hubs, and contracts
+- `python_kit.py` -> new v3 entrypoint that adds orchestration, routing, hubs, utility providers, contracts, and gating
 """
 
+
+
+def _render_native_support_map() -> str:
     support_map_lines = [
         "# native-support-skills",
         "",
-        "The v3 orchestration layer keeps the native support skills as living reference skills.",
+        "Round 4 keeps the round 2 support skills as living reference skills.",
         "",
         "| Skill | Writes to | Primary consumers |",
         "|---|---|---|",
@@ -158,23 +186,25 @@ Recommended runtime layout:
         "",
         "Treat these as living reference skills. Refresh them when the codebase changes materially.",
     ]
+    return "\n".join(support_map_lines).rstrip() + "\n"
 
-    doc_payloads = {
-        "legacy-role-map.md": "\n".join(role_map_lines).rstrip() + "\n",
-        "folder-structure.md": structure,
-        "native-support-skills.md": "\n".join(support_map_lines).rstrip() + "\n",
-        "layer-model.md": render_layer_model(),
-        "hub-mesh.md": render_hub_mesh(),
-        "orchestrator-rules.md": render_orchestrator_rules(),
-        "round3-changelog.md": render_round3_changelog(),
-    }
 
-    written = []
-    for name in doc_names_for_bundle(bundle):
-        output = docs_dir / name
-        write_text(output, doc_payloads[name])
+
+def emit_docs(project_path: Path, bundle: str) -> List[Path]:
+    docs_dir = project_path / ".ai-kit" / "docs"
+    docs_dir.mkdir(parents=True, exist_ok=True)
+
+    written: List[Path] = []
+    for doc_name in BUNDLE_DOC_NAMES.get(bundle, []):
+        output = docs_dir / f"{doc_name}.md"
+        if doc_name in DOC_STATIC_BUILDERS:
+            content = DOC_STATIC_BUILDERS[doc_name]()
+        else:
+            content = DOC_RENDERERS[doc_name]()
+        write_text(output, content)
         written.append(output)
     return written
+
 
 
 def create_bmad_upgrade(project_path: str, ai: str, bundle: str, with_contracts: bool, with_docs: bool, with_reference_templates: bool) -> List[Path]:
@@ -183,10 +213,11 @@ def create_bmad_upgrade(project_path: str, ai: str, bundle: str, with_contracts:
     if with_contracts:
         written.extend(emit_contracts(base, bundle))
     if with_reference_templates:
-        written.extend(emit_reference_templates(base))
+        written.extend(emit_reference_templates(base, bundle))
     if with_docs:
         written.extend(emit_docs(base, bundle))
     return written
+
 
 
 def create_legacy_skills(project_path: str, ai: str, verbose: bool, skills: Optional[List[str]], kit: str, repo_root: Path) -> int:

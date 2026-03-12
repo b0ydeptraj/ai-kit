@@ -1,10 +1,5 @@
-from .artifacts import (
-    ARTIFACT_CONTRACTS,
-    contracts_for_bundle,
-    doc_names_for_bundle,
-    render_artifact,
-    supports_round3_topology,
-)
+from .artifacts import ARTIFACT_CONTRACTS, render_artifact
+from .gating import BUNDLE_DOC_NAMES, REFERENCE_NAMES_FOR_BUNDLE, contract_names_for_bundle
 from .skills import (
     ALL_V3_SKILLS,
     CLEANUP_SKILLS,
@@ -13,24 +8,54 @@ from .skills import (
     NATIVE_SUPPORT_SKILLS,
     ORCHESTRATOR_SKILLS,
     ROLE_SKILLS,
+    UTILITY_PROVIDER_SKILLS,
     WORKFLOW_HUB_SKILLS,
     render_skill,
 )
 from .support_refs import SUPPORT_REFERENCES, render_support_reference
-from .topology import HUB_MESH, HUB_SUPPORT_MAP, LAYER_MODEL, render_hub_mesh, render_layer_model, render_orchestrator_rules, render_round3_changelog
-from .workflows import COMPLEXITY_LADDER, TRACKS, render_team_board, render_workflow_state
+from .topology import (
+    HUB_MESH,
+    HUB_SUPPORT_MAP,
+    LAYER_MODEL,
+    UTILITY_PROVIDER_NAMES,
+    render_bundle_gating,
+    render_hub_mesh,
+    render_layer_model,
+    render_orchestrator_rules,
+    render_parallelism_rules,
+    render_round2_changelog,
+    render_round3_changelog,
+    render_round4_changelog,
+    render_standalone_taxonomy,
+    render_utility_provider_model,
+)
+from .workflows import COMPLEXITY_LADDER, TRACKS, render_handoff_log, render_lane_registry, render_team_board, render_workflow_state
+
+DOC_RENDERERS = {
+    "round2-changelog": render_round2_changelog,
+    "layer-model": render_layer_model,
+    "hub-mesh": render_hub_mesh,
+    "orchestrator-rules": render_orchestrator_rules,
+    "round3-changelog": render_round3_changelog,
+    "utility-provider-model": render_utility_provider_model,
+    "standalone-taxonomy": render_standalone_taxonomy,
+    "parallelism-rules": render_parallelism_rules,
+    "bundle-gating": render_bundle_gating,
+    "round4-changelog": render_round4_changelog,
+}
 
 __all__ = [
     "ARTIFACT_CONTRACTS",
-    "contracts_for_bundle",
-    "doc_names_for_bundle",
     "render_artifact",
-    "supports_round3_topology",
+    "BUNDLE_DOC_NAMES",
+    "REFERENCE_NAMES_FOR_BUNDLE",
+    "contract_names_for_bundle",
     "ALL_V3_SKILLS",
     "CORE_SKILLS",
     "ORCHESTRATOR_SKILLS",
     "WORKFLOW_HUB_SKILLS",
     "ROLE_SKILLS",
+    "UTILITY_PROVIDER_SKILLS",
     "CLEANUP_SKILLS",
     "NATIVE_SUPPORT_SKILLS",
     "LEGACY_ROLE_MAP",
@@ -41,11 +66,21 @@ __all__ = [
     "TRACKS",
     "render_workflow_state",
     "render_team_board",
+    "render_lane_registry",
+    "render_handoff_log",
     "LAYER_MODEL",
     "HUB_MESH",
     "HUB_SUPPORT_MAP",
+    "UTILITY_PROVIDER_NAMES",
+    "DOC_RENDERERS",
     "render_layer_model",
     "render_hub_mesh",
     "render_orchestrator_rules",
+    "render_round2_changelog",
     "render_round3_changelog",
+    "render_utility_provider_model",
+    "render_standalone_taxonomy",
+    "render_parallelism_rules",
+    "render_bundle_gating",
+    "render_round4_changelog",
 ]
