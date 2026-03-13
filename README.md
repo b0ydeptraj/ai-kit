@@ -2,6 +2,12 @@
 
 `python-kit` now runs with a registry-driven v3 entrypoint while preserving the previous generator as `python_kit_legacy.py`.
 
+## Status snapshot
+
+- Current baseline: `round4` / `v3.2`
+- Compatibility bundles still supported: `round2`, `round3`
+- Hardened topology: orchestrators + workflow hubs + utility providers + specialists
+
 ## What changed in round 4
 
 - keeps the round 3 BMAD-lite base in place
@@ -89,7 +95,7 @@ Use `--emit-contracts`, `--emit-docs`, and `--emit-reference-templates` to mater
 3. one workflow hub runs the current playbook (`plan-hub`, `debug-hub`, `test-hub`, etc.) and pulls utility providers as needed.
 4. specialists, standalones, and native support skills produce or refresh the real artifacts.
 
-This keeps orchestration separate from execution, while still using BMAD-style context handoff through shared artifacts. BMAD’s official workflow map similarly emphasizes routing by phase/track and passing artifacts forward as context instead of relying on raw chat memory.
+This keeps orchestration separate from execution, while still using BMAD-style context handoff through shared artifacts. BMAD's official workflow map similarly emphasizes routing by phase/track and passing artifacts forward as context instead of relying on raw chat memory.
 
 ## Round 4 intent
 
