@@ -2,6 +2,37 @@
 
 All notable changes to `python-kit` are documented here.
 
+## v3.2.1 - 2026-03-15
+
+### Added
+
+- Added the `baseline-next` bundle as the smallest future-baseline candidate:
+  `round4` plus `root-cause-debugging` and `evidence-before-completion`.
+- Added the `discipline-utilities` gauntlet records under
+  `docs/gauntlet-runs/discipline-utilities-v1/`, including scorecards,
+  pressure-round notes, and the final decision memo.
+- Added runtime validation tooling:
+  `scripts/validate_runtime.py` and
+  `.github/workflows/validate-runtime.yml`.
+
+### Changed
+
+- Updated the baseline proposal so the next-baseline recommendation now follows
+  gauntlet evidence instead of a provisional ranking.
+- Clarified active runtime docs and the manifest so they match the current v3.2
+  adapter model, bundle model, and state files.
+- Labeled migration-only Codex/legacy docs as historical so they are not read
+  as current runtime truth.
+
+### Fixed
+
+- Fixed `--ai all` for active v3 bundle generation so it now emits
+  `.claude/skills`, `.agent/skills`, and `.codex/skills`.
+- Fixed the remaining public docs drift around `.agent` compatibility wording,
+  `bundle-gating`, and Codex adapter expectations.
+- Added CI coverage for runtime parity and bundle gating so drift is caught
+  before `round4`, `baseline-next`, or adapter outputs silently diverge.
+
 ## v3.2.0 - 2026-03-13
 
 ### Added
@@ -42,4 +73,3 @@ All notable changes to `python-kit` are documented here.
   round4-only state or docs.
 - Cleaned up public documentation drift between the repo landing page and the
   actual round 4 implementation.
-
