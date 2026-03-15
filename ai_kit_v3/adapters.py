@@ -8,7 +8,7 @@ ADAPTER_TARGETS: Dict[str, List[str]] = {
     "claude": [".claude/skills"],
     "gemini": [".agent/skills"],
     "codex": [".codex/skills"],
-    "all": [".claude/skills", ".agent/skills"],
+    "all": [".claude/skills", ".agent/skills", ".codex/skills"],
     "generic": [".python-kit-prompts"],
 }
 

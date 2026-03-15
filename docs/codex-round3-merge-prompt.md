@@ -1,5 +1,7 @@
 You are working inside the `b0ydeptraj/ai-kit` repository, which is already on the round 2 / v3 baseline.
 
+> Historical migration note: this document records the round 3 merge prompt for Codex and is not the source of truth for the active runtime model.
+
 Use ONLY the extracted contents of `ai-kit-bmad-lite-round3-upgrade.zip`.
 Do not re-apply round 1 or round 2 packs. Round 3 is an additive upgrade on top of the current round 2 repo.
 

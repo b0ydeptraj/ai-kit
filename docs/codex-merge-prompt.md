@@ -1,5 +1,7 @@
 # Prompt for Codex
 
+> Historical migration note: this prompt was used for the round 2 merge into Codex and is not a description of the current active runtime model.
+
 Paste the block below into Codex after you put this round 2 pack in the same workspace as the `ai-kit` repo.
 
 ```text

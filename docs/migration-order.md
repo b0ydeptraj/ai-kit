@@ -1,5 +1,7 @@
 # Suggested refactor order
 
+> Historical migration note: this file documents the round 2 migration path and is not the source of truth for the current v3.2 runtime model.
+
 1. **Freeze the old generator**
    - Rename current `python_kit.py` to `python_kit_legacy.py`.
    - Do not mix new registry logic into the old `PROMPTS` dict.

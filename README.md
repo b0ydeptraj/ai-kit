@@ -100,7 +100,7 @@ Use `--emit-contracts`, `--emit-docs`, and `--emit-reference-templates` to mater
 
 `baseline-next` is also additive: it leaves `round4` untouched and exposes the smallest future-baseline candidate bundle approved by the gauntlet.
 
-`--ai all` currently writes `.claude/skills` and `.agent/skills`. Generate Codex explicitly with `--ai codex` when you need `.codex/skills`.
+For v3 bundle generation, `--ai all` writes `.claude/skills`, `.agent/skills`, and `.codex/skills`. Legacy kits keep their legacy compatibility behavior, so use `--ai codex` explicitly when you need Codex output from the preserved generator.
 
 See also: [`docs/discipline-utilities-baseline-proposal.md`](docs/discipline-utilities-baseline-proposal.md)
 

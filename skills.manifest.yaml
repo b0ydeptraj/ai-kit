@@ -25,7 +25,7 @@ conventions:
     - Treat Claude commands or agents and Antigravity workflows or rules as legacy compatibility assets, not active v3 runtime primitives.
     - Utility providers are stateless and should not own project strategy or lane state.
     - Route through layer-1 orchestrators and layer-2 hubs before invoking specialists directly.
-    - Generate Codex explicitly with `--ai codex`; `--ai all` is a Claude plus `.agent` convenience target, not a universal adapter sweep.
+    - For v3 bundles, `--ai all` targets `.claude/skills`, `.agent/skills`, and `.codex/skills`; legacy kits keep their own compatibility behavior.
 
 layers:
   layer_1_orchestrators:
