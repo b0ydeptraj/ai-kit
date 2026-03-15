@@ -5,6 +5,7 @@
 - Reviewed after gauntlet `discipline-utilities-v1`
 - Decision owner: `python-kit` architecture
 - Current recommendation: keep `discipline-utilities` as an optional overlay bundle for now, but treat `root-cause-debugging` and `evidence-before-completion` as approved candidates for the next baseline cut
+- Additive implementation status: `baseline-next` bundle now exists to materialize the approved future-baseline candidate without changing `round4`
 
 ## Decision to make
 

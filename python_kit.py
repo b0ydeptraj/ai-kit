@@ -6,7 +6,7 @@ How to adopt with minimal breakage:
 2. Use this file plus the `ai_kit_v3/` package as the active entrypoint.
 3. Keep using legacy kits for project-specific analysis/template generation.
 4. Use the new bundles to generate orchestrators, workflow hubs, utility providers,
-   discipline overlays, artifact contracts, topology docs, and cleaned runtime skills.
+   discipline overlays, next-baseline candidates, artifact contracts, topology docs, and cleaned runtime skills.
 """
 
 from __future__ import annotations
@@ -47,13 +47,14 @@ def list_everything(repo_root: Path) -> None:
 def parse_args(repo_root: Path) -> argparse.Namespace:
     _, legacy = legacy_kits(repo_root)
     parser = argparse.ArgumentParser(
-        description="Python Kit v3.2 - BMAD-lite hardening with orchestrators, workflow hubs, utility providers, discipline overlays, bundle gating, and legacy compatibility",
+        description="Python Kit v3.2 - BMAD-lite hardening with orchestrators, workflow hubs, utility providers, discipline overlays, baseline-next candidates, bundle gating, and legacy compatibility",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   python python_kit.py /path/to/project --bundle round4 --ai all --emit-contracts --emit-docs --emit-reference-templates
   python python_kit.py /path/to/project --bundle utility-providers --ai codex --emit-docs
   python python_kit.py /path/to/project --bundle discipline-utilities --ai claude --emit-docs
+  python python_kit.py /path/to/project --bundle baseline-next --ai codex --emit-contracts --emit-docs --emit-reference-templates
   python python_kit.py /path/to/project --bundle round3 --ai claude --emit-contracts --emit-docs
   python python_kit.py /path/to/project --legacy-kit python --ai claude
   python python_kit.py --list-skills

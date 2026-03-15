@@ -7,6 +7,7 @@ from typing import Dict, List, Optional
 from .adapters import ensure_dirs, targets_for
 from .registry import (
     ALL_V3_SKILLS,
+    BASELINE_NEXT_DISCIPLINE_SKILLS,
     BUNDLE_DOC_NAMES,
     CLEANUP_SKILLS,
     CORE_SKILLS,
@@ -46,6 +47,7 @@ BUNDLES: Dict[str, List[str]] = {
     "discipline-utilities": list(DISCIPLINE_UTILITY_SKILLS.keys()),
     "round4-core": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()),
     "round4": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()) + list(NATIVE_SUPPORT_SKILLS.keys()),
+    "baseline-next": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()) + list(NATIVE_SUPPORT_SKILLS.keys()) + list(BASELINE_NEXT_DISCIPLINE_SKILLS.keys()),
 }
 
 

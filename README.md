@@ -5,6 +5,7 @@
 ## Status snapshot
 
 - Current baseline: `round4` / `v3.2`
+- Next baseline candidate bundle: `baseline-next`
 - Compatibility bundles still supported: `round2`, `round3`
 - Hardened topology: orchestrators + workflow hubs + utility providers + specialists
 - Optional discipline overlay available through `discipline-utilities`
@@ -55,6 +56,7 @@ python python_kit.py . --bundle round4 --ai codex --emit-contracts --emit-docs -
 ```bash
 python python_kit.py . --bundle utility-providers --ai claude --emit-docs
 python python_kit.py . --bundle discipline-utilities --ai claude --emit-docs
+python python_kit.py . --bundle baseline-next --ai codex --emit-contracts --emit-docs --emit-reference-templates
 python python_kit.py . --bundle round3 --ai codex --emit-contracts --emit-docs --emit-reference-templates
 python python_kit.py . --bundle round2 --ai codex --emit-contracts --emit-docs --emit-reference-templates
 ```
@@ -88,10 +90,13 @@ python python_kit.py . --legacy-kit full --ai all
 | `discipline-utilities` | optional root-cause / test-first / completion-evidence overlay plus operational discipline docs |
 | `round4-core` | orchestrators + hubs + roles + utility providers |
 | `round4` | full round 4 set: round4-core + cleanup + native support |
+| `baseline-next` | `round4` plus approved discipline utilities: `root-cause-debugging` and `evidence-before-completion` |
 
 Use `--emit-contracts`, `--emit-docs`, and `--emit-reference-templates` to materialize `.ai-kit/` outputs alongside skill generation.
 
 `discipline-utilities` is intentionally additive: it strengthens execution discipline without changing the behavior or scope of `round2`, `round3`, or `round4`.
+
+`baseline-next` is also additive: it leaves `round4` untouched and exposes the smallest future-baseline candidate bundle approved by the gauntlet.
 
 See also: `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\docs\discipline-utilities-baseline-proposal.md`
 

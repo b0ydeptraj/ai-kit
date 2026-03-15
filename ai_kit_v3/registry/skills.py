@@ -1060,6 +1060,11 @@ DISCIPLINE_UTILITY_SKILLS: Dict[str, SkillSpec] = {
     ),
 }
 
+BASELINE_NEXT_DISCIPLINE_SKILLS: Dict[str, SkillSpec] = {
+    "root-cause-debugging": DISCIPLINE_UTILITY_SKILLS["root-cause-debugging"],
+    "evidence-before-completion": DISCIPLINE_UTILITY_SKILLS["evidence-before-completion"],
+}
+
 
 ROUND2_CORE_ORDER = [
     "workflow-router",

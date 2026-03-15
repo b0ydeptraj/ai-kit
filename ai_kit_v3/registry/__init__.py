@@ -2,6 +2,7 @@ from .artifacts import ARTIFACT_CONTRACTS, render_artifact
 from .gating import BUNDLE_DOC_NAMES, REFERENCE_NAMES_FOR_BUNDLE, contract_names_for_bundle
 from .skills import (
     ALL_V3_SKILLS,
+    BASELINE_NEXT_DISCIPLINE_SKILLS,
     CLEANUP_SKILLS,
     CORE_SKILLS,
     DISCIPLINE_UTILITY_SKILLS,
@@ -64,6 +65,7 @@ __all__ = [
     "contract_names_for_bundle",
     "ALL_V3_SKILLS",
     "CORE_SKILLS",
+    "BASELINE_NEXT_DISCIPLINE_SKILLS",
     "ORCHESTRATOR_SKILLS",
     "WORKFLOW_HUB_SKILLS",
     "ROLE_SKILLS",
