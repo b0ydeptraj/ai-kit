@@ -74,6 +74,19 @@ python python_kit.py . --legacy-kit full --ai all
 
 Legacy kits are migration and compatibility flows. They can materialize ClaudeKit or Antigravity-shaped assets, but they do not redefine the active v3 runtime model.
 
+### validate adapter parity and bundle gating
+
+```bash
+python scripts/validate_runtime.py
+```
+
+This validation checks the active v3 runtime contract:
+- `--ai all` writes `.claude/skills`, `.agent/skills`, and `.codex/skills`
+- checked-in runtime skill folders stay in parity across the three adapters
+- `round4` does not leak discipline utilities
+- `discipline-utilities` stays overlay-only
+- `baseline-next` contains only the approved discipline additions
+
 ## v3 bundles
 
 | Bundle | What it writes |
