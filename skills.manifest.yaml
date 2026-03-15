@@ -1,8 +1,8 @@
-version: 0.1
-philosophy: mesh-not-islands
+version: 0.2
+philosophy: hub-and-spoke-runtime
 objective: >-
-  Turn ai-kit from a broad skill catalog into a mesh ecosystem with a small orchestration spine,
-  shared handoff contracts, and reusable utility providers.
+  Keep the active ai-kit runtime adapter-neutral at the skill layer while preserving
+  legacy migration kits for ClaudeKit and Antigravity compatibility.
 
 conventions:
   handoff_contract_required:
@@ -16,210 +16,101 @@ conventions:
     - validation_plan
     - risks
   state_files:
-    plan: .ai-kit/state/plan.md
-    routes: .ai-kit/state/routes.json
-    findings: .ai-kit/state/findings.md
-    review: .ai-kit/state/review.md
+    workflow_state: .ai-kit/state/workflow-state.md
+    team_board: .ai-kit/state/team-board.md
+    lane_registry: .ai-kit/state/lane-registry.md
+    handoff_log: .ai-kit/state/handoff-log.md
   execution_rules:
-    - Prefer orchestration through workflow hubs over direct expert invocation.
-    - Utility providers are stateless and should not own project strategy.
-    - Domain experts should implement or advise narrowly within their specialty.
-    - Every complex task should leave behind a current plan and validation trail.
+    - Treat `.claude/skills`, `.agent/skills`, and `.codex/skills` as the active runtime surfaces.
+    - Treat Claude commands or agents and Antigravity workflows or rules as legacy compatibility assets, not active v3 runtime primitives.
+    - Utility providers are stateless and should not own project strategy or lane state.
+    - Route through layer-1 orchestrators and layer-2 hubs before invoking specialists directly.
+    - Generate Codex explicitly with `--ai codex`; `--ai all` is a Claude plus `.agent` convenience target, not a universal adapter sweep.
 
-tiers:
-  orchestrators:
+layers:
+  layer_1_orchestrators:
+    - workflow-router
+    - bootstrap
+    - team
     - cook
-  workflow_hubs:
-    - plan
-    - scout
-    - debug
-    - fix
-    - validate
-    - review
-    - brainstorm
-  utility_providers:
+  layer_2_workflow_hubs:
+    - brainstorm-hub
+    - scout-hub
+    - plan-hub
+    - debug-hub
+    - fix-hub
+    - test-hub
+    - review-hub
+  layer_3_utility_providers:
+    - research
     - docs-seeker
-    - repomix
-    - chrome-devtools
+    - sequential-thinking
+    - problem-solving
     - ai-multimodal
+    - chrome-devtools
+    - repomix
     - context-engineering
-    - mcp-management
     - mermaidjs-v11
+    - ui-ux-pro-max
     - media-processing
-  domain_experts:
-    - react-expert
-    - nextjs-expert
-    - nodejs-expert
-    - nestjs-expert
-    - backend-development
-    - rest-api-expert
-    - auth-expert
-    - database-expert
-    - postgres-expert
-    - mongodb-expert
-    - prisma-expert
-    - typescript-expert
-    - typescript-type-expert
-    - accessibility-expert
-    - css-styling-expert
-    - state-management-expert
-    - playwright-expert
-    - jest-testing-expert
-    - vitest-testing-expert
-    - vite-expert
-    - webpack-expert
-    - docker-expert
-    - devops-expert
-    - github-actions-expert
-    - git-expert
+  optional_discipline_overlays:
+    - root-cause-debugging
+    - test-first-development
+    - evidence-before-completion
+  layer_4_specialists_and_standalones:
+    - analyst
+    - pm
+    - architect
+    - scrum-master
+    - developer
+    - qa-governor
+    - agentic-loop
+    - project-architecture
+    - dependency-management
+    - api-integration
+    - data-persistence
+    - testing-patterns
 
-profiles:
-  coding-core:
-    include:
-      - cook
-      - plan
-      - scout
-      - debug
-      - fix
-      - validate
-      - review
-      - brainstorm
-      - docs-seeker
-      - repomix
-      - context-engineering
-      - triage-expert
-      - testing-expert
-      - git-expert
-      - typescript-expert
-      - typescript-type-expert
-  frontend-app:
-    extends: coding-core
-    include:
-      - react-expert
-      - nextjs-expert
-      - vite-expert
-      - webpack-expert
-      - state-management-expert
-      - accessibility-expert
-      - css-styling-expert
-      - chrome-devtools
-      - ai-multimodal
-      - aesthetic
-  backend-app:
-    extends: coding-core
-    include:
-      - backend-development
-      - nodejs-expert
-      - nestjs-expert
-      - rest-api-expert
-      - auth-expert
-      - database-expert
-      - postgres-expert
-      - mongodb-expert
-      - prisma-expert
-      - docker-expert
-      - devops-expert
-      - github-actions-expert
-  fullstack-web:
-    extends:
-      - frontend-app
-      - backend-app
-    include:
-      - mcp-management
-      - mermaidjs-v11
+bundles:
+  active_baselines:
+    - round2
+    - round3
+    - round4
+    - baseline-next
+  additive_overlays:
+    - utility-providers
+    - discipline-utilities
+  notes:
+    - round4 is the current baseline.
+    - baseline-next is additive and leaves round4 untouched.
+    - discipline-utilities remains optional until a future baseline absorbs approved skills.
 
-routing:
-  cook:
-    role: primary_entrypoint
-    delegates_to:
-      - plan
-      - scout
-      - debug
-      - fix
-      - validate
-      - review
-    state_files:
-      - .ai-kit/state/plan.md
-      - .ai-kit/state/routes.json
-  plan:
-    role: architecture_and_execution_design
-    delegates_to:
-      - scout
-      - docs-seeker
-      - repomix
-      - brainstorm
-      - context-engineering
-      - mermaidjs-v11
-  scout:
-    role: codebase_mapping_and_impact_analysis
-    delegates_to:
-      - repomix
-      - context-engineering
-      - docs-seeker
-  debug:
-    role: root_cause_and_failure_analysis
-    delegates_to:
-      - triage-expert
-      - docs-seeker
-      - chrome-devtools
-      - mcp-management
-  fix:
-    role: implementation_hub
-    delegates_to:
-      - react-expert
-      - nextjs-expert
-      - typescript-expert
-      - typescript-type-expert
-      - backend-development
-      - nodejs-expert
-      - nestjs-expert
-      - auth-expert
-      - database-expert
-      - postgres-expert
-      - mongodb-expert
-      - prisma-expert
-      - rest-api-expert
-      - docker-expert
-      - devops-expert
-      - accessibility-expert
-      - css-styling-expert
-      - state-management-expert
-  validate:
-    role: test_and_quality_validation
-    delegates_to:
-      - testing-expert
-      - jest-testing-expert
-      - vitest-testing-expert
-      - playwright-expert
-      - chrome-devtools
-      - ai-multimodal
-  review:
-    role: risk_edge_case_and_regression_review
-    delegates_to:
-      - scout
-      - validate
-      - typescript-type-expert
-      - accessibility-expert
-      - git-expert
-  brainstorm:
-    role: option_generation_and_tradeoff_analysis
-    delegates_to:
-      - plan
-      - docs-seeker
-      - backend-development
-      - aesthetic
-      - frontend-design
-      - mermaidjs-v11
+adapter_runtime:
+  claude:
+    skill_root: .claude/skills
+    model: runtime-skills-only
+  gemini:
+    skill_root: .agent/skills
+    model: runtime-skills-only
+    note: serves as the active compatibility target for Gemini and Antigravity-style usage
+  codex:
+    skill_root: .codex/skills
+    model: runtime-skills-only
+    note: keep Codex as a skill surface, not a Claude command or Antigravity workflow surface
 
-rollout:
-  phase_1:
-    - Add manifest and seven workflow hubs plus cook.
-    - Keep existing experts intact.
-    - Add simple command layer mapping /cook /debug /review /ship to hubs.
-  phase_2:
-    - Refactor triage-expert into debug provider or keep as delegate under debug.
-    - Refactor testing-expert into validate provider or keep as delegate under validate.
-    - Split broad umbrellas only when routing noise becomes measurable.
-  phase_3:
-    - Add metrics: route frequency, failure loops, validation coverage, average skills per task.
-    - Introduce team/bootstrap only after single-agent flow is stable.
+legacy_compatibility:
+  generator: python_kit_legacy.py
+  template_roots:
+    - templates/agent
+    - templates/claude
+  preserved_kits:
+    - python
+    - flutter
+    - antigravity
+    - claudekit
+    - ui-ux
+    - full
+  notes:
+    - Antigravity workflows, rules, and shared assets belong to legacy migration support only.
+    - Claude commands and agents belong to legacy migration support only.
+    - Codex support assets may be materialized by the legacy generator under `.codex/support`, but they are not part of the active v3 runtime taxonomy.

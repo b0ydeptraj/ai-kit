@@ -28,7 +28,7 @@
 After running v3 generation, the repo uses these runtime folders:
 
 - `.claude/skills/` -> Claude runtime skills
-- `.agent/skills/` -> Gemini/Antigravity runtime skills
+- `.agent/skills/` -> Gemini-compatible runtime skills and the active compatibility target for Antigravity-style usage
 - `.codex/skills/` -> Codex runtime skills
 - `.ai-kit/contracts/` -> shared workflow contracts
 - `.ai-kit/state/` -> workflow state, lane registry, handoff log, and multi-lane coordination state
@@ -72,6 +72,8 @@ python python_kit.py . --legacy-kit ui-ux --ai codex
 python python_kit.py . --legacy-kit full --ai all
 ```
 
+Legacy kits are migration and compatibility flows. They can materialize ClaudeKit or Antigravity-shaped assets, but they do not redefine the active v3 runtime model.
+
 ## v3 bundles
 
 | Bundle | What it writes |
@@ -97,6 +99,8 @@ Use `--emit-contracts`, `--emit-docs`, and `--emit-reference-templates` to mater
 `discipline-utilities` is intentionally additive: it strengthens execution discipline without changing the behavior or scope of `round2`, `round3`, or `round4`.
 
 `baseline-next` is also additive: it leaves `round4` untouched and exposes the smallest future-baseline candidate bundle approved by the gauntlet.
+
+`--ai all` currently writes `.claude/skills` and `.agent/skills`. Generate Codex explicitly with `--ai codex` when you need `.codex/skills`.
 
 See also: [`docs/discipline-utilities-baseline-proposal.md`](docs/discipline-utilities-baseline-proposal.md)
 
