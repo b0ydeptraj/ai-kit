@@ -98,7 +98,7 @@ Use `--emit-contracts`, `--emit-docs`, and `--emit-reference-templates` to mater
 
 `baseline-next` is also additive: it leaves `round4` untouched and exposes the smallest future-baseline candidate bundle approved by the gauntlet.
 
-See also: `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\docs\discipline-utilities-baseline-proposal.md`
+See also: [`docs/discipline-utilities-baseline-proposal.md`](docs/discipline-utilities-baseline-proposal.md)
 
 ## 4-layer usage model
 
