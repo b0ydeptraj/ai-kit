@@ -89,7 +89,7 @@ def validate_adapter_targets() -> None:
 
 def validate_list_output() -> None:
     output = run_python_kit("--list-skills")
-    for bundle in ("round4", "discipline-utilities", "baseline-next"):
+    for bundle in ("round4", "discipline-utilities", "baseline", "baseline-next"):
         if bundle not in output:
             fail(f"--list-skills output is missing bundle: {bundle}")
 
@@ -97,15 +97,15 @@ def validate_list_output() -> None:
 def validate_checked_in_docs() -> None:
     assert_contains(
         REPO_ROOT / "README.md",
-        ["`--ai all`", ".claude/skills", ".agent/skills", ".codex/skills", "baseline-next"],
+        ["`--ai all`", ".claude/skills", ".agent/skills", ".codex/skills", "baseline", "baseline-next"],
     )
     assert_contains(
         REPO_ROOT / "skills.manifest.yaml",
-        [".claude/skills", ".agent/skills", ".codex/skills", "discipline-utilities", "baseline-next"],
+        [".claude/skills", ".agent/skills", ".codex/skills", "discipline-utilities", "baseline", "baseline-next"],
     )
     assert_contains(
         REPO_ROOT / ".ai-kit" / "docs" / "bundle-gating.md",
-        ["discipline-utilities", "baseline-next"],
+        ["discipline-utilities", "baseline", "baseline-next"],
     )
 
 
@@ -133,13 +133,13 @@ def validate_generated_bundle(bundle: str) -> None:
             if leaked:
                 fail(f"round4 leaked discipline skills: {sorted(leaked)}")
 
-        if bundle == "baseline-next":
+        if bundle in {"baseline", "baseline-next"}:
             current = generated_sets[ALL_TARGETS[0]]
             missing = BASELINE_NEXT_APPROVED - current
             unexpected = current & {"test-first-development"}
             if missing or unexpected:
                 fail(
-                    "baseline-next discipline mismatch. "
+                    f"{bundle} discipline mismatch. "
                     f"Missing approved: {sorted(missing) or '-'} "
                     f"Unexpected: {sorted(unexpected) or '-'}"
                 )
@@ -158,7 +158,7 @@ def validate_generated_bundle(bundle: str) -> None:
 
         bundle_gating_doc = temp_dir / ".ai-kit" / "docs" / "bundle-gating.md"
         if bundle_gating_doc.exists():
-            assert_contains(bundle_gating_doc, ["discipline-utilities", "baseline-next"])
+            assert_contains(bundle_gating_doc, ["discipline-utilities", "baseline", "baseline-next"])
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 
@@ -168,7 +168,7 @@ def main() -> int:
     validate_list_output()
     validate_checked_in_runtime()
     validate_checked_in_docs()
-    for bundle in ("round4", "discipline-utilities", "baseline-next"):
+    for bundle in ("round4", "discipline-utilities", "baseline", "baseline-next"):
         validate_generated_bundle(bundle)
     print("Runtime validation passed.")
     return 0

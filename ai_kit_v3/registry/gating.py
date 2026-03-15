@@ -44,6 +44,7 @@ BUNDLE_CONTRACT_NAMES: Dict[str, List[str]] = {
     "discipline-utilities": [],
     "round4-core": list(ROUND2_BASE_CONTRACTS) + list(ROUND3_EXTRA_CONTRACTS) + list(ROUND4_EXTRA_CONTRACTS),
     "round4": list(ROUND2_BASE_CONTRACTS) + list(ROUND3_EXTRA_CONTRACTS) + list(ROUND4_EXTRA_CONTRACTS),
+    "baseline": list(ROUND2_BASE_CONTRACTS) + list(ROUND3_EXTRA_CONTRACTS) + list(ROUND4_EXTRA_CONTRACTS),
     "baseline-next": list(ROUND2_BASE_CONTRACTS) + list(ROUND3_EXTRA_CONTRACTS) + list(ROUND4_EXTRA_CONTRACTS),
 }
 
@@ -62,6 +63,7 @@ BUNDLE_DOC_NAMES: Dict[str, List[str]] = {
     "discipline-utilities": ["planning-discipline", "parallel-execution", "workspace-isolation", "branch-completion", "review-loop"],
     "round4-core": list(ROUND4_DOCS),
     "round4": list(ROUND4_DOCS),
+    "baseline": list(ROUND4_DOCS),
     "baseline-next": list(ROUND4_DOCS),
 }
 
@@ -80,6 +82,7 @@ REFERENCE_NAMES_FOR_BUNDLE: Dict[str, List[str]] = {
     "discipline-utilities": [],
     "round4-core": list(SUPPORT_REFERENCES.keys()),
     "round4": list(SUPPORT_REFERENCES.keys()),
+    "baseline": list(SUPPORT_REFERENCES.keys()),
     "baseline-next": list(SUPPORT_REFERENCES.keys()),
 }
 

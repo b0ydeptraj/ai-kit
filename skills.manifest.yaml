@@ -76,13 +76,15 @@ bundles:
     - round2
     - round3
     - round4
+    - baseline
     - baseline-next
   additive_overlays:
     - utility-providers
     - discipline-utilities
   notes:
-    - round4 is the current baseline.
-    - baseline-next is additive and leaves round4 untouched.
+    - baseline is the current baseline.
+    - round4 remains available as the previous compatibility baseline.
+    - baseline-next is a compatibility alias for baseline during the promotion cycle.
     - discipline-utilities remains optional until a future baseline absorbs approved skills.
 
 adapter_runtime:

@@ -2,6 +2,25 @@
 
 All notable changes to `python-kit` are documented here.
 
+## v3.2.2 - 2026-03-15
+
+### Added
+
+- Added the official `baseline` bundle as the promoted active baseline.
+- Retained `baseline-next` as a compatibility alias during the promotion cycle.
+
+### Changed
+
+- Switched the public baseline status from `round4` / `baseline-next candidate` to
+  `baseline` plus `round4` compatibility support.
+- Updated the baseline proposal, README, manifest, and bundle-gating docs to
+  reflect the completed promotion.
+
+### Fixed
+
+- Extended runtime validation so CI now checks both the official `baseline`
+  bundle and the `baseline-next` compatibility alias.
+
 ## v3.2.1 - 2026-03-15
 
 ### Added

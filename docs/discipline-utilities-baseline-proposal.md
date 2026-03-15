@@ -4,12 +4,12 @@
 
 - Reviewed after gauntlet `discipline-utilities-v1`
 - Decision owner: `python-kit` architecture
-- Current recommendation: keep `discipline-utilities` as an optional overlay bundle for now, but treat `root-cause-debugging` and `evidence-before-completion` as approved candidates for the next baseline cut
-- Additive implementation status: `baseline-next` bundle now exists to materialize the approved future-baseline candidate without changing `round4`
+- Current recommendation: keep `discipline-utilities` as an optional overlay bundle while treating `root-cause-debugging` and `evidence-before-completion` as official baseline members
+- Baseline promotion status: `baseline` is now the official active baseline; `baseline-next` is retained as a compatibility alias during the promotion cycle; `round4` remains untouched as the previous compatibility baseline
 
 ## Decision to make
 
-Should `discipline-utilities` stay as a long-lived optional bundle, or should some of its skills be folded into a future baseline after `round4`?
+Should `discipline-utilities` stay as a long-lived optional bundle, and if so, which parts belong in the official baseline versus staying overlay-only after `round4`?
 
 Current skills in scope:
 
@@ -121,15 +121,11 @@ Assessment after gauntlet:
 
 Decision now:
 
-- keep as optional overlay
-
-Decision for next baseline:
-
-- approved candidate to fold into the next baseline after `round4`
+- part of the official `baseline`
 
 Future fold eligibility:
 
-- already cleared by gauntlet for the next baseline cut, provided bundle gating stays unchanged
+- baseline promotion is complete; keep validating bundle gating and adapter parity
 
 ### `test-first-development`
 
@@ -179,15 +175,11 @@ Assessment after gauntlet:
 
 Decision now:
 
-- keep as optional overlay
-
-Decision for next baseline:
-
-- approved candidate to fold into the next baseline after `round4`
+- part of the official `baseline`
 
 Future fold eligibility:
 
-- already cleared by gauntlet for the next baseline cut, provided bundle gating stays unchanged
+- baseline promotion is complete; keep validating bundle gating and adapter parity
 
 ## Candidate scoring
 
@@ -199,9 +191,9 @@ Scoring scale:
 
 | Skill | Layer fit | Cross-cutting value | Baseline noise risk | Current fold readiness | Recommendation |
 |---|---|---|---|---|---|
-| `root-cause-debugging` | High | High | Low | High | Keep overlay now, fold in next baseline |
+| `root-cause-debugging` | High | High | Low | High | Official baseline member |
 | `test-first-development` | High | Medium-High | Medium-High | Medium | Keep overlay next cycle |
-| `evidence-before-completion` | High | High | Low | High | Keep overlay now, fold in next baseline |
+| `evidence-before-completion` | High | High | Low | High | Official baseline member |
 
 ## Decision
 
@@ -209,8 +201,8 @@ The gauntlet-backed decision is:
 
 1. keep `discipline-utilities` as an auxiliary bundle
 2. do not fold any of the 3 skills into `round4`
-3. treat `root-cause-debugging` as approved for the next baseline cut
-4. treat `evidence-before-completion` as approved for the next baseline cut
+3. promote `root-cause-debugging` into the official `baseline`
+4. promote `evidence-before-completion` into the official `baseline`
 5. keep `test-first-development` as an overlay for at least one more cycle
 
 ## What would justify a future fold
@@ -233,11 +225,8 @@ Only reconsider a fold if all of these remain true at the same time:
 
 ### Medium term
 
-If the architecture cuts a stricter baseline later:
-
-- fold `root-cause-debugging` into that next baseline
-- fold `evidence-before-completion` into that next baseline
 - leave `test-first-development` in `discipline-utilities` until another cycle proves lower baseline cost
+- keep `round4` available as the compatibility baseline until downstream commands and docs no longer depend on it
 
 ### Do not do by default
 
@@ -247,12 +236,12 @@ If the architecture cuts a stricter baseline later:
 
 ## Final verdict
 
-`discipline-utilities` should remain an optional overlay for now.
+`discipline-utilities` remains an optional overlay, but only for the one skill that did not clear baseline promotion.
 
-However, the gauntlet is strong enough to support a stricter future move:
+The promoted result is now:
 
-- fold `root-cause-debugging` into the next baseline
-- fold `evidence-before-completion` into the next baseline
-- keep `test-first-development` optional until one more cycle proves lower ceremony on ordinary implementation work
+- `baseline` includes `root-cause-debugging`
+- `baseline` includes `evidence-before-completion`
+- `test-first-development` remains optional until one more cycle proves lower ceremony on ordinary implementation work
 
-That preserves the current 4-layer architecture, keeps `round4` clean, and still turns the strongest two utilities into future baseline candidates based on evidence rather than intuition.
+That preserves the current 4-layer architecture, keeps `round4` clean, and converts the strongest two utilities into official baseline behavior based on evidence rather than intuition.

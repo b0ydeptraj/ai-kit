@@ -4,8 +4,9 @@
 
 ## Status snapshot
 
-- Current baseline: `round4` / `v3.2`
-- Next baseline candidate bundle: `baseline-next`
+- Current baseline: `baseline` / `v3.2`
+- Compatibility baseline still supported: `round4`
+- Compatibility alias retained for one cycle: `baseline-next`
 - Compatibility bundles still supported: `round2`, `round3`
 - Hardened topology: orchestrators + workflow hubs + utility providers + specialists
 - Optional discipline overlay available through `discipline-utilities`
@@ -56,7 +57,7 @@ python python_kit.py . --bundle round4 --ai codex --emit-contracts --emit-docs -
 ```bash
 python python_kit.py . --bundle utility-providers --ai claude --emit-docs
 python python_kit.py . --bundle discipline-utilities --ai claude --emit-docs
-python python_kit.py . --bundle baseline-next --ai codex --emit-contracts --emit-docs --emit-reference-templates
+python python_kit.py . --bundle baseline --ai codex --emit-contracts --emit-docs --emit-reference-templates
 python python_kit.py . --bundle round3 --ai codex --emit-contracts --emit-docs --emit-reference-templates
 python python_kit.py . --bundle round2 --ai codex --emit-contracts --emit-docs --emit-reference-templates
 ```
@@ -105,13 +106,16 @@ This validation checks the active v3 runtime contract:
 | `discipline-utilities` | optional root-cause / test-first / completion-evidence overlay plus operational discipline docs |
 | `round4-core` | orchestrators + hubs + roles + utility providers |
 | `round4` | full round 4 set: round4-core + cleanup + native support |
-| `baseline-next` | `round4` plus approved discipline utilities: `root-cause-debugging` and `evidence-before-completion` |
+| `baseline` | official baseline: `round4` plus `root-cause-debugging` and `evidence-before-completion` |
+| `baseline-next` | compatibility alias for `baseline` during the promotion cycle |
 
 Use `--emit-contracts`, `--emit-docs`, and `--emit-reference-templates` to materialize `.ai-kit/` outputs alongside skill generation.
 
 `discipline-utilities` is intentionally additive: it strengthens execution discipline without changing the behavior or scope of `round2`, `round3`, or `round4`.
 
-`baseline-next` is also additive: it leaves `round4` untouched and exposes the smallest future-baseline candidate bundle approved by the gauntlet.
+`baseline` is now the official active baseline. It leaves `round4` untouched and adds only the two discipline utilities approved by the gauntlet.
+
+`baseline-next` is retained as a compatibility alias for one promotion cycle so earlier commands and notes do not break immediately.
 
 For v3 bundle generation, `--ai all` writes `.claude/skills`, `.agent/skills`, and `.codex/skills`. Legacy kits keep their legacy compatibility behavior, so use `--ai codex` explicitly when you need Codex output from the preserved generator.
 
