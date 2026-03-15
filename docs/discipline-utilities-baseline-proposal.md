@@ -2,9 +2,9 @@
 
 ## Status
 
-- Proposed
+- Reviewed after gauntlet `discipline-utilities-v1`
 - Decision owner: `python-kit` architecture
-- Current recommendation: keep `discipline-utilities` as an optional overlay bundle
+- Current recommendation: keep `discipline-utilities` as an optional overlay bundle for now, but treat `root-cause-debugging` and `evidence-before-completion` as approved candidates for the next baseline cut
 
 ## Decision to make
 
@@ -111,20 +111,24 @@ Evidence:
   - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\debug-hub\SKILL.md`
   - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\agentic-loop\SKILL.md`
 
-Assessment:
+Assessment after gauntlet:
 
 - Strong debugging discipline
 - Good fit for layer 3
-- Not yet proven as a baseline-wide requirement
-- Currently strongest when work starts from failures, regressions, or unexplained behavior
+- Proven across `12/12` isolated tasks plus `3/3` pressure-round cases
+- Low baseline noise in the pilot
 
 Decision now:
 
 - keep as optional overlay
 
+Decision for next baseline:
+
+- approved candidate to fold into the next baseline after `round4`
+
 Future fold eligibility:
 
-- possible candidate later if it becomes directly referenced by additional core execution or review paths
+- already cleared by gauntlet for the next baseline cut, provided bundle gating stays unchanged
 
 ### `test-first-development`
 
@@ -137,12 +141,12 @@ Evidence:
 - referenced from:
   - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\developer\SKILL.md`
 
-Assessment:
+Assessment after gauntlet:
 
 - Useful discipline for engineering quality
-- Too opinionated to become baseline-wide today
-- Not every repo, feature, or migration path can realistically adopt test-first as the default
-- Fails the low-noise requirement for a universal baseline
+- Demonstrated value across all trial repos
+- Still too opinionated and too uneven in baseline cost to become default today
+- Several strong wins required extra harness work or characterization-style tests
 
 Decision now:
 
@@ -150,7 +154,7 @@ Decision now:
 
 Future fold eligibility:
 
-- do not fold unless the project explicitly raises the baseline philosophy to test-first by default
+- re-evaluate after one more cycle only if ordinary implementation work shows lower ceremony than the current gauntlet did
 
 ### `evidence-before-completion`
 
@@ -165,20 +169,24 @@ Evidence:
   - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\qa-governor\SKILL.md`
   - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\agentic-loop\SKILL.md`
 
-Assessment:
+Assessment after gauntlet:
 
-- Strongest candidate for eventual baseline inclusion
+- Strongest candidate for baseline inclusion
 - Fits verification and completion gates well
-- Cross-cutting value is higher than the other two skills
-- Still adds friction to quick-flow or low-risk tasks if made mandatory too early
+- Proven across `12/12` isolated tasks plus `3/3` pressure-round cases
+- Very low ceremony compared with the discipline gain
 
 Decision now:
 
 - keep as optional overlay
 
+Decision for next baseline:
+
+- approved candidate to fold into the next baseline after `round4`
+
 Future fold eligibility:
 
-- strongest future candidate if the project decides that completion claims must always be evidence-backed
+- already cleared by gauntlet for the next baseline cut, provided bundle gating stays unchanged
 
 ## Candidate scoring
 
@@ -190,19 +198,19 @@ Scoring scale:
 
 | Skill | Layer fit | Cross-cutting value | Baseline noise risk | Current fold readiness | Recommendation |
 |---|---|---|---|---|---|
-| `root-cause-debugging` | High | Medium | Low-Medium | Medium | Keep optional now, re-evaluate later |
-| `test-first-development` | High | Low-Medium | High | Low | Keep optional long-term |
-| `evidence-before-completion` | High | High | Medium | Medium-High | Best future fold candidate, but not yet |
+| `root-cause-debugging` | High | High | Low | High | Keep overlay now, fold in next baseline |
+| `test-first-development` | High | Medium-High | Medium-High | Medium | Keep overlay next cycle |
+| `evidence-before-completion` | High | High | Low | High | Keep overlay now, fold in next baseline |
 
 ## Decision
 
-The safe decision today is:
+The gauntlet-backed decision is:
 
 1. keep `discipline-utilities` as an auxiliary bundle
 2. do not fold any of the 3 skills into `round4`
-3. treat `evidence-before-completion` as the first candidate for future baseline inclusion
-4. treat `root-cause-debugging` as the second candidate
-5. keep `test-first-development` as an overlay unless baseline philosophy changes
+3. treat `root-cause-debugging` as approved for the next baseline cut
+4. treat `evidence-before-completion` as approved for the next baseline cut
+5. keep `test-first-development` as an overlay for at least one more cycle
 
 ## What would justify a future fold
 
@@ -224,10 +232,11 @@ Only reconsider a fold if all of these remain true at the same time:
 
 ### Medium term
 
-If the architecture wants a stricter baseline later:
+If the architecture cuts a stricter baseline later:
 
-- consider folding `evidence-before-completion` into a future `round5-core`
-- consider folding `root-cause-debugging` only if debugging discipline becomes mandatory in more than the current failure-oriented flows
+- fold `root-cause-debugging` into that next baseline
+- fold `evidence-before-completion` into that next baseline
+- leave `test-first-development` in `discipline-utilities` until another cycle proves lower baseline cost
 
 ### Do not do by default
 
@@ -239,4 +248,10 @@ If the architecture wants a stricter baseline later:
 
 `discipline-utilities` should remain an optional overlay for now.
 
-That is the strictest and safest choice because it preserves the current 4-layer architecture, keeps `round4` clean, and still gives advanced teams access to stronger execution discipline without forcing extra baseline complexity onto every project.
+However, the gauntlet is strong enough to support a stricter future move:
+
+- fold `root-cause-debugging` into the next baseline
+- fold `evidence-before-completion` into the next baseline
+- keep `test-first-development` optional until one more cycle proves lower ceremony on ordinary implementation work
+
+That preserves the current 4-layer architecture, keeps `round4` clean, and still turns the strongest two utilities into future baseline candidates based on evidence rather than intuition.
