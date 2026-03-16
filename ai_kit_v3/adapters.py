@@ -3,13 +3,15 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict, Iterable, List
 
+from relay_kit_compat import GENERIC_CANONICAL_DIR, GENERIC_COMPAT_DIR
+
 
 ADAPTER_TARGETS: Dict[str, List[str]] = {
     "claude": [".claude/skills"],
     "gemini": [".agent/skills"],
     "codex": [".codex/skills"],
     "all": [".claude/skills", ".agent/skills", ".codex/skills"],
-    "generic": [".python-kit-prompts"],
+    "generic": [GENERIC_CANONICAL_DIR, GENERIC_COMPAT_DIR],
 }
 
 

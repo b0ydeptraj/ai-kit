@@ -2,6 +2,29 @@
 
 All notable changes to `Relay-kit` are documented here.
 
+## v3.2.3 - 2026-03-16
+
+### Added
+
+- Added `relay_kit.py` as the preferred Relay-kit v3 entrypoint.
+- Added `relay_kit_legacy.py` as the preferred preserved legacy generator.
+- Added a compatibility-safe dual-write path for generic output:
+  `.relay-kit-prompts/` plus mirrored `.python-kit-prompts/`.
+
+### Changed
+
+- Switched docs, help text, and validation to present `relay_kit.py` and
+  `relay_kit_legacy.py` as the preferred commands.
+- Kept `python_kit.py`, `python_kit_legacy.py`, and `.python-kit-prompts/`
+  as compatibility aliases for one migration cycle.
+
+### Fixed
+
+- Extended runtime validation to assert both canonical and compatibility
+  entrypoints still work.
+- Added generic output validation so `.relay-kit-prompts/` and
+  `.python-kit-prompts/` stay equivalent during the migration cycle.
+
 ## v3.2.2 - 2026-03-15
 
 ### Added

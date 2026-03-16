@@ -1,10 +1,12 @@
 # Relay-kit v3.2
 
-`Relay-kit` now runs with a registry-driven v3 entrypoint while preserving the previous generator as `python_kit_legacy.py`.
+`Relay-kit` now runs with a registry-driven v3 entrypoint while preserving a one-cycle compatibility layer for the old names.
 
 Compatibility note:
 - the product brand is now `Relay-kit`
-- the CLI entrypoints remain `python_kit.py` and `python_kit_legacy.py` for compatibility in this cycle
+- preferred CLI entrypoints are now `relay_kit.py` and `relay_kit_legacy.py`
+- `python_kit.py` and `python_kit_legacy.py` remain as compatibility aliases for one cycle
+- generic prompt output now prefers `.relay-kit-prompts/` and mirrors `.python-kit-prompts/` for one cycle
 
 ## Status snapshot
 
@@ -26,7 +28,7 @@ Compatibility note:
   - `.ai-kit/state/handoff-log.md`
   - richer `workflow-state.md` and `team-board.md`
 - adds topology docs for utility providers, standalone taxonomy, bundle gating, and parallelism rules
-- preserves legacy kits through `python_kit_legacy.py`
+- preserves legacy kits through `relay_kit_legacy.py` while keeping `python_kit_legacy.py` as an alias
 
 ## Runtime layout
 
@@ -45,39 +47,47 @@ After running v3 generation, the repo uses these runtime folders:
 ### list bundles and kits
 
 ```bash
-python python_kit.py --list-skills
+python relay_kit.py --list-skills
 ```
 
 ### generate the full round 4 layer set
 
 ```bash
-python python_kit.py . --bundle round4 --ai claude --emit-contracts --emit-docs --emit-reference-templates
-python python_kit.py . --bundle round4 --ai gemini --emit-contracts --emit-docs --emit-reference-templates
-python python_kit.py . --bundle round4 --ai codex --emit-contracts --emit-docs --emit-reference-templates
+python relay_kit.py . --bundle round4 --ai claude --emit-contracts --emit-docs --emit-reference-templates
+python relay_kit.py . --bundle round4 --ai gemini --emit-contracts --emit-docs --emit-reference-templates
+python relay_kit.py . --bundle round4 --ai codex --emit-contracts --emit-docs --emit-reference-templates
 ```
 
 ### generate utility overlays or compatibility bundles
 
 ```bash
-python python_kit.py . --bundle utility-providers --ai claude --emit-docs
-python python_kit.py . --bundle discipline-utilities --ai claude --emit-docs
-python python_kit.py . --bundle baseline --ai codex --emit-contracts --emit-docs --emit-reference-templates
-python python_kit.py . --bundle round3 --ai codex --emit-contracts --emit-docs --emit-reference-templates
-python python_kit.py . --bundle round2 --ai codex --emit-contracts --emit-docs --emit-reference-templates
+python relay_kit.py . --bundle utility-providers --ai claude --emit-docs
+python relay_kit.py . --bundle discipline-utilities --ai claude --emit-docs
+python relay_kit.py . --bundle baseline --ai codex --emit-contracts --emit-docs --emit-reference-templates
+python relay_kit.py . --bundle round3 --ai codex --emit-contracts --emit-docs --emit-reference-templates
+python relay_kit.py . --bundle round2 --ai codex --emit-contracts --emit-docs --emit-reference-templates
 ```
 
 ### legacy kits
 
 ```bash
-python python_kit.py . --legacy-kit python --ai claude
-python python_kit.py . --legacy-kit flutter --ai claude
-python python_kit.py . --legacy-kit antigravity --ai gemini
-python python_kit.py . --legacy-kit claudekit --ai claude
-python python_kit.py . --legacy-kit ui-ux --ai codex
-python python_kit.py . --legacy-kit full --ai all
+python relay_kit.py . --legacy-kit python --ai claude
+python relay_kit.py . --legacy-kit flutter --ai claude
+python relay_kit.py . --legacy-kit antigravity --ai gemini
+python relay_kit.py . --legacy-kit claudekit --ai claude
+python relay_kit.py . --legacy-kit ui-ux --ai codex
+python relay_kit.py . --legacy-kit full --ai all
 ```
 
 Legacy kits are migration and compatibility flows. They can materialize ClaudeKit or Antigravity-shaped assets, but they do not redefine the active v3 runtime model.
+
+### one-cycle compatibility aliases
+
+```bash
+python python_kit.py --list-skills
+python python_kit.py . --bundle baseline --ai codex --emit-contracts --emit-docs --emit-reference-templates
+python python_kit.py . --legacy-kit python --ai claude
+```
 
 ### validate adapter parity and bundle gating
 
@@ -145,7 +155,11 @@ Round 4 is a **hardening pass**, not a random prompt dump:
 
 ## Migration notes
 
-- `python_kit.py` remains the active Relay-kit v3 entrypoint.
-- `python_kit_legacy.py` remains the preserved old generator.
+- `relay_kit.py` is the preferred Relay-kit v3 entrypoint.
+- `python_kit.py` remains a compatibility alias for one cycle.
+- `relay_kit_legacy.py` is the preferred preserved legacy generator.
+- `python_kit_legacy.py` remains a compatibility alias for one cycle.
+- `.relay-kit-prompts/` is the preferred generic output path; `.python-kit-prompts/` is mirrored for one cycle.
 - `round2` and `round3` behavior stay available.
 - `round4` adds utility providers, bundle gating, and stronger multi-lane state on top of the round 3 base instead of replacing it.
+- renaming the physical repo folder is deferred to a later manual migration after the compatibility cycle so current absolute Windows paths remain truthful.

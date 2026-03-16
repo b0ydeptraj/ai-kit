@@ -7,5 +7,9 @@ Recommended runtime layout:
 - `.ai-kit/references/` -> living support references for architecture, APIs, persistence, and testing
 - `.ai-kit/docs/` -> topology docs, migration notes, gating rules, and orchestration rules
 - `.claude/skills/`, `.agent/skills/`, `.codex/skills/` -> adapter-specific runtime skill folders
-- `python_kit_legacy.py` -> renamed old generator, still used for legacy analysis/template kits
-- `python_kit.py` -> current Relay-kit v3 entrypoint that adds orchestration, routing, hubs, utility providers, contracts, and gating
+- `.relay-kit-prompts/` -> preferred generic prompt output path
+- `.python-kit-prompts/` -> compatibility alias for generic prompt output during one migration cycle
+- `relay_kit_legacy.py` -> preferred preserved legacy generator for analysis/template kits
+- `python_kit_legacy.py` -> compatibility alias for one migration cycle
+- `relay_kit.py` -> preferred Relay-kit v3 entrypoint that adds orchestration, routing, hubs, utility providers, contracts, and gating
+- `python_kit.py` -> compatibility alias for one migration cycle

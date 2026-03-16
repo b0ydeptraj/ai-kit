@@ -30,6 +30,12 @@ from .registry import (
     render_team_board,
     render_workflow_state,
 )
+from relay_kit_compat import (
+    CANONICAL_LEGACY_ENTRYPOINT,
+    COMPAT_LEGACY_ENTRYPOINT,
+    legacy_entrypoint_candidates,
+    mirrored_generic_paths,
+)
 
 
 BUNDLES: Dict[str, List[str]] = {
@@ -60,15 +66,16 @@ DOC_STATIC_BUILDERS = {
 
 
 def load_legacy_module(repo_root: Path):
-    legacy_path = repo_root / "python_kit_legacy.py"
-    if not legacy_path.exists():
-        return None
-    spec = importlib.util.spec_from_file_location("python_kit_legacy", legacy_path)
-    if spec is None or spec.loader is None:
-        return None
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
+    for legacy_path in legacy_entrypoint_candidates(repo_root):
+        if not legacy_path.exists():
+            continue
+        spec = importlib.util.spec_from_file_location("relay_kit_legacy_runtime", legacy_path)
+        if spec is None or spec.loader is None:
+            continue
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    return None
 
 
 
@@ -92,9 +99,9 @@ def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
             spec = spec_for(name)
             if spec is None:
                 continue
-            output = project_path / ".python-kit-prompts" / f"{name}.md"
-            write_text(output, render_skill(spec))
-            written.append(output)
+            for output in mirrored_generic_paths(project_path, f"{name}.md"):
+                write_text(output, render_skill(spec))
+                written.append(output)
         return written
 
     ensure_dirs(project_path, relative_targets)
@@ -169,8 +176,12 @@ Recommended runtime layout:
 - `.ai-kit/references/` -> living support references for architecture, APIs, persistence, and testing
 - `.ai-kit/docs/` -> topology docs, migration notes, gating rules, and orchestration rules
 - `.claude/skills/`, `.agent/skills/`, `.codex/skills/` -> adapter-specific runtime skill folders
-- `python_kit_legacy.py` -> renamed old generator, still used for legacy analysis/template kits
-- `python_kit.py` -> current Relay-kit v3 entrypoint that adds orchestration, routing, hubs, utility providers, contracts, and gating
+- `.relay-kit-prompts/` -> preferred generic prompt output path
+- `.python-kit-prompts/` -> compatibility alias for generic prompt output during one migration cycle
+- `relay_kit_legacy.py` -> canonical legacy generator for analysis/template kits
+- `python_kit_legacy.py` -> compatibility alias for one migration cycle
+- `relay_kit.py` -> current Relay-kit v3 entrypoint that adds orchestration, routing, hubs, utility providers, contracts, and gating
+- `python_kit.py` -> compatibility alias for one migration cycle
 """
 
 
@@ -228,7 +239,10 @@ def create_bmad_upgrade(project_path: str, ai: str, bundle: str, with_contracts:
 def create_legacy_skills(project_path: str, ai: str, verbose: bool, skills: Optional[List[str]], kit: str, repo_root: Path) -> int:
     legacy = load_legacy_module(repo_root)
     if legacy is None:
-        print("Legacy generator not found. Rename your old script to python_kit_legacy.py to keep old kits working.")
+        print(
+            "Legacy generator not found. "
+            f"Expected {CANONICAL_LEGACY_ENTRYPOINT} or {COMPAT_LEGACY_ENTRYPOINT}."
+        )
         return 1
     return legacy.create_python_skills(
         project_path=project_path,

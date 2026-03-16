@@ -101,7 +101,7 @@ adapter_runtime:
     note: keep Codex as a skill surface, not a Claude command or Antigravity workflow surface
 
 legacy_compatibility:
-  generator: python_kit_legacy.py
+  generator: relay_kit_legacy.py
   template_roots:
     - templates/agent
     - templates/claude
@@ -113,6 +113,7 @@ legacy_compatibility:
     - ui-ux
     - full
   notes:
+    - `python_kit.py`, `python_kit_legacy.py`, and `.python-kit-prompts` remain compatibility aliases for one migration cycle.
     - Antigravity workflows, rules, and shared assets belong to legacy migration support only.
     - Claude commands and agents belong to legacy migration support only.
     - Codex support assets may be materialized by the legacy generator under `.codex/support`, but they are not part of the active v3 runtime taxonomy.
