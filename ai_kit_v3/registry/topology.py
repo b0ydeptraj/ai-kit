@@ -143,7 +143,7 @@ ROUND2_CHANGELOG = dedent(
 
     Round 2 introduced the BMAD-lite base:
 
-    - v3 entrypoint in `python_kit.py`
+    - Relay-kit v3 entrypoint in `python_kit.py`
     - preserved legacy generator in `python_kit_legacy.py`
     - role-based core skills
     - cleaned `agentic-loop`

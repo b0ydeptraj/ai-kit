@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate adapter parity and bundle gating for the active v3 runtime."""
+"""Validate adapter parity and bundle gating for the active Relay-kit v3 runtime."""
 
 from __future__ import annotations
 
@@ -15,8 +15,10 @@ if str(REPO_ROOT) not in sys.path:
 
 from ai_kit_v3.adapters import ADAPTER_TARGETS
 from ai_kit_v3.generator import BUNDLES
+from ai_kit_v3.registry.skills import ALL_V3_SKILLS
 
 ALL_TARGETS = [".claude/skills", ".agent/skills", ".codex/skills"]
+EXPECTED_RUNTIME_SKILLS = set(ALL_V3_SKILLS.keys())
 ROUND4_DISCIPLINE_SKILLS = {
     "root-cause-debugging",
     "evidence-before-completion",
@@ -74,7 +76,7 @@ def assert_contains(path: Path, required_tokens: list[str]) -> None:
 
 
 def validate_checked_in_runtime() -> None:
-    adapter_sets = {target: skill_dirs(REPO_ROOT, target) for target in ALL_TARGETS}
+    adapter_sets = {target: skill_dirs(REPO_ROOT, target) & EXPECTED_RUNTIME_SKILLS for target in ALL_TARGETS}
     reference_target, reference_set = next(iter(adapter_sets.items()))
     for target, current_set in adapter_sets.items():
         assert_set(f"checked-in runtime parity vs {reference_target} for {target}", current_set, reference_set)
@@ -111,7 +113,7 @@ def validate_checked_in_docs() -> None:
 
 def validate_generated_bundle(bundle: str) -> None:
     expected_skills = set(BUNDLES[bundle])
-    temp_dir = Path(tempfile.mkdtemp(prefix=f"python-kit-{bundle}-"))
+    temp_dir = Path(tempfile.mkdtemp(prefix=f"relay-kit-{bundle}-"))
     try:
         run_python_kit(
             str(temp_dir),

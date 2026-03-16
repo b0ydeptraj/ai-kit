@@ -3,7 +3,7 @@
 ## Status
 
 - Proposed execution plan
-- Decision owner: `python-kit` architecture
+- Decision owner: `Relay-kit` architecture
 - Purpose: produce one high-confidence fold or keep decision for `discipline-utilities`
 
 ## Goal

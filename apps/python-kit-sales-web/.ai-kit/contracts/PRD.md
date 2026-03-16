@@ -5,10 +5,10 @@
 > Used by: pm, architect, scrum-master, qa-governor, plan-hub
 
 ## Objective and scope
-Build a sales demo for `python-kit` that targets AI builders and proves the product with real repo evidence. Scope is limited to a public marketing flow: landing page, pricing page, fake checkout, success page, and a mock checkout API route.
+Build a sales demo for `Relay-kit` that targets AI builders and proves the product with real repo evidence. Scope is limited to a public marketing flow: landing page, pricing page, fake checkout, success page, and a mock checkout API route.
 
 ## Functional requirements
-1. The home page must explain the positioning of `python-kit` as a workflow OS, not a prompt pack.
+1. The home page must explain the positioning of `Relay-kit` as a workflow OS, not a prompt pack.
 2. The home page must include sections for the 4-layer model, adapter parity, repo-backed proof claims, workflow map, feature grid, and pricing preview.
 3. The pricing page must show the three fixed plans: Solo Builder, Team Workflow, Operator Continuity.
 4. The checkout page must accept a plan from query params, render a real form, validate input, and post to `/api/mock-checkout`.

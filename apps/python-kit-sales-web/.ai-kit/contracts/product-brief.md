@@ -5,11 +5,11 @@
 > Used by: analyst, pm, workflow-router, brainstorm-hub, plan-hub
 
 ## Problem statement
-AI builders can assemble prompt packs and adapter-specific kits quickly, but those packs usually collapse once the work needs routing, durable artifacts, QA gates, and adapter parity. This demo exists to prove that `python-kit` is not only a repo of skills: it can carry a real product workflow from framing to implementation to evidence-backed checkout.
+AI builders can assemble prompt packs and adapter-specific kits quickly, but those packs usually collapse once the work needs routing, durable artifacts, QA gates, and adapter parity. This demo exists to prove that `Relay-kit` is not only a repo of skills: it can carry a real product workflow from framing to implementation to evidence-backed checkout.
 
 ## Target users and jobs-to-be-done
 - Primary users: AI devs, internal platform builders, small AI feature squads, and solo builders graduating from ad-hoc prompting.
-- Core job: evaluate whether `python-kit` can act as a workflow OS instead of a pile of prompts.
+- Core job: evaluate whether `Relay-kit` can act as a workflow OS instead of a pile of prompts.
 - Demo-specific job: understand the baseline, adapter parity, state model, and QA story quickly enough to justify a trial purchase.
 
 ## Desired outcomes and success signals

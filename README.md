@@ -1,6 +1,10 @@
-# Python Kit v3.2
+# Relay-kit v3.2
 
-`python-kit` now runs with a registry-driven v3 entrypoint while preserving the previous generator as `python_kit_legacy.py`.
+`Relay-kit` now runs with a registry-driven v3 entrypoint while preserving the previous generator as `python_kit_legacy.py`.
+
+Compatibility note:
+- the product brand is now `Relay-kit`
+- the CLI entrypoints remain `python_kit.py` and `python_kit_legacy.py` for compatibility in this cycle
 
 ## Status snapshot
 
@@ -141,7 +145,7 @@ Round 4 is a **hardening pass**, not a random prompt dump:
 
 ## Migration notes
 
-- `python_kit.py` remains the active v3 entrypoint.
+- `python_kit.py` remains the active Relay-kit v3 entrypoint.
 - `python_kit_legacy.py` remains the preserved old generator.
 - `round2` and `round3` behavior stay available.
 - `round4` adds utility providers, bundle gating, and stronger multi-lane state on top of the round 3 base instead of replacing it.

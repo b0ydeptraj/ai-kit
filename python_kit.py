@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Python Kit v3.2 - registry-driven BMAD-lite hardening for ai-kit.
+"""Relay-kit v3.2 - registry-driven BMAD-lite hardening for ai-kit.
 
 How to adopt with minimal breakage:
 1. Keep the old generator as `python_kit_legacy.py`.
-2. Use this file plus the `ai_kit_v3/` package as the active entrypoint.
+2. Use this file plus the `ai_kit_v3/` package as the active Relay-kit entrypoint.
 3. Keep using legacy kits for project-specific analysis/template generation.
 4. Use the new bundles to generate orchestrators, workflow hubs, utility providers,
    discipline overlays, next-baseline candidates, artifact contracts, topology docs, and cleaned runtime skills.
@@ -47,7 +47,7 @@ def list_everything(repo_root: Path) -> None:
 def parse_args(repo_root: Path) -> argparse.Namespace:
     _, legacy = legacy_kits(repo_root)
     parser = argparse.ArgumentParser(
-        description="Python Kit v3.2 - BMAD-lite hardening with orchestrators, workflow hubs, utility providers, discipline overlays, the official baseline bundle, bundle gating, and legacy compatibility",
+        description="Relay-kit v3.2 - BMAD-lite hardening with orchestrators, workflow hubs, utility providers, discipline overlays, the official baseline bundle, bundle gating, and legacy compatibility",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:

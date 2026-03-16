@@ -3,7 +3,7 @@
 ## Status
 
 - Reviewed after gauntlet `discipline-utilities-v1`
-- Decision owner: `python-kit` architecture
+- Decision owner: `Relay-kit` architecture
 - Current recommendation: keep `discipline-utilities` as an optional overlay bundle while treating `root-cause-debugging` and `evidence-before-completion` as official baseline members
 - Baseline promotion status: `baseline` is now the official active baseline; `baseline-next` is retained as a compatibility alias during the promotion cycle; `round4` remains untouched as the previous compatibility baseline
 

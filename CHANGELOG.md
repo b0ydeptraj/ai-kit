@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to `python-kit` are documented here.
+All notable changes to `Relay-kit` are documented here.
 
 ## v3.2.2 - 2026-03-15
 
@@ -81,7 +81,7 @@ All notable changes to `python-kit` are documented here.
   preserved `python_kit_legacy.py` unchanged for legacy kits.
 - Updated `workflow-state.md` and `team-board.md` to support lane ownership,
   handoffs, lock scopes, and active utility-provider tracking.
-- Refreshed the public README to present the repository as `Python Kit v3.2`
+- Refreshed the public README to present the repository as `Relay-kit v3.2`
   with round 4 status and bundle coverage.
 
 ### Fixed

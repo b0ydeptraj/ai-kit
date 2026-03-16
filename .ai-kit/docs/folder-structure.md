@@ -8,4 +8,4 @@ Recommended runtime layout:
 - `.ai-kit/docs/` -> topology docs, migration notes, gating rules, and orchestration rules
 - `.claude/skills/`, `.agent/skills/`, `.codex/skills/` -> adapter-specific runtime skill folders
 - `python_kit_legacy.py` -> renamed old generator, still used for legacy analysis/template kits
-- `python_kit.py` -> new v3 entrypoint that adds orchestration, routing, hubs, utility providers, contracts, and gating
+- `python_kit.py` -> current Relay-kit v3 entrypoint that adds orchestration, routing, hubs, utility providers, contracts, and gating
