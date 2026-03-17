@@ -134,6 +134,7 @@ Use `--emit-contracts`, `--emit-docs`, and `--emit-reference-templates` to mater
 For v3 bundle generation, `--ai all` writes `.claude/skills`, `.agent/skills`, and `.codex/skills`. Legacy kits keep their legacy compatibility behavior, so use `--ai codex` explicitly when you need Codex output from the preserved generator.
 
 See also: [`docs/discipline-utilities-baseline-proposal.md`](docs/discipline-utilities-baseline-proposal.md)
+See also: [`docs/relay-kit-compatibility-cycle.md`](docs/relay-kit-compatibility-cycle.md)
 
 ## 4-layer usage model
 
@@ -163,3 +164,4 @@ Round 4 is a **hardening pass**, not a random prompt dump:
 - `round2` and `round3` behavior stay available.
 - `round4` adds utility providers, bundle gating, and stronger multi-lane state on top of the round 3 base instead of replacing it.
 - renaming the physical repo folder is deferred to a later manual migration after the compatibility cycle so current absolute Windows paths remain truthful.
+- use `docs/relay-kit-compatibility-cycle.md` as the removal gate before deleting old names or renaming the physical repo folder.

@@ -2,6 +2,22 @@
 
 All notable changes to `Relay-kit` are documented here.
 
+## v3.2.4 - 2026-03-17
+
+### Added
+
+- Added `docs/relay-kit-compatibility-cycle.md` to make the Relay-kit rename
+  soak period explicit.
+
+### Changed
+
+- Defined the deprecation/removal gate for:
+  - `python_kit.py`
+  - `python_kit_legacy.py`
+  - `.python-kit-prompts`
+- Documented that the physical repo-folder rename remains deferred until the
+  compatibility cycle is complete.
+
 ## v3.2.3 - 2026-03-16
 
 ### Added
