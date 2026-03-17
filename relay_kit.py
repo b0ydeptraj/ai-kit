@@ -16,6 +16,7 @@ import sys
 from pathlib import Path
 
 from ai_kit_v3.generator import BUNDLES, create_bmad_upgrade, create_legacy_skills, load_legacy_module
+from relay_kit_cycle_log import append_cycle_event, current_source
 from relay_kit_compat import (
     CANONICAL_ENTRYPOINT,
     CANONICAL_LEGACY_ENTRYPOINT,
@@ -95,11 +96,40 @@ Compatibility alias for one cycle:
 
 
 
-def main() -> int:
+def _build_event(args: argparse.Namespace, invoked_as: str, exit_code: int) -> dict[str, object]:
+    flow = "no_op"
+    if args.list_skills:
+        flow = "list_skills"
+    elif args.bundle and (args.legacy_kit or args.skills):
+        flow = "bundle_plus_legacy"
+    elif args.bundle:
+        flow = "v3_bundle"
+    elif args.legacy_kit or args.skills:
+        flow = "legacy_bridge"
+
+    return {
+        "entrypoint": invoked_as,
+        "source": current_source(),
+        "flow": flow,
+        "project_path": args.project_path,
+        "ai": args.ai,
+        "bundle": args.bundle,
+        "legacy_kit": args.legacy_kit or ("python" if args.skills else None),
+        "skills": list(args.skills or []),
+        "generic_output": args.ai == "generic",
+        "exit_code": exit_code,
+        "success": exit_code == 0,
+    }
+
+
+def main(invoked_as: str | None = None) -> int:
     repo_root = Path(__file__).resolve().parent
+    entrypoint = invoked_as or Path(sys.argv[0]).name or CANONICAL_ENTRYPOINT
     args = parse_args(repo_root)
+    exit_code = 0
     if args.list_skills:
         list_everything(repo_root)
+        append_cycle_event(repo_root, _build_event(args, entrypoint, 0))
         return 0
 
     ran_anything = False
@@ -124,7 +154,9 @@ def main() -> int:
                 "Cannot run legacy generation because neither "
                 f"{CANONICAL_LEGACY_ENTRYPOINT} nor {COMPAT_LEGACY_ENTRYPOINT} is available."
             )
-            return 1
+            exit_code = 1
+            append_cycle_event(repo_root, _build_event(args, entrypoint, exit_code))
+            return exit_code
         legacy_kit = args.legacy_kit or "python"
         exit_code = create_legacy_skills(
             project_path=args.project_path,
@@ -135,14 +167,18 @@ def main() -> int:
             repo_root=repo_root,
         )
         if exit_code != 0:
+            append_cycle_event(repo_root, _build_event(args, entrypoint, exit_code))
             return exit_code
         ran_anything = True
 
     if not ran_anything:
         print("Nothing to do. Use --bundle for v3 generation or --legacy-kit/--skills for legacy generation.")
         print("Tip: run with --list-skills to see both v3 bundles and legacy kits.")
-        return 1
+        exit_code = 1
+        append_cycle_event(repo_root, _build_event(args, entrypoint, exit_code))
+        return exit_code
 
+    append_cycle_event(repo_root, _build_event(args, entrypoint, exit_code))
     return 0
 
 

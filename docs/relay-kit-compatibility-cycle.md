@@ -9,6 +9,28 @@ Use this checklist before:
 - removing the old entrypoint filenames
 - removing the old generic prompt path alias
 
+## Auto-log and checkpoint workflow
+
+- Local event log:
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.relay-kit-cycle\events.jsonl`
+- This local event log is ignored by git and is meant for machine-written evidence.
+- Tracked summary/log file:
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\docs\relay-kit-compatibility-log.md`
+- Checkpoint commands:
+
+```bash
+python scripts/summarize_compat_cycle.py
+python scripts/summarize_compat_cycle.py --write-summary
+python scripts/summarize_compat_cycle.py --checkpoint
+```
+
+Windows one-click helpers:
+
+```bat
+run-relay-kit-summary.cmd
+run-relay-kit-checkpoint.cmd
+```
+
 ## What stays deferred in this cycle
 
 - Physical repo folder rename on disk:

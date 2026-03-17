@@ -18,6 +18,7 @@ import os
 import shutil
 from pathlib import Path
 
+from relay_kit_cycle_log import append_cycle_event, current_source
 from relay_kit_compat import (
     GENERIC_CANONICAL_DIR,
     GENERIC_COMPAT_DIR,
@@ -1988,7 +1989,28 @@ def create_python_skills(
     return 0 if not failed_commands else 1
 
 
-def main():
+def _build_event(args: argparse.Namespace, invoked_as: str, exit_code: int) -> dict[str, object]:
+    flow = "legacy_kit"
+    if args.list_skills:
+        flow = "list_skills"
+
+    return {
+        "entrypoint": invoked_as,
+        "source": current_source(),
+        "flow": flow,
+        "project_path": args.project_path,
+        "ai": args.ai,
+        "legacy_kit": args.kit,
+        "skills": list(args.skills or []),
+        "generic_output": args.ai == "generic",
+        "exit_code": exit_code,
+        "success": exit_code == 0,
+    }
+
+
+def main(invoked_as: str | None = None) -> int:
+    repo_root = Path(__file__).resolve().parent
+    entrypoint = invoked_as or Path(sys.argv[0]).name or "relay_kit_legacy.py"
     parser = argparse.ArgumentParser(
         description="Relay-kit legacy v2.1 - Generate AI agent skills from multiple kits",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -2054,7 +2076,8 @@ Skill sets:
                 print(f"    - {skill}")
             print()
         print(f"Total unique skills: {len(ALL_SKILLS)}")
-        return
+        append_cycle_event(repo_root, _build_event(args, entrypoint, 0))
+        return 0
 
     exit_code = create_python_skills(
         project_path=args.project_path,
@@ -2063,9 +2086,9 @@ Skill sets:
         skills=args.skills,
         kit=args.kit
     )
-    
-    sys.exit(exit_code)
+    append_cycle_event(repo_root, _build_event(args, entrypoint, exit_code))
+    return exit_code
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

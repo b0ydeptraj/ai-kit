@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import os
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -42,12 +43,15 @@ def fail(message: str) -> None:
 
 def run_cli(script_name: str, *args: str) -> str:
     command = [sys.executable, str(REPO_ROOT / script_name), *args]
+    env = dict(os.environ)
+    env["RELAY_KIT_CYCLE_SOURCE"] = "validate_runtime"
     result = subprocess.run(
         command,
         cwd=REPO_ROOT,
         text=True,
         capture_output=True,
         check=False,
+        env=env,
     )
     if result.returncode != 0:
         fail(

@@ -12,6 +12,7 @@ venv/
 
 # Local tooling / extracted packs
 .serena/
+.relay-kit-cycle/
 ai-kit-bmad-lite-round2-upgrade/
 ai-kit-bmad-lite-round3-upgrade/
 ai-kit-bmad-lite-round4-upgrade/

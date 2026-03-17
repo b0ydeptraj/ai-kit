@@ -19,7 +19,7 @@ def main() -> int:
             "Compatibility alias: prefer `relay_kit_legacy.py`; "
             "`python_kit_legacy.py` will be removed after one migration cycle."
         )
-    return _legacy_main()
+    return _legacy_main(invoked_as="python_kit_legacy.py")
 
 
 if __name__ == "__main__":

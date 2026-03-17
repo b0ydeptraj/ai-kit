@@ -16,7 +16,7 @@ def _should_print_notice(argv: list[str]) -> bool:
 def main() -> int:
     if _should_print_notice(sys.argv):
         print("Compatibility alias: prefer `relay_kit.py`; `python_kit.py` will be removed after one migration cycle.")
-    return _relay_main()
+    return _relay_main(invoked_as="python_kit.py")
 
 
 if __name__ == "__main__":
