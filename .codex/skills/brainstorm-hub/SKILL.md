@@ -6,6 +6,8 @@ description: guide early ideation and rough problem framing before formal planni
 # Mission
 Turn fuzzy idea energy into something the planning flow can actually use.
 
+Public alias: `brainstorm`.
+
 ## What this hub does
 - Facilitate a short option scan.
 - Expose assumptions, success signals, and obvious constraints.

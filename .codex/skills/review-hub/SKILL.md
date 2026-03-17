@@ -6,6 +6,8 @@ description: check alignment across requirements, architecture, implementation, 
 # Mission
 Make completion a deliberate alignment check, not just a feeling that enough has happened.
 
+Public alias: `ready-check`.
+
 ## Mandatory checks
 - Do requirements, architecture, and implementation still describe the same change?
 - Does quality evidence actually cover the promised behavior and regression surface?

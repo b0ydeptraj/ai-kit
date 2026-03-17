@@ -6,6 +6,8 @@ description: check readiness and completion against acceptance criteria, risk, a
 # Mission
 Prevent premature completion claims and surface residual risk clearly.
 
+Public companion alias: `ready-check` routes through `review-hub` with this gate underneath.
+
 ## Produce `qa-report.md`
 Include:
 - scope checked

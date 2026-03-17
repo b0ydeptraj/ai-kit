@@ -6,6 +6,8 @@ description: turn prd and architecture into implementation-ready stories or a te
 # Mission
 Cut work into execution units that a developer can complete without re-opening product or architecture debates.
 
+Public alias: `write-steps`.
+
 ## For quick-flow
 Create or refine `.ai-kit/contracts/tech-spec.md` with:
 - change summary

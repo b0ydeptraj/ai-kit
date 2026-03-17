@@ -6,6 +6,8 @@ description: triage failures, collect evidence, and decide whether the issue is 
 # Mission
 Turn a symptom into evidence and a decision, not into random edits.
 
+Public alias: `debug-systematically`.
+
 ## Mandatory behavior
 1. Reproduce the issue or explain why reproduction is not yet reliable.
 2. Write `investigation-notes.md` with evidence, likely root cause, and non-causes ruled out.

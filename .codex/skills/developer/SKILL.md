@@ -6,6 +6,8 @@ description: implement a story or tech-spec using the cleaned execution loop and
 # Mission
 Turn an approved story or tech-spec into code and evidence without reopening solved planning questions.
 
+Public alias: `build-it`.
+
 ## Mandatory behavior
 1. Read the active story or tech-spec completely before changing code.
 2. Pull only the support references needed for the specific files or boundaries involved.

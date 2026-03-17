@@ -6,6 +6,8 @@ description: route a request through the right delivery track, choose the active
 # Mission
 Act as the routing kernel for the whole system: choose the track, choose the active lane, and make the next move explicit.
 
+Public alias: `start-here`.
+
 ## Mandatory routing procedure
 1. Read `.ai-kit/contracts/project-context.md` and `.ai-kit/state/workflow-state.md` if they exist.
 2. Score the request on five axes: ambiguity, breadth of change, architecture risk, operational risk, and coordination cost.
