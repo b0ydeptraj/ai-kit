@@ -1,4 +1,4 @@
-[English](README.md) | [Tiếng Việt](README.vi.md)
+﻿[English](README.md) | [Tiếng Việt](README.vi.md)
 
 # Relay-kit
 
@@ -79,6 +79,7 @@ If you only remember a few names, remember these:
 | shape a rough idea | `brainstorm` | `brainstorm-hub` |
 | turn approved work into buildable steps | `write-steps` | `scrum-master` |
 | implement the approved slice | `build-it` | `developer` |
+| review a branch or PR before merge or sign-off | `review-pr` | `review-hub` |
 | debug without guessing | `debug-systematically` | `debug-hub` + `root-cause-debugging` |
 | decide if work is actually ready | `ready-check` | `review-hub` + `qa-governor` |
 | force a final proof pass | `prove-it` | `evidence-before-completion` |
@@ -98,8 +99,15 @@ Default path for bugs:
 3. `build-it`
 4. `ready-check`
 
+Default path for branch or PR review:
+
+1. `review-pr`
+2. `ready-check` if you need a real readiness or shipability verdict
+3. `prove-it` if the completion claim still sounds stronger than the proof
+
 More detail:
 - [`docs/relay-kit-start-flow.md`](docs/relay-kit-start-flow.md)
+- [`docs/relay-kit-review-flow.md`](docs/relay-kit-review-flow.md)
 
 ## How it works
 
@@ -164,6 +172,8 @@ Removal gate:
 
 - Start flow:
   - [`docs/relay-kit-start-flow.md`](docs/relay-kit-start-flow.md)
+- Review flow:
+  - [`docs/relay-kit-review-flow.md`](docs/relay-kit-review-flow.md)
 - Skill authoring:
   - [`docs/how-to-write-skills.md`](docs/how-to-write-skills.md)
 - Contributing:

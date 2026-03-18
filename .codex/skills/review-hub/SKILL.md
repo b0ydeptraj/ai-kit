@@ -1,4 +1,4 @@
----
+﻿---
 name: review-hub
 description: Use when artifacts disagree or before final completion claims. Check alignment across requirements, architecture, implementation, and quality evidence, then decide whether to accept, re-slice, debug, or re-plan.
 ---
@@ -6,7 +6,9 @@ description: Use when artifacts disagree or before final completion claims. Chec
 # Mission
 Make completion a deliberate alignment check, not just a feeling that enough has happened.
 
-Public alias: `ready-check`.
+Public aliases:
+- `review-pr` for branch or PR review
+- `ready-check` for readiness and shipability decisions
 
 ## Mandatory checks
 - Do requirements, architecture, and implementation still describe the same change?
@@ -42,6 +44,7 @@ End with one explicit verdict:
 - Verify external review feedback against the codebase before accepting it.
 - Prefer one review item at a time when feedback changes code or requirements.
 - If the lane is complete, route through branch-completion discipline before treating it as finished.
+- When the task is branch or PR review, end with a bounce-back decision, the missing evidence or risks, and the exact next lane.
 - Do not accept a frontend lane on code inspection alone when the user complaint is visual, responsive, or interaction-based.
 - If the screen is functionally correct but visually weak, say so directly and bounce back to implementation with a concrete refinement list.
 

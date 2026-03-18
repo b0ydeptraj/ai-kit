@@ -1,4 +1,4 @@
----
+﻿---
 name: build-it
 description: Use when an approved story or tech spec is ready for implementation with controlled scope and evidence. Public Relay-kit entrypoint for building.
 ---
@@ -14,8 +14,9 @@ Use this when:
 
 What this alias should do:
 1. implement the scoped change
-2. keep evidence tied to the actual acceptance criteria
-3. hand off with test and browser proof instead of completion claims
+2. start from a failing test or failing reproduction when the behavior is testable
+3. keep evidence tied to the actual acceptance criteria
+4. hand off with test and browser proof instead of completion claims
 
 Behind the scenes:
 - canonical skill: `developer`

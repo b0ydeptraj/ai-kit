@@ -1,4 +1,4 @@
-[English](README.md) | [Tiếng Việt](README.vi.md)
+﻿[English](README.md) | [Tiếng Việt](README.vi.md)
 
 # Relay-kit
 
@@ -79,6 +79,7 @@ Nếu chỉ nhớ vài cái tên, hãy nhớ các tên này:
 | biến ý tưởng mơ hồ thành hướng rõ | `brainstorm` | `brainstorm-hub` |
 | biến việc đã chốt thành các bước có thể làm | `write-steps` | `scrum-master` |
 | triển khai phần việc đã được duyệt | `build-it` | `developer` |
+| review branch hoặc PR trước khi merge hoặc sign-off | `review-pr` | `review-hub` |
 | gỡ lỗi mà không đoán mò | `debug-systematically` | `debug-hub` + `root-cause-debugging` |
 | quyết định xem công việc đã thật sự sẵn sàng chưa | `ready-check` | `review-hub` + `qa-governor` |
 | ép kiểm tra bằng chứng lần cuối | `prove-it` | `evidence-before-completion` |
@@ -98,8 +99,15 @@ Nếu chỉ nhớ vài cái tên, hãy nhớ các tên này:
 3. `build-it`
 4. `ready-check`
 
+Đường mặc định cho review branch/PR:
+
+1. `review-pr`
+2. `ready-check` nếu cần một verdict thật sự về readiness hoặc shipability
+3. `prove-it` nếu claim "xong" vẫn nghe mạnh hơn phần bằng chứng
+
 Xem chi tiết hơn:
 - [`docs/relay-kit-start-flow.md`](docs/relay-kit-start-flow.md)
+- [`docs/relay-kit-review-flow.md`](docs/relay-kit-review-flow.md)
 
 ## Nó hoạt động như thế nào
 
@@ -123,6 +131,7 @@ Entrypoint chính:
 Baseline đang hoạt động:
 
 - `baseline`
+- bí danh tương thích: `baseline-next`
 
 Sau khi generate, bạn sẽ có:
 
@@ -133,6 +142,12 @@ Sau khi generate, bạn sẽ có:
 - `.ai-kit/state/`
 - `.ai-kit/references/`
 - `.ai-kit/docs/`
+
+Generate tất cả adapter cùng lúc với `--ai all`:
+
+```bash
+python relay_kit.py . --bundle baseline --ai all
+```
 
 ## Tương thích
 
@@ -157,6 +172,8 @@ Bí danh cũ vẫn giữ trong một chu kỳ:
 
 - Start flow:
   - [`docs/relay-kit-start-flow.md`](docs/relay-kit-start-flow.md)
+- Review flow:
+  - [`docs/relay-kit-review-flow.md`](docs/relay-kit-review-flow.md)
 - Cấu trúc thư mục:
   - [`.ai-kit/docs/folder-structure.md`](.ai-kit/docs/folder-structure.md)
 - Luật bundle:
