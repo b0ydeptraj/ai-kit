@@ -12,19 +12,19 @@
 `python scripts/summarize_compat_cycle.py --write-summary` refreshes this block.
 
 <!-- compat-cycle-summary:start -->
-- Last summary update: `2026-03-17 09:42:02 SE Asia Standard Time`
+- Last summary update: `2026-03-18 22:48:43 SE Asia Standard Time`
 - Source filter: `interactive`
-- Total logged events considered: `1`
-- Total real runs: `0`
-- `relay_kit.py` runs: `0`
+- Total logged events considered: `2`
+- Total real runs: `1`
+- `relay_kit.py` runs: `1`
 - `python_kit.py` runs: `0`
 - `relay_kit_legacy.py` runs: `0`
 - `python_kit_legacy.py` runs: `0`
 - Generic dual-write runs: `0`
-- Distinct target projects: `0`
+- Distinct target projects: `1`
 - Failed runs in filtered set: `0`
 - Last validation result: `pass`
-- Last observed event: `2026-03-17T08:47:31+07:00`
+- Last observed event: `2026-03-18T11:31:03+07:00`
 <!-- compat-cycle-summary:end -->
 
 Manual gate:
@@ -178,6 +178,36 @@ run-relay-kit-checkpoint.cmd
   - `0`
 - Distinct target projects:
   - `0`
+- Failed runs in filtered set:
+  - `0`
+- Validation command:
+  - `python scripts/validate_runtime.py`
+- Result:
+  - `pass`
+- Notes:
+  - auto-generated checkpoint
+
+
+## Checkpoint 2026-03-18 22:48 SE Asia Standard Time
+
+- Source filter:
+  - `interactive`
+- Total logged events considered:
+  - `2`
+- Total real runs:
+  - `1`
+- `relay_kit.py` runs:
+  - `1`
+- `python_kit.py` runs:
+  - `0`
+- `relay_kit_legacy.py` runs:
+  - `0`
+- `python_kit_legacy.py` runs:
+  - `0`
+- Generic dual-write runs:
+  - `0`
+- Distinct target projects:
+  - `1`
 - Failed runs in filtered set:
   - `0`
 - Validation command:
