@@ -8,16 +8,19 @@ Produce a compact map of the code area the lane is about to touch.
 
 ## Default outputs
 - repo map notes appended to project-context or architecture
+- a short read-first file list for the next skill
 
 ## Typical tasks
-- List key entrypoints and modules.
-- Show likely dependency direction.
-- Highlight hotspots or choke points.
+- Scope the map to the area the lane is actually about to touch.
+- List key entrypoints, modules, and dependency direction.
+- Highlight hotspots, choke points, or ownership boundaries.
+- Name the first files the next skill should read instead of dumping the whole tree.
 
 ## Working rules
-- Prefer concrete paths and modules.
-- Keep the map small enough for the next skill to use.
-- Flag uncertainty when ownership is fuzzy.
+- Prefer repo-relative paths, modules, and boundaries over prose-heavy summaries.
+- Keep the map small enough for the next skill to use immediately.
+- If ownership is fuzzy, say so explicitly instead of inventing structure.
+- Stop once the next skill can navigate without another broad repo walk.
 
 ## Role
 - utility-provider
@@ -32,6 +35,7 @@ Produce a compact map of the code area the lane is about to touch.
 
 ## Outputs
 - repo map notes appended to project-context or architecture
+- a short read-first file list for the next skill
 
 ## Reference skills and rules
 - Good for unfamiliar areas and dependency direction.

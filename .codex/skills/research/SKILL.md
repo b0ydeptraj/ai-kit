@@ -9,16 +9,19 @@ Gather the minimum useful research needed for the next decision, then hand contr
 ## Default outputs
 - evidence bullets appended to the active artifact
 - assumption checks or citations for the current decision
+- a short list of unresolved questions only when they block the next decision
 
 ## Typical tasks
-- Summarize current market, technical, or domain evidence.
-- Highlight which assumptions are confirmed, unconfirmed, or contradicted.
-- Recommend the smallest next question if uncertainty remains high.
+- Answer the current decision question, not the whole topic.
+- Summarize only the market, technical, or domain evidence that changes the next move.
+- Mark which assumptions are confirmed, unconfirmed, or contradicted.
+- Recommend the smallest next question only when uncertainty still blocks the lane.
 
 ## Working rules
 - Write into `product-brief.md`, `PRD.md`, or the active artifact instead of creating a side quest.
 - Separate evidence from recommendation.
-- Name the source or provenance whenever possible.
+- Name the source, provenance, and freshness whenever possible.
+- Stop as soon as the owning hub can decide without another broad research pass.
 
 ## Role
 - utility-provider
@@ -34,6 +37,7 @@ Gather the minimum useful research needed for the next decision, then hand contr
 ## Outputs
 - evidence bullets appended to the active artifact
 - assumption checks or citations for the current decision
+- a short list of unresolved questions only when they block the next decision
 
 ## Reference skills and rules
 - Do not own the plan; feed findings back to the current hub.

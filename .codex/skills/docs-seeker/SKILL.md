@@ -8,16 +8,19 @@ Find the smallest set of authoritative documentation fragments needed to unblock
 
 ## Default outputs
 - doc pointers, file paths, or citations appended to the active artifact
+- a short conflict note when documentation and implementation disagree
 
 ## Typical tasks
-- Locate the most relevant local docs or code comments.
-- Quote or summarize only the load-bearing fragments.
-- Flag contradictions between docs and implementation.
+- Check repo-local docs, comments, and nearby code first when the question is codebase-specific.
+- Locate the smallest authoritative fragment that answers the current question.
+- Return exact file paths, anchors, or section names whenever possible.
+- Flag contradictions between docs and implementation instead of smoothing them over.
 
 ## Working rules
 - Citations and file paths are more valuable than long summaries.
-- Hand the result back to the current hub quickly.
-- If docs disagree, say so explicitly.
+- Quote or summarize only the load-bearing fragment.
+- Format the result so the owning hub can paste it straight into the active artifact.
+- Stop once the next skill has enough exact evidence to act safely.
 
 ## Role
 - utility-provider
@@ -32,6 +35,7 @@ Find the smallest set of authoritative documentation fragments needed to unblock
 
 ## Outputs
 - doc pointers, file paths, or citations appended to the active artifact
+- a short conflict note when documentation and implementation disagree
 
 ## Reference skills and rules
 - Return exact doc pointers, not vague summaries.
