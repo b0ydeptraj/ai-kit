@@ -47,6 +47,28 @@ When styling a real product surface:
 - define which blocks are dominant, supporting, and quiet
 - customize borrowed components until they feel native to the product
 
+## Taste controls
+Set these three controls before building or restyling a surface:
+- **Design variance**: `low`, `medium`, or `high` depending on how adventurous the structure should be
+- **Motion intensity**: `low`, `medium`, or `high` depending on how animated the UI should feel
+- **Visual density**: `low`, `medium`, or `high` depending on how much information should fit on screen
+
+These controls should change the result. A minimal marketing page should not look like a dense operations dashboard.
+
+## State coverage requirements
+When styling a real product surface, require explicit design for:
+- loading state
+- empty state
+- error state
+
+Do not leave these as unstyled placeholders. They are part of the product UI, not afterthoughts.
+
+## Layout and motion rules
+- Prefer grid layout or deliberate asymmetry when hierarchy matters; do not rely on flexbox as a generic equal-card hack.
+- Avoid the default three-card horizontal block unless the content truly has equal priority.
+- Avoid purple-blue gradient filler and other generic AI styling shortcuts.
+- Keep motion performance-safe: prefer transform and opacity, use staggered reveals intentionally, and respect reduced-motion settings.
+
 ## Menu UI Principle
 
 When a screen needs strong visual quality, source patterns intentionally instead of asking the model to invent them.

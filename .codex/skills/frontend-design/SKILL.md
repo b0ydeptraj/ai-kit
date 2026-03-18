@@ -37,6 +37,29 @@ Before coding, understand the context and commit to a clear aesthetic direction:
 
 **CRITICAL**: Choose a clear conceptual direction and execute it with precision. The goal is not "more styling". The goal is a stronger structure and a more believable visual language.
 
+## Taste controls
+Before coding, set these three controls explicitly:
+- **Design variance**: `low`, `medium`, or `high` depending on how bold the composition should be
+- **Motion intensity**: `low`, `medium`, or `high` depending on how animated the UI should feel
+- **Visual density**: `low`, `medium`, or `high` depending on how much information should fit on the screen
+
+Do not leave these vague. A restrained docs surface and an operator dashboard should not use the same settings.
+
+## State and layout requirements
+For real product UI, require:
+- a loading state
+- an empty state
+- an error state
+
+These states must feel designed, not bolted on.
+
+Prefer grid layout or deliberate asymmetry when hierarchy matters. Avoid using flexbox as a generic equal-card hack when a stronger grid would communicate better structure.
+
+Keep motion performance-safe:
+- prefer transform and opacity over layout-thrashing animation
+- match motion intensity to the page purpose
+- respect reduced-motion settings
+
 ## Reference-Driven Workflow
 
 ### 1. Lock a source of truth before styling

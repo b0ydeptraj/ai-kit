@@ -1064,12 +1064,33 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
     "ui-ux-pro-max": utility_provider_spec(
         name="ui-ux-pro-max",
         description="Use when a hub needs sharper information hierarchy, cleaner flows, stronger screen structure, less generic AI-looking UI, or concrete UX corrections tied to implementation reality. UX and layout utility for user-facing work.",
-        outputs=["ux notes appended to product-brief, PRD, architecture, or qa-report"],
-        references=["Useful for journeys, friction points, and interaction trade-offs.", "Return notes to the owning hub rather than taking over the project."],
+        outputs=[
+            "ux notes appended to product-brief, PRD, architecture, or qa-report",
+            "recommended taste controls for design variance, motion intensity, and visual density",
+            "state coverage notes for loading, empty, and error handling when the surface is real product UI",
+        ],
+        references=[
+            "Use this skill to block AI-slop layouts, not merely to polish them.",
+            "Prefer reference-driven direction, explicit hierarchy, and deliberate grid structure over generic SaaS template patterns.",
+            "Return notes to the owning hub rather than taking over the project.",
+        ],
         next_steps=["brainstorm-hub", "plan-hub", "review-hub"],
-        mission="Contribute user-experience structure without stealing ownership from product or implementation lanes.",
-        tasks=["Outline the user journey or interaction flow.", "Call out friction, edge cases, and copy concerns.", "Recommend small UX validations."],
-        rules=["Tie UX comments to a specific screen or step.", "Balance UX gains with implementation cost.", "Keep notes focused on the current slice."],
+        mission="Sharpen hierarchy, flow, and design taste without stealing ownership from product or implementation lanes.",
+        tasks=[
+            "Outline the user journey or interaction flow.",
+            "Set design variance, motion intensity, and visual density for the current slice before recommending layout changes.",
+            "Call out friction, edge cases, copy issues, and template-like structure.",
+            "Require loading, empty, and error states when the surface is a real product flow.",
+            "Replace generic three-card layouts, filler gradients, and flex-hack compositions with stronger structure.",
+        ],
+        rules=[
+            "Tie UX comments to a specific screen or step.",
+            "Balance UX gains with implementation cost.",
+            "Keep notes focused on the current slice.",
+            "Do not approve purple-blue gradient filler, three-equal-card SaaS layouts, or layout choices that feel obviously AI-generated.",
+            "Prefer grid layout or deliberate asymmetry over flex hacks when hierarchy matters.",
+            "Keep motion performance-safe: prefer transform and opacity, and respect reduced-motion needs.",
+        ],
     ),
     "media-processing": utility_provider_spec(
         name="media-processing",

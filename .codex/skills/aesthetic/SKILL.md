@@ -31,6 +31,26 @@ Reject and revise if the output shows these signs:
 - charts, icons, and nav patterns chosen with no source
 - the overall feeling of "AI built this in one pass"
 
+## Taste controls
+Before changing the UI, set these three controls explicitly:
+- **Design variance**: how far the layout can move from a safe default
+- **Motion intensity**: how much animation and micro-interaction is appropriate
+- **Visual density**: how sparse or dense the information should feel
+
+Use them to avoid every screen converging on the same generic SaaS composition.
+
+## State and structure rules
+For a real product surface, require:
+- a loading state
+- an empty state
+- an error state
+
+Also enforce these layout rules:
+- prefer deliberate grid structure over flexbox hacks when hierarchy matters
+- do not fall back to three equal cards unless the content truly needs equal weight
+- use motion only when it strengthens comprehension or delight, not as decoration
+- keep motion performance-safe with transform/opacity-first choices and reduced-motion support
+
 ## Workflow 1: Capture and analyze references
 1. Gather strong references from screenshots, real products, or component libraries.
 2. Use browser tools to capture the relevant viewport, not random long pages.

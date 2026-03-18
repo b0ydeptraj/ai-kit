@@ -1,4 +1,4 @@
----
+﻿---
 name: ui-ux-pro-max
 description: Use when a hub needs sharper information hierarchy, cleaner flows, stronger screen structure, less generic AI-looking UI, or concrete UX corrections tied to implementation reality. UX and layout utility for user-facing work.
 ---
@@ -17,10 +17,30 @@ This skill exists to stop vague UX comments and generic "make it modern" output.
 - responsive collapse behavior
 - post-build UI critique with concrete fixes
 
+## Taste controls
+Set these three controls before recommending or implementing major layout changes:
+
+- **Design variance**
+  - `low`: restrained, stable, familiar structure
+  - `medium`: clear point of view without becoming noisy
+  - `high`: strong compositional moves, asymmetry, bold hierarchy shifts
+- **Motion intensity**
+  - `low`: subtle hover/focus/entry feedback only
+  - `medium`: meaningful page-load choreography and small transitions
+  - `high`: richer motion language, but still performance-safe
+- **Visual density**
+  - `low`: spacious, editorial, minimal information per screen
+  - `medium`: balanced product UI
+  - `high`: dense dashboard/operator surfaces with tight grouping and strong scanning cues
+
+Do not leave these implicit. Pick them deliberately based on the product surface.
+
 ## Default outputs
 - UX/layout notes appended to `product-brief`, `PRD`, `architecture`, or `qa-report`
 - a compact screen-by-screen critique
 - a refinement checklist with concrete edits, not vague taste comments
+- a recommended setting for design variance, motion intensity, and visual density
+- a state-coverage note for loading, empty, and error handling when relevant
 
 ## Typical tasks
 - audit a landing page, dashboard, checkout, or settings flow
@@ -28,6 +48,7 @@ This skill exists to stop vague UX comments and generic "make it modern" output.
 - convert a rough brief into a stronger page structure
 - tighten CTA hierarchy, card usage, navigation, and responsive behavior
 - review a built screen and specify the next round of polish
+- require loading, empty, and error states on real product surfaces
 
 ## Anti-generic rules
 Do not approve UI just because it is clean.
@@ -35,13 +56,22 @@ Do not approve UI just because it is clean.
 Flag and correct these patterns aggressively:
 - oversized safe hero + generic supporting card column
 - rounded cards everywhere with little hierarchy difference
-- decorative gradients with no structural purpose
+- decorative gradients with no structural purpose, especially purple/blue gradient filler
 - repetitive feature-card grids that say little and look the same
 - metric tiles or badges used as filler instead of narrative proof
 - default icon sets, default chart shapes, default typography stacks
 - layouts that look like "template SaaS marketing page #427"
+- flexbox hacks where a deliberate grid would create stronger hierarchy
 
 If the screen looks like first-pass AI output, say so directly and recommend structural changes.
+
+## State coverage requirements
+When the screen is a real product surface, require explicit handling for:
+- loading state
+- empty state
+- error state
+
+These states should be designed, not tacked on. They must match the same hierarchy, spacing, and tone as the main interface.
 
 ## Working method
 
@@ -75,6 +105,7 @@ When no reference exists, define a concrete direction before recommending change
 - Are cards doing real information work, or just filling space?
 - Do spacing and alignment create rhythm, or just uniform emptiness?
 - Will the mobile collapse still make sense?
+- Are loading, empty, and error states designed with the same care as the default state?
 
 ### 4. Convert critique into implementation-ready edits
 Bad:
@@ -86,10 +117,17 @@ Good:
 - reduce hero width and move proof closer to the headline
 - replace three identical pain cards with one narrative proof block + one supporting metric strip
 - switch checkout from stacked text blocks to two-column summary/form with stronger plan selection state
-- tighten radius system from large-soft to controlled-small to reduce template feel
+- replace the flex row of equal cards with a grid that gives one dominant block and two supporting blocks
+- add explicit loading, empty, and error states to the account table instead of leaving a blank placeholder region
 
 ### 5. Require one review pass after build
 For meaningful UI work, this skill should recommend at least one screenshot-based or browser-based review after implementation. First-pass code is not final UX.
+
+### 6. Keep motion disciplined
+- Prefer transform and opacity over layout-thrashing animation.
+- Match motion intensity to the product surface.
+- Respect reduced-motion settings.
+- Do not scatter animation everywhere just to make the screen feel "premium".
 
 ## Role
 - utility-provider

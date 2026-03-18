@@ -36,6 +36,9 @@ When the change affects a user-facing page, component, checkout flow, settings s
    - key computed widths or breakpoints when layout is suspect,
    - and contrast/alignment checks when readability is in question.
 6. If the design system breaks across pages, stop treating the task as a local component tweak and route through `review-hub`.
+7. When visual quality matters, set design variance, motion intensity, and visual density before polishing components.
+8. For a real product surface, implement loading, empty, and error states instead of shipping only the happy path.
+9. Prefer grid structure or deliberate asymmetry over a generic equal-card flex row when hierarchy matters.
 
 ## Anti-generic frontend guardrails
 Flag and correct these patterns during implementation:
