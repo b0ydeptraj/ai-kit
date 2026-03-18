@@ -1,0 +1,88 @@
+﻿Relay-kit migration timeline reference
+Generated: 2026-03-18
+
+1. Giai đoạn hiện tại: soak cycle đang chạy
+
+Mốc thời gian:
+- Bắt đầu tính từ: 2026-03-18
+- Sớm nhất để kết thúc phase này: 2026-03-31
+
+Chỉ làm trong giai đoạn này:
+- dùng Relay-kit thật
+- theo dõi compatibility cycle
+- sửa bug nhỏ nếu lòi ra
+
+Chưa làm trong giai đoạn này:
+- đổi `.ai-kit` -> `.relay-kit`
+- bỏ `python_kit.py`
+- rename thư mục repo thật trên disk
+
+Tác dụng:
+- giữ số liệu compatibility cycle sạch
+- không trộn migration lớn vào lúc đang kiểm rename hiện tại
+
+Lưu ý:
+- nếu có fix đụng vào compatibility hiện tại, mốc 2026-03-31 có thể bị lùi vì phải tính lại chu kỳ
+
+2. Ngay sau khi compatibility cycle hiện tại pass sạch
+
+Mốc sớm nhất:
+- từ 2026-04-01
+
+Nên làm ở phase này:
+- mở plan riêng cho `.ai-kit` -> `.relay-kit`
+- audit toàn bộ chỗ đang dùng `.ai-kit`
+- mở rộng `docs/how-to-write-skills.md` hoặc `CONTRIBUTING.md` nếu cần
+- làm skill behavior validation hoặc gauntlet regression nếu muốn khóa chất lượng skill chặt hơn
+- xử lý các việc branding nhỏ còn sót như GitHub description/topics hoặc `apps/python-kit-sales-web` nếu quyết định dọn tiếp
+
+Tác dụng:
+- khóa chất lượng trước khi rename lớn
+- biết chính xác rename `.ai-kit` sẽ đụng đâu
+- giảm nguy cơ rename xong mới lòi drift
+
+3. Chỉ sau khi phase `.ai-kit` có compatibility layer riêng và chạy thêm một chu kỳ nữa
+
+Yêu cầu:
+- phase 2 phải xong trước
+- sau đó chạy thêm một compatibility cycle riêng cho `.ai-kit` -> `.relay-kit`
+
+Thời lượng khuyên dùng:
+- 7-14 ngày
+
+Mốc thực tế an toàn:
+- nếu bắt đầu phase `.ai-kit` ngay đầu tháng 4/2026 thì mốc sớm nhất để bỏ alias cũ là khoảng 2026-04-08 đến 2026-04-15
+- nhưng mốc an toàn hơn là sau giữa tháng 4/2026
+
+Chỉ lúc đó mới làm:
+- đổi `.ai-kit` sang `.relay-kit`
+- bỏ `python_kit.py`
+- bỏ alias/path cũ
+- rename thư mục repo thật trên disk
+
+Tác dụng:
+- hoàn tất rename kỹ thuật
+- dừng mang compatibility layer lâu hơn cần thiết
+- tránh vừa rename vừa đoán mò
+
+4. Những thứ nên để rất sau, không ưu tiên
+
+Để sau khi rename lớn ổn định:
+- session/queryable memory
+- slash command shims
+- các feature mới không liên quan trực tiếp đến migration
+
+Tác dụng của việc để sau:
+- không làm nhiễu migration
+- dễ biết bug nào do rename, bug nào do feature mới
+
+5. Tóm tắt cực ngắn
+
+- đến 2026-03-31: chỉ soak cycle hiện tại
+- từ 2026-04-01: audit + plan `.ai-kit`
+- sau đó chạy thêm một cycle riêng cho `.ai-kit`
+- sớm nhất khoảng giữa 04/2026 mới tính chuyện bỏ alias cũ và rename lớn
+
+6. Câu nhắc ngắn để dùng lại trong chat sau này
+
+"Kiểm phase timeline Relay-kit: nếu còn trước 2026-03-31 thì chỉ soak cycle; nếu cycle sạch thì mở phase `.ai-kit` -> `.relay-kit`; chỉ sau cycle riêng của `.ai-kit` mới bỏ alias cũ và rename repo thật."
