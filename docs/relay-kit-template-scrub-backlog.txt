@@ -92,3 +92,17 @@ When To Resume
 Rule
 - Do not mass-rename or mass-rewrite everything just for cosmetics.
 - Prioritize user-facing clone-smell first, bundle by bundle.
+
+Additional Deferred Areas
+- templates/agent/.shared/*
+  - shared workflows/scripts may still carry imported naming, vendor comments, or old pack voice
+- templates/agent/workflows/*
+  - workflow docs can still expose old naming or non-Relay-kit orchestration phrasing
+- runtime skills with imported tone
+  - only rewrite these after the relevant template or shipped bundle actually matters
+- demo/docs public
+  - app demo copy, screenshots, examples, and public docs should be scrubbed only when preparing a public-facing release
+
+Priority Rule For These Areas
+- Do not touch them during the current compatibility soak unless they create a real public-facing problem.
+- Treat them as after-cycle cleanup, behind actual product quality and real usage feedback.
