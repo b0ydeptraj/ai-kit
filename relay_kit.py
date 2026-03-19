@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Relay-kit v3.2 - registry-driven BMAD-lite hardening for ai-kit.
+"""Relay-kit v3.2 - registry-driven workflow runtime for ai-kit.
 
 How to adopt with minimal breakage:
 1. Use `relay_kit.py` as the preferred Relay-kit v3 entrypoint.
@@ -34,6 +34,15 @@ def legacy_kits(repo_root: Path):
 
 
 
+def normalize_legacy_kit_name(repo_root: Path, kit: str | None) -> str | None:
+    if not kit:
+        return kit
+    module, _ = legacy_kits(repo_root)
+    if module is None or not hasattr(module, "normalize_legacy_kit"):
+        return kit
+    return module.normalize_legacy_kit(kit)
+
+
 def list_everything(repo_root: Path) -> None:
     module, legacy = legacy_kits(repo_root)
     print("Built-in v3 bundles:")
@@ -57,7 +66,7 @@ def list_everything(repo_root: Path) -> None:
 def parse_args(repo_root: Path) -> argparse.Namespace:
     _, legacy = legacy_kits(repo_root)
     parser = argparse.ArgumentParser(
-        description="Relay-kit v3.2 - BMAD-lite hardening with orchestrators, workflow hubs, utility providers, discipline overlays, the official baseline bundle, bundle gating, and legacy compatibility",
+        description="Relay-kit v3.2 - workflow runtime with orchestrators, workflow hubs, utility providers, discipline overlays, the official baseline bundle, bundle gating, and legacy compatibility",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -81,8 +90,11 @@ Compatibility alias for one cycle:
     parser.add_argument("--emit-reference-templates", action="store_true", help="Write living reference templates into .ai-kit/references/")
     parser.add_argument(
         "--legacy-kit",
-        choices=legacy or None,
-        help=f"Run an old skill set through {CANONICAL_LEGACY_ENTRYPOINT} ({COMPAT_LEGACY_ENTRYPOINT} remains as an alias)",
+        help=(
+            f"Run a preserved legacy suite through {CANONICAL_LEGACY_ENTRYPOINT} "
+            f"({COMPAT_LEGACY_ENTRYPOINT} remains as an alias). "
+            f"Visible suites: {', '.join(legacy) if legacy else 'unavailable'}"
+        ),
     )
     parser.add_argument(
         "--skills",
@@ -97,6 +109,7 @@ Compatibility alias for one cycle:
 
 
 def _build_event(args: argparse.Namespace, invoked_as: str, exit_code: int) -> dict[str, object]:
+    repo_root = Path(__file__).resolve().parent
     flow = "no_op"
     if args.list_skills:
         flow = "list_skills"
@@ -114,7 +127,7 @@ def _build_event(args: argparse.Namespace, invoked_as: str, exit_code: int) -> d
         "project_path": args.project_path,
         "ai": args.ai,
         "bundle": args.bundle,
-        "legacy_kit": args.legacy_kit or ("python" if args.skills else None),
+        "legacy_kit": normalize_legacy_kit_name(repo_root, args.legacy_kit or ("python" if args.skills else None)),
         "skills": list(args.skills or []),
         "generic_output": args.ai == "generic",
         "exit_code": exit_code,

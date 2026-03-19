@@ -155,7 +155,7 @@ def _render_legacy_role_map() -> str:
     role_map_lines = [
         "# legacy-role-map",
         "",
-        "This file explains how legacy skills should be treated after the BMAD-lite upgrade.",
+        "This file explains how legacy skills should be treated after the Relay-kit v3 upgrade.",
         "",
     ]
     for role, skills in LEGACY_ROLE_MAP.items():

@@ -2,7 +2,7 @@ version: 0.2
 philosophy: hub-and-spoke-runtime
 objective: >-
   Keep the active ai-kit runtime adapter-neutral at the skill layer while preserving
-  legacy migration kits for ClaudeKit and Antigravity compatibility.
+  legacy migration suites without exposing them as active v3 runtime primitives.
 
 conventions:
   handoff_contract_required:
@@ -22,7 +22,7 @@ conventions:
     handoff_log: .ai-kit/state/handoff-log.md
   execution_rules:
     - Treat `.claude/skills`, `.agent/skills`, and `.codex/skills` as the active runtime surfaces.
-    - Treat Claude commands or agents and Antigravity workflows or rules as legacy compatibility assets, not active v3 runtime primitives.
+    - Treat preserved legacy command and workflow assets as migration-only support, not active v3 runtime primitives.
     - Utility providers are stateless and should not own project strategy or lane state.
     - Route through layer-1 orchestrators and layer-2 hubs before invoking specialists directly.
     - For v3 bundles, `--ai all` targets `.claude/skills`, `.agent/skills`, and `.codex/skills`; legacy kits keep their own compatibility behavior.
@@ -43,16 +43,16 @@ layers:
     - review-hub
   layer_3_utility_providers:
     - research
-    - docs-seeker
+    - doc-pointers
     - sequential-thinking
     - problem-solving
-    - ai-multimodal
-    - chrome-devtools
-    - repomix
-    - context-engineering
-    - mermaidjs-v11
+    - multimodal-evidence
+    - browser-inspector
+    - repo-map
+    - handoff-context
+    - mermaid-diagrams
     - ui-ux-pro-max
-    - media-processing
+    - media-tooling
   optional_discipline_overlays:
     - root-cause-debugging
     - test-first-development
@@ -64,7 +64,7 @@ layers:
     - scrum-master
     - developer
     - qa-governor
-    - agentic-loop
+    - execution-loop
     - project-architecture
     - dependency-management
     - api-integration
@@ -94,11 +94,11 @@ adapter_runtime:
   gemini:
     skill_root: .agent/skills
     model: runtime-skills-only
-    note: serves as the active compatibility target for Gemini and Antigravity-style usage
+    note: serves as the active compatibility target for Gemini-style usage
   codex:
     skill_root: .codex/skills
     model: runtime-skills-only
-    note: keep Codex as a skill surface, not a Claude command or Antigravity workflow surface
+    note: keep Codex as a skill surface, not a legacy command or workflow surface
 
 legacy_compatibility:
   generator: relay_kit_legacy.py
@@ -107,13 +107,13 @@ legacy_compatibility:
     - templates/claude
   preserved_kits:
     - python
-    - flutter
-    - antigravity
-    - claudekit
-    - ui-ux
+    - mobile-analysis
+    - expert-suite
+    - tooling-suite
+    - design-suite
     - full
   notes:
     - `python_kit.py`, `python_kit_legacy.py`, and `.python-kit-prompts` remain compatibility aliases for one migration cycle.
-    - Antigravity workflows, rules, and shared assets belong to legacy migration support only.
-    - Claude commands and agents belong to legacy migration support only.
+    - Legacy workflow, rules, and shared assets belong to migration support only.
+    - Legacy command and agent surfaces belong to migration support only.
     - Codex support assets may be materialized by the legacy generator under `.codex/support`, but they are not part of the active v3 runtime taxonomy.

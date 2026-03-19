@@ -72,7 +72,7 @@ For frontend work, a "go" recommendation should usually include:
 - When discipline utilities are installed, use `evidence-before-completion` before making completion claims.
 - Use `.ai-kit/docs/review-loop.md` when review feedback must be validated before action.
 - Coverage must be explained against acceptance criteria and risk, not just number of tests.
-- Use `chrome-devtools` for browser-native evidence and `review-hub` when a screen is shippable in code but still questionable in presentation.
+- Use `browser-inspector` for browser-native evidence and `review-hub` when a screen is shippable in code but still questionable in presentation.
 - For meaningful UI work, do not treat `lint`, `typecheck`, and `build` as sufficient evidence on their own.
 
 ## Likely next step

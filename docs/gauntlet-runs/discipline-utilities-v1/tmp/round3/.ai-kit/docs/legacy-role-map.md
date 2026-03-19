@@ -1,6 +1,6 @@
 # legacy-role-map
 
-This file explains how legacy skills should be treated after the BMAD-lite upgrade.
+This file explains how legacy skills should be treated after the Relay-kit v3 upgrade.
 
 ## analyst
 - research-expert
@@ -28,7 +28,7 @@ This file explains how legacy skills should be treated after the BMAD-lite upgra
 - dependency-management
 - api-integration
 - data-persistence
-- agentic-loop
+- execution-loop
 - testing-patterns
 - systematic-debugging
 - refactoring-expert

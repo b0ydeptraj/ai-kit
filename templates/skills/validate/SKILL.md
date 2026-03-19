@@ -13,7 +13,7 @@ Run the narrowest useful checks that increase confidence in the changed surface.
 - jest suites -> `jest-testing-expert`
 - vitest suites -> `vitest-testing-expert`
 - e2e or browser checks -> `playwright-expert`
-- browser interaction issues -> `chrome-devtools`
+- browser interaction issues -> `browser-inspector`
 
 ## Workflow
 1. Identify the changed surface and the fastest meaningful validation.

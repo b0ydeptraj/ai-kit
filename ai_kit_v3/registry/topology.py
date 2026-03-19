@@ -6,16 +6,16 @@ from typing import Dict, List
 
 UTILITY_PROVIDER_NAMES = [
     "research",
-    "docs-seeker",
+    "doc-pointers",
     "sequential-thinking",
     "problem-solving",
-    "ai-multimodal",
-    "chrome-devtools",
-    "repomix",
-    "context-engineering",
-    "mermaidjs-v11",
+    "multimodal-evidence",
+    "browser-inspector",
+    "repo-map",
+    "handoff-context",
+    "mermaid-diagrams",
     "ui-ux-pro-max",
-    "media-processing",
+    "media-tooling",
 ]
 
 DISCIPLINE_UTILITY_NAMES = [
@@ -54,7 +54,7 @@ LAYER_MODEL: Dict[str, Dict[str, object]] = {
             "scrum-master",
             "developer",
             "qa-governor",
-            "agentic-loop",
+            "execution-loop",
             "project-architecture",
             "dependency-management",
             "api-integration",
@@ -102,30 +102,30 @@ HUB_SUPPORT_MAP = {
         "api-integration",
         "data-persistence",
         "testing-patterns",
-        "docs-seeker",
-        "repomix",
-        "context-engineering",
+        "doc-pointers",
+        "repo-map",
+        "handoff-context",
     ],
-    "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "ui-ux-pro-max", "mermaidjs-v11"],
-    "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "chrome-devtools", "ai-multimodal"],
-    "fix-hub": ["developer", "agentic-loop", "project-architecture", "api-integration", "data-persistence", "context-engineering"],
-    "test-hub": ["qa-governor", "testing-patterns", "agentic-loop", "ai-multimodal", "media-processing"],
-    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "docs-seeker", "mermaidjs-v11"],
+    "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "ui-ux-pro-max", "mermaid-diagrams"],
+    "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "browser-inspector", "multimodal-evidence"],
+    "fix-hub": ["developer", "execution-loop", "project-architecture", "api-integration", "data-persistence", "handoff-context"],
+    "test-hub": ["qa-governor", "testing-patterns", "execution-loop", "multimodal-evidence", "media-tooling"],
+    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "doc-pointers", "mermaid-diagrams"],
 }
 
 
 UTILITY_PROVIDER_RULES = {
     "research": "Synthesize market, domain, or technical evidence quickly and feed it back into the authoritative artifact.",
-    "docs-seeker": "Find the most relevant local or external docs fragments and hand back citations or exact file paths.",
+    "doc-pointers": "Find the most relevant local or external docs fragments and hand back citations or exact file paths.",
     "sequential-thinking": "Break hard debugging or planning problems into explicit steps without claiming ownership of the overall lane.",
     "problem-solving": "Generate options, trade-offs, and root-cause hypotheses grounded in current evidence.",
-    "ai-multimodal": "Interpret screenshots, diagrams, logs, or media artifacts and hand observations back to the active hub.",
-    "chrome-devtools": "Collect browser-side evidence such as console, network, layout, and performance observations.",
-    "repomix": "Produce fast repo maps and dependency summaries for unfamiliar areas.",
-    "context-engineering": "Prepare the minimum viable context pack for the next skill instead of flooding it with irrelevant detail.",
-    "mermaidjs-v11": "Express flows or architecture as diagrams inside the current artifact.",
+    "multimodal-evidence": "Interpret screenshots, diagrams, logs, or media artifacts and hand observations back to the active hub.",
+    "browser-inspector": "Collect browser-side evidence such as console, network, layout, and performance observations.",
+    "repo-map": "Produce fast repo maps and dependency summaries for unfamiliar areas.",
+    "handoff-context": "Prepare the minimum viable context pack for the next skill instead of flooding it with irrelevant detail.",
+    "mermaid-diagrams": "Express flows or architecture as diagrams inside the current artifact.",
     "ui-ux-pro-max": "Contribute UX framing, flow notes, and interface trade-offs when product work has user-facing impact.",
-    "media-processing": "Handle images, screenshots, and media transforms needed for evidence or UX delivery.",
+    "media-tooling": "Handle images, screenshots, and media transforms needed for evidence or UX delivery.",
 }
 
 
@@ -134,19 +134,19 @@ STANDALONE_TAXONOMY = {
     "backend-and-data": ["backend-development", "databases", "API-heavy services", "jobs and queues"],
     "platform-and-infra": ["devops", "deployment", "CI/CD", "observability"],
     "commerce-and-integrations": ["shopify", "payments", "catalog or checkout flows"],
-    "media-and-content": ["media-processing", "content pipelines", "asset-heavy workflows"],
+    "media-and-content": ["media-tooling", "content pipelines", "asset-heavy workflows"],
 }
 
 
 ROUND2_CHANGELOG = dedent(
     """    # round2-changelog
 
-    Round 2 introduced the BMAD-lite base:
+    Round 2 introduced the v3 base:
 
     - Relay-kit v3 entrypoint in `python_kit.py`
     - preserved legacy generator in `python_kit_legacy.py`
     - role-based core skills
-    - cleaned `agentic-loop`
+    - cleaned `execution-loop`
     - shared contracts, workflow-state, and living support references
     """
 )

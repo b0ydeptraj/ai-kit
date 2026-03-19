@@ -18,10 +18,10 @@ $ARGUMENTS
 
 ## Use These Skills As Needed
 - `triage-expert` for structured diagnostic reasoning.
-- `docs-seeker` for API, framework, or library semantics.
-- `chrome-devtools` for browser-side failures, network issues, rendering bugs, and performance traces.
+- `doc-pointers` for API, framework, or library semantics.
+- `browser-inspector` for browser-side failures, network issues, rendering bugs, and performance traces.
 - `mcp-management` when the best evidence comes from MCP-enabled tools.
-- `context-engineering` to condense large findings.
+- `handoff-context` to condense large findings.
 
 ## Output Requirements
 Produce a concise debugging handoff containing:

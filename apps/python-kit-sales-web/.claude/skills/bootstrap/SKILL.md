@@ -1,6 +1,6 @@
 ---
 name: bootstrap
-description: initialize or refresh the shared bmAD-lite runtime before a new lane begins. use at repo start, after major structure changes, or whenever workflow-state or project-context is missing or stale.
+description: initialize or refresh the shared Relay-kit runtime before a new lane begins. use at repo start, after major structure changes, or whenever workflow-state or project-context is missing or stale.
 ---
 
 # Mission

@@ -35,7 +35,7 @@ This layer remains mostly legacy and stateless. Round 3 does not rewrite those u
 - scrum-master
 - developer
 - qa-governor
-- agentic-loop
+- execution-loop
 - native support skills
 
 ## New state and artifacts

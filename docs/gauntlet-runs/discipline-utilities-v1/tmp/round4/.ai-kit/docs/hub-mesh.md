@@ -67,9 +67,9 @@ Can hand off to:
 - api-integration
 - data-persistence
 - testing-patterns
-- docs-seeker
-- repomix
-- context-engineering
+- doc-pointers
+- repo-map
+- handoff-context
 
 ### plan-hub
 - analyst
@@ -78,34 +78,34 @@ Can hand off to:
 - scrum-master
 - research
 - ui-ux-pro-max
-- mermaidjs-v11
+- mermaid-diagrams
 
 ### debug-hub
 - developer
 - testing-patterns
 - problem-solving
 - sequential-thinking
-- chrome-devtools
-- ai-multimodal
+- browser-inspector
+- multimodal-evidence
 
 ### fix-hub
 - developer
-- agentic-loop
+- execution-loop
 - project-architecture
 - api-integration
 - data-persistence
-- context-engineering
+- handoff-context
 
 ### test-hub
 - qa-governor
 - testing-patterns
-- agentic-loop
-- ai-multimodal
-- media-processing
+- execution-loop
+- multimodal-evidence
+- media-tooling
 
 ### review-hub
 - qa-governor
 - testing-patterns
 - project-architecture
-- docs-seeker
-- mermaidjs-v11
+- doc-pointers
+- mermaid-diagrams

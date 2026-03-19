@@ -122,9 +122,9 @@ Limit tool exposure:
 ```json
 {
   "mcpServers": {
-    "chrome-devtools": {
+    "browser-inspector": {
       "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "args": ["-y", "browser-inspector-mcp@latest"],
       "includeTools": ["navigate_page", "screenshot"],
       "excludeTools": ["evaluate_js"]
     }

@@ -159,7 +159,7 @@ export const adapterCards = [
     body: "Skill-based runtime surface without falling back to old command-era semantics.",
   },
   {
-    name: "Gemini and Antigravity-compatible runtime",
+      name: "Gemini-compatible runtime",
     surface: ".agent/skills",
     body: "The active skill model remains intact while legacy migration semantics stay clearly separated.",
   },
@@ -343,7 +343,7 @@ export const workflowLanes = [
   },
   {
     lane: "Build lane",
-    owner: "scrum-master -> developer -> agentic-loop",
+    owner: "scrum-master -> developer -> execution-loop",
     output: "Next.js app, command panels, checkout flow, style system",
   },
   {

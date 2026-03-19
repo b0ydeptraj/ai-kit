@@ -17,11 +17,11 @@ $ARGUMENTS
 
 ## Use These Skills As Needed
 - `scout` for codebase mapping and impact analysis.
-- `docs-seeker` for framework or library guidance.
-- `repomix` for repo packaging or large-context inspection.
+- `doc-pointers` for framework or library guidance.
+- `repo-map` for repo packaging or large-context inspection.
 - `brainstorm` when there are multiple viable designs or tradeoffs.
-- `context-engineering` to compress or structure large findings.
-- `mermaidjs-v11` if an architecture diagram would clarify the plan.
+- `handoff-context` to compress or structure large findings.
+- `mermaid-diagrams` if an architecture diagram would clarify the plan.
 
 ## Plan Output Must Include
 1. Objective

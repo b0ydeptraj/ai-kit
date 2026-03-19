@@ -1,6 +1,6 @@
 ---
 name: aesthetic
-description: Create aesthetically beautiful interfaces following proven design principles. Use when building UI/UX, analyzing designs from inspiration sites, generating design images with ai-multimodal, implementing visual hierarchy and color theory, adding micro-interactions, or creating design documentation. Includes workflows for capturing and analyzing inspiration screenshots with chrome-devtools and ai-multimodal, iterative design image generation until aesthetic standards are met, and comprehensive design system guidance covering BEAUTIFUL (aesthetic principles), RIGHT (functionality/accessibility), SATISFYING (micro-interactions), and PEAK (storytelling) stages. Integrates with chrome-devtools, ai-multimodal, media-processing, ui-styling, and web-frameworks skills.
+description: Create aesthetically beautiful interfaces following proven design principles. Use when building UI/UX, analyzing designs from inspiration sites, generating design images with multimodal-evidence, implementing visual hierarchy and color theory, adding micro-interactions, or creating design documentation. Includes workflows for capturing and analyzing inspiration screenshots with browser-inspector and multimodal-evidence, iterative design image generation until aesthetic standards are met, and comprehensive design system guidance covering BEAUTIFUL (aesthetic principles), RIGHT (functionality/accessibility), SATISFYING (micro-interactions), and PEAK (storytelling) stages. Integrates with browser-inspector, multimodal-evidence, media-tooling, ui-styling, and web-frameworks skills.
 ---
 
 # Aesthetic
@@ -48,8 +48,8 @@ Elevate with narrative elements—parallax effects, particle systems, thematic c
 
 **Steps**:
 1. Browse inspiration sites (Dribbble, Mobbin, Behance, Awwwards)
-2. Use **chrome-devtools** skill to capture full-screen screenshots (not full page)
-3. Use **ai-multimodal** skill to analyze screenshots and extract:
+2. Use **browser-inspector** skill to capture full-screen screenshots (not full page)
+3. Use **multimodal-evidence** skill to analyze screenshots and extract:
    - Design style (Minimalism, Glassmorphism, Neo-brutalism, etc.)
    - Layout structure & grid systems
    - Typography system & hierarchy
@@ -68,12 +68,12 @@ Elevate with narrative elements—parallax effects, particle systems, thematic c
 
 **Steps**:
 1. Define design prompt with: style, colors, typography, audience, animation specs
-2. Use **ai-multimodal** skill to generate design images with Gemini API
-3. Use **ai-multimodal** skill to analyze output images and evaluate aesthetic quality
+2. Use **multimodal-evidence** skill to generate design images with Gemini API
+3. Use **multimodal-evidence** skill to analyze output images and evaluate aesthetic quality
 4. If score < 7/10 or fails professional standards:
    - Identify specific weaknesses (color, typography, layout, spacing, hierarchy)
    - Refine prompt with improvements
-   - Regenerate with **ai-multimodal** or use **media-processing** skill to modify outputs (resize, crop, filters, composition)
+   - Regenerate with **multimodal-evidence** or use **media-tooling** skill to modify outputs (resize, crop, filters, composition)
 5. Repeat until aesthetic standards met (score ≥ 7/10)
 6. Document final design decisions using templates
 
@@ -102,9 +102,9 @@ Save in project `./docs/design-story.md`.
 ## Resources & Integration
 
 ### Related Skills
-- **ai-multimodal**: Analyze documents, screenshots & videos, generate design images, edit generated images, evaluate aesthetic quality using Gemini API
-- **chrome-devtools**: Capture full-screen screenshots from inspiration websites, navigate between pages, interact with elements, read console logs & network requests
-- **media-processing**: Refine generated images (FFmpeg for video, ImageMagick for images)
+- **multimodal-evidence**: Analyze documents, screenshots & videos, generate design images, edit generated images, evaluate aesthetic quality using Gemini API
+- **browser-inspector**: Capture full-screen screenshots from inspiration websites, navigate between pages, interact with elements, read console logs & network requests
+- **media-tooling**: Refine generated images (FFmpeg for video, ImageMagick for images)
 - **ui-styling**: Implement designs with shadcn/ui components + Tailwind CSS utility-first styling
 - **web-frameworks**: Build with Next.js (App Router, Server Components, SSR/SSG)
 

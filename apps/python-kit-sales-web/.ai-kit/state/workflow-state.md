@@ -15,7 +15,7 @@ Build a Next.js sales demo inside `apps/python-kit-sales-web` that sells `python
 
 ## Active utility providers
 - Primary utility provider: evidence-before-completion
-- Additional utilities in play: ui-ux-pro-max, frontend-design reference review, chrome-devtools/playwright-style browser review, root-cause-debugging for verification tooling issues
+- Additional utilities in play: ui-ux-pro-max, frontend-design reference review, browser-inspector/playwright-style browser review, root-cause-debugging for verification tooling issues
 
 ## Active standalone/domain skill
 - Skill: project-architecture

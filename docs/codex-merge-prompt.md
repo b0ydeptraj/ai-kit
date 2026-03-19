@@ -17,7 +17,7 @@ Important constraints:
 - Do not auto-commit unless explicitly asked.
 
 What to do:
-1. Inspect the repo root and confirm these existing paths if present: `python_kit.py`, `.claude/skills/agentic-loop/`, `.agent/skills/agentic-loop/`, `templates/`.
+1. Inspect the repo root and confirm these existing paths if present: `python_kit.py`, `.claude/skills/execution-loop/`, `.agent/skills/execution-loop/`, `templates/`.
 2. Find the extracted incoming upgrade pack by locating a file named `README.md` whose first heading is `# ai-kit BMAD-lite round 2 upgrade pack`.
 3. Rename the current repo script `python_kit.py` to `python_kit_legacy.py` if that file does not already exist.
 4. Copy the incoming `python_kit.py` and `ai_kit_v3/` folder from the upgrade pack into the repo root.
@@ -39,7 +39,7 @@ What to do:
    - `.claude/skills/architect/SKILL.md`
    - `.claude/skills/project-architecture/SKILL.md`
    - `.agent/skills/testing-patterns/SKILL.md`
-8. Open and inspect `.claude/skills/agentic-loop/SKILL.md` and confirm it no longer contains the leaked authoring text `Create ... SKILL.md with:`.
+8. Open and inspect `.claude/skills/execution-loop/SKILL.md` and confirm it no longer contains the leaked authoring text `Create ... SKILL.md with:`.
 9. Show me a concise summary with:
    - files added or replaced
    - any command failures
@@ -50,5 +50,5 @@ Acceptance criteria:
 - The old generator is preserved as `python_kit_legacy.py`.
 - The new v3 generator runs successfully.
 - The `round2` bundle emits core orchestration skills, cleanup skill, native support skills, contracts, docs, and references.
-- No prompt-authoring leakage remains in the generated `agentic-loop` runtime skill.
+- No prompt-authoring leakage remains in the generated `execution-loop` runtime skill.
 ```

@@ -30,7 +30,7 @@ Convert a known problem into a bounded implementation path that can be executed 
 
 ## Reference skills and rules
 - Keep the fix surface as small as possible.
-- Use developer plus agentic-loop for execution, not as a replacement for scoping.
+- Use developer plus execution-loop for execution, not as a replacement for scoping.
 - If the fix expands the contract or architecture, route back through workflow-router or plan-hub.
 
 ## Likely next step

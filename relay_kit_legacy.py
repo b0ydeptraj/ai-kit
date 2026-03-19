@@ -5,10 +5,10 @@ Supports multiple AI assistants: Claude, Gemini, or generic output.
 
 Skill sets:
 - Python core: 19 analysis skills (architecture, dependencies, api, data, async, cli-gui, utilities, testing, etc.)
-- Flutter: 8 analysis skills (architecture, DI, API, storage, state, UI, utilities, testing)
-- Antigravity: template skills for web/devops/testing/database stacks
-- ClaudeKit: template skills for tooling, docs, MCP, and frontend/backends
-- UI/UX Pro Max: design intelligence skill with assets
+- Mobile analysis: 8 analysis skills (architecture, DI, API, storage, state, UI, utilities, testing)
+- Expert suite: template skills for web/devops/testing/database stacks
+- Tooling suite: template skills for tooling, docs, MCP, and frontend/backends
+- Design suite: design intelligence skill with assets
 """
 
 import subprocess
@@ -164,7 +164,7 @@ description: Reference when writing tests, creating fixtures, or understanding t
 ---
 ''',
 
-    # ========== UPGRADED CLAUDEKIT SKILLS (4) ==========
+    # ========== UPGRADED TOOLING-SUITE SKILLS (4) ==========
     
     "systematic-debugging": '''Analyze project's debugging patterns and create a comprehensive systematic debugging skill:
 
@@ -1150,9 +1150,9 @@ description: Use when implementing logging, error tracking, or monitoring. Cover
 
     # ========== AGENTIC WORKFLOW (1) ==========
     
-    "agentic-loop": '''You are now in AGENTIC MODE. This is a self-correcting development loop.
+    "execution-loop": '''You are now in AGENTIC MODE. This is a self-correcting development loop.
 
-Create `.ai-skills/agentic-loop/SKILL.md` with:
+Create `.ai-skills/execution-loop/SKILL.md` with:
 
 ## THE AGENTIC LOOP
 
@@ -1227,7 +1227,7 @@ If you catch yourself thinking:
 - "Add multiple changes" ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ STOP, one at a time
 - "Skip the test" ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ STOP, test is mandatory
 ---
-name: agentic-loop
+name: execution-loop
 description: Self-correcting development loop with enforced 4-phase debugging. Use when building features that require iteration until success. Never allows quick fixes - always finds root cause first.
 ---
 '''
@@ -1406,7 +1406,7 @@ AI_SKILL_FOLDERS = {
 TEMPLATE_ROOT = Path(__file__).parent / "templates"
 TEMPLATE_SKILL_ROOT = TEMPLATE_ROOT / "skills"
 
-ANTIGRAVITY_SKILLS = [
+EXPERT_SUITE_SKILLS = [
     "accessibility-expert",
     "ai-sdk-expert",
     "auth-expert",
@@ -1439,18 +1439,18 @@ ANTIGRAVITY_SKILLS = [
     "webpack-expert",
 ]
 
-CLAUDEKIT_SKILLS = [
+TOOLING_SUITE_SKILLS = [
     "aesthetic",
-    "ai-multimodal",
+    "multimodal-evidence",
     "backend-development",
     "better-auth",
     "brainstorm",
-    "chrome-devtools",
+    "browser-inspector",
     "claude-code",
-    "context-engineering",
+    "handoff-context",
     "cook",
     "debug",
-    "docs-seeker",
+    "doc-pointers",
     "docx",
     "fix",
     "pdf",
@@ -1462,10 +1462,10 @@ CLAUDEKIT_SKILLS = [
     "google-adk-python",
     "mcp-builder",
     "mcp-management",
-    "media-processing",
-    "mermaidjs-v11",
+    "media-tooling",
+    "mermaid-diagrams",
     "review",
-    "repomix",
+    "repo-map",
     "scout",
     "shopify",
     "skill-creator",
@@ -1475,9 +1475,9 @@ CLAUDEKIT_SKILLS = [
     "web-frameworks",
 ]
 
-UI_UX_SKILLS = ["ui-ux-pro-max"]
+DESIGN_SUITE_SKILLS = ["ui-ux-pro-max"]
 
-TEMPLATE_SKILLS = set(ANTIGRAVITY_SKILLS + CLAUDEKIT_SKILLS + UI_UX_SKILLS)
+TEMPLATE_SKILLS = set(EXPERT_SUITE_SKILLS + TOOLING_SUITE_SKILLS + DESIGN_SUITE_SKILLS)
 
 PYTHON_CORE_SKILLS = [
     "project-architecture",
@@ -1498,21 +1498,39 @@ PYTHON_CORE_SKILLS = [
     "security-patterns",
     "performance-optimization",
     "logging-observability",
-    "agentic-loop",
+    "execution-loop",
 ]
 
-FLUTTER_SKILLS = list(FLUTTER_PROMPTS.keys())
+MOBILE_ANALYSIS_SKILLS = list(FLUTTER_PROMPTS.keys())
 
 ALL_SKILLS = sorted(set(PROMPTS.keys()) | TEMPLATE_SKILLS)
 
+LEGACY_KIT_ALIASES = {
+    "python": "python",
+    "mobile-analysis": "mobile-analysis",
+    "expert-suite": "expert-suite",
+    "tooling-suite": "tooling-suite",
+    "design-suite": "design-suite",
+    "full": "full",
+    # hidden compatibility aliases
+    "flutter": "mobile-analysis",
+    "antigravity": "expert-suite",
+    "claudekit": "tooling-suite",
+    "ui-ux": "design-suite",
+}
+
 SKILL_SETS = {
     "python": PYTHON_CORE_SKILLS,
-    "flutter": FLUTTER_SKILLS,
-    "antigravity": ANTIGRAVITY_SKILLS,
-    "claudekit": CLAUDEKIT_SKILLS,
-    "ui-ux": UI_UX_SKILLS,
+    "mobile-analysis": MOBILE_ANALYSIS_SKILLS,
+    "expert-suite": EXPERT_SUITE_SKILLS,
+    "tooling-suite": TOOLING_SUITE_SKILLS,
+    "design-suite": DESIGN_SUITE_SKILLS,
     "full": ALL_SKILLS,
 }
+
+
+def normalize_legacy_kit(kit: str) -> str:
+    return LEGACY_KIT_ALIASES.get(kit, kit)
 
 def get_skill_folder(ai: str) -> str:
     """Get the skill folder path for the given AI."""
@@ -1644,7 +1662,7 @@ def copy_template_skill(skill_name: str, project_path: str, ai: str, verbose: bo
 
 
 def copy_agent_assets(project_path: str, ai: str, verbose: bool = False) -> int:
-    """Copy Antigravity rules/workflows/.shared into .agent when applicable."""
+    """Copy expert-suite rules/workflows/.shared into .agent when applicable."""
     if ai not in ("gemini", "all"):
         return 0
 
@@ -1669,7 +1687,7 @@ def copy_agent_assets(project_path: str, ai: str, verbose: bool = False) -> int:
 
 
 def copy_claude_assets(project_path: str, ai: str, verbose: bool = False) -> int:
-    """Copy ClaudeKit agents/commands into .claude when applicable."""
+    """Copy tooling-suite agents/commands into .claude when applicable."""
     if ai not in ("claude", "all"):
         return 0
 
@@ -1694,22 +1712,22 @@ def copy_claude_assets(project_path: str, ai: str, verbose: bool = False) -> int
 
 
 def copy_codex_assets(project_path: str, ai: str, kit: str, verbose: bool = False) -> int:
-    """Copy Antigravity/ClaudeKit auxiliary assets into .codex/support for Codex."""
+    """Copy preserved legacy auxiliary assets into .codex/support for Codex."""
     if ai != "codex":
         return 0
 
     codex_aux = Path(project_path) / ".codex" / "support"
     copy_specs = []
 
-    if kit in ("antigravity", "full"):
+    if kit in ("expert-suite", "full"):
         agent_root = TEMPLATE_ROOT / "agent"
         for name in ["rules", "workflows", ".shared"]:
-            copy_specs.append((agent_root / name, codex_aux / "antigravity" / name, "Antigravity"))
+            copy_specs.append((agent_root / name, codex_aux / "expert-suite" / name, "expert suite"))
 
-    if kit in ("claudekit", "full"):
+    if kit in ("tooling-suite", "full"):
         claude_root = TEMPLATE_ROOT / "claude"
         for name in ["agents", "commands"]:
-            copy_specs.append((claude_root / name, codex_aux / "claude" / name, "ClaudeKit"))
+            copy_specs.append((claude_root / name, codex_aux / "tooling-suite" / name, "tooling suite"))
 
     for src, dest, label in copy_specs:
         if not src.exists():
@@ -1877,6 +1895,8 @@ def create_python_skills(
         print(f"ERROR: Unknown AI adapter: {ai}")
         print(f"   Available: {', '.join(ADAPTERS.keys())}")
         return 1
+
+    kit = normalize_legacy_kit(kit)
     
     if skills:
         selected_skills = [name for name in skills if name in ALL_SKILLS]
@@ -1947,17 +1967,17 @@ def create_python_skills(
             print(f"   Error: {e}")
             failed_commands.append(skill_name)
 
-    if kit in ("antigravity", "full"):
+    if kit in ("expert-suite", "full"):
         result = copy_agent_assets(project_path, ai, verbose)
         if result != 0:
             asset_errors.append("agent-assets")
 
-    if kit in ("claudekit", "full"):
+    if kit in ("tooling-suite", "full"):
         result = copy_claude_assets(project_path, ai, verbose)
         if result != 0:
             asset_errors.append("claude-assets")
 
-    if kit in ("antigravity", "claudekit", "full"):
+    if kit in ("expert-suite", "tooling-suite", "full"):
         result = copy_codex_assets(project_path, ai, kit, verbose)
         if result != 0:
             asset_errors.append("codex-assets")
@@ -1976,7 +1996,7 @@ def create_python_skills(
             print(f"Skills created in: {project_path}/.agent/skills/")
         elif ai == "codex":
             print(f"Skills created in: {project_path}/.codex/skills/")
-            if kit in ("antigravity", "claudekit", "full"):
+            if kit in ("expert-suite", "tooling-suite", "full"):
                 print(f"Codex support assets in: {project_path}/.codex/support/")
         elif ai == "all":
             print(f"Skills created in: {project_path}/.claude/skills/ AND .agent/skills/")
@@ -2000,7 +2020,7 @@ def _build_event(args: argparse.Namespace, invoked_as: str, exit_code: int) -> d
         "flow": flow,
         "project_path": args.project_path,
         "ai": args.ai,
-        "legacy_kit": args.kit,
+        "legacy_kit": normalize_legacy_kit(args.kit),
         "skills": list(args.skills or []),
         "generic_output": args.ai == "generic",
         "exit_code": exit_code,
@@ -2012,16 +2032,16 @@ def main(invoked_as: str | None = None) -> int:
     repo_root = Path(__file__).resolve().parent
     entrypoint = invoked_as or Path(sys.argv[0]).name or "relay_kit_legacy.py"
     parser = argparse.ArgumentParser(
-        description="Relay-kit legacy v2.1 - Generate AI agent skills from multiple kits",
+        description="Relay-kit legacy v2.1 - Generate AI agent skills from preserved legacy suites",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   python relay_kit_legacy.py                      # Default python skill set with Claude
   python relay_kit_legacy.py /path/to/project     # Analyze specific project
-  python relay_kit_legacy.py --kit flutter        # Run Flutter analysis skills
-  python relay_kit_legacy.py --kit antigravity    # Install Antigravity template skills
-  python relay_kit_legacy.py --kit claudekit      # Install ClaudeKit template skills
-  python relay_kit_legacy.py --kit ui-ux          # Install UI/UX Pro Max skill
+  python relay_kit_legacy.py --kit mobile-analysis # Run mobile analysis skills
+  python relay_kit_legacy.py --kit expert-suite   # Install expert-suite template skills
+  python relay_kit_legacy.py --kit tooling-suite  # Install tooling-suite template skills
+  python relay_kit_legacy.py --kit design-suite   # Install the design suite skill
   python relay_kit_legacy.py --kit full           # Run all skills (analysis + templates)
   python relay_kit_legacy.py --skills project-architecture testing-patterns
 
@@ -2032,18 +2052,19 @@ Compatibility aliases for one cycle:
 
 AI Adapters:
   --ai claude   -> .claude/skills/   (auto-read by Claude Code)
-  --ai gemini   -> .agent/skills/    (auto-read by Gemini/Antigravity)
+  --ai gemini   -> .agent/skills/    (auto-read by Gemini)
   --ai codex    -> .codex/skills/    (for Codex)
   --ai all      -> Both folders      (Claude + Gemini)
   --ai generic  -> .relay-kit-prompts/ (canonical) + .python-kit-prompts/ (compatibility alias)
 
 Skill sets:
-  python (default) - Python analysis skills
-  flutter          - Flutter analysis skills
-  antigravity      - Antigravity template skills
-  claudekit        - ClaudeKit template skills
-  ui-ux            - UI/UX Pro Max
-  full             - All skills
+  python (default)   - Python analysis skills
+  mobile-analysis    - Mobile analysis skills
+  expert-suite       - Expert template skills
+  tooling-suite      - Tooling, docs, and MCP template skills
+  design-suite       - UI/UX Pro Max
+  full               - All skills
+
         """
     )
 
@@ -2053,7 +2074,7 @@ Skill sets:
     parser.add_argument("--ai", choices=list(ADAPTERS.keys()), default="claude",
                         help="AI adapter to use (default: claude)")
 
-    parser.add_argument("--kit", choices=list(SKILL_SETS.keys()), default="python",
+    parser.add_argument("--kit", default="python",
                         help="Skill set to run when --skills is not specified")
     
     parser.add_argument("-v", "--verbose", action="store_true",

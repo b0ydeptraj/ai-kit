@@ -94,8 +94,8 @@ Produce one or more of:
 - screenshot review findings
 
 ## Related skills
-- `chrome-devtools` for capture and browser inspection
-- `ai-multimodal` for screenshot analysis when available
+- `browser-inspector` for capture and browser inspection
+- `multimodal-evidence` for screenshot analysis when available
 - `ui-styling` for implementation systems
 - `frontend-design` for shipping the page
 - `ui-ux-pro-max` for flow and UX structure

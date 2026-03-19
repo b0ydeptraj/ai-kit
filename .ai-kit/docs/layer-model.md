@@ -25,16 +25,16 @@ Run repeatable multi-step workflows and hand off to the right specialist or util
 Stateless capabilities and analysis helpers. These should be called by hubs or orchestrators rather than acting as long-lived owners of work.
 
 - research
-- docs-seeker
+- doc-pointers
 - sequential-thinking
 - problem-solving
-- ai-multimodal
-- chrome-devtools
-- repomix
-- context-engineering
-- mermaidjs-v11
+- multimodal-evidence
+- browser-inspector
+- repo-map
+- handoff-context
+- mermaid-diagrams
 - ui-ux-pro-max
-- media-processing
+- media-tooling
 
 ## layer-4-specialists-and-standalones
 Role specialists, native support skills, and domain standalones that actually produce architecture, stories, code, and quality evidence.
@@ -45,7 +45,7 @@ Role specialists, native support skills, and domain standalones that actually pr
 - scrum-master
 - developer
 - qa-governor
-- agentic-loop
+- execution-loop
 - project-architecture
 - dependency-management
 - api-integration

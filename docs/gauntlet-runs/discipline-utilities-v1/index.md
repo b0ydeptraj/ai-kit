@@ -29,7 +29,7 @@
   - `plan-hub -> planning-discipline.md`
   - `review-hub -> review-loop.md` and `branch-completion.md`
   - `scrum-master -> planning-discipline.md`
-  - `agentic-loop -> root-cause-debugging` and `evidence-before-completion`
+  - `execution-loop -> root-cause-debugging` and `evidence-before-completion`
 
 ## Round 1 summary
 

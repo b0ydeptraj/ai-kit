@@ -31,7 +31,7 @@ Examples or likely members:
 
 ## media-and-content
 Examples or likely members:
-- media-processing
+- media-tooling
 - content pipelines
 - asset-heavy workflows
 

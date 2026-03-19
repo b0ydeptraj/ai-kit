@@ -110,7 +110,7 @@ Evidence:
   - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.codex\skills\root-cause-debugging\SKILL.md`
 - referenced from:
   - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\debug-hub\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\agentic-loop\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\execution-loop\SKILL.md`
 
 Assessment after gauntlet:
 
@@ -164,7 +164,7 @@ Evidence:
 - referenced from:
   - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\test-hub\SKILL.md`
   - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\qa-governor\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\agentic-loop\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\execution-loop\SKILL.md`
 
 Assessment after gauntlet:
 

@@ -1,6 +1,6 @@
 ---
 name: bootstrap
-description: Use when starting a repo lane, after major structure changes, or whenever workflow-state or project-context is missing or stale. Initialize or refresh the shared BMAD-lite runtime before a new lane begins.
+description: Use when starting a repo lane, after major structure changes, or whenever workflow-state or project-context is missing or stale. Initialize or refresh the shared Relay-kit runtime before a new lane begins.
 ---
 
 # Mission

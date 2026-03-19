@@ -12,7 +12,7 @@ Round 4 promotes layer-3 utility providers to first-class registry entries while
 ### research
 Synthesize market, domain, or technical evidence quickly and feed it back into the authoritative artifact.
 
-### docs-seeker
+### doc-pointers
 Find the most relevant local or external docs fragments and hand back citations or exact file paths.
 
 ### sequential-thinking
@@ -21,23 +21,23 @@ Break hard debugging or planning problems into explicit steps without claiming o
 ### problem-solving
 Generate options, trade-offs, and root-cause hypotheses grounded in current evidence.
 
-### ai-multimodal
+### multimodal-evidence
 Interpret screenshots, diagrams, logs, or media artifacts and hand observations back to the active hub.
 
-### chrome-devtools
+### browser-inspector
 Collect browser-side evidence such as console, network, layout, and performance observations.
 
-### repomix
+### repo-map
 Produce fast repo maps and dependency summaries for unfamiliar areas.
 
-### context-engineering
+### handoff-context
 Prepare the minimum viable context pack for the next skill instead of flooding it with irrelevant detail.
 
-### mermaidjs-v11
+### mermaid-diagrams
 Express flows or architecture as diagrams inside the current artifact.
 
 ### ui-ux-pro-max
 Contribute UX framing, flow notes, and interface trade-offs when product work has user-facing impact.
 
-### media-processing
+### media-tooling
 Handle images, screenshots, and media transforms needed for evidence or UX delivery.

@@ -30,7 +30,7 @@ After the merge, the repo should support:
 - layer 1 orchestrators: `workflow-router`, `bootstrap`, `team`, `cook`
 - layer 2 workflow hubs: `brainstorm-hub`, `scout-hub`, `plan-hub`, `debug-hub`, `fix-hub`, `test-hub`, `review-hub`
 - layer 3 utility providers as first-class registry skills:
-  - `research`, `docs-seeker`, `sequential-thinking`, `problem-solving`, `ai-multimodal`, `chrome-devtools`, `repomix`, `context-engineering`, `mermaidjs-v11`, `ui-ux-pro-max`, `media-processing`
+  - `research`, `doc-pointers`, `sequential-thinking`, `problem-solving`, `multimodal-evidence`, `browser-inspector`, `repo-map`, `handoff-context`, `mermaid-diagrams`, `ui-ux-pro-max`, `media-tooling`
 - layer 4 specialists still intact, including `developer`
 - new state files: `.ai-kit/state/lane-registry.md`, `.ai-kit/state/handoff-log.md`
 - new docs: `.ai-kit/docs/utility-provider-model.md`, `.ai-kit/docs/standalone-taxonomy.md`, `.ai-kit/docs/parallelism-rules.md`, `.ai-kit/docs/bundle-gating.md`, `.ai-kit/docs/round4-changelog.md`
@@ -71,15 +71,15 @@ Verify these paths exist after generation:
 
 - `.claude/skills/team/SKILL.md`
 - `.claude/skills/research/SKILL.md`
-- `.claude/skills/docs-seeker/SKILL.md`
-- `.claude/skills/context-engineering/SKILL.md`
+- `.claude/skills/doc-pointers/SKILL.md`
+- `.claude/skills/handoff-context/SKILL.md`
 - `.claude/skills/ui-ux-pro-max/SKILL.md`
 - `.agent/skills/team/SKILL.md`
-- `.agent/skills/chrome-devtools/SKILL.md`
+- `.agent/skills/browser-inspector/SKILL.md`
 - `.agent/skills/sequential-thinking/SKILL.md`
 - `.codex/skills/workflow-router/SKILL.md`
-- `.codex/skills/repomix/SKILL.md`
-- `.codex/skills/mermaidjs-v11/SKILL.md`
+- `.codex/skills/repo-map/SKILL.md`
+- `.codex/skills/mermaid-diagrams/SKILL.md`
 - `.ai-kit/state/lane-registry.md`
 - `.ai-kit/state/handoff-log.md`
 - `.ai-kit/state/workflow-state.md`
@@ -137,7 +137,7 @@ Must exist:
 - `_tmp_round4_gate/.ai-kit/docs/bundle-gating.md`
 - `_tmp_round4_gate/.ai-kit/docs/round4-changelog.md`
 - `_tmp_round4_gate/.codex/skills/research/SKILL.md`
-- `_tmp_round4_gate/.codex/skills/context-engineering/SKILL.md`
+- `_tmp_round4_gate/.codex/skills/handoff-context/SKILL.md`
 
 ## Acceptance criteria
 - `round2` still works and no longer emits round3/round4 extras in a clean output directory.

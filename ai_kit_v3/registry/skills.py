@@ -45,7 +45,7 @@ LEGACY_ROLE_MAP = {
         "dependency-management",
         "api-integration",
         "data-persistence",
-        "agentic-loop",
+        "execution-loop",
         "testing-patterns",
         "systematic-debugging",
         "refactoring-expert",
@@ -118,7 +118,7 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
     ),
     "bootstrap": SkillSpec(
         name="bootstrap",
-        description="Use when starting a repo lane, after major structure changes, or whenever workflow-state or project-context is missing or stale. Initialize or refresh the shared BMAD-lite runtime before a new lane begins.",
+        description="Use when starting a repo lane, after major structure changes, or whenever workflow-state or project-context is missing or stale. Initialize or refresh the shared Relay-kit runtime before a new lane begins.",
         role="session-bootstrap",
         layer="layer-1-orchestrators",
         inputs=["repo root", ".ai-kit/ runtime folders if present", "current request"],
@@ -352,7 +352,7 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
         outputs=["refined tech-spec or story", "implementation handoff to developer", "updated workflow-state"],
         references=[
             "Keep the fix surface as small as possible.",
-            "Use developer plus agentic-loop for execution, not as a replacement for scoping.",
+            "Use developer plus execution-loop for execution, not as a replacement for scoping.",
             "If the fix expands the contract or architecture, route back through workflow-router or plan-hub.",
         ],
         next_steps=["developer", "test-hub", "review-hub", "workflow-router"],
@@ -602,14 +602,14 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         inputs=["story or tech-spec", "project-context", "architecture when present", "relevant support references"],
         outputs=["working code", "test evidence", "updated workflow-state or handoff note"],
         references=[
-            "Use agentic-loop as the execution engine.",
+            "Use execution-loop as the execution engine.",
             "Pull in project-architecture, api-integration, data-persistence, and testing-patterns as needed.",
             "Hand off to test-hub or qa-governor; do not self-certify completion without evidence.",
             "Default to `test-first-development` whenever the change introduces or fixes behavior that can be exercised with a test or clear reproduction harness.",
             "If test-first is not practical, say why before coding and name the alternative failing signal you will use.",
             "If tasks are truly independent and the platform supports collaboration, follow `.ai-kit/docs/parallel-execution.md` before using subagent-style execution.",
         ],
-        next_steps=["agentic-loop", "test-hub", "qa-governor", "review-hub"],
+        next_steps=["execution-loop", "test-hub", "qa-governor", "review-hub"],
         body=dedent(
             """\
             # Mission
@@ -621,7 +621,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             3. Default to `test-first-development` whenever the behavior is testable.
             4. Capture the failing test or failing reproduction signal before the main implementation pass.
             5. If test-first is not practical, say why and name the fallback evidence path before editing code.
-            6. Execute through `agentic-loop` rather than piling unrelated changes into one pass.
+            6. Execute through `execution-loop` rather than piling unrelated changes into one pass.
             7. Keep one behavior or fix slice per red-green cycle instead of widening scope during the green phase.
             8. Preserve the active acceptance criteria and note any hidden scope discovered during implementation.
             9. Hand off to `test-hub` or `qa-governor` with the evidence actually collected.
@@ -672,8 +672,8 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
 
 
 CLEANUP_SKILLS: Dict[str, SkillSpec] = {
-    "agentic-loop": SkillSpec(
-        name="agentic-loop",
+    "execution-loop": SkillSpec(
+        name="execution-loop",
         description="Use when building or fixing code iteratively and require evidence before claiming completion. Self-correcting development loop for implementation work.",
         role="developer-support",
         layer="layer-4-specialists-and-standalones",
@@ -942,8 +942,8 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "Stop as soon as the owning hub can decide without another broad research pass.",
         ],
     ),
-    "docs-seeker": utility_provider_spec(
-        name="docs-seeker",
+    "doc-pointers": utility_provider_spec(
+        name="doc-pointers",
         description="Use when a hub needs exact docs fragments, file paths, or source references before deciding. Stateless docs retrieval utility.",
         outputs=[
             "doc pointers, file paths, or citations appended to the active artifact",
@@ -985,8 +985,8 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         tasks=["Generate root-cause hypotheses.", "Compare implementation or mitigation options.", "Call out the cheapest validating experiment."],
         rules=["Ground every option in evidence already collected.", "State uncertainty instead of bluffing.", "Recommend escalation if the issue is really a planning problem."],
     ),
-    "ai-multimodal": utility_provider_spec(
-        name="ai-multimodal",
+    "multimodal-evidence": utility_provider_spec(
+        name="multimodal-evidence",
         description="Use when screenshots, diagrams, rendered UIs, or media artifacts contain important clues. Multimodal evidence utility.",
         outputs=["visual or media observations appended to the active artifact"],
         references=["Describe what is visible and why it matters.", "Feed observations back to the owning hub."],
@@ -995,8 +995,8 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         tasks=["Inspect screenshots, diagrams, or logs embedded as images.", "Summarize what changed between before/after artifacts.", "Call out ambiguous areas that need manual confirmation."],
         rules=["Do not over-interpret weak signals.", "Tie observations to UI states, logs, or acceptance criteria.", "Keep the output compact and actionable."],
     ),
-    "chrome-devtools": utility_provider_spec(
-        name="chrome-devtools",
+    "browser-inspector": utility_provider_spec(
+        name="browser-inspector",
         description="Use when the active hub needs console, network, DOM, or performance observations from a web flow. Browser evidence utility.",
         outputs=["browser-side evidence appended to investigation-notes or qa-report"],
         references=["Collect evidence first, then suggest the next move.", "Capture the smallest reproducible browser path."],
@@ -1005,8 +1005,8 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         tasks=["Inspect console, network, layout, and performance clues.", "Note the exact page state and reproduction path.", "Return the evidence to the owning hub."],
         rules=["Prefer reproducible steps and specific requests over general browsing notes.", "Link evidence to the failing acceptance criterion or symptom.", "Do not claim the fix; supply the evidence."],
     ),
-    "repomix": utility_provider_spec(
-        name="repomix",
+    "repo-map": utility_provider_spec(
+        name="repo-map",
         description="Use when a hub needs a quick dependency map, file tree slice, or entrypoint overview before acting. Repo-map utility.",
         outputs=[
             "repo map notes appended to project-context or architecture",
@@ -1028,8 +1028,8 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "Stop once the next skill can navigate without another broad repo walk.",
         ],
     ),
-    "context-engineering": utility_provider_spec(
-        name="context-engineering",
+    "handoff-context": utility_provider_spec(
+        name="handoff-context",
         description="Use when the next skill needs a tighter, more relevant context handoff than the current artifact already provides. Context-pack utility.",
         outputs=[
             "focused context pack notes added to workflow-state, story, or handoff-log",
@@ -1051,8 +1051,8 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "Stop when the receiving skill can act without reopening the whole repo or replaying the whole chat.",
         ],
     ),
-    "mermaidjs-v11": utility_provider_spec(
-        name="mermaidjs-v11",
+    "mermaid-diagrams": utility_provider_spec(
+        name="mermaid-diagrams",
         description="Use when architecture, flow, or sequencing should be expressed as a quick mermaid diagram inside an artifact. Diagramming utility.",
         outputs=["mermaid snippets inserted into architecture, project-context, or docs"],
         references=["Prefer diagrams that clarify ownership, flow, or sequencing.", "Diagrams should serve the artifact, not replace it."],
@@ -1092,8 +1092,8 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "Keep motion performance-safe: prefer transform and opacity, and respect reduced-motion needs.",
         ],
     ),
-    "media-processing": utility_provider_spec(
-        name="media-processing",
+    "media-tooling": utility_provider_spec(
+        name="media-tooling",
         description="Use when screenshots, assets, or content files need transformation or evidence extraction for the current lane. Media handling utility.",
         outputs=["media processing notes or asset instructions appended to the active artifact"],
         references=["Useful for evidence packaging and asset-heavy workflows.", "Should stay stateless and task-scoped."],

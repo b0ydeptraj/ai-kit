@@ -12,7 +12,7 @@ Turn an approved story or tech-spec into code and evidence without reopening sol
 3. Default to `test-first-development` whenever the behavior is testable.
 4. Capture the failing test or failing reproduction signal before the main implementation pass.
 5. If test-first is not practical, say why and name the fallback evidence path before editing code.
-6. Execute through `agentic-loop` rather than piling unrelated changes into one pass.
+6. Execute through `execution-loop` rather than piling unrelated changes into one pass.
 7. Keep one behavior or fix slice per red-green cycle instead of widening scope during the green phase.
 8. Preserve the active acceptance criteria and note any hidden scope discovered during implementation.
 9. Hand off to `test-hub` or `qa-governor` with the evidence actually collected.
@@ -38,7 +38,7 @@ If implementation reveals missing architecture, unclear acceptance criteria, a b
 - updated workflow-state or handoff note
 
 ## Reference skills and rules
-- Use agentic-loop as the execution engine.
+- Use execution-loop as the execution engine.
 - Pull in project-architecture, api-integration, data-persistence, and testing-patterns as needed.
 - Hand off to test-hub or qa-governor; do not self-certify completion without evidence.
 - Default to `test-first-development` whenever the change introduces or fixes behavior that can be exercised with a test or clear reproduction harness.
@@ -46,7 +46,7 @@ If implementation reveals missing architecture, unclear acceptance criteria, a b
 - If tasks are truly independent and the platform supports collaboration, follow `.ai-kit/docs/parallel-execution.md` before using subagent-style execution.
 
 ## Likely next step
-- agentic-loop
+- execution-loop
 - test-hub
 - qa-governor
 - review-hub

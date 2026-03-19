@@ -12,7 +12,7 @@
 
 3. **Clean the obvious runtime leak**
    - Run `--bundle cleanup` for each adapter you support.
-   - Confirm `agentic-loop` no longer contains `Create ... SKILL.md with:`.
+   - Confirm `execution-loop` no longer contains `Create ... SKILL.md with:`.
 
 4. **Adopt core orchestration skills**
    - Generate `workflow-router`, `analyst`, `pm`, `architect`, `scrum-master`, `qa-governor`.
@@ -24,7 +24,7 @@
    - Confirm Architect, Developer, and QA can all consume the same reference files.
 
 6. **Keep legacy kits alive during migration**
-   - Use `--legacy-kit` for the old `python`, `flutter`, `antigravity`, `claudekit`, `ui-ux`, and `full` kits while round 2 settles.
+- Use `--legacy-kit` for `python`, `mobile-analysis`, `expert-suite`, `tooling-suite`, `design-suite`, and `full` while round 2 settles.
    - Move one prompt family at a time only after the native version is stable.
 
 7. **Only then replace or deprecate old adapters**

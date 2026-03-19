@@ -13,8 +13,8 @@ Identify the most likely root cause and the smallest reliable path to a fix.
 2. Invoke `scout` if the relevant code paths are not yet mapped.
 3. Gather evidence from code, logs, stack traces, tests, and runtime behavior.
 4. Use utility skills when appropriate:
-   - `docs-seeker` for framework or library behavior
-   - `chrome-devtools` for browser-side issues
+   - `doc-pointers` for framework or library behavior
+   - `browser-inspector` for browser-side issues
    - `mcp-management` when MCP-backed tooling is needed
 5. Narrow the issue to a root-cause hypothesis.
 6. Hand off to `fix` with evidence, likely cause, and affected files.
