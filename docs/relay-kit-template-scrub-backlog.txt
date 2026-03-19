@@ -1,0 +1,94 @@
+Relay-kit Template Scrub Backlog
+
+Purpose
+- Keep a short list of template cleanup work for later.
+- Do not treat this as current priority during the compatibility soak window.
+
+High-Risk
+- templates/skills/browser-inspector/SKILL.md
+  - still reads like an imported Chrome DevTools agent pack
+- templates/skills/doc-pointers/SKILL.md
+  - still has long imported docs-discovery/catalog tone
+- templates/skills/handoff-context/SKILL.md
+  - still carries old context-engineering pack voice
+- templates/skills/multimodal-evidence/SKILL.md
+  - still reads like old ai-multimodal / Gemini-heavy pack content
+- templates/skills/repo-map/SKILL.md
+  - still presents as a Repomix-branded skill
+- templates/skills/ux-structure/SKILL.md
+  - name changed, but body is still mostly old catalog-style pack content
+- templates/skills/claude-code/SKILL.md
+  - explicitly exposes external brand
+- templates/skills/skill-creator/SKILL.md
+  - still says "extends Claude's capabilities"
+- templates/skills/oracle/SKILL.md
+  - still exposes Oracle/GPT-5/cursor-agent framing
+- templates/skills/template-skill/SKILL.md
+  - placeholder, not product-ready
+
+Medium-Risk
+- templates/skills/accessibility-expert/SKILL.md
+- templates/skills/ai-sdk-expert/SKILL.md
+- templates/skills/auth-expert/SKILL.md
+- templates/skills/backend-development/SKILL.md
+- templates/skills/better-auth/SKILL.md
+- templates/skills/cli-expert/SKILL.md
+- templates/skills/css-styling-expert/SKILL.md
+- templates/skills/database-expert/SKILL.md
+- templates/skills/devops-expert/SKILL.md
+- templates/skills/docker-expert/SKILL.md
+- templates/skills/docx/SKILL.md
+- templates/skills/frontend-dev-guidelines/SKILL.md
+- templates/skills/git-expert/SKILL.md
+- templates/skills/github-actions-expert/SKILL.md
+- templates/skills/google-adk-python/SKILL.md
+- templates/skills/jest-testing-expert/SKILL.md
+- templates/skills/mcp-builder/SKILL.md
+- templates/skills/mcp-management/SKILL.md
+- templates/skills/media-tooling/SKILL.md
+- templates/skills/mermaid-diagrams/SKILL.md
+- templates/skills/mongodb-expert/SKILL.md
+- templates/skills/nestjs-expert/SKILL.md
+- templates/skills/nextjs-expert/SKILL.md
+- templates/skills/nodejs-expert/SKILL.md
+- templates/skills/pdf/SKILL.md
+- templates/skills/playwright-expert/SKILL.md
+- templates/skills/postgres-expert/SKILL.md
+- templates/skills/pptx/SKILL.md
+- templates/skills/prisma-expert/SKILL.md
+- templates/skills/react-expert/SKILL.md
+- templates/skills/react-performance/SKILL.md
+- templates/skills/rest-api-expert/SKILL.md
+- templates/skills/shopify/SKILL.md
+- templates/skills/state-management-expert/SKILL.md
+- templates/skills/testing-expert/SKILL.md
+- templates/skills/triage-expert/SKILL.md
+- templates/skills/typescript-expert/SKILL.md
+- templates/skills/typescript-type-expert/SKILL.md
+- templates/skills/vite-expert/SKILL.md
+- templates/skills/vitest-testing-expert/SKILL.md
+- templates/skills/web-frameworks/SKILL.md
+- templates/skills/webpack-expert/SKILL.md
+- templates/skills/xlsx/SKILL.md
+
+Low-Risk / Already Relay-kit Enough
+- templates/skills/brainstorm/SKILL.md
+- templates/skills/cook/SKILL.md
+- templates/skills/debug/SKILL.md
+- templates/skills/fix/SKILL.md
+- templates/skills/plan/SKILL.md
+- templates/skills/review/SKILL.md
+- templates/skills/scout/SKILL.md
+- templates/skills/validate/SKILL.md
+- templates/skills/aesthetic/SKILL.md
+- templates/skills/frontend-design/SKILL.md
+- templates/skills/ui-styling/SKILL.md
+
+When To Resume
+- After the compatibility cycle is clean.
+- Start with High-Risk only.
+- Rewrite only what will actually ship or be shown to users first.
+
+Rule
+- Do not mass-rename or mass-rewrite everything just for cosmetics.
+- Prioritize user-facing clone-smell first, bundle by bundle.
