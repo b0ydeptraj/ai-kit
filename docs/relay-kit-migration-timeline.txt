@@ -164,6 +164,7 @@ Capability backlog:
   - đây là một trong các capability đáng làm nhất sau 2026-04-01
   - nên làm sau `memory-search` và trước các feature memory nặng hơn
   - spec draft: `docs/relay-kit-context-continuity-design-note.md`
+  - topology rule: `docs/relay-kit-skill-topology-rule.md`
 
 5. Những thứ nên để rất sau, không ưu tiên
 
