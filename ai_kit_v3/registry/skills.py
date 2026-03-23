@@ -607,6 +607,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Hand off to test-hub or qa-governor; do not self-certify completion without evidence.",
             "Default to `test-first-development` whenever the change introduces or fixes behavior that can be exercised with a test or clear reproduction harness.",
             "If test-first is not practical, say why before coding and name the alternative failing signal you will use.",
+            "Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data unless the repo or product explicitly requires non-ASCII content.",
             "If tasks are truly independent and the platform supports collaboration, follow `.ai-kit/docs/parallel-execution.md` before using subagent-style execution.",
         ],
         next_steps=["execution-loop", "test-hub", "qa-governor", "review-hub"],
@@ -621,10 +622,11 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             3. Default to `test-first-development` whenever the behavior is testable.
             4. Capture the failing test or failing reproduction signal before the main implementation pass.
             5. If test-first is not practical, say why and name the fallback evidence path before editing code.
-            6. Execute through `execution-loop` rather than piling unrelated changes into one pass.
-            7. Keep one behavior or fix slice per red-green cycle instead of widening scope during the green phase.
-            8. Preserve the active acceptance criteria and note any hidden scope discovered during implementation.
-            9. Hand off to `test-hub` or `qa-governor` with the evidence actually collected.
+            6. Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data. Do not add decorative icons, emojis, or unusual Unicode characters unless the existing repo or product content explicitly requires them.
+            7. Execute through `execution-loop` rather than piling unrelated changes into one pass.
+            8. Keep one behavior or fix slice per red-green cycle instead of widening scope during the green phase.
+            9. Preserve the active acceptance criteria and note any hidden scope discovered during implementation.
+            10. Hand off to `test-hub` or `qa-governor` with the evidence actually collected.
 
             ## Escalation
             If implementation reveals missing architecture, unclear acceptance criteria, a bigger-than-expected change surface, or the need for parallel sub-work, stop and route back through `review-hub` or `workflow-router`.
@@ -702,6 +704,7 @@ CLEANUP_SKILLS: Dict[str, SkillSpec] = {
             - No quick fixes without root-cause reasoning.
             - No stacking multiple unrelated changes in one test cycle.
             - Write or update a failing test whenever the change fixes a bug.
+            - Default to plain ASCII in code, comments, tests, fixtures, and sample data unless the repo or product explicitly requires non-ASCII content.
             - Do not say done without fresh evidence from commands actually run.
 
             ## Failure protocol
@@ -1124,7 +1127,7 @@ DISCIPLINE_UTILITY_SKILLS: Dict[str, SkillSpec] = {
         next_steps=["developer", "test-hub", "qa-governor"],
         mission="Drive implementation through the smallest useful red-green-refactor loop.",
         tasks=["Name the behavior that should fail first.", "Capture the failing test or reproduction evidence.", "Implement only enough to turn the signal green before cleanup."],
-        rules=["If the behavior cannot be tested first, say why instead of pretending the loop happened.", "Keep one behavior per cycle.", "Do not widen scope during the green phase."],
+        rules=["If the behavior cannot be tested first, say why instead of pretending the loop happened.", "Keep one behavior per cycle.", "Keep tests, fixtures, and sample payloads plain ASCII unless the behavior explicitly depends on non-ASCII content.", "Do not widen scope during the green phase."],
     ),
     "evidence-before-completion": utility_provider_spec(
         name="evidence-before-completion",

@@ -46,6 +46,8 @@ When styling a real product surface:
 - choose a deliberate contrast system
 - define which blocks are dominant, supporting, and quiet
 - customize borrowed components until they feel native to the product
+- keep source code, labels, comments, placeholder copy, and demo data plain ASCII unless the repo or product explicitly requires non-ASCII content
+- do not paste decorative icons, emojis, or odd Unicode glyphs into code to simulate personality; if icons are required, use the chosen icon system consistently
 
 ## Taste controls
 Set these three controls before building or restyling a surface:

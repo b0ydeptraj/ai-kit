@@ -17,6 +17,7 @@ Drive implementation through the smallest useful red-green-refactor loop.
 ## Working rules
 - If the behavior cannot be tested first, say why instead of pretending the loop happened.
 - Keep one behavior per cycle.
+- Keep tests, fixtures, and sample payloads plain ASCII unless the behavior explicitly depends on non-ASCII content.
 - Do not widen scope during the green phase.
 
 ## Role

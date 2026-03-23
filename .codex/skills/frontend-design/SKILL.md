@@ -16,6 +16,8 @@ The user provides frontend requirements: a component, page, application, or inte
   - an existing product/page pattern in the codebase
   - a strong component/library source ("menu UI") for charts, forms, nav, icons, or layouts
 - Treat libraries and templates as raw material, not final design.
+- Default source code, JSX copy, comments, test names, and demo data to plain ASCII. Do not paste decorative icons, emojis, or unusual Unicode glyphs into code just to make the UI feel lively.
+- If a real icon is required, use the chosen icon system or repo-native icon components rather than raw symbol characters.
 - If the first build looks obviously AI-generated, do not defend it. Diagnose it and change structure.
 
 Flag these smells aggressively:

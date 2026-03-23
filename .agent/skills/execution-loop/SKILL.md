@@ -18,6 +18,7 @@ Execute implementation work in a tight loop without resorting to random fixes.
 - No quick fixes without root-cause reasoning.
 - No stacking multiple unrelated changes in one test cycle.
 - Write or update a failing test whenever the change fixes a bug.
+- Default to plain ASCII in code, comments, tests, fixtures, and sample data unless the repo or product explicitly requires non-ASCII content.
 - Do not say done without fresh evidence from commands actually run.
 
 ## Failure protocol
