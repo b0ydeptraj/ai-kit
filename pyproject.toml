@@ -16,6 +16,15 @@ relay-kit = "relay_kit_public_cli:main"
 
 [tool.setuptools]
 include-package-data = true
+py-modules = [
+  "relay_kit",
+  "relay_kit_public_cli",
+  "relay_kit_legacy",
+  "relay_kit_compat",
+  "relay_kit_cycle_log",
+  "python_kit",
+  "python_kit_legacy",
+]
 
 [tool.setuptools.packages.find]
 include = ["ai_kit_v3*"]

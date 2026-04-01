@@ -77,6 +77,13 @@ relay-kit /path/to/project --claude
 relay-kit /path/to/project --antigravity
 ```
 
+Install without cloning the repo first:
+
+```bash
+pipx install "git+https://github.com/b0ydeptraj/Relay-kit.git"
+relay-kit /path/to/project --codex
+```
+
 The public wrapper maps:
 - `--codex` -> `--ai codex`
 - `--claude` -> `--ai claude`
