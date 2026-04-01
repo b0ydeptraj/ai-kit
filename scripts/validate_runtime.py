@@ -134,6 +134,29 @@ def assert_skill_descriptions_trigger_first() -> None:
         )
 
 
+def validate_skill_gauntlet() -> None:
+    command = [
+        sys.executable,
+        str(REPO_ROOT / "scripts" / "skill_gauntlet.py"),
+        str(REPO_ROOT),
+        "--strict",
+    ]
+    result = subprocess.run(
+        command,
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        fail(
+            "skill_gauntlet validation failed:\n"
+            f"command: {' '.join(command)}\n"
+            f"stdout:\n{result.stdout}\n"
+            f"stderr:\n{result.stderr}"
+        )
+
+
 def assert_file_map(name: str, actual: dict[str, str], expected: dict[str, str]) -> None:
     actual_names = set(actual)
     expected_names = set(expected)
@@ -348,6 +371,7 @@ def main() -> int:
     validate_list_output()
     validate_checked_in_runtime()
     assert_skill_descriptions_trigger_first()
+    validate_skill_gauntlet()
     validate_checked_in_docs()
     for bundle in ("round4", "discipline-utilities", "baseline", "baseline-next"):
         validate_generated_bundle(bundle)

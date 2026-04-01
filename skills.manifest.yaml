@@ -52,6 +52,7 @@ layers:
     - memory-search
     - release-readiness
     - accessibility-review
+    - skill-gauntlet
     - handoff-context
     - mermaid-diagrams
     - ux-structure

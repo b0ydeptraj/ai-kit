@@ -1109,6 +1109,32 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "If manual verification is needed, say exactly what to test and why.",
         ],
     ),
+    "skill-gauntlet": utility_provider_spec(
+        name="skill-gauntlet",
+        description="Use when runtime skill behavior may have drifted and you need a regression gate before trusting routing or completion claims.",
+        outputs=[
+            "skill behavior regression findings appended to qa-report or workflow-state",
+            "explicit pass or hold verdict for SKILL.md trigger and structure discipline",
+        ],
+        references=[
+            "Use `python scripts/skill_gauntlet.py <project> --strict` for machine-checkable gating.",
+            "Run this before promoting large skill edits, bundle changes, or release branches.",
+        ],
+        next_steps=["review-hub", "qa-governor", "workflow-router", "fix-hub"],
+        mission="Protect routing quality by detecting skill drift early instead of waiting for behavior regressions in live lanes.",
+        tasks=[
+            "Validate SKILL.md frontmatter, trigger descriptions, and required section structure across runtime surfaces.",
+            "Report malformed or stale skill files with concrete paths and checks.",
+            "Gate release or migration work when skill quality checks fail.",
+            "Hand failures to fix-hub with exact remediation targets.",
+        ],
+        rules=[
+            "Treat skill behavior regressions as release risk, not optional cleanup.",
+            "Prefer deterministic checks over subjective style review.",
+            "Fail fast when trigger wording or core sections drift from required structure.",
+            "Keep the gauntlet report small and path-specific so fixes are easy to apply.",
+        ],
+    ),
     "handoff-context": utility_provider_spec(
         name="handoff-context",
         description="Use when the next skill needs a tighter, more relevant context handoff than the current artifact already provides. Context-pack utility.",
