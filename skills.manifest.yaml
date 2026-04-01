@@ -51,6 +51,7 @@ layers:
     - repo-map
     - memory-search
     - release-readiness
+    - accessibility-review
     - handoff-context
     - mermaid-diagrams
     - ux-structure

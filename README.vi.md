@@ -48,6 +48,7 @@ Nói ngắn: nó khiến agent bớt làm việc kiểu ứng biến, và làm v
 - các artifact workflow dùng chung trong `.ai-kit/`
 - utility `memory-search` dạng read-only để tra quyết định và handoff cũ
 - utility `release-readiness` để gate pre/post deploy và theo dõi rollback signal
+- gate `accessibility-review` để chặn thiếu sót a11y trước khi gọi là ready
 - một baseline đang hoạt động và đã được kiểm, không phải bộ skill ghép rời rạc
 - một cách làm việc ổn định hơn mà không phải nhét mọi thứ vào chat memory
 
@@ -126,6 +127,7 @@ Xem chi tiết hơn:
 - [`docs/relay-kit-review-flow.md`](docs/relay-kit-review-flow.md)
 - [`docs/relay-kit-memory-search.md`](docs/relay-kit-memory-search.md)
 - [`docs/relay-kit-release-readiness.md`](docs/relay-kit-release-readiness.md)
+- [`docs/relay-kit-accessibility-review.md`](docs/relay-kit-accessibility-review.md)
 
 ## Nó hoạt động như thế nào
 
@@ -196,6 +198,8 @@ Bí danh cũ vẫn giữ trong một chu kỳ:
   - [`docs/relay-kit-memory-search.md`](docs/relay-kit-memory-search.md)
 - Release readiness và deploy smoke:
   - [`docs/relay-kit-release-readiness.md`](docs/relay-kit-release-readiness.md)
+- Accessibility gate:
+  - [`docs/relay-kit-accessibility-review.md`](docs/relay-kit-accessibility-review.md)
 - Cấu trúc thư mục:
   - [`.ai-kit/docs/folder-structure.md`](.ai-kit/docs/folder-structure.md)
 - Luật bundle:
