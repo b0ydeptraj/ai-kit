@@ -46,6 +46,7 @@ It makes agents behave less like improvising interns and more like engineers wor
 - a small public skill surface that is easy to remember
 - reusable runtime skills for `.claude`, `.agent`, and `.codex`
 - shared workflow artifacts in `.ai-kit/`
+- a read-only `memory-search` utility for retrieving prior decisions and handoffs
 - an active baseline that is validated instead of loosely assembled
 - a way to make work more consistent without forcing everything through raw chat memory
 
@@ -122,6 +123,7 @@ Default path for branch or PR review:
 More detail:
 - [`docs/relay-kit-start-flow.md`](docs/relay-kit-start-flow.md)
 - [`docs/relay-kit-review-flow.md`](docs/relay-kit-review-flow.md)
+- [`docs/relay-kit-memory-search.md`](docs/relay-kit-memory-search.md)
 
 ## How it works
 
@@ -188,6 +190,8 @@ Removal gate:
   - [`docs/relay-kit-start-flow.md`](docs/relay-kit-start-flow.md)
 - Review flow:
   - [`docs/relay-kit-review-flow.md`](docs/relay-kit-review-flow.md)
+- Memory retrieval utility:
+  - [`docs/relay-kit-memory-search.md`](docs/relay-kit-memory-search.md)
 - Skill authoring:
   - [`docs/how-to-write-skills.md`](docs/how-to-write-skills.md)
 - Contributing:

@@ -1031,6 +1031,32 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "Stop once the next skill can navigate without another broad repo walk.",
         ],
     ),
+    "memory-search": utility_provider_spec(
+        name="memory-search",
+        description="Use when a hub needs past decisions, handoff breadcrumbs, or prior debug evidence from .ai-kit artifacts. Read-only state retrieval utility.",
+        outputs=[
+            "matching evidence excerpts from .ai-kit/state or .ai-kit/contracts appended to the active artifact",
+            "a short continuity note that links current work to prior decisions",
+        ],
+        references=[
+            "Prefer read-only retrieval from authoritative artifacts over replaying chat memory.",
+            "Use `python scripts/memory_search.py <project> --query ...` for deterministic lookups.",
+        ],
+        next_steps=["debug-hub", "review-hub", "plan-hub", "workflow-router"],
+        mission="Recover prior context quickly so the lane can reuse proven decisions and avoid repeating old mistakes.",
+        tasks=[
+            "Search `.ai-kit/state` and `.ai-kit/contracts` for the exact decision, failure pattern, or handoff being referenced.",
+            "Return file paths and line-level excerpts that the active hub can verify immediately.",
+            "Call out conflicts between older decisions and the current request instead of smoothing them over.",
+            "Extract only the evidence needed for the next decision and stop.",
+        ],
+        rules=[
+            "Stay read-only; do not rewrite artifacts during retrieval.",
+            "Cite concrete paths and lines, not vague summaries.",
+            "Separate observed facts from interpretation when prior context is noisy.",
+            "If no evidence is found, say so explicitly and route to fresh investigation instead of guessing.",
+        ],
+    ),
     "handoff-context": utility_provider_spec(
         name="handoff-context",
         description="Use when the next skill needs a tighter, more relevant context handoff than the current artifact already provides. Context-pack utility.",

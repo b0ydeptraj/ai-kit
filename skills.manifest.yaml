@@ -49,6 +49,7 @@ layers:
     - multimodal-evidence
     - browser-inspector
     - repo-map
+    - memory-search
     - handoff-context
     - mermaid-diagrams
     - ux-structure

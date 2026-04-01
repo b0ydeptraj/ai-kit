@@ -12,6 +12,7 @@ UTILITY_PROVIDER_NAMES = [
     "multimodal-evidence",
     "browser-inspector",
     "repo-map",
+    "memory-search",
     "handoff-context",
     "mermaid-diagrams",
     "ux-structure",
@@ -104,13 +105,14 @@ HUB_SUPPORT_MAP = {
         "testing-patterns",
         "doc-pointers",
         "repo-map",
+        "memory-search",
         "handoff-context",
     ],
     "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "ux-structure", "mermaid-diagrams"],
-    "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "browser-inspector", "multimodal-evidence"],
+    "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "browser-inspector", "multimodal-evidence", "memory-search"],
     "fix-hub": ["developer", "execution-loop", "project-architecture", "api-integration", "data-persistence", "handoff-context"],
     "test-hub": ["qa-governor", "testing-patterns", "execution-loop", "multimodal-evidence", "media-tooling"],
-    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "doc-pointers", "mermaid-diagrams"],
+    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "doc-pointers", "memory-search", "mermaid-diagrams"],
 }
 
 
@@ -122,6 +124,7 @@ UTILITY_PROVIDER_RULES = {
     "multimodal-evidence": "Interpret screenshots, diagrams, logs, or media artifacts and hand observations back to the active hub.",
     "browser-inspector": "Collect browser-side evidence such as console, network, layout, and performance observations.",
     "repo-map": "Produce fast repo maps and dependency summaries for unfamiliar areas.",
+    "memory-search": "Retrieve prior decisions, debug evidence, and handoff context from `.ai-kit/state` and `.ai-kit/contracts` without mutating artifacts.",
     "handoff-context": "Prepare the minimum viable context pack for the next skill instead of flooding it with irrelevant detail.",
     "mermaid-diagrams": "Express flows or architecture as diagrams inside the current artifact.",
     "ux-structure": "Contribute UX framing, flow notes, and interface trade-offs when product work has user-facing impact.",
