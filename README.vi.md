@@ -152,7 +152,6 @@ Xem chi tiết hơn:
 - [`docs/relay-kit-accessibility-review.md`](docs/relay-kit-accessibility-review.md)
 - [`docs/relay-kit-skill-gauntlet.md`](docs/relay-kit-skill-gauntlet.md)
 - [`docs/relay-kit-context-continuity.md`](docs/relay-kit-context-continuity.md)
-- [`docs/relay-kit-soak-feedback.md`](docs/relay-kit-soak-feedback.md)
 
 ## Nó hoạt động như thế nào
 
@@ -230,8 +229,6 @@ Bí danh cũ vẫn giữ trong một chu kỳ:
 - Context continuity:
   - [`docs/relay-kit-context-continuity.md`](docs/relay-kit-context-continuity.md)
   - [`docs/relay-kit-context-continuity-design-note.md`](docs/relay-kit-context-continuity-design-note.md)
-- Công cụ soak feedback:
-  - [`docs/relay-kit-soak-feedback.md`](docs/relay-kit-soak-feedback.md)
 - Cấu trúc thư mục:
   - [`.ai-kit/docs/folder-structure.md`](.ai-kit/docs/folder-structure.md)
 - Luật bundle:

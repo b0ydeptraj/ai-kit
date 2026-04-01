@@ -152,7 +152,6 @@ More detail:
 - [`docs/relay-kit-accessibility-review.md`](docs/relay-kit-accessibility-review.md)
 - [`docs/relay-kit-skill-gauntlet.md`](docs/relay-kit-skill-gauntlet.md)
 - [`docs/relay-kit-context-continuity.md`](docs/relay-kit-context-continuity.md)
-- [`docs/relay-kit-soak-feedback.md`](docs/relay-kit-soak-feedback.md)
 
 ## How it works
 
@@ -230,8 +229,6 @@ Removal gate:
 - Context continuity:
   - [`docs/relay-kit-context-continuity.md`](docs/relay-kit-context-continuity.md)
   - [`docs/relay-kit-context-continuity-design-note.md`](docs/relay-kit-context-continuity-design-note.md)
-- Soak feedback tool:
-  - [`docs/relay-kit-soak-feedback.md`](docs/relay-kit-soak-feedback.md)
 - Skill authoring:
   - [`docs/how-to-write-skills.md`](docs/how-to-write-skills.md)
 - Contributing:
