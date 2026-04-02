@@ -12,6 +12,7 @@ Prepare the smallest complete context pack for the next handoff.
 
 ## Typical tasks
 - Select the minimum set of files, artifacts, and rules the receiving skill actually needs.
+- Include impact-critical dependencies and known risk edges so the receiver does not rediscover blast radius.
 - State why each included item matters.
 - Name what was deliberately excluded and why it is safe to ignore for now.
 - Write a short receiving-skill brief so the next handoff starts cleanly.
@@ -20,6 +21,7 @@ Prepare the smallest complete context pack for the next handoff.
 - Context quality beats context quantity.
 - Use authoritative artifacts over memory.
 - Update handoff-log when the receiving skill changes.
+- Call out stale context explicitly before handoff completion.
 - Stop when the receiving skill can act without reopening the whole repo or replaying the whole chat.
 - Escalate to context-continuity when the receiving lane needs durable checkpoint and rehydrate artifacts.
 

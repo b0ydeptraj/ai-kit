@@ -10,10 +10,11 @@ Gather the minimum reliable context the next lane needs so nobody plans or fixes
 1. Refresh `project-context.md` when architecture, tooling, or domain constraints are unclear.
 2. Refresh only the reference files actually relevant to the active lane.
 3. Add file paths, commands, or modules whenever possible.
-4. If a failure is being investigated, start `investigation-notes.md` with reproduction steps and evidence.
+4. Record freshness signals (last-updated clues, stale docs, stale notes) before recommending a path.
+5. If a failure is being investigated, start `investigation-notes.md` with reproduction steps and evidence.
 
 ## Output contract
-Name exactly what became clearer, what is still unknown, and which hub or specialist should use the refreshed context next.
+Name exactly what became clearer, what is still unknown, which sources might be stale, and which hub or specialist should use the refreshed context next.
 
 ## Role
 - recon-hub
@@ -35,6 +36,7 @@ Name exactly what became clearer, what is still unknown, and which hub or specia
 - Use project-architecture, dependency-management, api-integration, data-persistence, and testing-patterns as living references.
 - Prefer concrete file paths, commands, and entrypoints over summaries.
 - When the problem starts from a failure, capture findings in investigation-notes.
+- Run a freshness pass first: stale assumptions or stale artifacts should be called out explicitly before planning.
 
 ## Likely next step
 - plan-hub

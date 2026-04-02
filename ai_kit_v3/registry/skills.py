@@ -263,6 +263,7 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             "Use project-architecture, dependency-management, api-integration, data-persistence, and testing-patterns as living references.",
             "Prefer concrete file paths, commands, and entrypoints over summaries.",
             "When the problem starts from a failure, capture findings in investigation-notes.",
+            "Run a freshness pass first: stale assumptions or stale artifacts should be called out explicitly before planning.",
         ],
         next_steps=["plan-hub", "debug-hub", "review-hub", "workflow-router"],
         body=dedent(
@@ -274,10 +275,11 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             1. Refresh `project-context.md` when architecture, tooling, or domain constraints are unclear.
             2. Refresh only the reference files actually relevant to the active lane.
             3. Add file paths, commands, or modules whenever possible.
-            4. If a failure is being investigated, start `investigation-notes.md` with reproduction steps and evidence.
+            4. Record freshness signals (last-updated clues, stale docs, stale notes) before recommending a path.
+            5. If a failure is being investigated, start `investigation-notes.md` with reproduction steps and evidence.
 
             ## Output contract
-            Name exactly what became clearer, what is still unknown, and which hub or specialist should use the refreshed context next.
+            Name exactly what became clearer, what is still unknown, which sources might be stale, and which hub or specialist should use the refreshed context next.
             """
         ).strip(),
     ),
@@ -1027,13 +1029,16 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         tasks=[
             "Scope the map to the area the lane is actually about to touch.",
             "List key entrypoints, modules, and dependency direction.",
+            "Highlight likely impact surface (upstream callers, downstream dependencies, test touch points) when symbols are known.",
             "Highlight hotspots, choke points, or ownership boundaries.",
             "Name the first files the next skill should read instead of dumping the whole tree.",
         ],
         rules=[
             "Prefer repo-relative paths, modules, and boundaries over prose-heavy summaries.",
+            "Prefer token-efficient map output over long narrative so the next skill can act in one pass.",
             "Keep the map small enough for the next skill to use immediately.",
             "If ownership is fuzzy, say so explicitly instead of inventing structure.",
+            "If mapping data looks stale, mark it and route to scout-hub or index refresh before high-risk edits.",
             "Stop once the next skill can navigate without another broad repo walk.",
         ],
     ),
@@ -1047,17 +1052,20 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         references=[
             "Prefer read-only retrieval from authoritative artifacts over replaying chat memory.",
             "Use `python scripts/memory_search.py <project> --query ...` for deterministic lookups.",
+            "Use intent/path/freshness filters to return high-signal context in one pass instead of broad dumps.",
         ],
         next_steps=["debug-hub", "review-hub", "plan-hub", "workflow-router"],
         mission="Recover prior context quickly so the lane can reuse proven decisions and avoid repeating old mistakes.",
         tasks=[
             "Search `.ai-kit/state` and `.ai-kit/contracts` for the exact decision, failure pattern, or handoff being referenced.",
+            "Use intent-aware retrieval when the lane needs decision, handoff, debug, review, or migration evidence.",
             "Return file paths and line-level excerpts that the active hub can verify immediately.",
             "Call out conflicts between older decisions and the current request instead of smoothing them over.",
             "Extract only the evidence needed for the next decision and stop.",
         ],
         rules=[
             "Stay read-only; do not rewrite artifacts during retrieval.",
+            "Mark stale hits explicitly instead of mixing stale and fresh evidence silently.",
             "Cite concrete paths and lines, not vague summaries.",
             "Separate observed facts from interpretation when prior context is noisy.",
             "If no evidence is found, say so explicitly and route to fresh investigation instead of guessing.",
@@ -1183,6 +1191,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         mission="Prepare the smallest complete context pack for the next handoff.",
         tasks=[
             "Select the minimum set of files, artifacts, and rules the receiving skill actually needs.",
+            "Include impact-critical dependencies and known risk edges so the receiver does not rediscover blast radius.",
             "State why each included item matters.",
             "Name what was deliberately excluded and why it is safe to ignore for now.",
             "Write a short receiving-skill brief so the next handoff starts cleanly.",
@@ -1191,6 +1200,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "Context quality beats context quantity.",
             "Use authoritative artifacts over memory.",
             "Update handoff-log when the receiving skill changes.",
+            "Call out stale context explicitly before handoff completion.",
             "Stop when the receiving skill can act without reopening the whole repo or replaying the whole chat.",
             "Escalate to context-continuity when the receiving lane needs durable checkpoint and rehydrate artifacts.",
         ],

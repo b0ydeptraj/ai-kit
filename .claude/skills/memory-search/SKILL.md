@@ -12,12 +12,14 @@ Recover prior context quickly so the lane can reuse proven decisions and avoid r
 
 ## Typical tasks
 - Search `.ai-kit/state` and `.ai-kit/contracts` for the exact decision, failure pattern, or handoff being referenced.
+- Use intent-aware retrieval when the lane needs decision, handoff, debug, review, or migration evidence.
 - Return file paths and line-level excerpts that the active hub can verify immediately.
 - Call out conflicts between older decisions and the current request instead of smoothing them over.
 - Extract only the evidence needed for the next decision and stop.
 
 ## Working rules
 - Stay read-only; do not rewrite artifacts during retrieval.
+- Mark stale hits explicitly instead of mixing stale and fresh evidence silently.
 - Cite concrete paths and lines, not vague summaries.
 - Separate observed facts from interpretation when prior context is noisy.
 - If no evidence is found, say so explicitly and route to fresh investigation instead of guessing.
@@ -40,6 +42,7 @@ Recover prior context quickly so the lane can reuse proven decisions and avoid r
 ## Reference skills and rules
 - Prefer read-only retrieval from authoritative artifacts over replaying chat memory.
 - Use `python scripts/memory_search.py <project> --query ...` for deterministic lookups.
+- Use intent/path/freshness filters to return high-signal context in one pass instead of broad dumps.
 
 ## Likely next step
 - debug-hub
