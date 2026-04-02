@@ -75,6 +75,7 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             "Escalate from quick-flow to product-flow whenever hidden complexity appears.",
             "Hand off to bootstrap when base artifacts are missing, to cook for a single request, and to team when multiple lanes must move in parallel.",
             "If session continuity is weak, run context-continuity checkpoint or rehydrate before routing deeper work.",
+            "For existing codebases, prefer scout-hub plus repo-map before planning when dependency boundaries are still unclear.",
         ],
         next_steps=["bootstrap", "cook", "team", "context-continuity", "scout-hub", "plan-hub", "debug-hub"],
         body=dedent(
@@ -103,7 +104,8 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
                - `scout-hub` when the codebase area is unclear
                - `plan-hub` when planning artifacts are missing or stale
                - `debug-hub` when the request starts from a failure or regression
-            7. Update `.ai-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
+            7. Mark the lane mode explicitly as one of: discovery, planning, implementation, or verification.
+            8. Update `.ai-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
 
             ## Escalation rules
             Escalate immediately when:
@@ -163,6 +165,7 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             "Use cook inside a lane, not as a replacement for team.",
             "Use `.ai-kit/docs/parallel-execution.md` to decide when work is independent enough to split safely.",
             "Require context-continuity handoff packs when ownership shifts across sessions or AIs.",
+            "Prefer wave-based execution: parallel inside a wave, strict dependency gate between waves.",
         ],
         next_steps=["cook", "plan-hub", "scout-hub", "debug-hub", "review-hub", "context-continuity"],
         body=dedent(
@@ -177,11 +180,13 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             4. If one lane uncovers architecture or scope drift, update workflow-state and notify all affected lanes.
             5. Park lanes that are blocked instead of letting them thrash.
             6. Record lock scope and handoff status whenever a lane changes ownership or pauses.
+            7. For each lane, record `depends_on` and `wave_id`, then only advance to the next wave after current-wave verification gates pass.
 
             ## Do not do this
             - Do not let two lanes silently diverge on the same acceptance criteria.
             - Do not keep lane state only in memory.
             - Do not parallelize before a quick scout when the codebase area is unfamiliar.
+            - Do not close a lane as done when no artifact delta or verification evidence exists.
             """
         ).strip(),
     ),
@@ -295,6 +300,7 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             "Use scout-hub first if the current codebase context is too weak to plan safely.",
             "Route to review-hub if artifacts disagree with one another.",
             "Use `.ai-kit/docs/planning-discipline.md` to keep plans artifact-first, bite-sized, and verification-aware.",
+            "Lock key UX, API, and behavior assumptions before story slicing so implementation does not drift.",
         ],
         next_steps=["analyst", "pm", "architect", "scrum-master", "developer", "review-hub"],
         body=dedent(
@@ -316,6 +322,8 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             - Prefer small, verifiable slices over broad task bundles.
             - Every story or quick spec should name what will prove it is done.
             - If the work spans unrelated subsystems, split the plan before implementation starts.
+            - Include dependency metadata (`depends_on`, parallel-safe yes/no, first verification command) so execution can run in controlled waves.
+            - If slicing yields zero executable stories, block and escalate instead of declaring planning complete.
             """
         ).strip(),
     ),
@@ -567,6 +575,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Each story should be a thin vertical slice with explicit done criteria.",
             "Do not create stories that hide architectural decisions or missing acceptance criteria.",
             "Use `.ai-kit/docs/planning-discipline.md` to keep tasks bite-sized, testable, and explicit about verification.",
+            "Execution order should be explicit; stories are not considered runnable until dependencies and first verification signals are named.",
         ],
         next_steps=["developer", "test-hub", "review-hub", "workflow-router"],
         body=dedent(
@@ -590,6 +599,8 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - implementation notes
             - test notes
             - risks
+            - depends_on (story ids)
+            - parallel-safe (yes/no)
             - done checklist
 
             ## Story quality bar
@@ -598,6 +609,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - Explicit about what must be tested.
             - Explicit about which upstream documents it depends on.
             - Explicit about the first verification command or evidence expected after implementation.
+            - Explicit about execution wave placement if parallel work is expected.
             """
         ).strip(),
     ),
@@ -693,6 +705,7 @@ CLEANUP_SKILLS: Dict[str, SkillSpec] = {
             "testing-patterns",
             "If discipline utilities are installed, use `root-cause-debugging` before repeated fix attempts.",
             "If discipline utilities are installed, use `evidence-before-completion` before claiming success.",
+            "State the slice objective and expected files before each cycle so context does not rot across long loops.",
         ],
         next_steps=["test-hub", "qa-governor"],
         body=dedent(
@@ -714,6 +727,7 @@ CLEANUP_SKILLS: Dict[str, SkillSpec] = {
             - Write or update a failing test whenever the change fixes a bug.
             - Default to plain ASCII in code, comments, tests, fixtures, and sample data unless the repo or product explicitly requires non-ASCII content.
             - Do not say done without fresh evidence from commands actually run.
+            - A code-change claim is invalid when there is zero file delta and zero verification output unless the task is explicitly a no-code decision update.
 
             ## Failure protocol
             After three failed fix attempts, stop and question the story, architecture, or assumptions instead of thrashing.
@@ -1287,8 +1301,18 @@ DISCIPLINE_UTILITY_SKILLS: Dict[str, SkillSpec] = {
         references=["No completion claims without fresh verification output.", "Match every claim to the command or evidence that proves it."],
         next_steps=["test-hub", "qa-governor", "review-hub"],
         mission="Stop premature completion claims by forcing a claim-to-evidence check.",
-        tasks=["List the exact claims being made.", "Name the command, artifact, or output that proves each claim.", "Reject claims that are not backed by fresh evidence."],
-        rules=["Confidence is not evidence.", "Partial verification is not completion.", "If evidence is stale or missing, route back to testing or debugging instead of approving the lane."],
+        tasks=[
+            "List the exact claims being made.",
+            "Name the command, artifact, or output that proves each claim.",
+            "Check whether expected artifact deltas actually exist for code-change claims.",
+            "Reject claims that are not backed by fresh evidence.",
+        ],
+        rules=[
+            "Confidence is not evidence.",
+            "Partial verification is not completion.",
+            "If evidence is stale or missing, route back to testing or debugging instead of approving the lane.",
+            "If a code-change claim has zero file delta and zero verification output, mark it invalid unless the lane explicitly recorded a no-code outcome.",
+        ],
     ),
 }
 

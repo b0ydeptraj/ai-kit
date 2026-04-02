@@ -22,6 +22,8 @@ Each story must include:
 - implementation notes
 - test notes
 - risks
+- depends_on (story ids)
+- parallel-safe (yes/no)
 - done checklist
 
 ## Story quality bar
@@ -30,6 +32,7 @@ Each story must include:
 - Explicit about what must be tested.
 - Explicit about which upstream documents it depends on.
 - Explicit about the first verification command or evidence expected after implementation.
+- Explicit about execution wave placement if parallel work is expected.
 
 ## Role
 - delivery
@@ -51,6 +54,7 @@ Each story must include:
 - Each story should be a thin vertical slice with explicit done criteria.
 - Do not create stories that hide architectural decisions or missing acceptance criteria.
 - Use `.ai-kit/docs/planning-discipline.md` to keep tasks bite-sized, testable, and explicit about verification.
+- Execution order should be explicit; stories are not considered runnable until dependencies and first verification signals are named.
 
 ## Likely next step
 - developer

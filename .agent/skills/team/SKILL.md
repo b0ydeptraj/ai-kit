@@ -13,11 +13,13 @@ Coordinate parallel work while preserving one authoritative source of truth for 
 4. If one lane uncovers architecture or scope drift, update workflow-state and notify all affected lanes.
 5. Park lanes that are blocked instead of letting them thrash.
 6. Record lock scope and handoff status whenever a lane changes ownership or pauses.
+7. For each lane, record `depends_on` and `wave_id`, then only advance to the next wave after current-wave verification gates pass.
 
 ## Do not do this
 - Do not let two lanes silently diverge on the same acceptance criteria.
 - Do not keep lane state only in memory.
 - Do not parallelize before a quick scout when the codebase area is unfamiliar.
+- Do not close a lane as done when no artifact delta or verification evidence exists.
 
 ## Role
 - meta-orchestrator
@@ -40,6 +42,7 @@ Coordinate parallel work while preserving one authoritative source of truth for 
 - Use cook inside a lane, not as a replacement for team.
 - Use `.ai-kit/docs/parallel-execution.md` to decide when work is independent enough to split safely.
 - Require context-continuity handoff packs when ownership shifts across sessions or AIs.
+- Prefer wave-based execution: parallel inside a wave, strict dependency gate between waves.
 
 ## Likely next step
 - cook

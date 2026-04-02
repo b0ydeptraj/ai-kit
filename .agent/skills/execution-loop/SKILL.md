@@ -20,6 +20,7 @@ Execute implementation work in a tight loop without resorting to random fixes.
 - Write or update a failing test whenever the change fixes a bug.
 - Default to plain ASCII in code, comments, tests, fixtures, and sample data unless the repo or product explicitly requires non-ASCII content.
 - Do not say done without fresh evidence from commands actually run.
+- A code-change claim is invalid when there is zero file delta and zero verification output unless the task is explicitly a no-code decision update.
 
 ## Failure protocol
 After three failed fix attempts, stop and question the story, architecture, or assumptions instead of thrashing.
@@ -42,6 +43,7 @@ After three failed fix attempts, stop and question the story, architecture, or a
 - testing-patterns
 - If discipline utilities are installed, use `root-cause-debugging` before repeated fix attempts.
 - If discipline utilities are installed, use `evidence-before-completion` before claiming success.
+- State the slice objective and expected files before each cycle so context does not rot across long loops.
 
 ## Likely next step
 - test-hub

@@ -29,7 +29,8 @@ Public alias: `start-here`.
    - `scout-hub` when the codebase area is unclear
    - `plan-hub` when planning artifacts are missing or stale
    - `debug-hub` when the request starts from a failure or regression
-7. Update `.ai-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
+7. Mark the lane mode explicitly as one of: discovery, planning, implementation, or verification.
+8. Update `.ai-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
 
 ## Escalation rules
 Escalate immediately when:
@@ -63,6 +64,7 @@ Never end with vague advice. Always name the next skill, the artifact it should 
 - Escalate from quick-flow to product-flow whenever hidden complexity appears.
 - Hand off to bootstrap when base artifacts are missing, to cook for a single request, and to team when multiple lanes must move in parallel.
 - If session continuity is weak, run context-continuity checkpoint or rehydrate before routing deeper work.
+- For existing codebases, prefer scout-hub plus repo-map before planning when dependency boundaries are still unclear.
 
 ## Likely next step
 - bootstrap
