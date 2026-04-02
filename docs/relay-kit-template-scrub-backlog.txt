@@ -106,3 +106,21 @@ Additional Deferred Areas
 Priority Rule For These Areas
 - Do not touch them during the current compatibility soak unless they create a real public-facing problem.
 - Treat them as after-cycle cleanup, behind actual product quality and real usage feedback.
+
+Execution Window (post-soak)
+- Earliest start: 2026-04-16 (only if soak cycle is clean through at least 2026-04-15)
+- Order:
+  1) 2026-04-16 to 2026-04-17: High-Risk imported-tone scrub
+  2) 2026-04-18 to 2026-04-20: Medium-Risk runtime/template scrub
+  3) 2026-04-21 to 2026-04-22: demo/docs/public wording scrub
+
+Batch Gate (required before each push)
+- python scripts/validate_runtime.py
+- python scripts/skill_gauntlet.py . --strict
+- smoke public adapters:
+  - python relay_kit_public_cli.py C:\temp\rk-codex --codex
+  - python relay_kit_public_cli.py C:\temp\rk-claude --claude
+  - python relay_kit_public_cli.py C:\temp\rk-antigravity --antigravity
+
+Stop Rule
+- If any gate fails, stop at that batch, fix, re-run gates, then continue.
