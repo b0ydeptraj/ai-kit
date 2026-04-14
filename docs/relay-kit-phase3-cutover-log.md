@@ -1,4 +1,4 @@
-﻿# Relay-kit Phase 3 Cutover Log
+# Relay-kit Phase 3 Cutover Log
 
 Date opened: 2026-04-14
 Owner: runtime-core
@@ -44,7 +44,7 @@ Complete phase-3 cutover with canonical runtime paths and no active compatibilit
   - post-cutover validation script updated
 
 ### Batch 4 - Physical repo rename
-- Status: complete (operational cutover) with old-path cleanup pending lock release
+- Status: complete
 - Scope:
   - activate new physical repo path `...\relay-kit`
   - refresh any machine-specific absolute paths
@@ -52,7 +52,7 @@ Complete phase-3 cutover with canonical runtime paths and no active compatibilit
 - Execution notes (2026-04-14):
   - in-place rename was blocked by file lock on `...\python-kit`
   - created full mirror at `...\relay-kit` and switched execution there
-  - old `...\python-kit` path remains only as locked legacy copy to delete after session close
+  - old locked path cleanup completed after releasing file handles
 - Runbook:
   - `docs/relay-kit-phase3-rename-runbook.md`
 
@@ -62,7 +62,7 @@ Complete phase-3 cutover with canonical runtime paths and no active compatibilit
 - [x] migration guard passes with historical allowlist
 - [x] adapter smoke passed on active repo and one real project (`apps/python-kit-sales-web`)
 - [x] operational runtime from `...\relay-kit` verified on at least 2 real projects
-- [ ] old locked path `...\python-kit` removed after process lock release
+- [x] old locked path `...\python-kit` removed after process lock release
 
 ## Verification evidence (2026-04-14)
 - `py -3.12 scripts/skill_gauntlet.py . --strict` -> pass
@@ -91,9 +91,10 @@ Complete phase-3 cutover with canonical runtime paths and no active compatibilit
   - `relay-kit C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\apps\python-kit-sales-web --claude` -> pass
   - `relay-kit C:\Users\b0ydeptrai\OneDrive\Documents\prompt-genius --antigravity` -> pass
   - `relay-kit C:\Users\b0ydeptrai\OneDrive\Documents\prompt-genius --generic` -> pass
-- old-path cleanup blocker:
-  - `Move-Item ...\python-kit -> ...\relay-kit` -> failed (directory in use)
-  - `Rename-Item ...\python-kit -> ...\python-kit-old` -> failed (directory in use)
+- old-path cleanup completion (2026-04-14 19:58 +07):
+  - `handle64.exe ...\python-kit` identified lock holders (`powershell.exe`, `git.exe`)
+  - stopped lock-holder PIDs, then `Remove-Item ...\python-kit -Force` -> success
+  - `Test-Path ...\python-kit` -> `False`
 
 ## Notes
 - Historical compatibility docs remain intentionally allowlisted for traceability.
