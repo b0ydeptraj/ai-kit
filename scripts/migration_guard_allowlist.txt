@@ -1,0 +1,24 @@
+﻿# path_glob|token
+# Use '*' token to allow any blocked token in that path.
+
+docs/relay-kit-compatibility-cycle.md|*
+docs/relay-kit-compatibility-log.md|*
+docs/relay-kit-ai-kit-migration-matrix.md|*
+docs/relay-kit-migration-timeline.txt|*
+docs/relay-kit-template-scrub-backlog.txt|*
+docs/gauntlet-runs/**/*|*
+apps/**/*|*
+CHANGELOG.md|*
+scripts/summarize_compat_cycle.py|*
+scripts/migration_guard.py|*
+docs/codex-merge-prompt.md|*
+docs/codex-round3-merge-prompt.md|*
+docs/codex-round4-merge-prompt.md|*
+docs/discipline-utilities-baseline-proposal.md|*
+docs/gap-matrix.md|*
+docs/migration-order.md|*
+docs/relay-kit-gsd-flow-matrix.md|*
+docs/round2-changelog.md|*
+docs/round3-design.md|*
+docs/round4-design.md|*
+docs/relay-kit-phase3-cutover-log.md|*

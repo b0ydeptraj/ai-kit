@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from textwrap import dedent
 from typing import Dict, List
@@ -16,6 +16,7 @@ UTILITY_PROVIDER_NAMES = [
     "release-readiness",
     "accessibility-review",
     "skill-gauntlet",
+    "migration-guard",
     "context-continuity",
     "handoff-context",
     "mermaid-diagrams",
@@ -116,8 +117,8 @@ HUB_SUPPORT_MAP = {
     "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "context-continuity", "ux-structure", "mermaid-diagrams"],
     "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "browser-inspector", "multimodal-evidence", "memory-search"],
     "fix-hub": ["developer", "execution-loop", "project-architecture", "api-integration", "data-persistence", "accessibility-review", "handoff-context"],
-    "test-hub": ["qa-governor", "testing-patterns", "execution-loop", "multimodal-evidence", "release-readiness", "accessibility-review", "skill-gauntlet", "context-continuity", "media-tooling"],
-    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "doc-pointers", "memory-search", "release-readiness", "accessibility-review", "skill-gauntlet", "context-continuity", "mermaid-diagrams"],
+    "test-hub": ["qa-governor", "testing-patterns", "execution-loop", "multimodal-evidence", "release-readiness", "accessibility-review", "skill-gauntlet", "migration-guard", "context-continuity", "media-tooling"],
+    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "doc-pointers", "memory-search", "release-readiness", "accessibility-review", "skill-gauntlet", "migration-guard", "context-continuity", "mermaid-diagrams"],
 }
 
 
@@ -129,10 +130,11 @@ UTILITY_PROVIDER_RULES = {
     "multimodal-evidence": "Interpret screenshots, diagrams, logs, or media artifacts and hand observations back to the active hub.",
     "browser-inspector": "Collect browser-side evidence such as console, network, layout, and performance observations.",
     "repo-map": "Produce fast repo maps and dependency summaries for unfamiliar areas.",
-    "memory-search": "Retrieve prior decisions, debug evidence, and handoff context from `.ai-kit/state` and `.ai-kit/contracts` without mutating artifacts.",
+    "memory-search": "Retrieve prior decisions, debug evidence, and handoff context from `.relay-kit/state` and `.relay-kit/contracts` without mutating artifacts.",
     "release-readiness": "Apply explicit pre-deploy and post-deploy smoke gates so release claims are backed by concrete operational signals.",
     "accessibility-review": "Run an explicit accessibility gate for keyboard, focus, semantic structure, labels, and contrast before approving frontend readiness.",
     "skill-gauntlet": "Run deterministic regression checks over SKILL.md trigger wording and required structure before trusting runtime routing quality.",
+    "migration-guard": "Detect stale compatibility tokens and block cutover merges until old runtime aliases are removed or explicitly allowlisted.",
     "context-continuity": "Capture and rehydrate durable continuity artifacts so lane state survives chat truncation, thread changes, and AI handoffs.",
     "handoff-context": "Prepare the minimum viable context pack for the next skill instead of flooding it with irrelevant detail.",
     "mermaid-diagrams": "Express flows or architecture as diagrams inside the current artifact.",
@@ -155,8 +157,8 @@ ROUND2_CHANGELOG = dedent(
 
     Round 2 introduced the v3 base:
 
-    - Relay-kit v3 entrypoint in `python_kit.py`
-    - preserved legacy generator in `python_kit_legacy.py`
+    - Relay-kit v3 entrypoint in `relay_kit.py`
+    - preserved legacy generator in `relay_kit_legacy.py`
     - role-based core skills
     - cleaned `execution-loop`
     - shared contracts, workflow-state, and living support references
@@ -306,10 +308,10 @@ def render_parallelism_rules() -> str:
     lines.extend([
         "",
         "## Required state files",
-        "- `.ai-kit/state/workflow-state.md`",
-        "- `.ai-kit/state/team-board.md`",
-        "- `.ai-kit/state/lane-registry.md`",
-        "- `.ai-kit/state/handoff-log.md`",
+        "- `.relay-kit/state/workflow-state.md`",
+        "- `.relay-kit/state/team-board.md`",
+        "- `.relay-kit/state/lane-registry.md`",
+        "- `.relay-kit/state/handoff-log.md`",
         "",
         "## Handoff minimum",
         "- source skill",
@@ -483,3 +485,4 @@ def render_review_loop() -> str:
         "",
     ]
     return "\n".join(lines).rstrip() + "\n"
+

@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from dataclasses import dataclass
 from textwrap import dedent
@@ -68,8 +68,8 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
         description="Use when a request arrives, the user asks what to do next, or scope or complexity is unclear. Route a request through the right delivery track, choose the active orchestrator or hub, and keep workflow-state current.",
         role="routing-kernel",
         layer="layer-1-orchestrators",
-        inputs=["user request", ".ai-kit/contracts/project-context.md (if present)", ".ai-kit/state/workflow-state.md (if present)", ".ai-kit/state/team-board.md (if present)"],
-        outputs=[".ai-kit/state/workflow-state.md", ".ai-kit/contracts/tech-spec.md or product-brief.md kickoff", ".ai-kit/state/team-board.md when parallel lanes are needed"],
+        inputs=["user request", ".relay-kit/contracts/project-context.md (if present)", ".relay-kit/state/workflow-state.md (if present)", ".relay-kit/state/team-board.md (if present)"],
+        outputs=[".relay-kit/state/workflow-state.md", ".relay-kit/contracts/tech-spec.md or product-brief.md kickoff", ".relay-kit/state/team-board.md when parallel lanes are needed"],
         references=[
             "Prefer existing project-context over assumptions.",
             "Escalate from quick-flow to product-flow whenever hidden complexity appears.",
@@ -84,7 +84,7 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             Act as the routing kernel for the whole system: choose the track, choose the active lane, and make the next move explicit.
 
             ## Mandatory routing procedure
-            1. Read `.ai-kit/contracts/project-context.md` and `.ai-kit/state/workflow-state.md` if they exist.
+            1. Read `.relay-kit/contracts/project-context.md` and `.relay-kit/state/workflow-state.md` if they exist.
             2. Score the request on five axes: ambiguity, breadth of change, architecture risk, operational risk, and coordination cost.
             3. Classify complexity:
                - `L0`: single bug or tiny refactor
@@ -105,7 +105,7 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
                - `plan-hub` when planning artifacts are missing or stale
                - `debug-hub` when the request starts from a failure or regression
             7. Mark the lane mode explicitly as one of: discovery, planning, implementation, or verification.
-            8. Update `.ai-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
+            8. Update `.relay-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
 
             ## Escalation rules
             Escalate immediately when:
@@ -124,8 +124,8 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
         description="Use when starting a repo lane, after major structure changes, or whenever workflow-state or project-context is missing or stale. Initialize or refresh the shared Relay-kit runtime before a new lane begins.",
         role="session-bootstrap",
         layer="layer-1-orchestrators",
-        inputs=["repo root", ".ai-kit/ runtime folders if present", "current request"],
-        outputs=[".ai-kit/state/workflow-state.md", ".ai-kit/contracts/project-context.md", ".ai-kit/state/team-board.md when parallel work is expected"],
+        inputs=["repo root", ".relay-kit/ runtime folders if present", "current request"],
+        outputs=[".relay-kit/state/workflow-state.md", ".relay-kit/contracts/project-context.md", ".relay-kit/state/team-board.md when parallel work is expected"],
         references=[
             "Prefer lightweight initialization over speculative planning.",
             "If the codebase is unfamiliar, route immediately to scout-hub after bootstrapping.",
@@ -139,9 +139,9 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             Prepare the runtime so later steps have an authoritative baseline instead of relying on chat memory.
 
             ## Mandatory setup
-            1. Ensure `.ai-kit/state/workflow-state.md` exists and records the current request.
-            2. Ensure `.ai-kit/contracts/project-context.md` exists. If facts are missing, create a skeletal version with explicit unknowns.
-            3. If the request is likely to branch into more than one lane, create or refresh `.ai-kit/state/team-board.md`.
+            1. Ensure `.relay-kit/state/workflow-state.md` exists and records the current request.
+            2. Ensure `.relay-kit/contracts/project-context.md` exists. If facts are missing, create a skeletal version with explicit unknowns.
+            3. If the request is likely to branch into more than one lane, create or refresh `.relay-kit/state/team-board.md`.
             4. Record which artifacts already exist and which ones must be refreshed.
             5. If the repo area is not well understood, route next to `scout-hub`.
 
@@ -157,13 +157,13 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
         description="Use when work must proceed in parallel, when planning and implementation overlap, or when one lane is blocked and another can move. Coordinate multi-lane or multi-session work without letting agents step on each other.",
         role="meta-orchestrator",
         layer="layer-1-orchestrators",
-        inputs=[".ai-kit/state/workflow-state.md", ".ai-kit/state/team-board.md", "active artifacts and blockers"],
-        outputs=[".ai-kit/state/team-board.md", ".ai-kit/state/workflow-state.md"],
+        inputs=[".relay-kit/state/workflow-state.md", ".relay-kit/state/team-board.md", "active artifacts and blockers"],
+        outputs=[".relay-kit/state/team-board.md", ".relay-kit/state/workflow-state.md"],
         references=[
             "Shared artifacts beat chat summaries; update the artifact before handing off.",
             "Assign one owner skill per lane and name merge order explicitly.",
             "Use cook inside a lane, not as a replacement for team.",
-            "Use `.ai-kit/docs/parallel-execution.md` to decide when work is independent enough to split safely.",
+            "Use `.relay-kit/docs/parallel-execution.md` to decide when work is independent enough to split safely.",
             "Require context-continuity handoff packs when ownership shifts across sessions or AIs.",
             "Prefer wave-based execution: parallel inside a wave, strict dependency gate between waves.",
         ],
@@ -174,7 +174,7 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             Coordinate parallel work while preserving one authoritative source of truth for each artifact.
 
             ## Mandatory behavior
-            1. Maintain `.ai-kit/state/team-board.md` with lanes, owners, active artifacts, blockers, and merge order.
+            1. Maintain `.relay-kit/state/team-board.md` with lanes, owners, active artifacts, blockers, and merge order.
             2. Split work only when lanes are independent enough to avoid editing the same artifact section at the same time.
             3. Use `cook` to drive each active lane, but keep final merge and priority decisions here.
             4. If one lane uncovers architecture or scope drift, update workflow-state and notify all affected lanes.
@@ -195,7 +195,7 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
         description="Use when one active request already has routing and state, and needs the next solid handoff. Drive that request forward with the right hub or specialist.",
         role="lane-conductor",
         layer="layer-1-orchestrators",
-        inputs=[".ai-kit/state/workflow-state.md", "current request or lane objective", "available artifacts"],
+        inputs=[".relay-kit/state/workflow-state.md", "current request or lane objective", "available artifacts"],
         outputs=["updated workflow-state", "a named next hub or specialist", "refreshed artifacts produced by the chosen lane"],
         references=[
             "Cook does not replace hubs; it chooses and sequences them.",
@@ -232,8 +232,8 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
         description="Use when the request is still an idea, an opportunity, or a loosely described improvement. Guide early ideation and rough problem framing before formal planning exists.",
         role="ideation-hub",
         layer="layer-2-workflow-hubs",
-        inputs=["user idea or opportunity", ".ai-kit/state/workflow-state.md", "any existing brief or context"],
-        outputs=[".ai-kit/contracts/product-brief.md or a decision not to proceed"],
+        inputs=["user idea or opportunity", ".relay-kit/state/workflow-state.md", "any existing brief or context"],
+        outputs=[".relay-kit/contracts/product-brief.md or a decision not to proceed"],
         references=[
             "Use analyst for structured discovery and pm only once the shape is coherent enough to plan.",
             "Prefer narrowing the problem over generating a giant feature wish list.",
@@ -262,8 +262,8 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
         description="Use when the repo area is unfamiliar, stale, or likely to drift from existing assumptions. Reconnoiter the codebase and refresh living references before planning, debugging, or review work continues.",
         role="recon-hub",
         layer="layer-2-workflow-hubs",
-        inputs=["repo tree and relevant files", ".ai-kit/contracts/project-context.md", ".ai-kit/state/workflow-state.md"],
-        outputs=[".ai-kit/contracts/project-context.md", ".ai-kit/references/*.md as needed", ".ai-kit/contracts/investigation-notes.md when the work starts from a failure"],
+        inputs=["repo tree and relevant files", ".relay-kit/contracts/project-context.md", ".relay-kit/state/workflow-state.md"],
+        outputs=[".relay-kit/contracts/project-context.md", ".relay-kit/references/*.md as needed", ".relay-kit/contracts/investigation-notes.md when the work starts from a failure"],
         references=[
             "Use project-architecture, dependency-management, api-integration, data-persistence, and testing-patterns as living references.",
             "Prefer concrete file paths, commands, and entrypoints over summaries.",
@@ -299,7 +299,7 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             "Call only the roles needed to close the current planning gap.",
             "Use scout-hub first if the current codebase context is too weak to plan safely.",
             "Route to review-hub if artifacts disagree with one another.",
-            "Use `.ai-kit/docs/planning-discipline.md` to keep plans artifact-first, bite-sized, and verification-aware.",
+            "Use `.relay-kit/docs/planning-discipline.md` to keep plans artifact-first, bite-sized, and verification-aware.",
             "Lock key UX, API, and behavior assumptions before story slicing so implementation does not drift.",
         ],
         next_steps=["analyst", "pm", "architect", "scrum-master", "developer", "review-hub"],
@@ -333,7 +333,7 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
         role="debug-hub",
         layer="layer-2-workflow-hubs",
         inputs=["failing behavior", "logs, traces, or test output", "workflow-state", "relevant references"],
-        outputs=[".ai-kit/contracts/investigation-notes.md", ".ai-kit/contracts/tech-spec.md when a fix path is clear"],
+        outputs=[".relay-kit/contracts/investigation-notes.md", ".relay-kit/contracts/tech-spec.md when a fix path is clear"],
         references=[
             "When discipline utilities are installed, use `root-cause-debugging` before touching code.",
             "Use testing-patterns and problem-solving to turn evidence into a fix path.",
@@ -389,7 +389,7 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
         role="verification-hub",
         layer="layer-2-workflow-hubs",
         inputs=["story or tech-spec", "implementation evidence", "testing-patterns reference", "workflow-state"],
-        outputs=[".ai-kit/contracts/qa-report.md", "updated workflow-state with pass, fail, or blocked verdict"],
+        outputs=[".relay-kit/contracts/qa-report.md", "updated workflow-state with pass, fail, or blocked verdict"],
         references=[
             "Use qa-governor for the actual readiness gate.",
             "Prefer evidence tied to acceptance criteria and regression surface.",
@@ -421,7 +421,7 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
         references=[
             "Review-hub is the mesh junction: it may send work back to plan, debug, fix, or test.",
             "Do not hide disagreement between artifacts; name it and route accordingly.",
-            "Use `.ai-kit/docs/review-loop.md` and `.ai-kit/docs/branch-completion.md` for review handling and end-of-branch discipline.",
+            "Use `.relay-kit/docs/review-loop.md` and `.relay-kit/docs/branch-completion.md` for review handling and end-of-branch discipline.",
             "If work crosses sessions, require context-continuity artifacts before accepting final completion claims.",
         ],
         next_steps=["plan-hub", "debug-hub", "fix-hub", "test-hub", "context-continuity", "workflow-router"],
@@ -459,8 +459,8 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         description="Use when discovery is needed before writing a prd or choosing architecture. Clarify product intent, assumptions, users, and open questions; produce a product brief for work that is not already fully scoped.",
         role="analysis",
         layer="layer-4-specialists-and-standalones",
-        inputs=["user request", ".ai-kit/contracts/project-context.md", ".ai-kit/state/workflow-state.md"],
-        outputs=[".ai-kit/contracts/product-brief.md"],
+        inputs=["user request", ".relay-kit/contracts/project-context.md", ".relay-kit/state/workflow-state.md"],
+        outputs=[".relay-kit/contracts/product-brief.md"],
         references=[
             "Lean on research-expert, problem-solving, and sequential-thinking when the scope is fuzzy.",
             "Keep the brief short enough that downstream roles can actually use it.",
@@ -493,8 +493,8 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         description="Use when the work is past discovery and needs a buildable scope. Translate a product brief or scoped request into a prd, release slices, and acceptance criteria.",
         role="planning",
         layer="layer-4-specialists-and-standalones",
-        inputs=[".ai-kit/contracts/product-brief.md or direct scoped request", ".ai-kit/contracts/project-context.md"],
-        outputs=[".ai-kit/contracts/PRD.md", ".ai-kit/contracts/epics.md"],
+        inputs=[".relay-kit/contracts/product-brief.md or direct scoped request", ".relay-kit/contracts/project-context.md"],
+        outputs=[".relay-kit/contracts/PRD.md", ".relay-kit/contracts/epics.md"],
         references=[
             "Do not hand wave acceptance criteria.",
             "Separate must-have requirements from stretch goals and out-of-scope ideas.",
@@ -533,8 +533,8 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         description="Use when a prd exists or when a change could alter module boundaries, data flow, security, or operations. Convert requirements into an implementation-ready architecture that fits the existing codebase.",
         role="solutioning",
         layer="layer-4-specialists-and-standalones",
-        inputs=[".ai-kit/contracts/PRD.md", ".ai-kit/contracts/project-context.md", "existing support skills and references"],
-        outputs=[".ai-kit/contracts/architecture.md"],
+        inputs=[".relay-kit/contracts/PRD.md", ".relay-kit/contracts/project-context.md", "existing support skills and references"],
+        outputs=[".relay-kit/contracts/architecture.md"],
         references=[
             "Mirror the existing codebase before inventing new patterns.",
             "Pull in project-architecture, dependency-management, api-integration, data-persistence, security-patterns, performance-optimization, and logging-observability when relevant.",
@@ -569,12 +569,12 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         description="Use when planning is done and work must be sliced into safe, verifiable increments. Turn prd and architecture into implementation-ready stories or a tech spec for quick-flow work.",
         role="delivery",
         layer="layer-4-specialists-and-standalones",
-        inputs=[".ai-kit/contracts/PRD.md", ".ai-kit/contracts/architecture.md", ".ai-kit/contracts/epics.md", ".ai-kit/contracts/tech-spec.md"],
-        outputs=[".ai-kit/contracts/stories/story-xxx.md", ".ai-kit/contracts/tech-spec.md when quick-flow is used"],
+        inputs=[".relay-kit/contracts/PRD.md", ".relay-kit/contracts/architecture.md", ".relay-kit/contracts/epics.md", ".relay-kit/contracts/tech-spec.md"],
+        outputs=[".relay-kit/contracts/stories/story-xxx.md", ".relay-kit/contracts/tech-spec.md when quick-flow is used"],
         references=[
             "Each story should be a thin vertical slice with explicit done criteria.",
             "Do not create stories that hide architectural decisions or missing acceptance criteria.",
-            "Use `.ai-kit/docs/planning-discipline.md` to keep tasks bite-sized, testable, and explicit about verification.",
+            "Use `.relay-kit/docs/planning-discipline.md` to keep tasks bite-sized, testable, and explicit about verification.",
             "Execution order should be explicit; stories are not considered runnable until dependencies and first verification signals are named.",
         ],
         next_steps=["developer", "test-hub", "review-hub", "workflow-router"],
@@ -584,7 +584,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             Cut work into execution units that a developer can complete without re-opening product or architecture debates.
 
             ## For quick-flow
-            Create or refine `.ai-kit/contracts/tech-spec.md` with:
+            Create or refine `.relay-kit/contracts/tech-spec.md` with:
             - change summary
             - root cause or context
             - files likely affected
@@ -592,7 +592,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - verification steps
 
             ## For product-flow or enterprise-flow
-            Create story files under `.ai-kit/contracts/stories/`.
+            Create story files under `.relay-kit/contracts/stories/`.
             Each story must include:
             - story statement
             - acceptance criteria
@@ -627,7 +627,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Default to `test-first-development` whenever the change introduces or fixes behavior that can be exercised with a test or clear reproduction harness.",
             "If test-first is not practical, say why before coding and name the alternative failing signal you will use.",
             "Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data unless the repo or product explicitly requires non-ASCII content.",
-            "If tasks are truly independent and the platform supports collaboration, follow `.ai-kit/docs/parallel-execution.md` before using subagent-style execution.",
+            "If tasks are truly independent and the platform supports collaboration, follow `.relay-kit/docs/parallel-execution.md` before using subagent-style execution.",
         ],
         next_steps=["execution-loop", "test-hub", "qa-governor", "review-hub"],
         body=dedent(
@@ -658,11 +658,11 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         role="quality",
         layer="layer-4-specialists-and-standalones",
         inputs=["PRD or tech-spec", "architecture or story", "evidence from tests and reviews"],
-        outputs=[".ai-kit/contracts/qa-report.md"],
+        outputs=[".relay-kit/contracts/qa-report.md"],
         references=[
             "Use testing-patterns as the evidence map for the project.",
             "When discipline utilities are installed, use `evidence-before-completion` before making completion claims.",
-            "Use `.ai-kit/docs/review-loop.md` when review feedback must be validated before action.",
+            "Use `.relay-kit/docs/review-loop.md` when review feedback must be validated before action.",
             "Coverage must be explained against acceptance criteria and risk, not just number of tests.",
             "Use context-continuity when readiness evidence must survive a new thread or handoff before final sign-off.",
         ],
@@ -743,8 +743,8 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
         description="Use when designing a change, reviewing architectural drift, or implementing code in an unfamiliar area. Analyze the current codebase shape and maintain a living architecture reference.",
         role="architecture-support",
         layer="layer-4-specialists-and-standalones",
-        inputs=["repository tree", ".ai-kit/contracts/project-context.md", ".ai-kit/contracts/architecture.md when available"],
-        outputs=[".ai-kit/references/project-architecture.md"],
+        inputs=["repository tree", ".relay-kit/contracts/project-context.md", ".relay-kit/contracts/architecture.md when available"],
+        outputs=[".relay-kit/references/project-architecture.md"],
         references=[
             "Document what the codebase actually does today, not what the team intended six months ago.",
             "Include concrete file paths, entrypoints, and dependency direction.",
@@ -755,7 +755,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             # Mission
             Build and maintain an accurate map of the current architecture so downstream roles stop guessing.
 
-            ## Produce `.ai-kit/references/project-architecture.md`
+            ## Produce `.relay-kit/references/project-architecture.md`
             Cover:
             - entry points and execution flow
             - layer or package structure
@@ -778,7 +778,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
         role="build-support",
         layer="layer-4-specialists-and-standalones",
         inputs=["package metadata files", "lockfiles", "toolchain config", "CI setup if present"],
-        outputs=[".ai-kit/references/dependency-management.md"],
+        outputs=[".relay-kit/references/dependency-management.md"],
         references=[
             "Record both the official package manager and what contributors actually use day to day.",
             "Make transitive risk and pinning policy explicit.",
@@ -789,7 +789,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             # Mission
             Prevent dependency changes from becoming hidden architecture or release risk.
 
-            ## Produce `.ai-kit/references/dependency-management.md`
+            ## Produce `.relay-kit/references/dependency-management.md`
             Cover:
             - package manager and lockfiles
             - environment and toolchain setup
@@ -812,7 +812,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
         role="integration-support",
         layer="layer-4-specialists-and-standalones",
         inputs=["HTTP or RPC client code", "settings or secret config", "test or mock code"],
-        outputs=[".ai-kit/references/api-integration.md"],
+        outputs=[".relay-kit/references/api-integration.md"],
         references=[
             "Prefer concrete service names, client classes, and endpoint groups over generic summaries.",
             "Make retries, timeouts, idempotency, and error translation explicit.",
@@ -823,7 +823,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             # Mission
             Make network-facing behavior predictable so changes to API code do not become reliability surprises.
 
-            ## Produce `.ai-kit/references/api-integration.md`
+            ## Produce `.relay-kit/references/api-integration.md`
             Cover:
             - clients, transports, and endpoints
             - authentication and secret handling
@@ -846,7 +846,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
         role="persistence-support",
         layer="layer-4-specialists-and-standalones",
         inputs=["model files", "repository or DAO code", "migration files", "cache config if present"],
-        outputs=[".ai-kit/references/data-persistence.md"],
+        outputs=[".relay-kit/references/data-persistence.md"],
         references=[
             "Cover both primary storage and auxiliary state like caches, queues, or object stores when relevant.",
             "Document rollback and migration risks, not only happy-path structure.",
@@ -857,7 +857,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             # Mission
             Make data changes safer by documenting where state lives, how it moves, and what can go wrong.
 
-            ## Produce `.ai-kit/references/data-persistence.md`
+            ## Produce `.relay-kit/references/data-persistence.md`
             Cover:
             - stores and connection points
             - schemas, models, and repositories
@@ -880,7 +880,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
         role="quality-support",
         layer="layer-4-specialists-and-standalones",
         inputs=["test folders", "test config", "fixtures or factories", "CI or local test commands"],
-        outputs=[".ai-kit/references/testing-patterns.md"],
+        outputs=[".relay-kit/references/testing-patterns.md"],
         references=[
             "Explain how to produce evidence locally, not only what frameworks exist.",
             "Map tests to risk areas and brittle zones where regressions cluster.",
@@ -891,7 +891,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             # Mission
             Turn the project test suite into a usable playbook for implementation and quality review.
 
-            ## Produce `.ai-kit/references/testing-patterns.md`
+            ## Produce `.relay-kit/references/testing-patterns.md`
             Cover:
             - frameworks and folder rules
             - fixture and factory patterns
@@ -1058,9 +1058,9 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
     ),
     "memory-search": utility_provider_spec(
         name="memory-search",
-        description="Use when a hub needs past decisions, handoff breadcrumbs, or prior debug evidence from .ai-kit artifacts. Read-only state retrieval utility.",
+        description="Use when a hub needs past decisions, handoff breadcrumbs, or prior debug evidence from .relay-kit artifacts. Read-only state retrieval utility.",
         outputs=[
-            "matching evidence excerpts from .ai-kit/state or .ai-kit/contracts appended to the active artifact",
+            "matching evidence excerpts from .relay-kit/state or .relay-kit/contracts appended to the active artifact",
             "a short continuity note that links current work to prior decisions",
         ],
         references=[
@@ -1071,7 +1071,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         next_steps=["debug-hub", "review-hub", "plan-hub", "workflow-router"],
         mission="Recover prior context quickly so the lane can reuse proven decisions and avoid repeating old mistakes.",
         tasks=[
-            "Search `.ai-kit/state` and `.ai-kit/contracts` for the exact decision, failure pattern, or handoff being referenced.",
+            "Search `.relay-kit/state` and `.relay-kit/contracts` for the exact decision, failure pattern, or handoff being referenced.",
             "Use intent-aware retrieval when the lane needs decision, handoff, debug, review, or migration evidence.",
             "Return file paths and line-level excerpts that the active hub can verify immediately.",
             "Call out conflicts between older decisions and the current request instead of smoothing them over.",
@@ -1163,11 +1163,37 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "Keep the gauntlet report small and path-specific so fixes are easy to apply.",
         ],
     ),
+    "migration-guard": utility_provider_spec(
+        name="migration-guard",
+        description="Use when a migration or naming cutover might leave stale compatibility tokens behind. Enforce token-level cutover policy with an explicit allowlist gate.",
+        outputs=[
+            "cutover token drift findings appended to qa-report or workflow-state",
+            "explicit pass or hold verdict for migration safety before merge",
+        ],
+        references=[
+            "Use `python scripts/migration_guard.py <project> --strict` as the canonical migration gate.",
+            "Only historical records and approved compatibility notes should be allowlisted.",
+        ],
+        next_steps=["test-hub", "review-hub", "qa-governor", "fix-hub"],
+        mission="Block high-risk migration drift by proving old compatibility markers are gone from active runtime surfaces.",
+        tasks=[
+            "Scan source and runtime files for blocked compatibility tokens.",
+            "Flag every non-allowlisted occurrence with file, line, and token evidence.",
+            "Hold the lane when findings exist in active runtime or gate paths.",
+            "Hand actionable findings back to fix-hub with exact cleanup targets.",
+        ],
+        rules=[
+            "Do not hide active runtime drift behind broad allowlist rules.",
+            "Treat allowlist as historical exception management, not a bypass for unfinished migration work.",
+            "Run migration-guard before merge on every cutover batch touching runtime names or paths.",
+            "Keep findings deterministic so repeated runs produce stable verdicts.",
+        ],
+    ),
     "context-continuity": utility_provider_spec(
         name="context-continuity",
         description="Use when work needs reliable continuity across long chats, new threads, AI switches, or resume-after-gap sessions.",
         outputs=[
-            "checkpoint, rehydrate, handoff, or diff artifacts under .ai-kit/state and .ai-kit/handoffs",
+            "checkpoint, rehydrate, handoff, or diff artifacts under .relay-kit/state and .relay-kit/handoffs",
             "a compact resume brief with explicit next step and open loops",
         ],
         references=[
@@ -1379,3 +1405,4 @@ def render_skill(spec: SkillSpec) -> str:
     ])
     parts.extend(f"- {item}" for item in spec.next_steps)
     return "\n".join(parts).rstrip() + "\n"
+

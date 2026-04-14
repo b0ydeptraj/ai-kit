@@ -1,14 +1,14 @@
-#!/usr/bin/env python3
-"""Validate adapter parity and bundle gating for the active Relay-kit v3 runtime."""
+﻿#!/usr/bin/env python3
+"""Validate Relay-kit runtime integrity for the post-cutover model."""
 
 from __future__ import annotations
 
+import os
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
-import os
-import re
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -19,10 +19,10 @@ from ai_kit_v3.adapters import ADAPTER_TARGETS
 from ai_kit_v3.generator import BUNDLES
 from ai_kit_v3.registry.skills import ALL_V3_SKILLS
 from relay_kit_compat import (
+    CANONICAL_ARTIFACT_ROOT,
     CANONICAL_ENTRYPOINT,
-    COMPAT_ENTRYPOINT,
+    CANONICAL_LEGACY_ENTRYPOINT,
     GENERIC_CANONICAL_DIR,
-    GENERIC_COMPAT_DIR,
 )
 
 ALL_TARGETS = [".claude/skills", ".agent/skills", ".codex/skills"]
@@ -42,13 +42,12 @@ def fail(message: str) -> None:
     raise AssertionError(message)
 
 
-def run_cli(script_name: str, *args: str) -> str:
-    command = [sys.executable, str(REPO_ROOT / script_name), *args]
+def run_command(command: list[str], label: str, *, cwd: Path = REPO_ROOT) -> str:
     env = dict(os.environ)
     env["RELAY_KIT_CYCLE_SOURCE"] = "validate_runtime"
     result = subprocess.run(
         command,
-        cwd=REPO_ROOT,
+        cwd=cwd,
         text=True,
         capture_output=True,
         check=False,
@@ -56,56 +55,30 @@ def run_cli(script_name: str, *args: str) -> str:
     )
     if result.returncode != 0:
         fail(
-            f"{script_name} failed:\n"
+            f"{label} failed:\n"
             f"command: {' '.join(command)}\n"
             f"stdout:\n{result.stdout}\n"
             f"stderr:\n{result.stderr}"
         )
     return result.stdout
+
+
+def run_cli(script_name: str, *args: str) -> str:
+    return run_command([sys.executable, str(REPO_ROOT / script_name), *args], script_name)
 
 
 def run_public_cli(*args: str) -> str:
-    command = [sys.executable, str(REPO_ROOT / "relay_kit_public_cli.py"), *args]
-    env = dict(os.environ)
-    env["RELAY_KIT_CYCLE_SOURCE"] = "validate_runtime"
-    result = subprocess.run(
-        command,
-        cwd=REPO_ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-        env=env,
+    return run_command(
+        [sys.executable, str(REPO_ROOT / "relay_kit_public_cli.py"), *args],
+        "relay_kit_public_cli.py",
     )
-    if result.returncode != 0:
-        fail(
-            "relay_kit_public_cli.py failed:\n"
-            f"command: {' '.join(command)}\n"
-            f"stdout:\n{result.stdout}\n"
-            f"stderr:\n{result.stderr}"
-        )
-    return result.stdout
 
 
 def run_helper_script(script_relative_path: str, *args: str) -> str:
-    command = [sys.executable, str(REPO_ROOT / script_relative_path), *args]
-    env = dict(os.environ)
-    env["RELAY_KIT_CYCLE_SOURCE"] = "validate_runtime"
-    result = subprocess.run(
-        command,
-        cwd=REPO_ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-        env=env,
+    return run_command(
+        [sys.executable, str(REPO_ROOT / script_relative_path), *args],
+        script_relative_path,
     )
-    if result.returncode != 0:
-        fail(
-            f"{script_relative_path} failed:\n"
-            f"command: {' '.join(command)}\n"
-            f"stdout:\n{result.stdout}\n"
-            f"stderr:\n{result.stderr}"
-        )
-    return result.stdout
 
 
 def skill_dirs(base: Path, relative_dir: str) -> set[str]:
@@ -157,26 +130,27 @@ def assert_skill_descriptions_trigger_first() -> None:
 
 
 def validate_skill_gauntlet() -> None:
-    command = [
-        sys.executable,
-        str(REPO_ROOT / "scripts" / "skill_gauntlet.py"),
-        str(REPO_ROOT),
-        "--strict",
-    ]
-    result = subprocess.run(
-        command,
-        cwd=REPO_ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
+    run_command(
+        [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "skill_gauntlet.py"),
+            str(REPO_ROOT),
+            "--strict",
+        ],
+        "skill_gauntlet",
     )
-    if result.returncode != 0:
-        fail(
-            "skill_gauntlet validation failed:\n"
-            f"command: {' '.join(command)}\n"
-            f"stdout:\n{result.stdout}\n"
-            f"stderr:\n{result.stderr}"
-        )
+
+
+def validate_migration_guard() -> None:
+    run_command(
+        [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "migration_guard.py"),
+            str(REPO_ROOT),
+            "--strict",
+        ],
+        "migration_guard",
+    )
 
 
 def validate_context_continuity_utility() -> None:
@@ -204,9 +178,9 @@ def validate_context_continuity_utility() -> None:
             "--receiver",
             "qa",
         )
-        manifest = temp_dir / ".ai-kit" / "state" / "context-manifest.json"
-        ledger = temp_dir / ".ai-kit" / "state" / "session-ledger.jsonl"
-        handoff_dir = temp_dir / ".ai-kit" / "handoffs"
+        manifest = temp_dir / CANONICAL_ARTIFACT_ROOT / "state" / "context-manifest.json"
+        ledger = temp_dir / CANONICAL_ARTIFACT_ROOT / "state" / "session-ledger.jsonl"
+        handoff_dir = temp_dir / CANONICAL_ARTIFACT_ROOT / "handoffs"
         if not manifest.exists():
             fail("context_continuity checkpoint did not create context-manifest.json")
         if not ledger.exists():
@@ -216,18 +190,6 @@ def validate_context_continuity_utility() -> None:
             fail("context_continuity handoff did not create a handoff markdown file")
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
-
-
-def assert_file_map(name: str, actual: dict[str, str], expected: dict[str, str]) -> None:
-    actual_names = set(actual)
-    expected_names = set(expected)
-    if actual_names != expected_names:
-        missing = sorted(expected_names - actual_names)
-        extra = sorted(actual_names - expected_names)
-        fail(f"{name} mismatch. Missing: {missing or '-'} Extra: {extra or '-'}")
-    for key in sorted(expected_names):
-        if actual[key] != expected[key]:
-            fail(f"{name} content drift for {key}")
 
 
 def prompt_files(base: Path, relative_dir: str) -> dict[str, str]:
@@ -242,38 +204,32 @@ def prompt_files(base: Path, relative_dir: str) -> dict[str, str]:
 
 
 def validate_checked_in_runtime() -> None:
-    adapter_sets = {target: skill_dirs(REPO_ROOT, target) & EXPECTED_RUNTIME_SKILLS for target in ALL_TARGETS}
+    adapter_sets = {
+        target: skill_dirs(REPO_ROOT, target) & EXPECTED_RUNTIME_SKILLS for target in ALL_TARGETS
+    }
     reference_target, reference_set = next(iter(adapter_sets.items()))
     for target, current_set in adapter_sets.items():
-        assert_set(f"checked-in runtime parity vs {reference_target} for {target}", current_set, reference_set)
+        assert_set(
+            f"checked-in runtime parity vs {reference_target} for {target}",
+            current_set,
+            reference_set,
+        )
 
 
 def validate_adapter_targets() -> None:
-    expected = ALL_TARGETS
-    actual = ADAPTER_TARGETS["all"]
-    if actual != expected:
-        fail(f"ADAPTER_TARGETS['all'] drifted. Expected {expected}, got {actual}")
-    antigravity_expected = [".agent/skills"]
-    antigravity_actual = ADAPTER_TARGETS["antigravity"]
-    if antigravity_actual != antigravity_expected:
-        fail(
-            "ADAPTER_TARGETS['antigravity'] drifted. "
-            f"Expected {antigravity_expected}, got {antigravity_actual}"
-        )
-    if "gemini" in ADAPTER_TARGETS:
-        fail("Legacy adapter key 'gemini' should not be present in active adapter targets.")
-    generic_expected = [GENERIC_CANONICAL_DIR, GENERIC_COMPAT_DIR]
-    generic_actual = ADAPTER_TARGETS["generic"]
-    if generic_actual != generic_expected:
-        fail(f"ADAPTER_TARGETS['generic'] drifted. Expected {generic_expected}, got {generic_actual}")
+    if ADAPTER_TARGETS["all"] != ALL_TARGETS:
+        fail(f"ADAPTER_TARGETS['all'] drifted: {ADAPTER_TARGETS['all']}")
+    if ADAPTER_TARGETS["antigravity"] != [".agent/skills"]:
+        fail(f"ADAPTER_TARGETS['antigravity'] drifted: {ADAPTER_TARGETS['antigravity']}")
+    if ADAPTER_TARGETS["generic"] != [GENERIC_CANONICAL_DIR]:
+        fail(f"ADAPTER_TARGETS['generic'] drifted: {ADAPTER_TARGETS['generic']}")
 
 
 def validate_list_output() -> None:
-    for script_name in (CANONICAL_ENTRYPOINT, COMPAT_ENTRYPOINT):
-        output = run_cli(script_name, "--list-skills")
-        for bundle in ("round4", "discipline-utilities", "baseline", "baseline-next"):
-            if bundle not in output:
-                fail(f"{script_name} --list-skills output is missing bundle: {bundle}")
+    output = run_cli(CANONICAL_ENTRYPOINT, "--list-skills")
+    for bundle in ("round4", "discipline-utilities", "baseline", "baseline-next"):
+        if bundle not in output:
+            fail(f"{CANONICAL_ENTRYPOINT} --list-skills output is missing bundle: {bundle}")
 
 
 def validate_checked_in_docs() -> None:
@@ -288,17 +244,24 @@ def validate_checked_in_docs() -> None:
             "baseline",
             "baseline-next",
             "relay_kit.py",
-            "python_kit.py",
             ".relay-kit-prompts",
-            ".python-kit-prompts",
+            ".relay-kit/",
         ],
     )
     assert_contains(
         REPO_ROOT / "skills.manifest.yaml",
-        [".claude/skills", ".agent/skills", ".codex/skills", "discipline-utilities", "baseline", "baseline-next"],
+        [
+            ".claude/skills",
+            ".agent/skills",
+            ".codex/skills",
+            "discipline-utilities",
+            "baseline",
+            "baseline-next",
+            ".relay-kit/state/workflow-state.md",
+        ],
     )
     assert_contains(
-        REPO_ROOT / ".ai-kit" / "docs" / "bundle-gating.md",
+        REPO_ROOT / ".relay-kit" / "docs" / "bundle-gating.md",
         ["discipline-utilities", "baseline", "baseline-next"],
     )
 
@@ -351,7 +314,7 @@ def validate_generated_bundle(bundle: str) -> None:
                 },
             )
 
-        bundle_gating_doc = temp_dir / ".ai-kit" / "docs" / "bundle-gating.md"
+        bundle_gating_doc = temp_dir / CANONICAL_ARTIFACT_ROOT / "docs" / "bundle-gating.md"
         if bundle_gating_doc.exists():
             assert_contains(bundle_gating_doc, ["discipline-utilities", "baseline", "baseline-next"])
     finally:
@@ -371,12 +334,6 @@ def validate_generated_generic_bundle(bundle: str) -> None:
             "generic",
         )
         canonical = prompt_files(temp_dir, GENERIC_CANONICAL_DIR)
-        compat = prompt_files(temp_dir, GENERIC_COMPAT_DIR)
-        assert_file_map(
-            f"{bundle} generic prompt parity",
-            canonical,
-            compat,
-        )
         if set(canonical) != expected_files:
             missing = sorted(expected_files - set(canonical))
             extra = sorted(set(canonical) - expected_files)
@@ -386,27 +343,27 @@ def validate_generated_generic_bundle(bundle: str) -> None:
 
 
 def validate_legacy_generation() -> None:
-    for script_name in (CANONICAL_ENTRYPOINT, COMPAT_ENTRYPOINT):
-        temp_dir = Path(tempfile.mkdtemp(prefix=f"relay-kit-legacy-{Path(script_name).stem}-"))
-        try:
-            run_cli(
-                script_name,
-                str(temp_dir),
-                "--legacy-kit",
-                "python",
-                "--skills",
-                "project-architecture",
-                "--ai",
-                "generic",
+    temp_dir = Path(tempfile.mkdtemp(prefix="relay-kit-legacy-generic-"))
+    try:
+        run_cli(
+            CANONICAL_LEGACY_ENTRYPOINT,
+            str(temp_dir),
+            "--kit",
+            "python",
+            "--skills",
+            "project-architecture",
+            "--ai",
+            "generic",
+        )
+        canonical = prompt_files(temp_dir, GENERIC_CANONICAL_DIR)
+        expected = {"project-architecture.md"}
+        if set(canonical) != expected:
+            fail(
+                f"{CANONICAL_LEGACY_ENTRYPOINT} legacy generic output mismatch. "
+                f"Expected {sorted(expected)}, got {sorted(canonical)}"
             )
-            canonical = prompt_files(temp_dir, GENERIC_CANONICAL_DIR)
-            compat = prompt_files(temp_dir, GENERIC_COMPAT_DIR)
-            expected = {"project-architecture.md"}
-            assert_file_map(f"{script_name} legacy generic parity", canonical, compat)
-            if set(canonical) != expected:
-                fail(f"{script_name} legacy generic output mismatch. Expected {sorted(expected)}, got {sorted(canonical)}")
-        finally:
-            shutil.rmtree(temp_dir, ignore_errors=True)
+    finally:
+        shutil.rmtree(temp_dir, ignore_errors=True)
 
 
 def validate_public_wrapper_surface() -> None:
@@ -421,8 +378,8 @@ def validate_public_wrapper_surface() -> None:
             run_public_cli(str(temp_dir), f"--{adapter}")
             if not (temp_dir / target).exists():
                 fail(f"Public wrapper failed to generate adapter target {target} for --{adapter}")
-            if not (temp_dir / ".ai-kit").exists():
-                fail(f"Public wrapper failed to emit .ai-kit artifacts for --{adapter}")
+            if not (temp_dir / CANONICAL_ARTIFACT_ROOT).exists():
+                fail(f"Public wrapper failed to emit {CANONICAL_ARTIFACT_ROOT} artifacts for --{adapter}")
         finally:
             shutil.rmtree(temp_dir, ignore_errors=True)
 
@@ -434,6 +391,7 @@ def main() -> int:
     assert_skill_descriptions_trigger_first()
     validate_skill_gauntlet()
     validate_context_continuity_utility()
+    validate_migration_guard()
     validate_checked_in_docs()
     for bundle in ("round4", "discipline-utilities", "baseline", "baseline-next"):
         validate_generated_bundle(bundle)
