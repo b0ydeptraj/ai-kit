@@ -11,10 +11,10 @@ Round 4 hardens team parallelism so `team` behaves like a real meta-orchestrator
 - Every non-trivial handoff should appear in handoff-log before the receiver claims completion.
 
 ## Required state files
-- `.ai-kit/state/workflow-state.md`
-- `.ai-kit/state/team-board.md`
-- `.ai-kit/state/lane-registry.md`
-- `.ai-kit/state/handoff-log.md`
+- `.relay-kit/state/workflow-state.md`
+- `.relay-kit/state/team-board.md`
+- `.relay-kit/state/lane-registry.md`
+- `.relay-kit/state/handoff-log.md`
 
 ## Handoff minimum
 - source skill

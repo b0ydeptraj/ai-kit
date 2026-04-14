@@ -7,7 +7,7 @@ description: Use when work needs reliable continuity across long chats, new thre
 Preserve lane continuity with explicit artifacts so the next session can continue safely without replaying full chat history.
 
 ## Default outputs
-- checkpoint, rehydrate, handoff, or diff artifacts under .ai-kit/state and .ai-kit/handoffs
+- checkpoint, rehydrate, handoff, or diff artifacts under .relay-kit/state and .relay-kit/handoffs
 - a compact resume brief with explicit next step and open loops
 
 ## Typical tasks
@@ -34,7 +34,7 @@ Preserve lane continuity with explicit artifacts so the next session can continu
 - only the evidence relevant to this pass
 
 ## Outputs
-- checkpoint, rehydrate, handoff, or diff artifacts under .ai-kit/state and .ai-kit/handoffs
+- checkpoint, rehydrate, handoff, or diff artifacts under .relay-kit/state and .relay-kit/handoffs
 - a compact resume brief with explicit next step and open loops
 
 ## Reference skills and rules

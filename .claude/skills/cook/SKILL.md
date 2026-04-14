@@ -25,7 +25,7 @@ Run the day-to-day loop for one request without letting it skip gates or get stu
 - layer-1-orchestrators
 
 ## Inputs
-- .ai-kit/state/workflow-state.md
+- .relay-kit/state/workflow-state.md
 - current request or lane objective
 - available artifacts
 

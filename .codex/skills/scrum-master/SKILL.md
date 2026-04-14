@@ -6,10 +6,8 @@ description: Use when planning is done and work must be sliced into safe, verifi
 # Mission
 Cut work into execution units that a developer can complete without re-opening product or architecture debates.
 
-Public alias: `write-steps`.
-
 ## For quick-flow
-Create or refine `.ai-kit/contracts/tech-spec.md` with:
+Create or refine `.relay-kit/contracts/tech-spec.md` with:
 - change summary
 - root cause or context
 - files likely affected
@@ -17,7 +15,7 @@ Create or refine `.ai-kit/contracts/tech-spec.md` with:
 - verification steps
 
 ## For product-flow or enterprise-flow
-Create story files under `.ai-kit/contracts/stories/`.
+Create story files under `.relay-kit/contracts/stories/`.
 Each story must include:
 - story statement
 - acceptance criteria
@@ -43,19 +41,19 @@ Each story must include:
 - layer-4-specialists-and-standalones
 
 ## Inputs
-- .ai-kit/contracts/PRD.md
-- .ai-kit/contracts/architecture.md
-- .ai-kit/contracts/epics.md
-- .ai-kit/contracts/tech-spec.md
+- .relay-kit/contracts/PRD.md
+- .relay-kit/contracts/architecture.md
+- .relay-kit/contracts/epics.md
+- .relay-kit/contracts/tech-spec.md
 
 ## Outputs
-- .ai-kit/contracts/stories/story-xxx.md
-- .ai-kit/contracts/tech-spec.md when quick-flow is used
+- .relay-kit/contracts/stories/story-xxx.md
+- .relay-kit/contracts/tech-spec.md when quick-flow is used
 
 ## Reference skills and rules
 - Each story should be a thin vertical slice with explicit done criteria.
 - Do not create stories that hide architectural decisions or missing acceptance criteria.
-- Use `.ai-kit/docs/planning-discipline.md` to keep tasks bite-sized, testable, and explicit about verification.
+- Use `.relay-kit/docs/planning-discipline.md` to keep tasks bite-sized, testable, and explicit about verification.
 - Execution order should be explicit; stories are not considered runnable until dependencies and first verification signals are named.
 
 ## Likely next step

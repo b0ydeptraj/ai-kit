@@ -41,7 +41,7 @@ Route to `developer` only when the active story or tech-spec is ready for implem
 - Call only the roles needed to close the current planning gap.
 - Use scout-hub first if the current codebase context is too weak to plan safely.
 - Route to review-hub if artifacts disagree with one another.
-- Use `.ai-kit/docs/planning-discipline.md` to keep plans artifact-first, bite-sized, and verification-aware.
+- Use `.relay-kit/docs/planning-discipline.md` to keep plans artifact-first, bite-sized, and verification-aware.
 - Lock key UX, API, and behavior assumptions before story slicing so implementation does not drift.
 
 ## Likely next step

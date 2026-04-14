@@ -30,6 +30,24 @@ Collect browser-side evidence such as console, network, layout, and performance 
 ### repo-map
 Produce fast repo maps and dependency summaries for unfamiliar areas.
 
+### memory-search
+Retrieve prior decisions, debug evidence, and handoff context from `.relay-kit/state` and `.relay-kit/contracts` without mutating artifacts.
+
+### release-readiness
+Apply explicit pre-deploy and post-deploy smoke gates so release claims are backed by concrete operational signals.
+
+### accessibility-review
+Run an explicit accessibility gate for keyboard, focus, semantic structure, labels, and contrast before approving frontend readiness.
+
+### skill-gauntlet
+Run deterministic regression checks over SKILL.md trigger wording and required structure before trusting runtime routing quality.
+
+### migration-guard
+Detect stale compatibility tokens and block cutover merges until old runtime aliases are removed or explicitly allowlisted.
+
+### context-continuity
+Capture and rehydrate durable continuity artifacts so lane state survives chat truncation, thread changes, and AI handoffs.
+
 ### handoff-context
 Prepare the minimum viable context pack for the next skill instead of flooding it with irrelevant detail.
 

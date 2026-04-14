@@ -1,30 +1,35 @@
-# epics
+# story
 
-> Path: `.ai-kit/contracts/epics.md`
-> Purpose: Break work into coherent slices and define sequencing before story creation.
-> Used by: pm, scrum-master, plan-hub
+> Path: `.relay-kit/contracts/stories/story-001.md`
+> Purpose: Provide implementation-ready, focused context for a single vertical slice.
+> Used by: scrum-master, developer, qa-governor, fix-hub, test-hub
 
-## Epic overview
+## Story statement
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Per-epic goals
+## Acceptance criteria
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Dependencies
+## Implementation notes
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Definition of done
+## Test notes
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Suggested order
+## Risks
+Fill in only with evidence, decisions, or open questions relevant to this artifact.
+
+TBD
+
+## Done checklist
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD

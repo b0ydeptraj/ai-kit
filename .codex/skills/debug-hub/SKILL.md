@@ -6,8 +6,6 @@ description: Use when work starts from a regression, flaky behavior, or an unexp
 # Mission
 Turn a symptom into evidence and a decision, not into random edits.
 
-Public alias: `debug-systematically`.
-
 ## Mandatory behavior
 1. Reproduce the issue or explain why reproduction is not yet reliable.
 2. Write `investigation-notes.md` with evidence, likely root cause, and non-causes ruled out.
@@ -30,8 +28,8 @@ Public alias: `debug-systematically`.
 - relevant references
 
 ## Outputs
-- .ai-kit/contracts/investigation-notes.md
-- .ai-kit/contracts/tech-spec.md when a fix path is clear
+- .relay-kit/contracts/investigation-notes.md
+- .relay-kit/contracts/tech-spec.md when a fix path is clear
 
 ## Reference skills and rules
 - When discipline utilities are installed, use `root-cause-debugging` before touching code.

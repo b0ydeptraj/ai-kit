@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Dict, List
@@ -16,7 +16,7 @@ class SupportReference:
 SUPPORT_REFERENCES: Dict[str, SupportReference] = {
     "project-architecture": SupportReference(
         name="project-architecture",
-        path=".ai-kit/references/project-architecture.md",
+        path=".relay-kit/references/project-architecture.md",
         purpose="Capture the actual layer structure, entrypoints, module boundaries, dependency direction, and architecture drift observed in the current codebase.",
         sections=[
             "Entry points and execution flow",
@@ -30,7 +30,7 @@ SUPPORT_REFERENCES: Dict[str, SupportReference] = {
     ),
     "dependency-management": SupportReference(
         name="dependency-management",
-        path=".ai-kit/references/dependency-management.md",
+        path=".relay-kit/references/dependency-management.md",
         purpose="Record the package manager, lockfiles, environment rules, dependency pinning policy, upgrade conventions, and how new dependencies should be added safely.",
         sections=[
             "Package manager and lockfiles",
@@ -44,7 +44,7 @@ SUPPORT_REFERENCES: Dict[str, SupportReference] = {
     ),
     "api-integration": SupportReference(
         name="api-integration",
-        path=".ai-kit/references/api-integration.md",
+        path=".relay-kit/references/api-integration.md",
         purpose="Document HTTP or RPC clients, authentication, retry and timeout behavior, request or response shapes, error mapping, and test doubles for external integrations.",
         sections=[
             "Clients, transports, and endpoints",
@@ -58,7 +58,7 @@ SUPPORT_REFERENCES: Dict[str, SupportReference] = {
     ),
     "data-persistence": SupportReference(
         name="data-persistence",
-        path=".ai-kit/references/data-persistence.md",
+        path=".relay-kit/references/data-persistence.md",
         purpose="Describe storage engines, schema or model locations, repository patterns, migrations, caching, transactions, and data consistency expectations.",
         sections=[
             "Stores and connection points",
@@ -72,7 +72,7 @@ SUPPORT_REFERENCES: Dict[str, SupportReference] = {
     ),
     "testing-patterns": SupportReference(
         name="testing-patterns",
-        path=".ai-kit/references/testing-patterns.md",
+        path=".relay-kit/references/testing-patterns.md",
         purpose="Capture the project test framework, folder rules, fixtures, mocking conventions, async testing patterns, and the command matrix for collecting evidence.",
         sections=[
             "Frameworks and folder rules",
@@ -86,7 +86,7 @@ SUPPORT_REFERENCES: Dict[str, SupportReference] = {
     ),
     "security-patterns": SupportReference(
         name="security-patterns",
-        path=".ai-kit/references/security-patterns.md",
+        path=".relay-kit/references/security-patterns.md",
         purpose="Capture repo-specific authentication boundaries, authorization checks, secret handling rules, input validation expectations, sensitive logging constraints, and the highest-risk security failure modes.",
         sections=[
             "Auth and trust boundaries",
@@ -100,7 +100,7 @@ SUPPORT_REFERENCES: Dict[str, SupportReference] = {
     ),
     "logging-observability": SupportReference(
         name="logging-observability",
-        path=".ai-kit/references/logging-observability.md",
+        path=".relay-kit/references/logging-observability.md",
         purpose="Document how this codebase emits logs, metrics, traces, health signals, alerts, and other runtime evidence so debugging and review work can rely on concrete signals instead of guesswork.",
         sections=[
             "Logs, metrics, traces, and health signals",
@@ -114,7 +114,7 @@ SUPPORT_REFERENCES: Dict[str, SupportReference] = {
     ),
     "performance-optimization": SupportReference(
         name="performance-optimization",
-        path=".ai-kit/references/performance-optimization.md",
+        path=".relay-kit/references/performance-optimization.md",
         purpose="Record the codebase-specific performance budget, hot paths, profiling tools, query or rendering bottlenecks, and the rules for proving a performance claim with evidence.",
         sections=[
             "Performance-sensitive paths",
@@ -145,3 +145,4 @@ def render_support_reference(doc: SupportReference) -> str:
         lines.append("TBD")
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"
+

@@ -1,4 +1,4 @@
----
+﻿---
 name: start-here
 description: Use when a request arrives and you want Relay-kit to pick the right path, next skill, and next artifact without guessing. Easiest public Relay-kit entrypoint.
 ---
@@ -19,7 +19,7 @@ What this alias should do:
 
 Behind the scenes:
 - canonical skill: `workflow-router`
-- common outputs: `.ai-kit/state/workflow-state.md` and the next kickoff artifact
+- common outputs: `.relay-kit/state/workflow-state.md` and the next kickoff artifact
 
 Typical handoff:
 - `brainstorm`
@@ -27,3 +27,4 @@ Typical handoff:
 - `build-it`
 - `debug-systematically`
 - `ready-check`
+

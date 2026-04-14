@@ -1,4 +1,4 @@
-from __future__ import annotations
+﻿from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Dict, List
@@ -16,7 +16,7 @@ class ArtifactContract:
 ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     "product-brief": ArtifactContract(
         name="product-brief",
-        path=".ai-kit/contracts/product-brief.md",
+        path=".relay-kit/contracts/product-brief.md",
         purpose="Capture the problem, users, outcomes, assumptions, and constraints before detailed planning.",
         sections=[
             "Problem statement",
@@ -30,7 +30,7 @@ ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     ),
     "prd": ArtifactContract(
         name="prd",
-        path=".ai-kit/contracts/PRD.md",
+        path=".relay-kit/contracts/PRD.md",
         purpose="Define scope, functional and non-functional requirements, acceptance criteria, release slices, and risks.",
         sections=[
             "Objective and scope",
@@ -45,7 +45,7 @@ ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     ),
     "architecture": ArtifactContract(
         name="architecture",
-        path=".ai-kit/contracts/architecture.md",
+        path=".relay-kit/contracts/architecture.md",
         purpose="Translate the PRD into concrete technical structure, data flow, interfaces, and implementation constraints.",
         sections=[
             "Current-system constraints",
@@ -60,7 +60,7 @@ ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     ),
     "epics": ArtifactContract(
         name="epics",
-        path=".ai-kit/contracts/epics.md",
+        path=".relay-kit/contracts/epics.md",
         purpose="Break work into coherent slices and define sequencing before story creation.",
         sections=[
             "Epic overview",
@@ -73,7 +73,7 @@ ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     ),
     "story": ArtifactContract(
         name="story",
-        path=".ai-kit/contracts/stories/story-001.md",
+        path=".relay-kit/contracts/stories/story-001.md",
         purpose="Provide implementation-ready, focused context for a single vertical slice.",
         sections=[
             "Story statement",
@@ -87,7 +87,7 @@ ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     ),
     "project-context": ArtifactContract(
         name="project-context",
-        path=".ai-kit/contracts/project-context.md",
+        path=".relay-kit/contracts/project-context.md",
         purpose="Document current codebase patterns, constraints, and rules that every later step must respect.",
         sections=[
             "Existing architecture",
@@ -101,7 +101,7 @@ ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     ),
     "qa-report": ArtifactContract(
         name="qa-report",
-        path=".ai-kit/contracts/qa-report.md",
+        path=".relay-kit/contracts/qa-report.md",
         purpose="Record acceptance coverage, risk review, regression impact, and remaining gaps before declaring work complete.",
         sections=[
             "Scope checked",
@@ -115,7 +115,7 @@ ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     ),
     "tech-spec": ArtifactContract(
         name="tech-spec",
-        path=".ai-kit/contracts/tech-spec.md",
+        path=".relay-kit/contracts/tech-spec.md",
         purpose="Small-change spec used by the quick flow for bug fixes and narrowly scoped features.",
         sections=[
             "Change summary",
@@ -128,7 +128,7 @@ ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     ),
     "investigation-notes": ArtifactContract(
         name="investigation-notes",
-        path=".ai-kit/contracts/investigation-notes.md",
+        path=".relay-kit/contracts/investigation-notes.md",
         purpose="Capture reproduction steps, observed evidence, likely root cause, and ruled-out hypotheses before a fix is proposed.",
         sections=[
             "Observed symptom",
@@ -142,28 +142,28 @@ ARTIFACT_CONTRACTS: Dict[str, ArtifactContract] = {
     ),
     "workflow-state": ArtifactContract(
         name="workflow-state",
-        path=".ai-kit/state/workflow-state.md",
+        path=".relay-kit/state/workflow-state.md",
         purpose="Keep phase, chosen track, active orchestrator, active hub, current specialist, active utility providers, and blockers visible across sessions.",
         sections=[],
         used_by=["workflow-router", "team", "cook", "all hubs"],
     ),
     "team-board": ArtifactContract(
         name="team-board",
-        path=".ai-kit/state/team-board.md",
+        path=".relay-kit/state/team-board.md",
         purpose="Coordinate parallel lanes, artifact ownership, merge order, and shared blockers during multi-session or multi-agent work.",
         sections=[],
         used_by=["team", "cook", "workflow-router"],
     ),
     "lane-registry": ArtifactContract(
         name="lane-registry",
-        path=".ai-kit/state/lane-registry.md",
+        path=".relay-kit/state/lane-registry.md",
         purpose="Track every lane, its owner, claimed artifact lock, target hub, and merge preconditions so parallel work stays safe.",
         sections=[],
         used_by=["team", "cook", "workflow-router", "review-hub"],
     ),
     "handoff-log": ArtifactContract(
         name="handoff-log",
-        path=".ai-kit/state/handoff-log.md",
+        path=".relay-kit/state/handoff-log.md",
         purpose="Keep a durable log of handoffs between orchestrators, hubs, utility providers, and specialists.",
         sections=[],
         used_by=["workflow-router", "team", "cook", "all hubs", "developer", "qa-governor"],
@@ -249,3 +249,4 @@ def render_artifact(contract: ArtifactContract) -> str:
         lines.append("TBD")
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"
+

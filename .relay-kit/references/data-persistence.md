@@ -1,35 +1,35 @@
-# project-architecture
+# data-persistence
 
-> Path: `.ai-kit/references/project-architecture.md`
-> Purpose: Capture the actual layer structure, entrypoints, module boundaries, dependency direction, and architecture drift observed in the current codebase.
-> Used by: architect, developer, code-review
+> Path: `.relay-kit/references/data-persistence.md`
+> Purpose: Describe storage engines, schema or model locations, repository patterns, migrations, caching, transactions, and data consistency expectations.
+> Used by: architect, developer, qa-governor
 
-## Entry points and execution flow
+## Stores and connection points
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Layer or package structure
+## Schemas, models, and repositories
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Module responsibilities
+## Migrations and schema evolution
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Dependency direction and boundaries
+## Transactions and consistency
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Architecture drift and hotspots
+## Caching and invalidation
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Files to mirror when adding new work
+## Data risks and rollback notes
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD

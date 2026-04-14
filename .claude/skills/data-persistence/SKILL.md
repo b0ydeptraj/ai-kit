@@ -6,7 +6,7 @@ description: Use when touching schemas, repositories, transactions, caches, or d
 # Mission
 Make data changes safer by documenting where state lives, how it moves, and what can go wrong.
 
-## Produce `.ai-kit/references/data-persistence.md`
+## Produce `.relay-kit/references/data-persistence.md`
 Cover:
 - stores and connection points
 - schemas, models, and repositories
@@ -34,7 +34,7 @@ Cover:
 - cache config if present
 
 ## Outputs
-- .ai-kit/references/data-persistence.md
+- .relay-kit/references/data-persistence.md
 
 ## Reference skills and rules
 - Cover both primary storage and auxiliary state like caches, queues, or object stores when relevant.

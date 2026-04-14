@@ -1,35 +1,35 @@
-# security-patterns
+# dependency-management
 
-> Path: `.ai-kit/references/security-patterns.md`
-> Purpose: Capture repo-specific authentication boundaries, authorization checks, secret handling rules, input validation expectations, sensitive logging constraints, and the highest-risk security failure modes.
-> Used by: architect, developer, qa-governor, review-hub
+> Path: `.relay-kit/references/dependency-management.md`
+> Purpose: Record the package manager, lockfiles, environment rules, dependency pinning policy, upgrade conventions, and how new dependencies should be added safely.
+> Used by: architect, developer, qa-governor
 
-## Auth and trust boundaries
+## Package manager and lockfiles
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Secrets and configuration hygiene
+## Environment and toolchain setup
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Input validation and output encoding
+## Version pinning and upgrade policy
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Sensitive data handling and logging rules
+## Dev vs prod dependencies
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Dependency and supply-chain watchpoints
+## How to add a new dependency
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Security review hotspots
+## Known dependency risks
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD

@@ -1,35 +1,30 @@
-# qa-report
+# epics
 
-> Path: `.ai-kit/contracts/qa-report.md`
-> Purpose: Record acceptance coverage, risk review, regression impact, and remaining gaps before declaring work complete.
-> Used by: qa-governor, developer, test-hub, review-hub
+> Path: `.relay-kit/contracts/epics.md`
+> Purpose: Break work into coherent slices and define sequencing before story creation.
+> Used by: pm, scrum-master, plan-hub
 
-## Scope checked
+## Epic overview
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Acceptance coverage
+## Per-epic goals
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Risk matrix
+## Dependencies
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Regression surface
+## Definition of done
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Evidence collected
-Fill in only with evidence, decisions, or open questions relevant to this artifact.
-
-TBD
-
-## Go / no-go recommendation
+## Suggested order
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD

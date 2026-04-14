@@ -1,35 +1,35 @@
-# api-integration
+# performance-optimization
 
-> Path: `.ai-kit/references/api-integration.md`
-> Purpose: Document HTTP or RPC clients, authentication, retry and timeout behavior, request or response shapes, error mapping, and test doubles for external integrations.
-> Used by: architect, developer, qa-governor
+> Path: `.relay-kit/references/performance-optimization.md`
+> Purpose: Record the codebase-specific performance budget, hot paths, profiling tools, query or rendering bottlenecks, and the rules for proving a performance claim with evidence.
+> Used by: architect, developer, debug-hub, review-hub, qa-governor
 
-## Clients, transports, and endpoints
+## Performance-sensitive paths
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Authentication and secret handling
+## Budgets, SLOs, and user-facing thresholds
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Retry, timeout, and idempotency rules
+## Profiling and measurement commands
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Request and response patterns
+## Known bottlenecks and regression traps
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Error mapping and recovery
+## Caching, batching, and concurrency rules
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Testing and mocking approach
+## Evidence required before claiming an optimization
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD

@@ -1,6 +1,6 @@
 # product-brief
 
-> Path: `.ai-kit/contracts/product-brief.md`
+> Path: `.relay-kit/contracts/product-brief.md`
 > Purpose: Capture the problem, users, outcomes, assumptions, and constraints before detailed planning.
 > Used by: analyst, pm, workflow-router, brainstorm-hub, plan-hub
 

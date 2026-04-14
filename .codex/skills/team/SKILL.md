@@ -7,7 +7,7 @@ description: Use when work must proceed in parallel, when planning and implement
 Coordinate parallel work while preserving one authoritative source of truth for each artifact.
 
 ## Mandatory behavior
-1. Maintain `.ai-kit/state/team-board.md` with lanes, owners, active artifacts, blockers, and merge order.
+1. Maintain `.relay-kit/state/team-board.md` with lanes, owners, active artifacts, blockers, and merge order.
 2. Split work only when lanes are independent enough to avoid editing the same artifact section at the same time.
 3. Use `cook` to drive each active lane, but keep final merge and priority decisions here.
 4. If one lane uncovers architecture or scope drift, update workflow-state and notify all affected lanes.
@@ -28,19 +28,19 @@ Coordinate parallel work while preserving one authoritative source of truth for 
 - layer-1-orchestrators
 
 ## Inputs
-- .ai-kit/state/workflow-state.md
-- .ai-kit/state/team-board.md
+- .relay-kit/state/workflow-state.md
+- .relay-kit/state/team-board.md
 - active artifacts and blockers
 
 ## Outputs
-- .ai-kit/state/team-board.md
-- .ai-kit/state/workflow-state.md
+- .relay-kit/state/team-board.md
+- .relay-kit/state/workflow-state.md
 
 ## Reference skills and rules
 - Shared artifacts beat chat summaries; update the artifact before handing off.
 - Assign one owner skill per lane and name merge order explicitly.
 - Use cook inside a lane, not as a replacement for team.
-- Use `.ai-kit/docs/parallel-execution.md` to decide when work is independent enough to split safely.
+- Use `.relay-kit/docs/parallel-execution.md` to decide when work is independent enough to split safely.
 - Require context-continuity handoff packs when ownership shifts across sessions or AIs.
 - Prefer wave-based execution: parallel inside a wave, strict dependency gate between waves.
 

@@ -1,6 +1,6 @@
 # prd
 
-> Path: `.ai-kit/contracts/PRD.md`
+> Path: `.relay-kit/contracts/PRD.md`
 > Purpose: Define scope, functional and non-functional requirements, acceptance criteria, release slices, and risks.
 > Used by: pm, architect, scrum-master, qa-governor, plan-hub
 

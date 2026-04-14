@@ -21,7 +21,7 @@ What this alias should do:
 Behind the scenes:
 - canonical hub: `review-hub`
 - quality gate: `qa-governor`
-- common output: `.ai-kit/contracts/qa-report.md` plus a clear verdict
+- common output: `.relay-kit/contracts/qa-report.md` plus a clear verdict
 
 How this differs from `review-pr`:
 - `review-pr` is for reviewing a branch or PR and deciding what must bounce back before merge
@@ -33,3 +33,4 @@ Typical handoff:
 - `debug-systematically`
 - `review-pr`
 - `prove-it`
+

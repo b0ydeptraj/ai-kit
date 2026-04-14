@@ -1,4 +1,4 @@
-﻿---
+---
 name: developer
 description: Use when planning is ready and code must be changed with controlled scope and evidence. Implement a story or tech-spec using the cleaned execution loop and project-specific support references.
 ---
@@ -45,7 +45,7 @@ If implementation reveals missing architecture, unclear acceptance criteria, a b
 - Default to `test-first-development` whenever the change introduces or fixes behavior that can be exercised with a test or clear reproduction harness.
 - If test-first is not practical, say why before coding and name the alternative failing signal you will use.
 - Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data unless the repo or product explicitly requires non-ASCII content.
-- If tasks are truly independent and the platform supports collaboration, follow `.ai-kit/docs/parallel-execution.md` before using subagent-style execution.
+- If tasks are truly independent and the platform supports collaboration, follow `.relay-kit/docs/parallel-execution.md` before using subagent-style execution.
 
 ## Likely next step
 - execution-loop

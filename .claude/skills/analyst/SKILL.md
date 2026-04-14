@@ -29,11 +29,11 @@ Cover these sections:
 
 ## Inputs
 - user request
-- .ai-kit/contracts/project-context.md
-- .ai-kit/state/workflow-state.md
+- .relay-kit/contracts/project-context.md
+- .relay-kit/state/workflow-state.md
 
 ## Outputs
-- .ai-kit/contracts/product-brief.md
+- .relay-kit/contracts/product-brief.md
 
 ## Reference skills and rules
 - Lean on research-expert, problem-solving, and sequential-thinking when the scope is fuzzy.

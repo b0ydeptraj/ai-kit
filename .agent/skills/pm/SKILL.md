@@ -33,12 +33,12 @@ The PRD is not ready if any of the following is missing:
 - layer-4-specialists-and-standalones
 
 ## Inputs
-- .ai-kit/contracts/product-brief.md or direct scoped request
-- .ai-kit/contracts/project-context.md
+- .relay-kit/contracts/product-brief.md or direct scoped request
+- .relay-kit/contracts/project-context.md
 
 ## Outputs
-- .ai-kit/contracts/PRD.md
-- .ai-kit/contracts/epics.md
+- .relay-kit/contracts/PRD.md
+- .relay-kit/contracts/epics.md
 
 ## Reference skills and rules
 - Do not hand wave acceptance criteria.

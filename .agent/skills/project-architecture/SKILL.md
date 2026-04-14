@@ -6,7 +6,7 @@ description: Use when designing a change, reviewing architectural drift, or impl
 # Mission
 Build and maintain an accurate map of the current architecture so downstream roles stop guessing.
 
-## Produce `.ai-kit/references/project-architecture.md`
+## Produce `.relay-kit/references/project-architecture.md`
 Cover:
 - entry points and execution flow
 - layer or package structure
@@ -29,11 +29,11 @@ Cover:
 
 ## Inputs
 - repository tree
-- .ai-kit/contracts/project-context.md
-- .ai-kit/contracts/architecture.md when available
+- .relay-kit/contracts/project-context.md
+- .relay-kit/contracts/architecture.md when available
 
 ## Outputs
-- .ai-kit/references/project-architecture.md
+- .relay-kit/references/project-architecture.md
 
 ## Reference skills and rules
 - Document what the codebase actually does today, not what the team intended six months ago.

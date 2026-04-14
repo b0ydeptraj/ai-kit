@@ -26,7 +26,7 @@ Turn raw test execution into a real readiness decision.
 - workflow-state
 
 ## Outputs
-- .ai-kit/contracts/qa-report.md
+- .relay-kit/contracts/qa-report.md
 - updated workflow-state with pass, fail, or blocked verdict
 
 ## Reference skills and rules

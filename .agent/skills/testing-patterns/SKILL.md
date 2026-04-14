@@ -6,7 +6,7 @@ description: Use when adding tests, updating fixtures, validating regressions, o
 # Mission
 Turn the project test suite into a usable playbook for implementation and quality review.
 
-## Produce `.ai-kit/references/testing-patterns.md`
+## Produce `.relay-kit/references/testing-patterns.md`
 Cover:
 - frameworks and folder rules
 - fixture and factory patterns
@@ -34,7 +34,7 @@ Cover:
 - CI or local test commands
 
 ## Outputs
-- .ai-kit/references/testing-patterns.md
+- .relay-kit/references/testing-patterns.md
 
 ## Reference skills and rules
 - Explain how to produce evidence locally, not only what frameworks exist.

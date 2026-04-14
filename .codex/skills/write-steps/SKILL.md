@@ -1,4 +1,4 @@
----
+﻿---
 name: write-steps
 description: Use when approved work needs to be sliced into small, buildable, verifiable implementation steps. Public Relay-kit entrypoint for implementation slicing.
 ---
@@ -19,8 +19,9 @@ What this alias should do:
 
 Behind the scenes:
 - canonical skill: `scrum-master`
-- common outputs: `.ai-kit/contracts/tech-spec.md` or `.ai-kit/contracts/stories/story-xxx.md`
+- common outputs: `.relay-kit/contracts/tech-spec.md` or `.relay-kit/contracts/stories/story-xxx.md`
 
 Typical handoff:
 - `build-it`
 - `ready-check`
+

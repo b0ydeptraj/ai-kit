@@ -6,7 +6,7 @@ description: Use when building or changing API clients, webhooks, endpoints, or 
 # Mission
 Make network-facing behavior predictable so changes to API code do not become reliability surprises.
 
-## Produce `.ai-kit/references/api-integration.md`
+## Produce `.relay-kit/references/api-integration.md`
 Cover:
 - clients, transports, and endpoints
 - authentication and secret handling
@@ -33,7 +33,7 @@ Cover:
 - test or mock code
 
 ## Outputs
-- .ai-kit/references/api-integration.md
+- .relay-kit/references/api-integration.md
 
 ## Reference skills and rules
 - Prefer concrete service names, client classes, and endpoint groups over generic summaries.

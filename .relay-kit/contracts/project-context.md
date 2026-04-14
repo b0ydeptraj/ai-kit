@@ -1,6 +1,6 @@
 # project-context
 
-> Path: `.ai-kit/contracts/project-context.md`
+> Path: `.relay-kit/contracts/project-context.md`
 > Purpose: Document current codebase patterns, constraints, and rules that every later step must respect.
 > Used by: workflow-router, bootstrap, cook, analyst, pm, architect, scrum-master, developer, qa-governor, scout-hub
 

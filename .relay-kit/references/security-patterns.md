@@ -1,35 +1,35 @@
-# logging-observability
+# security-patterns
 
-> Path: `.ai-kit/references/logging-observability.md`
-> Purpose: Document how this codebase emits logs, metrics, traces, health signals, alerts, and other runtime evidence so debugging and review work can rely on concrete signals instead of guesswork.
-> Used by: developer, debug-hub, review-hub, qa-governor, test-hub
+> Path: `.relay-kit/references/security-patterns.md`
+> Purpose: Capture repo-specific authentication boundaries, authorization checks, secret handling rules, input validation expectations, sensitive logging constraints, and the highest-risk security failure modes.
+> Used by: architect, developer, qa-governor, review-hub
 
-## Logs, metrics, traces, and health signals
+## Auth and trust boundaries
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Where to inspect runtime evidence
+## Secrets and configuration hygiene
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Structured logging and correlation rules
+## Input validation and output encoding
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Alerting, dashboards, and noisy signals
+## Sensitive data handling and logging rules
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Common blind spots during debugging
+## Dependency and supply-chain watchpoints
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Observability follow-ups when behavior changes
+## Security review hotspots
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD

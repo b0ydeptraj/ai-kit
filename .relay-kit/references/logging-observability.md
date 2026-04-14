@@ -1,35 +1,35 @@
-# performance-optimization
+# logging-observability
 
-> Path: `.ai-kit/references/performance-optimization.md`
-> Purpose: Record the codebase-specific performance budget, hot paths, profiling tools, query or rendering bottlenecks, and the rules for proving a performance claim with evidence.
-> Used by: architect, developer, debug-hub, review-hub, qa-governor
+> Path: `.relay-kit/references/logging-observability.md`
+> Purpose: Document how this codebase emits logs, metrics, traces, health signals, alerts, and other runtime evidence so debugging and review work can rely on concrete signals instead of guesswork.
+> Used by: developer, debug-hub, review-hub, qa-governor, test-hub
 
-## Performance-sensitive paths
+## Logs, metrics, traces, and health signals
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Budgets, SLOs, and user-facing thresholds
+## Where to inspect runtime evidence
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Profiling and measurement commands
+## Structured logging and correlation rules
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Known bottlenecks and regression traps
+## Alerting, dashboards, and noisy signals
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Caching, batching, and concurrency rules
+## Common blind spots during debugging
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD
 
-## Evidence required before claiming an optimization
+## Observability follow-ups when behavior changes
 Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
 
 TBD

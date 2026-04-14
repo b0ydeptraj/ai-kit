@@ -14,12 +14,12 @@ TBD
 | lane-3 | TBD | TBD | TBD | TBD | parked | none | TBD |
 
 ## Shared artifacts that must stay authoritative
-- `.ai-kit/state/workflow-state.md`
-- `.ai-kit/state/lane-registry.md`
-- `.ai-kit/state/handoff-log.md`
-- `.ai-kit/contracts/project-context.md`
-- `.ai-kit/contracts/PRD.md`
-- `.ai-kit/contracts/architecture.md`
+- `.relay-kit/state/workflow-state.md`
+- `.relay-kit/state/lane-registry.md`
+- `.relay-kit/state/handoff-log.md`
+- `.relay-kit/contracts/project-context.md`
+- `.relay-kit/contracts/PRD.md`
+- `.relay-kit/contracts/architecture.md`
 
 ## Merge order
 TBD

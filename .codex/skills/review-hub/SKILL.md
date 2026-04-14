@@ -1,4 +1,4 @@
-﻿---
+---
 name: review-hub
 description: Use when artifacts disagree or before final completion claims. Check alignment across requirements, architecture, implementation, and quality evidence, then decide whether to accept, re-slice, debug, or re-plan.
 ---
@@ -6,31 +6,10 @@ description: Use when artifacts disagree or before final completion claims. Chec
 # Mission
 Make completion a deliberate alignment check, not just a feeling that enough has happened.
 
-Public aliases:
-- `review-pr` for branch or PR review
-- `ready-check` for readiness and shipability decisions
-
 ## Mandatory checks
 - Do requirements, architecture, and implementation still describe the same change?
 - Does quality evidence actually cover the promised behavior and regression surface?
 - Is the active lane done, or is it merely unblocked enough to continue elsewhere?
-
-## Frontend review checks
-When the work includes a web UI, page flow, pricing surface, dashboard, form, or checkout:
-- Is the reading order obvious in the browser, not just in JSX?
-- Are primary and secondary CTAs visually separated enough to support the intended decision?
-- Does the desktop layout stay in desktop mode at real desktop widths?
-- Does the mobile collapse preserve hierarchy instead of becoming a long stack of equal-weight cards?
-- Are typography, spacing, and card roles consistent across the page family?
-- Is any section still obviously "first-pass AI UI" because too many blocks have equal weight or generic structure?
-- Do light sections and dark sections both preserve readable contrast?
-- If gradients or transitions exist, do they support the content instead of washing it out?
-- Are prices, CTA rows, and decision surfaces aligned when alignment is part of the product perception?
-
-For meaningful frontend review, require browser evidence:
-- screenshots or snapshots,
-- viewport-specific findings,
-- and concrete UI defects tied to selectors, breakpoints, or rendered behavior.
 
 ## Output contract
 End with one explicit verdict:
@@ -44,9 +23,6 @@ End with one explicit verdict:
 - Verify external review feedback against the codebase before accepting it.
 - Prefer one review item at a time when feedback changes code or requirements.
 - If the lane is complete, route through branch-completion discipline before treating it as finished.
-- When the task is branch or PR review, end with a bounce-back decision, the missing evidence or risks, and the exact next lane.
-- Do not accept a frontend lane on code inspection alone when the user complaint is visual, responsive, or interaction-based.
-- If the screen is functionally correct but visually weak, say so directly and bounce back to implementation with a concrete refinement list.
 
 ## Role
 - review-hub
@@ -67,8 +43,7 @@ End with one explicit verdict:
 ## Reference skills and rules
 - Review-hub is the mesh junction: it may send work back to plan, debug, fix, or test.
 - Do not hide disagreement between artifacts; name it and route accordingly.
-- Use `.ai-kit/docs/review-loop.md` and `.ai-kit/docs/branch-completion.md` for review handling and end-of-branch discipline.
-- Use `browser-inspector`, `multimodal-evidence`, and `ux-structure` when the disagreement is visual rather than purely behavioral.
+- Use `.relay-kit/docs/review-loop.md` and `.relay-kit/docs/branch-completion.md` for review handling and end-of-branch discipline.
 - If work crosses sessions, require context-continuity artifacts before accepting final completion claims.
 
 ## Likely next step

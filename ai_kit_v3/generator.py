@@ -31,8 +31,8 @@ from .registry import (
     render_workflow_state,
 )
 from relay_kit_compat import (
+    CANONICAL_ARTIFACT_ROOT,
     CANONICAL_LEGACY_ENTRYPOINT,
-    COMPAT_LEGACY_ENTRYPOINT,
     legacy_entrypoint_candidates,
     mirrored_generic_paths,
 )
@@ -171,17 +171,14 @@ def _render_folder_structure() -> str:
 
 Recommended runtime layout:
 
-- `.ai-kit/contracts/` -> stable artifact contracts shared across roles and hubs
-- `.ai-kit/state/` -> workflow-state, team-board, lane-registry, handoff-log, and other runtime breadcrumbs
-- `.ai-kit/references/` -> living support references for architecture, APIs, persistence, testing, security, observability, and performance
-- `.ai-kit/docs/` -> topology docs, migration notes, gating rules, and orchestration rules
+- `.relay-kit/contracts/` -> stable artifact contracts shared across roles and hubs
+- `.relay-kit/state/` -> workflow-state, team-board, lane-registry, handoff-log, and other runtime breadcrumbs
+- `.relay-kit/references/` -> living support references for architecture, APIs, persistence, testing, security, observability, and performance
+- `.relay-kit/docs/` -> topology docs, migration notes, gating rules, and orchestration rules
 - `.claude/skills/`, `.agent/skills/`, `.codex/skills/` -> adapter-specific runtime skill folders
 - `.relay-kit-prompts/` -> preferred generic prompt output path
-- `.python-kit-prompts/` -> compatibility alias for generic prompt output during one migration cycle
 - `relay_kit_legacy.py` -> canonical legacy generator for analysis/template kits
-- `python_kit_legacy.py` -> compatibility alias for one migration cycle
 - `relay_kit.py` -> current Relay-kit v3 entrypoint that adds orchestration, routing, hubs, utility providers, contracts, and gating
-- `python_kit.py` -> compatibility alias for one migration cycle
 """
 
 
@@ -194,13 +191,13 @@ def _render_native_support_map() -> str:
         "",
         "| Skill | Writes to | Primary consumers |",
         "|---|---|---|",
-        "| project-architecture | `.ai-kit/references/project-architecture.md` | architect, developer, review-hub |",
-        "| dependency-management | `.ai-kit/references/dependency-management.md` | architect, developer, qa-governor |",
-        "| api-integration | `.ai-kit/references/api-integration.md` | architect, developer, qa-governor |",
-        "| data-persistence | `.ai-kit/references/data-persistence.md` | architect, developer, qa-governor |",
-        "| testing-patterns | `.ai-kit/references/testing-patterns.md` | developer, qa-governor, debug-hub, test-hub |",
+        "| project-architecture | `.relay-kit/references/project-architecture.md` | architect, developer, review-hub |",
+        "| dependency-management | `.relay-kit/references/dependency-management.md` | architect, developer, qa-governor |",
+        "| api-integration | `.relay-kit/references/api-integration.md` | architect, developer, qa-governor |",
+        "| data-persistence | `.relay-kit/references/data-persistence.md` | architect, developer, qa-governor |",
+        "| testing-patterns | `.relay-kit/references/testing-patterns.md` | developer, qa-governor, debug-hub, test-hub |",
         "",
-        "Additional cross-cutting references may also be maintained directly under `.ai-kit/references/`",
+        "Additional cross-cutting references may also be maintained directly under `.relay-kit/references/`",
         "for security, observability, and performance without changing the core support-skill set.",
         "",
         "Treat these as living reference skills. Refresh them when the codebase changes materially.",
@@ -210,7 +207,7 @@ def _render_native_support_map() -> str:
 
 
 def emit_docs(project_path: Path, bundle: str) -> List[Path]:
-    docs_dir = project_path / ".ai-kit" / "docs"
+    docs_dir = project_path / CANONICAL_ARTIFACT_ROOT / "docs"
     docs_dir.mkdir(parents=True, exist_ok=True)
 
     written: List[Path] = []
@@ -242,10 +239,7 @@ def create_bmad_upgrade(project_path: str, ai: str, bundle: str, with_contracts:
 def create_legacy_skills(project_path: str, ai: str, verbose: bool, skills: Optional[List[str]], kit: str, repo_root: Path) -> int:
     legacy = load_legacy_module(repo_root)
     if legacy is None:
-        print(
-            "Legacy generator not found. "
-            f"Expected {CANONICAL_LEGACY_ENTRYPOINT} or {COMPAT_LEGACY_ENTRYPOINT}."
-        )
+        print(f"Legacy generator not found. Expected {CANONICAL_LEGACY_ENTRYPOINT}.")
         return 1
     return legacy.create_python_skills(
         project_path=project_path,

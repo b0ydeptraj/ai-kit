@@ -69,6 +69,8 @@ Can hand off to:
 - testing-patterns
 - doc-pointers
 - repo-map
+- memory-search
+- context-continuity
 - handoff-context
 
 ### plan-hub
@@ -77,6 +79,7 @@ Can hand off to:
 - architect
 - scrum-master
 - research
+- context-continuity
 - ux-structure
 - mermaid-diagrams
 
@@ -87,6 +90,7 @@ Can hand off to:
 - sequential-thinking
 - browser-inspector
 - multimodal-evidence
+- memory-search
 
 ### fix-hub
 - developer
@@ -94,6 +98,7 @@ Can hand off to:
 - project-architecture
 - api-integration
 - data-persistence
+- accessibility-review
 - handoff-context
 
 ### test-hub
@@ -101,6 +106,11 @@ Can hand off to:
 - testing-patterns
 - execution-loop
 - multimodal-evidence
+- release-readiness
+- accessibility-review
+- skill-gauntlet
+- migration-guard
+- context-continuity
 - media-tooling
 
 ### review-hub
@@ -108,4 +118,10 @@ Can hand off to:
 - testing-patterns
 - project-architecture
 - doc-pointers
+- memory-search
+- release-readiness
+- accessibility-review
+- skill-gauntlet
+- migration-guard
+- context-continuity
 - mermaid-diagrams

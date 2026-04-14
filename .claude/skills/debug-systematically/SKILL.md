@@ -1,4 +1,4 @@
----
+﻿---
 name: debug-systematically
 description: Use when a bug, regression, flaky behavior, or mismatch needs disciplined debugging instead of guessing. Public Relay-kit entrypoint for the debug path.
 ---
@@ -21,8 +21,9 @@ What this alias should do:
 Behind the scenes:
 - canonical hub: `debug-hub`
 - discipline utility: `root-cause-debugging`
-- common output: `.ai-kit/contracts/investigation-notes.md`
+- common output: `.relay-kit/contracts/investigation-notes.md`
 
 Typical handoff:
 - `build-it`
 - `ready-check`
+

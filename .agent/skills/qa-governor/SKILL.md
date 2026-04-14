@@ -34,12 +34,12 @@ Include:
 - evidence from tests and reviews
 
 ## Outputs
-- .ai-kit/contracts/qa-report.md
+- .relay-kit/contracts/qa-report.md
 
 ## Reference skills and rules
 - Use testing-patterns as the evidence map for the project.
 - When discipline utilities are installed, use `evidence-before-completion` before making completion claims.
-- Use `.ai-kit/docs/review-loop.md` when review feedback must be validated before action.
+- Use `.relay-kit/docs/review-loop.md` when review feedback must be validated before action.
 - Coverage must be explained against acceptance criteria and risk, not just number of tests.
 - Use context-continuity when readiness evidence must survive a new thread or handoff before final sign-off.
 

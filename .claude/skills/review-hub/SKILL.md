@@ -43,7 +43,7 @@ End with one explicit verdict:
 ## Reference skills and rules
 - Review-hub is the mesh junction: it may send work back to plan, debug, fix, or test.
 - Do not hide disagreement between artifacts; name it and route accordingly.
-- Use `.ai-kit/docs/review-loop.md` and `.ai-kit/docs/branch-completion.md` for review handling and end-of-branch discipline.
+- Use `.relay-kit/docs/review-loop.md` and `.relay-kit/docs/branch-completion.md` for review handling and end-of-branch discipline.
 - If work crosses sessions, require context-continuity artifacts before accepting final completion claims.
 
 ## Likely next step

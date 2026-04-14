@@ -1,6 +1,6 @@
 # testing-patterns
 
-> Path: `.ai-kit/references/testing-patterns.md`
+> Path: `.relay-kit/references/testing-patterns.md`
 > Purpose: Capture the project test framework, folder rules, fixtures, mocking conventions, async testing patterns, and the command matrix for collecting evidence.
 > Used by: developer, qa-governor, code-review
 

@@ -6,10 +6,8 @@ description: Use when a request arrives, the user asks what to do next, or scope
 # Mission
 Act as the routing kernel for the whole system: choose the track, choose the active lane, and make the next move explicit.
 
-Public alias: `start-here`.
-
 ## Mandatory routing procedure
-1. Read `.ai-kit/contracts/project-context.md` and `.ai-kit/state/workflow-state.md` if they exist.
+1. Read `.relay-kit/contracts/project-context.md` and `.relay-kit/state/workflow-state.md` if they exist.
 2. Score the request on five axes: ambiguity, breadth of change, architecture risk, operational risk, and coordination cost.
 3. Classify complexity:
    - `L0`: single bug or tiny refactor
@@ -30,7 +28,7 @@ Public alias: `start-here`.
    - `plan-hub` when planning artifacts are missing or stale
    - `debug-hub` when the request starts from a failure or regression
 7. Mark the lane mode explicitly as one of: discovery, planning, implementation, or verification.
-8. Update `.ai-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
+8. Update `.relay-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
 
 ## Escalation rules
 Escalate immediately when:
@@ -50,14 +48,14 @@ Never end with vague advice. Always name the next skill, the artifact it should 
 
 ## Inputs
 - user request
-- .ai-kit/contracts/project-context.md (if present)
-- .ai-kit/state/workflow-state.md (if present)
-- .ai-kit/state/team-board.md (if present)
+- .relay-kit/contracts/project-context.md (if present)
+- .relay-kit/state/workflow-state.md (if present)
+- .relay-kit/state/team-board.md (if present)
 
 ## Outputs
-- .ai-kit/state/workflow-state.md
-- .ai-kit/contracts/tech-spec.md or product-brief.md kickoff
-- .ai-kit/state/team-board.md when parallel lanes are needed
+- .relay-kit/state/workflow-state.md
+- .relay-kit/contracts/tech-spec.md or product-brief.md kickoff
+- .relay-kit/state/team-board.md when parallel lanes are needed
 
 ## Reference skills and rules
 - Prefer existing project-context over assumptions.

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Context continuity utility for checkpoint, rehydrate, handoff, and diff flows."""
 
 from __future__ import annotations
@@ -13,26 +13,26 @@ from typing import Dict, List
 
 
 WATCH_FILES = [
-    ".ai-kit/state/current-state.md",
-    ".ai-kit/state/decision-register.md",
-    ".ai-kit/state/open-loops.md",
-    ".ai-kit/state/evidence-index.md",
-    ".ai-kit/state/workflow-state.md",
-    ".ai-kit/state/team-board.md",
-    ".ai-kit/state/lane-registry.md",
-    ".ai-kit/state/handoff-log.md",
-    ".ai-kit/contracts/tech-spec.md",
-    ".ai-kit/contracts/investigation-notes.md",
-    ".ai-kit/contracts/qa-report.md",
-    ".ai-kit/contracts/stories/story-001.md",
+    ".relay-kit/state/current-state.md",
+    ".relay-kit/state/decision-register.md",
+    ".relay-kit/state/open-loops.md",
+    ".relay-kit/state/evidence-index.md",
+    ".relay-kit/state/workflow-state.md",
+    ".relay-kit/state/team-board.md",
+    ".relay-kit/state/lane-registry.md",
+    ".relay-kit/state/handoff-log.md",
+    ".relay-kit/contracts/tech-spec.md",
+    ".relay-kit/contracts/investigation-notes.md",
+    ".relay-kit/contracts/qa-report.md",
+    ".relay-kit/contracts/stories/story-001.md",
 ]
 
 STATE_TEMPLATES = {
-    ".ai-kit/state/current-state.md": "# current-state\n\n## Current objective\nTBD\n\n## Active lane\nTBD\n\n## Current blocker\nTBD\n\n## Exact next step\nTBD\n",
-    ".ai-kit/state/decision-register.md": "# decision-register\n\n## Decisions\n- date:\n- decision:\n- reason:\n- rejected options:\n\n",
-    ".ai-kit/state/open-loops.md": "# open-loops\n\n## Open items\n- item:\n- owner:\n- unblock condition:\n\n",
-    ".ai-kit/state/evidence-index.md": "# evidence-index\n\n## Evidence pointers\n- command:\n- output:\n- related files:\n\n",
-    ".ai-kit/state/session-ledger.jsonl": "",
+    ".relay-kit/state/current-state.md": "# current-state\n\n## Current objective\nTBD\n\n## Active lane\nTBD\n\n## Current blocker\nTBD\n\n## Exact next step\nTBD\n",
+    ".relay-kit/state/decision-register.md": "# decision-register\n\n## Decisions\n- date:\n- decision:\n- reason:\n- rejected options:\n\n",
+    ".relay-kit/state/open-loops.md": "# open-loops\n\n## Open items\n- item:\n- owner:\n- unblock condition:\n\n",
+    ".relay-kit/state/evidence-index.md": "# evidence-index\n\n## Evidence pointers\n- command:\n- output:\n- related files:\n\n",
+    ".relay-kit/state/session-ledger.jsonl": "",
 }
 
 
@@ -79,7 +79,7 @@ def ensure_structure(base: Path) -> None:
         target.parent.mkdir(parents=True, exist_ok=True)
         if not target.exists():
             target.write_text(template, encoding="utf-8")
-    (base / ".ai-kit" / "handoffs").mkdir(parents=True, exist_ok=True)
+    (base / ".relay-kit" / "handoffs").mkdir(parents=True, exist_ok=True)
 
 
 def sha256_file(path: Path) -> str:
@@ -112,7 +112,7 @@ def collect_snapshot(base: Path) -> Dict[str, Dict[str, object]]:
 
 
 def manifest_path(base: Path) -> Path:
-    return base / ".ai-kit" / "state" / "context-manifest.json"
+    return base / ".relay-kit" / "state" / "context-manifest.json"
 
 
 def load_manifest(base: Path) -> Dict[str, object]:
@@ -129,14 +129,14 @@ def write_manifest(base: Path, payload: Dict[str, object]) -> None:
 
 
 def append_ledger(base: Path, entry: Dict[str, object]) -> None:
-    ledger = base / ".ai-kit" / "state" / "session-ledger.jsonl"
+    ledger = base / ".relay-kit" / "state" / "session-ledger.jsonl"
     ledger.parent.mkdir(parents=True, exist_ok=True)
     with ledger.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(entry, ensure_ascii=True) + "\n")
 
 
 def append_current_state_checkpoint(base: Path, payload: Dict[str, object]) -> None:
-    path = base / ".ai-kit" / "state" / "current-state.md"
+    path = base / ".relay-kit" / "state" / "current-state.md"
     lines = [
         "",
         f"## checkpoint {payload['updated_at']}",
@@ -205,7 +205,7 @@ def run_rehydrate(args: argparse.Namespace) -> int:
         "blocker": manifest.get("blocker", "none"),
         "next_step": manifest.get("next_step", "TBD"),
         "tracked_count": len(manifest.get("tracked_files", {})),
-        "open_loops_file": ".ai-kit/state/open-loops.md",
+        "open_loops_file": ".relay-kit/state/open-loops.md",
     }
     append_ledger(
         base,
@@ -247,7 +247,7 @@ def run_handoff(args: argparse.Namespace) -> int:
     timestamp = now_utc_iso()
     file_stamp = timestamp.replace(":", "-")
     handoff_name = f"{file_stamp}-{safe_slug(args.reason)}.md"
-    handoff_path = base / ".ai-kit" / "handoffs" / handoff_name
+    handoff_path = base / ".relay-kit" / "handoffs" / handoff_name
     content = [
         "# context-handoff",
         "",
@@ -262,10 +262,10 @@ def run_handoff(args: argparse.Namespace) -> int:
         f"- next_step: {manifest.get('next_step', 'TBD')}",
         "",
         "## Evidence pointers",
-        "- .ai-kit/state/context-manifest.json",
-        "- .ai-kit/state/session-ledger.jsonl",
-        "- .ai-kit/state/open-loops.md",
-        "- .ai-kit/state/evidence-index.md",
+        "- .relay-kit/state/context-manifest.json",
+        "- .relay-kit/state/session-ledger.jsonl",
+        "- .relay-kit/state/open-loops.md",
+        "- .relay-kit/state/evidence-index.md",
         "",
     ]
     handoff_path.write_text("\n".join(content), encoding="utf-8")
@@ -380,3 +380,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

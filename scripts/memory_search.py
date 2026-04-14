@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Read-only search utility for Relay-kit state and contract artifacts."""
 
 from __future__ import annotations
@@ -50,7 +50,7 @@ INTENT_HINTS = {
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Search .ai-kit artifacts for previous decisions, handoffs, and debug context.",
+        description="Search .relay-kit artifacts for previous decisions, handoffs, and debug context.",
     )
     parser.add_argument("project_path", nargs="?", default=".", help="Target project root")
     parser.add_argument("--query", required=True, help="Case-insensitive query string")
@@ -101,7 +101,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def candidate_files(base: Path, scope: str, path_contains: List[str]) -> Iterable[Path]:
-    ai_root = base / ".ai-kit"
+    ai_root = base / ".relay-kit"
     groups = []
     if scope in {"state", "all"}:
         groups.append(ai_root / "state")
@@ -270,3 +270,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

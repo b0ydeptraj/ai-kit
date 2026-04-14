@@ -6,7 +6,7 @@ description: Use when adding packages, updating libraries, or diagnosing environ
 # Mission
 Prevent dependency changes from becoming hidden architecture or release risk.
 
-## Produce `.ai-kit/references/dependency-management.md`
+## Produce `.relay-kit/references/dependency-management.md`
 Cover:
 - package manager and lockfiles
 - environment and toolchain setup
@@ -34,7 +34,7 @@ Cover:
 - CI setup if present
 
 ## Outputs
-- .ai-kit/references/dependency-management.md
+- .relay-kit/references/dependency-management.md
 
 ## Reference skills and rules
 - Record both the official package manager and what contributors actually use day to day.

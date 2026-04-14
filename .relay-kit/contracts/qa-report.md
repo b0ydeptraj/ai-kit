@@ -1,35 +1,35 @@
-# story
+# qa-report
 
-> Path: `.ai-kit/contracts/stories/story-001.md`
-> Purpose: Provide implementation-ready, focused context for a single vertical slice.
-> Used by: scrum-master, developer, qa-governor, fix-hub, test-hub
+> Path: `.relay-kit/contracts/qa-report.md`
+> Purpose: Record acceptance coverage, risk review, regression impact, and remaining gaps before declaring work complete.
+> Used by: qa-governor, developer, test-hub, review-hub
 
-## Story statement
+## Scope checked
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Acceptance criteria
+## Acceptance coverage
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Implementation notes
+## Risk matrix
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Test notes
+## Regression surface
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Risks
+## Evidence collected
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD
 
-## Done checklist
+## Go / no-go recommendation
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 TBD

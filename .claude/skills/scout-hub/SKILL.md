@@ -24,13 +24,13 @@ Name exactly what became clearer, what is still unknown, which sources might be 
 
 ## Inputs
 - repo tree and relevant files
-- .ai-kit/contracts/project-context.md
-- .ai-kit/state/workflow-state.md
+- .relay-kit/contracts/project-context.md
+- .relay-kit/state/workflow-state.md
 
 ## Outputs
-- .ai-kit/contracts/project-context.md
-- .ai-kit/references/*.md as needed
-- .ai-kit/contracts/investigation-notes.md when the work starts from a failure
+- .relay-kit/contracts/project-context.md
+- .relay-kit/references/*.md as needed
+- .relay-kit/contracts/investigation-notes.md when the work starts from a failure
 
 ## Reference skills and rules
 - Use project-architecture, dependency-management, api-integration, data-persistence, and testing-patterns as living references.

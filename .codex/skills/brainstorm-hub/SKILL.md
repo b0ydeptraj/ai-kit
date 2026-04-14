@@ -6,8 +6,6 @@ description: Use when the request is still an idea, an opportunity, or a loosely
 # Mission
 Turn fuzzy idea energy into something the planning flow can actually use.
 
-Public alias: `brainstorm`.
-
 ## What this hub does
 - Facilitate a short option scan.
 - Expose assumptions, success signals, and obvious constraints.
@@ -27,11 +25,11 @@ End with one of only three outcomes:
 
 ## Inputs
 - user idea or opportunity
-- .ai-kit/state/workflow-state.md
+- .relay-kit/state/workflow-state.md
 - any existing brief or context
 
 ## Outputs
-- .ai-kit/contracts/product-brief.md or a decision not to proceed
+- .relay-kit/contracts/product-brief.md or a decision not to proceed
 
 ## Reference skills and rules
 - Use analyst for structured discovery and pm only once the shape is coherent enough to plan.

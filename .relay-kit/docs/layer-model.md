@@ -31,6 +31,12 @@ Stateless capabilities and analysis helpers. These should be called by hubs or o
 - multimodal-evidence
 - browser-inspector
 - repo-map
+- memory-search
+- release-readiness
+- accessibility-review
+- skill-gauntlet
+- migration-guard
+- context-continuity
 - handoff-context
 - mermaid-diagrams
 - ux-structure

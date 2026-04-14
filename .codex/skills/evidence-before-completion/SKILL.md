@@ -6,8 +6,6 @@ description: Use when a hub or specialist is about to say work is done, fixed, o
 # Mission
 Stop premature completion claims by forcing a claim-to-evidence check.
 
-Public alias: `prove-it`.
-
 ## Default outputs
 - fresh verification evidence and claim checks appended to qa-report, workflow-state, or the active artifact
 

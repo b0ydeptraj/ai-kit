@@ -1,17 +1,17 @@
 ---
 name: memory-search
-description: Use when a hub needs past decisions, handoff breadcrumbs, or prior debug evidence from .ai-kit artifacts. Read-only state retrieval utility.
+description: Use when a hub needs past decisions, handoff breadcrumbs, or prior debug evidence from .relay-kit artifacts. Read-only state retrieval utility.
 ---
 
 # Mission
 Recover prior context quickly so the lane can reuse proven decisions and avoid repeating old mistakes.
 
 ## Default outputs
-- matching evidence excerpts from .ai-kit/state or .ai-kit/contracts appended to the active artifact
+- matching evidence excerpts from .relay-kit/state or .relay-kit/contracts appended to the active artifact
 - a short continuity note that links current work to prior decisions
 
 ## Typical tasks
-- Search `.ai-kit/state` and `.ai-kit/contracts` for the exact decision, failure pattern, or handoff being referenced.
+- Search `.relay-kit/state` and `.relay-kit/contracts` for the exact decision, failure pattern, or handoff being referenced.
 - Use intent-aware retrieval when the lane needs decision, handoff, debug, review, or migration evidence.
 - Return file paths and line-level excerpts that the active hub can verify immediately.
 - Call out conflicts between older decisions and the current request instead of smoothing them over.
@@ -36,7 +36,7 @@ Recover prior context quickly so the lane can reuse proven decisions and avoid r
 - only the evidence relevant to this pass
 
 ## Outputs
-- matching evidence excerpts from .ai-kit/state or .ai-kit/contracts appended to the active artifact
+- matching evidence excerpts from .relay-kit/state or .relay-kit/contracts appended to the active artifact
 - a short continuity note that links current work to prior decisions
 
 ## Reference skills and rules

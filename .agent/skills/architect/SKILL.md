@@ -29,12 +29,12 @@ Include:
 - layer-4-specialists-and-standalones
 
 ## Inputs
-- .ai-kit/contracts/PRD.md
-- .ai-kit/contracts/project-context.md
+- .relay-kit/contracts/PRD.md
+- .relay-kit/contracts/project-context.md
 - existing support skills and references
 
 ## Outputs
-- .ai-kit/contracts/architecture.md
+- .relay-kit/contracts/architecture.md
 
 ## Reference skills and rules
 - Mirror the existing codebase before inventing new patterns.

@@ -28,8 +28,8 @@ Turn a symptom into evidence and a decision, not into random edits.
 - relevant references
 
 ## Outputs
-- .ai-kit/contracts/investigation-notes.md
-- .ai-kit/contracts/tech-spec.md when a fix path is clear
+- .relay-kit/contracts/investigation-notes.md
+- .relay-kit/contracts/tech-spec.md when a fix path is clear
 
 ## Reference skills and rules
 - When discipline utilities are installed, use `root-cause-debugging` before touching code.

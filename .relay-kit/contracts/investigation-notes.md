@@ -1,6 +1,6 @@
 # investigation-notes
 
-> Path: `.ai-kit/contracts/investigation-notes.md`
+> Path: `.relay-kit/contracts/investigation-notes.md`
 > Purpose: Capture reproduction steps, observed evidence, likely root cause, and ruled-out hypotheses before a fix is proposed.
 > Used by: scout-hub, debug-hub, fix-hub, test-hub
 
