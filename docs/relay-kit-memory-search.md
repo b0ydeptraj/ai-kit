@@ -2,13 +2,13 @@
 
 `memory-search` is a read-only retrieval utility for phase 2.
 
-It helps hubs and specialists quickly find older decisions, handoffs, and debug notes from `.ai-kit` artifacts without replaying long chat history.
+It helps hubs and specialists quickly find older decisions, handoffs, and debug notes from `.relay-kit` artifacts without replaying long chat history.
 
 ## Scope
 
-- `.ai-kit/state/*.md`
-- `.ai-kit/contracts/*.md`
-- `.ai-kit/references/*.md` (optional via `--scope references` or `--scope all`)
+- `.relay-kit/state/*.md`
+- `.relay-kit/contracts/*.md`
+- `.relay-kit/references/*.md` (optional via `--scope references` or `--scope all`)
 
 ## Command
 

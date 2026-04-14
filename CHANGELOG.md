@@ -2,6 +2,30 @@
 
 All notable changes to `Relay-kit` are documented here.
 
+## v3.3.0 - 2026-04-14
+
+### Added
+
+- Added `scripts/migration_guard.py` and `scripts/migration_guard_allowlist.txt`
+  as the post-cutover token gate for phase-3 migration safety.
+- Added the `migration-guard` utility provider skill into runtime generation and
+  baseline bundles.
+
+### Changed
+
+- Switched canonical runtime artifact root from `.ai-kit/` to `.relay-kit/`.
+- Switched generic prompt output to canonical `.relay-kit-prompts/` only
+  (dual-write removed).
+- Updated generator, registry, runtime docs, and validation gates to post-cutover
+  rules.
+- Updated `scripts/validate_runtime.py` to enforce `migration-guard` and the new
+  canonical paths.
+
+### Removed
+
+- Removed compatibility entrypoints `python_kit.py` and `python_kit_legacy.py`.
+- Removed compatibility generic path `.python-kit-prompts/` from runtime output.
+
 ## v3.2.4 - 2026-03-17
 
 ### Added

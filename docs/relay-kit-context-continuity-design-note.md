@@ -78,36 +78,36 @@ Output:
 
 Do not implement this as one summary file. Use a layered model:
 
-- `.ai-kit/state/current-state.md`
+- `.relay-kit/state/current-state.md`
   - current objective
   - active lane
   - current blocker
   - exact next step
 
-- `.ai-kit/state/decision-register.md`
+- `.relay-kit/state/decision-register.md`
   - decisions made
   - reason for each decision
   - rejected options
   - what should not be reopened without new evidence
 
-- `.ai-kit/state/open-loops.md`
+- `.relay-kit/state/open-loops.md`
   - unresolved questions
   - pending risks
   - follow-up work
 
-- `.ai-kit/state/evidence-index.md`
+- `.relay-kit/state/evidence-index.md`
   - commands run
   - tests pass/fail
   - logs, screenshots, artifacts, commits, and touched files
 
-- `.ai-kit/state/session-ledger.jsonl`
+- `.relay-kit/state/session-ledger.jsonl`
   - append-only chronology
   - each entry should be short and timestamped
 
-- `.ai-kit/state/context-manifest.json`
+- `.relay-kit/state/context-manifest.json`
   - machine-friendly overview of the latest continuity package
 
-- `.ai-kit/handoffs/<timestamp>-<reason>.md`
+- `.relay-kit/handoffs/<timestamp>-<reason>.md`
   - handoff-ready pack for a new thread or AI
 
 ## Trigger conditions

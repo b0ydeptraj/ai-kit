@@ -39,10 +39,10 @@ python scripts/context_continuity.py diff-since-last /path/to/project
 
 ## Artifacts created
 
-- `.ai-kit/state/context-manifest.json`
-- `.ai-kit/state/session-ledger.jsonl`
-- `.ai-kit/state/current-state.md`
-- `.ai-kit/state/decision-register.md`
-- `.ai-kit/state/open-loops.md`
-- `.ai-kit/state/evidence-index.md`
-- `.ai-kit/handoffs/<timestamp>-<reason>.md`
+- `.relay-kit/state/context-manifest.json`
+- `.relay-kit/state/session-ledger.jsonl`
+- `.relay-kit/state/current-state.md`
+- `.relay-kit/state/decision-register.md`
+- `.relay-kit/state/open-loops.md`
+- `.relay-kit/state/evidence-index.md`
+- `.relay-kit/handoffs/<timestamp>-<reason>.md`

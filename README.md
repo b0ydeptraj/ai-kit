@@ -1,4 +1,4 @@
-﻿[English](README.md) | [Tiếng Việt](README.vi.md)
+[English](README.md) | [Tiếng Việt](README.vi.md)
 
 # Relay-kit
 
@@ -58,7 +58,7 @@ It makes agents behave less like improvising interns and more like engineers wor
 
 - a small public skill surface that is easy to remember
 - reusable runtime skills for `.claude`, `.agent`, and `.codex`
-- shared workflow artifacts in `.ai-kit/`
+- shared workflow artifacts in `.relay-kit/`
 - a read-only `memory-search` utility for retrieving prior decisions and handoffs
 - a `release-readiness` utility for pre/post deploy smoke gates and rollback signals
 - an `accessibility-review` gate so frontend quality is not only visual
@@ -163,7 +163,7 @@ Relay-kit separates the work into a small number of reliable stages:
 4. implement with evidence
 5. review before calling it done
 
-Under the hood, the system uses runtime skills plus shared state, contracts, references, and docs in `.ai-kit/`.
+Under the hood, the system uses runtime skills plus shared state, contracts, references, and docs in `.relay-kit/`.
 
 ## Configuration
 
@@ -182,10 +182,10 @@ Generated output includes:
 - `.codex/skills/`
 - `.claude/skills/`
 - `.agent/skills/`
-- `.ai-kit/contracts/`
-- `.ai-kit/state/`
-- `.ai-kit/references/`
-- `.ai-kit/docs/`
+- `.relay-kit/contracts/`
+- `.relay-kit/state/`
+- `.relay-kit/references/`
+- `.relay-kit/docs/`
 
 Generate all active adapter runtimes together with `--ai all`:
 
@@ -193,23 +193,16 @@ Generate all active adapter runtimes together with `--ai all`:
 python relay_kit.py . --bundle baseline --ai all
 ```
 
-## Compatibility
+## Migration status
 
-Relay-kit is currently in a compatibility cycle after the technical rename.
-
-Preferred names:
+Phase 3 cutover is active and canonical runtime paths are now:
 
 - `relay_kit.py`
 - `relay_kit_legacy.py`
+- `.relay-kit/`
 - `.relay-kit-prompts/`
 
-Compatibility aliases kept for one cycle:
-
-- `python_kit.py`
-- `python_kit_legacy.py`
-- `.python-kit-prompts/`
-
-Removal gate:
+Historical compatibility timeline and removal log:
 - [`docs/relay-kit-compatibility-cycle.md`](docs/relay-kit-compatibility-cycle.md)
 
 ## Deeper docs
@@ -234,9 +227,9 @@ Removal gate:
 - Contributing:
   - [`CONTRIBUTING.md`](CONTRIBUTING.md)
 - Folder structure:
-  - [`.ai-kit/docs/folder-structure.md`](.ai-kit/docs/folder-structure.md)
+  - [`.relay-kit/docs/folder-structure.md`](.relay-kit/docs/folder-structure.md)
 - Bundle gating:
-  - [`.ai-kit/docs/bundle-gating.md`](.ai-kit/docs/bundle-gating.md)
+  - [`.relay-kit/docs/bundle-gating.md`](.relay-kit/docs/bundle-gating.md)
 
 ## Legacy note
 

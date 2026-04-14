@@ -1,5 +1,12 @@
 Relay-kit Template Scrub Backlog
 
+Policy Override (2026-04-14)
+- Large migration and cleanup work is allowed to start today (2026-04-14) after clean soak evidence.
+- Keep gates mandatory for each batch:
+  - python scripts/validate_runtime.py
+  - python scripts/skill_gauntlet.py . --strict
+  - public adapter smoke checks
+
 Purpose
 - Keep a short list of template cleanup work for later.
 - Do not treat this as current priority during the compatibility soak window.
@@ -107,12 +114,12 @@ Priority Rule For These Areas
 - Do not touch them during the current compatibility soak unless they create a real public-facing problem.
 - Treat them as after-cycle cleanup, behind actual product quality and real usage feedback.
 
-Execution Window (post-soak)
-- Earliest start: 2026-04-16 (only if soak cycle is clean through at least 2026-04-15)
+Execution Window (post-soak / override)
+- Earliest start: 2026-04-14 (override approved after clean soak evidence)
 - Order:
-  1) 2026-04-16 to 2026-04-17: High-Risk imported-tone scrub
-  2) 2026-04-18 to 2026-04-20: Medium-Risk runtime/template scrub
-  3) 2026-04-21 to 2026-04-22: demo/docs/public wording scrub
+  1) 2026-04-14 to 2026-04-15: High-Risk imported-tone scrub
+  2) 2026-04-15 to 2026-04-17: Medium-Risk runtime/template scrub
+  3) 2026-04-17 to 2026-04-18: demo/docs/public wording scrub
 
 Batch Gate (required before each push)
 - python scripts/validate_runtime.py

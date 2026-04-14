@@ -1,4 +1,4 @@
-﻿[English](README.md) | [Tiếng Việt](README.vi.md)
+[English](README.md) | [Tiếng Việt](README.vi.md)
 
 # Relay-kit
 
@@ -58,7 +58,7 @@ Nói ngắn: nó khiến agent bớt làm việc kiểu ứng biến, và làm v
 
 - một mặt kỹ năng công khai nhỏ, dễ nhớ
 - runtime skills dùng lại được cho `.claude`, `.agent`, và `.codex`
-- các artifact workflow dùng chung trong `.ai-kit/`
+- các artifact workflow dùng chung trong `.relay-kit/`
 - utility `memory-search` dạng read-only để tra quyết định và handoff cũ
 - utility `release-readiness` để gate pre/post deploy và theo dõi rollback signal
 - gate `accessibility-review` để chặn thiếu sót a11y trước khi gọi là ready
@@ -163,7 +163,7 @@ Relay-kit tách công việc thành một số chặng ổn định:
 4. thực thi có bằng chứng
 5. review trước khi gọi là xong
 
-Ở bên dưới, hệ thống dùng runtime skills cùng với state, contracts, references, và docs trong `.ai-kit/`.
+Ở bên dưới, hệ thống dùng runtime skills cùng với state, contracts, references, và docs trong `.relay-kit/`.
 
 ## Cấu hình
 
@@ -182,10 +182,10 @@ Sau khi generate, bạn sẽ có:
 - `.codex/skills/`
 - `.claude/skills/`
 - `.agent/skills/`
-- `.ai-kit/contracts/`
-- `.ai-kit/state/`
-- `.ai-kit/references/`
-- `.ai-kit/docs/`
+- `.relay-kit/contracts/`
+- `.relay-kit/state/`
+- `.relay-kit/references/`
+- `.relay-kit/docs/`
 
 Generate tất cả adapter cùng lúc với `--ai all`:
 
@@ -193,23 +193,16 @@ Generate tất cả adapter cùng lúc với `--ai all`:
 python relay_kit.py . --bundle baseline --ai all
 ```
 
-## Tương thích
+## Trạng thái migration
 
-Relay-kit hiện đang ở trong một chu kỳ tương thích sau khi đổi tên kỹ thuật.
-
-Tên mới ưu tiên:
+Phase 3 cutover đã bật và canonical runtime path hiện tại là:
 
 - `relay_kit.py`
 - `relay_kit_legacy.py`
+- `.relay-kit/`
 - `.relay-kit-prompts/`
 
-Bí danh cũ vẫn giữ trong một chu kỳ:
-
-- `python_kit.py`
-- `python_kit_legacy.py`
-- `.python-kit-prompts/`
-
-Điều kiện để bỏ tên cũ:
+Nhật ký lịch sử compatibility và removal:
 - [`docs/relay-kit-compatibility-cycle.md`](docs/relay-kit-compatibility-cycle.md)
 
 ## Tài liệu sâu hơn
@@ -230,9 +223,9 @@ Bí danh cũ vẫn giữ trong một chu kỳ:
   - [`docs/relay-kit-context-continuity.md`](docs/relay-kit-context-continuity.md)
   - [`docs/relay-kit-context-continuity-design-note.md`](docs/relay-kit-context-continuity-design-note.md)
 - Cấu trúc thư mục:
-  - [`.ai-kit/docs/folder-structure.md`](.ai-kit/docs/folder-structure.md)
+  - [`.relay-kit/docs/folder-structure.md`](.relay-kit/docs/folder-structure.md)
 - Luật bundle:
-  - [`.ai-kit/docs/bundle-gating.md`](.ai-kit/docs/bundle-gating.md)
+  - [`.relay-kit/docs/bundle-gating.md`](.relay-kit/docs/bundle-gating.md)
 
 ## Ghi chú về legacy
 

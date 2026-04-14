@@ -12,19 +12,19 @@
 `python scripts/summarize_compat_cycle.py --write-summary` refreshes this block.
 
 <!-- compat-cycle-summary:start -->
-- Last summary update: `2026-04-01 09:39:40 SE Asia Standard Time`
+- Last summary update: `2026-04-14 16:05:29 SE Asia Standard Time`
 - Source filter: `interactive`
-- Total logged events considered: `5`
-- Total real runs: `3`
-- `relay_kit.py` runs: `3`
-- `python_kit.py` runs: `0`
-- `relay_kit_legacy.py` runs: `0`
-- `python_kit_legacy.py` runs: `0`
-- Generic dual-write runs: `0`
-- Distinct target projects: `1`
+- Total logged events considered: `39`
+- Total real runs: `33`
+- `relay_kit.py` runs: `18`
+- `python_kit.py` runs: `2`
+- `relay_kit_legacy.py` runs: `1`
+- `python_kit_legacy.py` runs: `1`
+- Generic dual-write runs: `5`
+- Distinct target projects: `14`
 - Failed runs in filtered set: `0`
 - Last validation result: `pass`
-- Last observed event: `2026-03-30T13:15:18+07:00`
+- Last observed event: `2026-04-14T16:03:12+07:00`
 <!-- compat-cycle-summary:end -->
 
 Manual gate:
@@ -268,6 +268,96 @@ run-relay-kit-checkpoint.cmd
   - `0`
 - Distinct target projects:
   - `1`
+- Failed runs in filtered set:
+  - `0`
+- Validation command:
+  - `python scripts/validate_runtime.py`
+- Result:
+  - `pass`
+- Notes:
+  - auto-generated checkpoint
+
+
+## Checkpoint 2026-04-07 16:06 SE Asia Standard Time
+
+- Source filter:
+  - `interactive`
+- Total logged events considered:
+  - `24`
+- Total real runs:
+  - `19`
+- `relay_kit.py` runs:
+  - `9`
+- `python_kit.py` runs:
+  - `2`
+- `relay_kit_legacy.py` runs:
+  - `1`
+- `python_kit_legacy.py` runs:
+  - `1`
+- Generic dual-write runs:
+  - `2`
+- Distinct target projects:
+  - `9`
+- Failed runs in filtered set:
+  - `0`
+- Validation command:
+  - `python scripts/validate_runtime.py`
+- Result:
+  - `pass`
+- Notes:
+  - auto-generated checkpoint
+
+
+## Checkpoint 2026-04-14 14:01 SE Asia Standard Time
+
+- Source filter:
+  - `interactive`
+- Total logged events considered:
+  - `33`
+- Total real runs:
+  - `27`
+- `relay_kit.py` runs:
+  - `17`
+- `python_kit.py` runs:
+  - `2`
+- `relay_kit_legacy.py` runs:
+  - `1`
+- `python_kit_legacy.py` runs:
+  - `1`
+- Generic dual-write runs:
+  - `4`
+- Distinct target projects:
+  - `13`
+- Failed runs in filtered set:
+  - `0`
+- Validation command:
+  - `python scripts/validate_runtime.py`
+- Result:
+  - `pass`
+- Notes:
+  - auto-generated checkpoint
+
+
+## Checkpoint 2026-04-14 16:05 SE Asia Standard Time
+
+- Source filter:
+  - `interactive`
+- Total logged events considered:
+  - `39`
+- Total real runs:
+  - `33`
+- `relay_kit.py` runs:
+  - `18`
+- `python_kit.py` runs:
+  - `2`
+- `relay_kit_legacy.py` runs:
+  - `1`
+- `python_kit_legacy.py` runs:
+  - `1`
+- Generic dual-write runs:
+  - `5`
+- Distinct target projects:
+  - `14`
 - Failed runs in filtered set:
   - `0`
 - Validation command:

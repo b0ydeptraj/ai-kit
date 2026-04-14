@@ -5,9 +5,9 @@ Relay-kit is not a random prompt dump.
 Treat changes as changes to a workflow system with:
 
 - adapter runtime parity
-- shared artifacts under `.ai-kit/`
+- shared artifacts under `.relay-kit/`
 - bundle gating
-- a live compatibility cycle for technical renames
+- migration safety gates for technical renames
 
 ## Before you change anything
 
@@ -16,8 +16,8 @@ Read the current public and runtime docs first:
 - `README.md`
 - `docs/relay-kit-start-flow.md`
 - `docs/how-to-write-skills.md`
-- `.ai-kit/docs/folder-structure.md`
-- `.ai-kit/docs/bundle-gating.md`
+- `.relay-kit/docs/folder-structure.md`
+- `.relay-kit/docs/bundle-gating.md`
 
 ## Contribution rules
 
@@ -49,7 +49,7 @@ If you touch runtime generation, bundles, or validation:
 - explain why the change belongs in the current bundle
 - explain why it should or should not affect `baseline`
 - do not break adapter parity casually
-- do not remove compatibility aliases until the active cycle allows it
+- run `scripts/migration_guard.py --strict` whenever naming or path cutover tokens could drift
 
 ## Validation
 
@@ -59,11 +59,11 @@ Run this before submitting a change:
 python scripts/validate_runtime.py
 ```
 
-If your change affects entrypoints or compatibility docs, also check:
+If your change affects runtime naming or migration docs, also check:
 
 ```bash
 python relay_kit.py --list-skills
-python python_kit.py --list-skills
+python scripts/migration_guard.py . --strict
 ```
 
 ## Pull request checklist
@@ -82,4 +82,4 @@ python python_kit.py --list-skills
 - do not turn Relay-kit into a plugin runtime
 - do not import large persona systems just because they look popular
 - do not expand the public surface without clear value
-- do not remove compatibility layers early
+- do not bypass migration guard by adding broad allowlist globs

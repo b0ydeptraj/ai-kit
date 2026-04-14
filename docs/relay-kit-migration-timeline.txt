@@ -1,6 +1,15 @@
 Relay-kit migration timeline reference
 Updated: 2026-04-01
 
+Policy override update: 2026-04-14
+- Decision: allow phase 3 preparation and large migration changes starting today (2026-04-14).
+- Reason: compatibility soak evidence is clean (no failed runs) and runtime gates are passing.
+- Safety condition remains mandatory:
+  - python scripts/validate_runtime.py
+  - python scripts/skill_gauntlet.py --strict
+  - smoke public adapters before each merge batch
+- This override replaces the previous "after 2026-04-15 / earliest 2026-04-16" wait requirement.
+
 1. Phase 2 status (as of 2026-04-01)
 
 Đã hoàn thành trong phase 2:
@@ -72,7 +81,7 @@ Mục tiêu:
 
 "Tính đến 2026-04-01: phase 2 capability đã xong; đang soak cycle. Chỉ sau soak sạch mới làm phase 3 gồm `.ai-kit` -> `.relay-kit`, bỏ `python_kit.py/python_kit_legacy.py`, và rename thư mục repo thật."
 
-7. Candidate skill moi sau 2026-04-15 (chi mo khi cycle sach)
+7. Candidate skill moi sau 2026-04-14 (chi mo khi cycle sach)
 
 - impact-radar (uu tien cao)
   - phan tich blast radius truoc khi sua/merge lon

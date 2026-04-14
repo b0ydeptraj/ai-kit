@@ -13,7 +13,7 @@ Use these files instead:
 - Current compatibility gate:
   - `docs/relay-kit-compatibility-cycle.md`
 - Current runtime structure:
-  - `.ai-kit/docs/folder-structure.md`
+  - `.relay-kit/docs/folder-structure.md`
 
 Historical snapshot from that earlier phase:
 

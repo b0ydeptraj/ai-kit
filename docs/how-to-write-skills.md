@@ -75,7 +75,7 @@ Do not write skills that assume a different runtime model such as:
 Work with the current structure:
 
 - runtime skills live in adapter folders
-- shared contracts, state, references, and docs live under `.ai-kit/`
+- shared contracts, state, references, and docs live under `.relay-kit/`
 - public aliases should not rewrite canonical runtime names unless there is a
   deliberate migration plan
 
@@ -91,9 +91,9 @@ Before finalizing a skill, decide what it is:
 
 Use the existing docs if you are unsure:
 
-- `.ai-kit/docs/layer-model.md`
-- `.ai-kit/docs/utility-provider-model.md`
-- `.ai-kit/docs/folder-structure.md`
+- `.relay-kit/docs/layer-model.md`
+- `.relay-kit/docs/utility-provider-model.md`
+- `.relay-kit/docs/folder-structure.md`
 
 ## Make the output and stop condition explicit
 
@@ -225,7 +225,7 @@ Default rule:
 
 Read:
 
-- `.ai-kit/docs/bundle-gating.md`
+- `.relay-kit/docs/bundle-gating.md`
 
 ## Contributor checklist
 

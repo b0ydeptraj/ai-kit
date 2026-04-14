@@ -17,7 +17,7 @@ In practice:
 These are not optional:
 - current layer topology
 - orchestrator and hub ownership
-- `.ai-kit` artifact model
+- `.relay-kit` artifact model
 - bundle gating
 - adapter parity
 - compatibility-safe evolution
@@ -51,10 +51,10 @@ Examples:
 New skills must plug into existing artifacts and state before introducing new standalone storage.
 
 Prefer:
-- updating `.ai-kit/state/*`
-- updating `.ai-kit/contracts/*`
-- adding references under `.ai-kit/references/*`
-- adding docs under `.ai-kit/docs/*`
+- updating `.relay-kit/state/*`
+- updating `.relay-kit/contracts/*`
+- adding references under `.relay-kit/references/*`
+- adding docs under `.relay-kit/docs/*`
 
 Avoid:
 - creating hidden side-state not visible to the Relay-kit workflow
@@ -98,7 +98,7 @@ Before adding it, state:
 Reject or redesign proposals that:
 - create a second router
 - create a second planning system
-- create a second memory system disconnected from `.ai-kit`
+- create a second memory system disconnected from `.relay-kit`
 - add many public names just for marketing breadth
 - clone another kit's persona swarm into Relay-kit
 - introduce plugin or command systems that bypass the current runtime model
