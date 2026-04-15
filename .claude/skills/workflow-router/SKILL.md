@@ -1,6 +1,6 @@
 ---
 name: workflow-router
-description: Use when a request arrives, the user asks what to do next, or scope or complexity is unclear. Route a request through the right delivery track, choose the active orchestrator or hub, and keep workflow-state current.
+description: Use when a request arrives, the user asks what to do next, or scope or complexity is unclear. Route a request through the right delivery track, choose the active orchestrator or hub, keep workflow-state current, and enforce SRS-first policy when it is enabled.
 ---
 
 # Mission
@@ -30,6 +30,11 @@ Act as the routing kernel for the whole system: choose the track, choose the act
 7. Mark the lane mode explicitly as one of: discovery, planning, implementation, or verification.
 8. Update `.relay-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
 
+## SRS-first gate
+- Read `.relay-kit/state/srs-policy.json` when present.
+- If policy is enabled and scope includes the active track, require `.relay-kit/contracts/srs-spec.md` before calling planning ready.
+- Route to `plan-hub` + `srs-clarifier` when SRS sections or UC-ID traceability are missing.
+
 ## Escalation rules
 Escalate immediately when:
 - a small fix changes contracts, schemas, APIs, or infrastructure
@@ -54,6 +59,7 @@ Never end with vague advice. Always name the next skill, the artifact it should 
 
 ## Outputs
 - .relay-kit/state/workflow-state.md
+- .relay-kit/contracts/srs-spec.md when SRS-first applies
 - .relay-kit/contracts/tech-spec.md or product-brief.md kickoff
 - .relay-kit/state/team-board.md when parallel lanes are needed
 
@@ -63,6 +69,7 @@ Never end with vague advice. Always name the next skill, the artifact it should 
 - Hand off to bootstrap when base artifacts are missing, to cook for a single request, and to team when multiple lanes must move in parallel.
 - If session continuity is weak, run context-continuity checkpoint or rehydrate before routing deeper work.
 - For existing codebases, prefer scout-hub plus repo-map before planning when dependency boundaries are still unclear.
+- If `.relay-kit/state/srs-policy.json` enables SRS-first, require `srs-spec.md` before declaring product-flow or enterprise-flow planning-ready.
 
 ## Likely next step
 - bootstrap

@@ -13,6 +13,7 @@ Include:
 - risk matrix
 - regression surface
 - evidence collected
+- SRS coverage table (UC-ID -> evidence)
 - go or no-go recommendation
 
 ## Mandatory checks
@@ -30,6 +31,7 @@ Include:
 
 ## Inputs
 - PRD or tech-spec
+- srs-spec when SRS-first is enabled
 - architecture or story
 - evidence from tests and reviews
 
@@ -42,6 +44,7 @@ Include:
 - Use `.relay-kit/docs/review-loop.md` when review feedback must be validated before action.
 - Coverage must be explained against acceptance criteria and risk, not just number of tests.
 - Use context-continuity when readiness evidence must survive a new thread or handoff before final sign-off.
+- When SRS-first is enabled, require a QA SRS coverage table that traces each UC-ID to evidence.
 
 ## Likely next step
 - review-hub

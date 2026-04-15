@@ -1,4 +1,4 @@
-﻿[English](README.md) | [Tiáº¿ng Viá»‡t](README.vi.md)
+[English](README.md) | [Tiáº¿ng Viá»‡t](README.vi.md)
 
 # Relay-kit
 
@@ -64,6 +64,7 @@ It makes agents behave less like improvising interns and more like engineers wor
 - an `accessibility-review` gate so frontend quality is not only visual
 - a `skill-gauntlet` regression gate to keep skill routing behavior stable
 - a `context-continuity` utility for checkpoint, rehydrate, handoff, and diff flows
+- an opt-in SRS-first policy for non-technical requirement quality and traceability
 - an active baseline that is validated instead of loosely assembled
 - a way to make work more consistent without forcing everything through raw chat memory
 
@@ -79,6 +80,12 @@ Generate the active baseline:
 
 ```bash
 python relay_kit.py . --bundle baseline --ai codex --emit-contracts --emit-docs --emit-reference-templates
+```
+
+Enable SRS-first policy for a project (opt-in):
+
+```bash
+relay-kit /path/to/project --enable-srs-first --srs-gate warn --srs-scope product-enterprise
 ```
 
 Public installer surface (local repo checkout):
@@ -152,6 +159,7 @@ More detail:
 - [`docs/relay-kit-accessibility-review.md`](docs/relay-kit-accessibility-review.md)
 - [`docs/relay-kit-skill-gauntlet.md`](docs/relay-kit-skill-gauntlet.md)
 - [`docs/relay-kit-context-continuity.md`](docs/relay-kit-context-continuity.md)
+- [`docs/relay-kit-srs-first-nontech.md`](docs/relay-kit-srs-first-nontech.md)
 
 ## How it works
 
@@ -226,6 +234,8 @@ Historical compatibility timeline and removal log:
 - Context continuity:
   - [`docs/relay-kit-context-continuity.md`](docs/relay-kit-context-continuity.md)
   - [`docs/relay-kit-context-continuity-design-note.md`](docs/relay-kit-context-continuity-design-note.md)
+- SRS-first non-tech guide:
+  - [`docs/relay-kit-srs-first-nontech.md`](docs/relay-kit-srs-first-nontech.md)
 - Skill authoring:
   - [`docs/how-to-write-skills.md`](docs/how-to-write-skills.md)
 - Contributing:
@@ -238,5 +248,3 @@ Historical compatibility timeline and removal log:
 ## Legacy note
 
 Legacy kits still exist for migration and compatibility work. They are not the main Relay-kit runtime story.
-
-

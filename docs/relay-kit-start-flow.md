@@ -1,4 +1,4 @@
-﻿# Relay-kit start flow
+# Relay-kit start flow
 
 Relay-kit already has a strong internal workflow. This document exposes the small public surface you should learn first.
 
@@ -12,6 +12,7 @@ Start with these public names:
 |---|---|---|
 | figure out where to start | `start-here` | `workflow-router` |
 | turn a rough idea into a clear direction | `brainstorm` | `brainstorm-hub` |
+| translate non-tech requirements into structured SRS | `srs-clarify` | `srs-clarifier` |
 | slice approved work into buildable steps | `write-steps` | `scrum-master` |
 | implement an approved slice | `build-it` | `developer` |
 | review a branch or PR before merge or sign-off | `review-pr` | `review-hub` |
@@ -25,10 +26,11 @@ Start with these public names:
 
 1. `start-here`
 2. `brainstorm`
-3. `write-steps`
-4. `build-it`
-5. `ready-check`
-6. `prove-it` if the completion claim still feels weak
+3. `srs-clarify` for non-tech requirement-heavy work
+4. `write-steps`
+5. `build-it`
+6. `ready-check`
+7. `prove-it` if the completion claim still feels weak
 
 ### Bug or regression
 

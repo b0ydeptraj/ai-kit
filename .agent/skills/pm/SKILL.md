@@ -15,7 +15,7 @@ Include:
 - acceptance criteria
 - risks and mitigations
 - release slices
-
+- SRS Traceability table (UC-ID -> requirement ID -> acceptance criterion)
 ## Produce `epics.md`
 Organize the PRD into thin vertical slices with an order that reduces risk early.
 
@@ -33,17 +33,20 @@ The PRD is not ready if any of the following is missing:
 - layer-4-specialists-and-standalones
 
 ## Inputs
+- .relay-kit/contracts/srs-spec.md when SRS-first is enabled
 - .relay-kit/contracts/product-brief.md or direct scoped request
 - .relay-kit/contracts/project-context.md
 
 ## Outputs
 - .relay-kit/contracts/PRD.md
 - .relay-kit/contracts/epics.md
+- SRS traceability map (UC-ID -> requirement -> acceptance criterion) in PRD
 
 ## Reference skills and rules
 - Do not hand wave acceptance criteria.
 - Separate must-have requirements from stretch goals and out-of-scope ideas.
 - Use UX and research support skills when the user experience is part of the risk.
+- When SRS-first is enabled, include explicit UC-ID traceability from srs-spec into PRD requirements and acceptance criteria.
 
 ## Likely next step
 - architect

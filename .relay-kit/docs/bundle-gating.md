@@ -8,6 +8,7 @@ Round 4 tightens bundle gating so lower bundles do not spray higher-level artifa
 | round3 | round2 base + round3 extras | round2 + round3 docs | support references |
 | utility-providers | none by default | utility and topology docs | none |
 | discipline-utilities | none by default | discipline docs only | none |
+| srs-first | srs-spec only (opt-in) | planning discipline docs | none |
 | round4 | round2 base + round3 extras + round4 extras | round2 + round3 + round4 docs | support references |
 | baseline | round4 scope + approved discipline utilities | round4 docs | support references |
 | baseline-next | compatibility alias for `baseline` during the promotion cycle | round4 docs | support references |

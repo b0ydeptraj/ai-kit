@@ -13,6 +13,7 @@ Use this page as the public entrypoint for current runtime behavior.
 - `docs/relay-kit-skill-gauntlet.md`
 - `docs/relay-kit-context-continuity.md`
 - `docs/relay-kit-context-continuity-design-note.md`
+- `docs/relay-kit-srs-first-nontech.md`
 - `docs/relay-kit-compatibility-cycle.md` (archived checklist with final decision)
 
 Canonical runtime naming:

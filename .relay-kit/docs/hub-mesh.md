@@ -85,6 +85,7 @@ Can hand off to:
 - context-continuity
 - ux-structure
 - mermaid-diagrams
+- srs-clarifier
 
 ### debug-hub
 - developer

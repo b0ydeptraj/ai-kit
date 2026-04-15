@@ -22,6 +22,7 @@ Each story must include:
 - implementation notes
 - test notes
 - risks
+- srs_uc_ids (at least one UC-ID when SRS-first is enabled)
 - depends_on (story ids)
 - parallel-safe (yes/no)
 - done checklist
@@ -41,6 +42,7 @@ Each story must include:
 - layer-4-specialists-and-standalones
 
 ## Inputs
+- .relay-kit/contracts/srs-spec.md when SRS-first is enabled
 - .relay-kit/contracts/PRD.md
 - .relay-kit/contracts/architecture.md
 - .relay-kit/contracts/epics.md
@@ -55,6 +57,7 @@ Each story must include:
 - Do not create stories that hide architectural decisions or missing acceptance criteria.
 - Use `.relay-kit/docs/planning-discipline.md` to keep tasks bite-sized, testable, and explicit about verification.
 - Execution order should be explicit; stories are not considered runnable until dependencies and first verification signals are named.
+- When SRS-first is enabled, every story must cite at least one UC-ID from srs-spec.
 
 ## Likely next step
 - developer
