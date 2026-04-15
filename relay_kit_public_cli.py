@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import argparse
 import sys
-from pathlib import Path
 
 import relay_kit as relay_core
 
@@ -78,6 +77,13 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
         help="Disable reference templates emit",
     )
 
+    srs_switch = parser.add_mutually_exclusive_group()
+    srs_switch.add_argument("--enable-srs-first", action="store_true", help="Enable SRS-first policy for this project")
+    srs_switch.add_argument("--disable-srs-first", action="store_true", help="Disable SRS-first policy for this project")
+    parser.add_argument("--srs-gate", choices=["off", "warn", "hard"], help="SRS policy gate mode")
+    parser.add_argument("--srs-scope", choices=["product-enterprise", "all"], help="SRS policy scope")
+    parser.add_argument("--srs-risk", choices=["normal", "high"], help="SRS policy risk profile")
+
     parser.add_argument("--legacy-kit", help="Optional preserved legacy kit")
     parser.add_argument("--skills", nargs="+", metavar="SKILL", help="Optional legacy skills")
     parser.add_argument("--list-skills", action="store_true", help="List bundles and legacy kits")
@@ -119,6 +125,17 @@ def _build_relay_argv(args: argparse.Namespace) -> list[str]:
         relay_argv.append("--emit-docs")
     if args.emit_reference_templates:
         relay_argv.append("--emit-reference-templates")
+
+    if args.enable_srs_first:
+        relay_argv.append("--enable-srs-first")
+    if args.disable_srs_first:
+        relay_argv.append("--disable-srs-first")
+    if args.srs_gate:
+        relay_argv.extend(["--srs-gate", args.srs_gate])
+    if args.srs_scope:
+        relay_argv.extend(["--srs-scope", args.srs_scope])
+    if args.srs_risk:
+        relay_argv.extend(["--srs-risk", args.srs_risk])
 
     if args.legacy_kit:
         relay_argv.extend(["--legacy-kit", args.legacy_kit])

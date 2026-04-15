@@ -7,6 +7,7 @@ from typing import Dict, List, Optional
 from .adapters import ensure_dirs, targets_for
 from .registry import (
     ALL_V3_SKILLS,
+    ARTIFACT_CONTRACTS,
     BASELINE_NEXT_DISCIPLINE_SKILLS,
     BUNDLE_DOC_NAMES,
     CLEANUP_SKILLS,
@@ -30,6 +31,7 @@ from .registry import (
     render_team_board,
     render_workflow_state,
 )
+from .srs_policy import ensure_srs_policy
 from relay_kit_compat import (
     CANONICAL_ARTIFACT_ROOT,
     CANONICAL_LEGACY_ENTRYPOINT,
@@ -51,6 +53,7 @@ BUNDLES: Dict[str, List[str]] = {
     "round3": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()) + list(NATIVE_SUPPORT_SKILLS.keys()),
     "utility-providers": list(UTILITY_PROVIDER_SKILLS.keys()),
     "discipline-utilities": list(DISCIPLINE_UTILITY_SKILLS.keys()),
+    "srs-first": ["srs-clarifier"],
     "round4-core": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()),
     "round4": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()) + list(NATIVE_SUPPORT_SKILLS.keys()),
     "baseline": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()) + list(NATIVE_SUPPORT_SKILLS.keys()) + list(BASELINE_NEXT_DISCIPLINE_SKILLS.keys()),
@@ -118,8 +121,6 @@ def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
 
 
 def emit_contracts(project_path: Path, bundle: str) -> List[Path]:
-    from .registry import ARTIFACT_CONTRACTS
-
     written: List[Path] = []
     for contract_name in contract_names_for_bundle(bundle):
         contract = ARTIFACT_CONTRACTS[contract_name]
@@ -136,6 +137,9 @@ def emit_contracts(project_path: Path, bundle: str) -> List[Path]:
             content = render_artifact(contract)
         write_text(output, content)
         written.append(output)
+
+    policy_path = ensure_srs_policy(project_path)
+    written.append(policy_path)
     return written
 
 

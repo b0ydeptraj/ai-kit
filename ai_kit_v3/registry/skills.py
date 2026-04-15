@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from dataclasses import dataclass
 from textwrap import dedent
@@ -65,17 +65,18 @@ LEGACY_ROLE_MAP = {
 ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
     "workflow-router": SkillSpec(
         name="workflow-router",
-        description="Use when a request arrives, the user asks what to do next, or scope or complexity is unclear. Route a request through the right delivery track, choose the active orchestrator or hub, and keep workflow-state current.",
+        description="Use when a request arrives, the user asks what to do next, or scope or complexity is unclear. Route a request through the right delivery track, choose the active orchestrator or hub, keep workflow-state current, and enforce SRS-first policy when it is enabled.",
         role="routing-kernel",
         layer="layer-1-orchestrators",
         inputs=["user request", ".relay-kit/contracts/project-context.md (if present)", ".relay-kit/state/workflow-state.md (if present)", ".relay-kit/state/team-board.md (if present)"],
-        outputs=[".relay-kit/state/workflow-state.md", ".relay-kit/contracts/tech-spec.md or product-brief.md kickoff", ".relay-kit/state/team-board.md when parallel lanes are needed"],
+        outputs=[".relay-kit/state/workflow-state.md", ".relay-kit/contracts/srs-spec.md when SRS-first applies", ".relay-kit/contracts/tech-spec.md or product-brief.md kickoff", ".relay-kit/state/team-board.md when parallel lanes are needed"],
         references=[
             "Prefer existing project-context over assumptions.",
             "Escalate from quick-flow to product-flow whenever hidden complexity appears.",
             "Hand off to bootstrap when base artifacts are missing, to cook for a single request, and to team when multiple lanes must move in parallel.",
             "If session continuity is weak, run context-continuity checkpoint or rehydrate before routing deeper work.",
             "For existing codebases, prefer scout-hub plus repo-map before planning when dependency boundaries are still unclear.",
+            "If `.relay-kit/state/srs-policy.json` enables SRS-first, require `srs-spec.md` before declaring product-flow or enterprise-flow planning-ready.",
         ],
         next_steps=["bootstrap", "cook", "team", "context-continuity", "scout-hub", "plan-hub", "debug-hub"],
         body=dedent(
@@ -106,6 +107,11 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
                - `debug-hub` when the request starts from a failure or regression
             7. Mark the lane mode explicitly as one of: discovery, planning, implementation, or verification.
             8. Update `.relay-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
+
+            ## SRS-first gate
+            - Read `.relay-kit/state/srs-policy.json` when present.
+            - If policy is enabled and scope includes the active track, require `.relay-kit/contracts/srs-spec.md` before calling planning ready.
+            - Route to `plan-hub` + `srs-clarifier` when SRS sections or UC-ID traceability are missing.
 
             ## Escalation rules
             Escalate immediately when:
@@ -290,17 +296,18 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
     ),
     "plan-hub": SkillSpec(
         name="plan-hub",
-        description="Use when work is larger than quick-flow or when existing planning artifacts are stale or incomplete. Run the planning chain from brief to prd to architecture to stories without losing context between roles.",
+        description="Use when work is larger than quick-flow or when existing planning artifacts are stale or incomplete. Run the planning chain from SRS-first or brief to PRD to architecture to stories without losing context between roles.",
         role="planning-hub",
         layer="layer-2-workflow-hubs",
-        inputs=["workflow-state", "existing brief, prd, architecture, or epics if present", "project-context"],
-        outputs=["product-brief, PRD, architecture, epics, and stories or tech-spec depending track"],
+        inputs=["workflow-state", "existing srs-spec, brief, PRD, architecture, or epics if present", "project-context", ".relay-kit/state/srs-policy.json when present"],
+        outputs=["srs-spec when policy requires it", "product-brief, PRD, architecture, epics, and stories or tech-spec depending track"],
         references=[
             "Call only the roles needed to close the current planning gap.",
             "Use scout-hub first if the current codebase context is too weak to plan safely.",
             "Route to review-hub if artifacts disagree with one another.",
             "Use `.relay-kit/docs/planning-discipline.md` to keep plans artifact-first, bite-sized, and verification-aware.",
             "Lock key UX, API, and behavior assumptions before story slicing so implementation does not drift.",
+            "When SRS-first is enabled, call `srs-clarifier` before PM readiness if actors/use cases/pre-post/exception flows are incomplete.",
         ],
         next_steps=["analyst", "pm", "architect", "scrum-master", "developer", "review-hub"],
         body=dedent(
@@ -309,6 +316,7 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             Sequence the planning roles so the lane produces buildable artifacts instead of disconnected documents.
 
             ## Mandatory order
+            - if SRS-first policy is enabled for this track, use `srs-clarifier` first to create or repair `srs-spec.md`
             - use `analyst` if the brief is missing or stale
             - use `pm` if requirements, acceptance criteria, or slice order are missing
             - use `architect` if technical boundaries or readiness are unclear
@@ -316,6 +324,7 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
 
             ## Planning gate
             Stop and route to `review-hub` when product, architecture, and story artifacts disagree.
+            If SRS-first is enabled, block planning readiness until `srs-spec.md` contains actors, UC-IDs, preconditions, postconditions, and exception flows.
             Route to `developer` only when the active story or tech-spec is ready for implementation.
 
             ## Planning discipline
@@ -493,12 +502,13 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         description="Use when the work is past discovery and needs a buildable scope. Translate a product brief or scoped request into a prd, release slices, and acceptance criteria.",
         role="planning",
         layer="layer-4-specialists-and-standalones",
-        inputs=[".relay-kit/contracts/product-brief.md or direct scoped request", ".relay-kit/contracts/project-context.md"],
-        outputs=[".relay-kit/contracts/PRD.md", ".relay-kit/contracts/epics.md"],
+        inputs=[".relay-kit/contracts/srs-spec.md when SRS-first is enabled", ".relay-kit/contracts/product-brief.md or direct scoped request", ".relay-kit/contracts/project-context.md"],
+        outputs=[".relay-kit/contracts/PRD.md", ".relay-kit/contracts/epics.md", "SRS traceability map (UC-ID -> requirement -> acceptance criterion) in PRD"],
         references=[
             "Do not hand wave acceptance criteria.",
             "Separate must-have requirements from stretch goals and out-of-scope ideas.",
             "Use UX and research support skills when the user experience is part of the risk.",
+            "When SRS-first is enabled, include explicit UC-ID traceability from srs-spec into PRD requirements and acceptance criteria.",
         ],
         next_steps=["architect", "scrum-master", "plan-hub", "review-hub"],
         body=dedent(
@@ -515,7 +525,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - acceptance criteria
             - risks and mitigations
             - release slices
-
+            - SRS Traceability table (UC-ID -> requirement ID -> acceptance criterion)
             ## Produce `epics.md`
             Organize the PRD into thin vertical slices with an order that reduces risk early.
 
@@ -569,13 +579,14 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         description="Use when planning is done and work must be sliced into safe, verifiable increments. Turn prd and architecture into implementation-ready stories or a tech spec for quick-flow work.",
         role="delivery",
         layer="layer-4-specialists-and-standalones",
-        inputs=[".relay-kit/contracts/PRD.md", ".relay-kit/contracts/architecture.md", ".relay-kit/contracts/epics.md", ".relay-kit/contracts/tech-spec.md"],
+        inputs=[".relay-kit/contracts/srs-spec.md when SRS-first is enabled", ".relay-kit/contracts/PRD.md", ".relay-kit/contracts/architecture.md", ".relay-kit/contracts/epics.md", ".relay-kit/contracts/tech-spec.md"],
         outputs=[".relay-kit/contracts/stories/story-xxx.md", ".relay-kit/contracts/tech-spec.md when quick-flow is used"],
         references=[
             "Each story should be a thin vertical slice with explicit done criteria.",
             "Do not create stories that hide architectural decisions or missing acceptance criteria.",
             "Use `.relay-kit/docs/planning-discipline.md` to keep tasks bite-sized, testable, and explicit about verification.",
             "Execution order should be explicit; stories are not considered runnable until dependencies and first verification signals are named.",
+            "When SRS-first is enabled, every story must cite at least one UC-ID from srs-spec.",
         ],
         next_steps=["developer", "test-hub", "review-hub", "workflow-router"],
         body=dedent(
@@ -599,6 +610,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - implementation notes
             - test notes
             - risks
+            - srs_uc_ids (at least one UC-ID when SRS-first is enabled)
             - depends_on (story ids)
             - parallel-safe (yes/no)
             - done checklist
@@ -657,7 +669,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         description="Use when work is about to be called done or implementation confidence is low. Check readiness and completion against acceptance criteria, risk, and regression scope, then write a QA report.",
         role="quality",
         layer="layer-4-specialists-and-standalones",
-        inputs=["PRD or tech-spec", "architecture or story", "evidence from tests and reviews"],
+        inputs=["PRD or tech-spec", "srs-spec when SRS-first is enabled", "architecture or story", "evidence from tests and reviews"],
         outputs=[".relay-kit/contracts/qa-report.md"],
         references=[
             "Use testing-patterns as the evidence map for the project.",
@@ -665,6 +677,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Use `.relay-kit/docs/review-loop.md` when review feedback must be validated before action.",
             "Coverage must be explained against acceptance criteria and risk, not just number of tests.",
             "Use context-continuity when readiness evidence must survive a new thread or handoff before final sign-off.",
+            "When SRS-first is enabled, require a QA SRS coverage table that traces each UC-ID to evidence.",
         ],
         next_steps=["review-hub", "debug-hub", "context-continuity", "workflow-router"],
         body=dedent(
@@ -679,6 +692,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - risk matrix
             - regression surface
             - evidence collected
+            - SRS coverage table (UC-ID -> evidence)
             - go or no-go recommendation
 
             ## Mandatory checks
@@ -1392,6 +1406,27 @@ DISCIPLINE_UTILITY_SKILLS: Dict[str, SkillSpec] = {
             "If a code-change claim has zero file delta and zero verification output, mark it invalid unless the lane explicitly recorded a no-code outcome.",
         ],
     ),
+    "srs-clarifier": utility_provider_spec(
+        name="srs-clarifier",
+        description="Use when non-technical requests need a structured SRS-first contract before PRD or story slicing.",
+        outputs=["srs-spec draft or repaired sections with UC-ID traceability notes"],
+        references=[
+            "Translate plain-language requirements into actors, use cases, preconditions, postconditions, and exception flows.",
+            "Keep language accessible for non-technical owners while preserving deterministic IDs for traceability.",
+        ],
+        next_steps=["plan-hub", "pm", "scrum-master", "qa-governor"],
+        mission="Convert fuzzy non-technical intent into a stable SRS contract that downstream planning and QA can verify.",
+        tasks=[
+            "Create or repair `.relay-kit/contracts/srs-spec.md` using the required section template.",
+            "Assign stable UC-IDs and ensure every use case has user-facing feedback and exception flow.",
+            "Call out unresolved questions that block PRD-quality planning.",
+        ],
+        rules=[
+            "Do not skip preconditions, postconditions, or exception flows when generating use cases.",
+            "Prefer short, concrete sentences over jargon-heavy requirement language.",
+            "When SRS-first policy is disabled, this skill stays optional and should not block quick-flow work.",
+        ],
+    ),
 }
 
 BASELINE_NEXT_DISCIPLINE_SKILLS: Dict[str, SkillSpec] = {
@@ -1457,5 +1492,3 @@ def render_skill(spec: SkillSpec) -> str:
     ])
     parts.extend(f"- {item}" for item in spec.next_steps)
     return "\n".join(parts).rstrip() + "\n"
-
-

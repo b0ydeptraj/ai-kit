@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from textwrap import dedent
 from typing import Dict, List
@@ -30,6 +30,7 @@ DISCIPLINE_UTILITY_NAMES = [
     "root-cause-debugging",
     "test-first-development",
     "evidence-before-completion",
+    "srs-clarifier",
 ]
 
 LAYER_MODEL: Dict[str, Dict[str, object]] = {
@@ -118,7 +119,7 @@ HUB_SUPPORT_MAP = {
         "context-continuity",
         "handoff-context",
     ],
-    "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "impact-radar", "context-continuity", "ux-structure", "mermaid-diagrams"],
+    "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "impact-radar", "context-continuity", "ux-structure", "mermaid-diagrams", "srs-clarifier"],
     "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "browser-inspector", "multimodal-evidence", "memory-search", "runtime-doctor"],
     "fix-hub": ["developer", "execution-loop", "project-architecture", "api-integration", "data-persistence", "accessibility-review", "handoff-context"],
     "test-hub": ["qa-governor", "testing-patterns", "execution-loop", "multimodal-evidence", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "media-tooling"],
@@ -344,6 +345,7 @@ def render_bundle_gating() -> str:
         | round3 | round2 base + round3 extras | round2 + round3 docs | support references |
         | utility-providers | none by default | utility and topology docs | none |
         | discipline-utilities | none by default | discipline docs only | none |
+        | srs-first | srs-spec only (opt-in) | planning discipline docs | none |
         | round4 | round2 base + round3 extras + round4 extras | round2 + round3 + round4 docs | support references |
         | baseline | round4 scope + approved discipline utilities | round4 docs | support references |
         | baseline-next | compatibility alias for `baseline` during the promotion cycle | round4 docs | support references |
@@ -491,6 +493,3 @@ def render_review_loop() -> str:
         "",
     ]
     return "\n".join(lines).rstrip() + "\n"
-
-
-
