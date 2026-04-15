@@ -32,7 +32,7 @@
 
 Manual gate:
 
-- Cycle end date: `TBD`
+- Cycle end date: `2026-04-14`
 - Blocking issues: `0`
 - Open medium+ issues: `0`
 - Removal decision: `completed`
@@ -369,5 +369,6 @@ run-relay-kit-checkpoint.cmd
   - `pass`
 - Notes:
   - auto-generated checkpoint
+
 
 

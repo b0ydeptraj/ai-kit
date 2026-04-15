@@ -1,4 +1,4 @@
-Relay-kit Template Scrub Backlog
+﻿Relay-kit Template Scrub Backlog
 
 Policy Override (2026-04-14)
 - Large migration and cleanup work is allowed to start today (2026-04-14) after clean soak evidence.
@@ -125,7 +125,7 @@ Execution Window (post-soak / override)
 - Status update 2026-04-14: completed batch HR-1 scrub for all listed high-risk skill templates.
 - Result: vendor/imported framing removed; instructions rewritten to Relay-kit runtime voice. imported-tone scrub
   2) 2026-04-15 to 2026-04-17: Medium-Risk runtime/template scrub
-  3) 2026-04-17 to 2026-04-18: demo/docs/public wording scrub
+  3) 2026-04-17 to 2026-04-18: demo/docs/public wording scrub (completed early on 2026-04-15)
 
 Batch Gate (required before each push)
 - python scripts/validate_runtime.py
@@ -153,3 +153,8 @@ Status update 2026-04-15 (new utility candidates promoted)
 - runtime-doctor: implemented and registered in runtime.
   - template: templates/skills/runtime-doctor/SKILL.md
   - script: scripts/runtime_doctor.py
+
+Status update 2026-04-15 (demo/docs/public wording scrub complete)
+- Completed public docs wording cleanup ahead of planned window.
+- Added docs/public-docs-index.md as current-doc entrypoint.
+- Marked migration-era docs as historical/archived where applicable.
