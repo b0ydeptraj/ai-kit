@@ -42,6 +42,12 @@ Run an explicit accessibility gate for keyboard, focus, semantic structure, labe
 ### skill-gauntlet
 Run deterministic regression checks over SKILL.md trigger wording and required structure before trusting runtime routing quality.
 
+### impact-radar
+Summarize blast radius from changed files and recommend gates before merge on risky batches.
+
+### runtime-doctor
+Detect adapter parity drift and missing runtime artifacts before they become release regressions.
+
 ### migration-guard
 Detect stale compatibility tokens and block cutover merges until old runtime aliases are removed or explicitly allowlisted.
 

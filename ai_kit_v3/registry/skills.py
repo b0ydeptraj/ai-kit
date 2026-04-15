@@ -1163,6 +1163,58 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "Keep the gauntlet report small and path-specific so fixes are easy to apply.",
         ],
     ),
+    "impact-radar": utility_provider_spec(
+        name="impact-radar",
+        description="Use when planning or review needs explicit blast-radius analysis before touching runtime, adapters, templates, or release-sensitive surfaces.",
+        outputs=[
+            "impact-area and changed-file breakdown appended to workflow-state or review notes",
+            "risk level plus recommended verification gates for the current diff",
+        ],
+        references=[
+            "Use `python scripts/impact_radar.py <project>` for deterministic working-tree analysis.",
+            "Use `--base` and `--head` when the lane needs commit-range impact evidence for review.",
+        ],
+        next_steps=["plan-hub", "review-hub", "qa-governor", "workflow-router"],
+        mission="Make change blast radius explicit before merge so gate selection is evidence-based instead of guess-based.",
+        tasks=[
+            "Classify changed files into runtime, adapter, scripts, templates, docs, and packaging impact areas.",
+            "Return a compact risk level with the concrete reason it was assigned.",
+            "Recommend the smallest gate set that still protects migration and runtime safety.",
+            "Highlight high-impact areas that need additional manual review before merge.",
+        ],
+        rules=[
+            "Use file-based evidence from git diff or working tree status; avoid speculative risk claims.",
+            "Keep recommendations command-ready so the owning hub can execute immediately.",
+            "Do not approve merges; provide impact evidence and required gates.",
+            "Escalate to review-hub or qa-governor when impact spans runtime-core and adapter surfaces.",
+        ],
+    ),
+    "runtime-doctor": utility_provider_spec(
+        name="runtime-doctor",
+        description="Use when runtime integrity may have drifted and you need deterministic diagnostics over adapters, artifacts, and lane state surfaces.",
+        outputs=[
+            "runtime drift findings with exact surface references appended to qa-report or workflow-state",
+            "pass or hold recommendation for runtime health based on parity and artifact checks",
+        ],
+        references=[
+            "Use `python scripts/runtime_doctor.py <project> --strict` for deterministic runtime diagnostics.",
+            "Use `--state-mode live` when validating active project state artifacts before release claims.",
+        ],
+        next_steps=["debug-hub", "test-hub", "review-hub", "fix-hub"],
+        mission="Catch adapter parity and runtime artifact drift early so regressions are blocked before release or cutover batches.",
+        tasks=[
+            "Verify required runtime docs and state artifacts exist under `.relay-kit`.",
+            "Check adapter skill parity against canonical registry skills across `.claude`, `.agent`, and `.codex` surfaces.",
+            "Flag missing, extra, or drifted skills with exact adapter paths.",
+            "In live mode, detect stale placeholder state markers that invalidate readiness claims.",
+        ],
+        rules=[
+            "Keep findings deterministic and path-specific so reruns are comparable.",
+            "Distinguish template diagnostics from live runtime diagnostics in the final report.",
+            "Do not auto-fix runtime drift; hand actionable findings back to fix-hub.",
+            "Return hold when strict checks fail on parity or required artifacts.",
+        ],
+    ),
     "migration-guard": utility_provider_spec(
         name="migration-guard",
         description="Use when a migration or naming cutover might leave stale compatibility tokens behind. Enforce token-level cutover policy with an explicit allowlist gate.",
@@ -1405,4 +1457,5 @@ def render_skill(spec: SkillSpec) -> str:
     ])
     parts.extend(f"- {item}" for item in spec.next_steps)
     return "\n".join(parts).rstrip() + "\n"
+
 

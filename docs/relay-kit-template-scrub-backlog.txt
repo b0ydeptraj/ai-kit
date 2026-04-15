@@ -137,3 +137,19 @@ Batch Gate (required before each push)
 
 Stop Rule
 - If any gate fails, stop at that batch, fix, re-run gates, then continue.
+
+Status update 2026-04-15 (MR-1 complete)
+- Completed medium-risk template scrub for all entries listed in this file.
+- Rewrote listed templates to Relay-kit voice with explicit sections: When to Use, Output Contract, Workflow, Scripts, Guardrails.
+- Validation gates executed after changes:
+  - py -3.12 scripts/validate_runtime.py
+  - py -3.12 scripts/skill_gauntlet.py . --strict
+  - py -3.12 scripts/migration_guard.py . --strict
+
+Status update 2026-04-15 (new utility candidates promoted)
+- impact-radar: implemented and registered in runtime.
+  - template: templates/skills/impact-radar/SKILL.md
+  - script: scripts/impact_radar.py
+- runtime-doctor: implemented and registered in runtime.
+  - template: templates/skills/runtime-doctor/SKILL.md
+  - script: scripts/runtime_doctor.py

@@ -16,6 +16,8 @@ UTILITY_PROVIDER_NAMES = [
     "release-readiness",
     "accessibility-review",
     "skill-gauntlet",
+    "impact-radar",
+    "runtime-doctor",
     "migration-guard",
     "context-continuity",
     "handoff-context",
@@ -111,14 +113,16 @@ HUB_SUPPORT_MAP = {
         "doc-pointers",
         "repo-map",
         "memory-search",
+        "impact-radar",
+        "runtime-doctor",
         "context-continuity",
         "handoff-context",
     ],
-    "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "context-continuity", "ux-structure", "mermaid-diagrams"],
-    "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "browser-inspector", "multimodal-evidence", "memory-search"],
+    "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "impact-radar", "context-continuity", "ux-structure", "mermaid-diagrams"],
+    "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "browser-inspector", "multimodal-evidence", "memory-search", "runtime-doctor"],
     "fix-hub": ["developer", "execution-loop", "project-architecture", "api-integration", "data-persistence", "accessibility-review", "handoff-context"],
-    "test-hub": ["qa-governor", "testing-patterns", "execution-loop", "multimodal-evidence", "release-readiness", "accessibility-review", "skill-gauntlet", "migration-guard", "context-continuity", "media-tooling"],
-    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "doc-pointers", "memory-search", "release-readiness", "accessibility-review", "skill-gauntlet", "migration-guard", "context-continuity", "mermaid-diagrams"],
+    "test-hub": ["qa-governor", "testing-patterns", "execution-loop", "multimodal-evidence", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "media-tooling"],
+    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "doc-pointers", "memory-search", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "mermaid-diagrams"],
 }
 
 
@@ -134,6 +138,8 @@ UTILITY_PROVIDER_RULES = {
     "release-readiness": "Apply explicit pre-deploy and post-deploy smoke gates so release claims are backed by concrete operational signals.",
     "accessibility-review": "Run an explicit accessibility gate for keyboard, focus, semantic structure, labels, and contrast before approving frontend readiness.",
     "skill-gauntlet": "Run deterministic regression checks over SKILL.md trigger wording and required structure before trusting runtime routing quality.",
+    "impact-radar": "Summarize blast radius from changed files and recommend gates before merge on risky batches.",
+    "runtime-doctor": "Detect adapter parity drift and missing runtime artifacts before they become release regressions.",
     "migration-guard": "Detect stale compatibility tokens and block cutover merges until old runtime aliases are removed or explicitly allowlisted.",
     "context-continuity": "Capture and rehydrate durable continuity artifacts so lane state survives chat truncation, thread changes, and AI handoffs.",
     "handoff-context": "Prepare the minimum viable context pack for the next skill instead of flooding it with irrelevant detail.",
@@ -485,4 +491,6 @@ def render_review_loop() -> str:
         "",
     ]
     return "\n".join(lines).rstrip() + "\n"
+
+
 

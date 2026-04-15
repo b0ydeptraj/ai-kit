@@ -1,4 +1,4 @@
-version: 0.2
+﻿version: 0.2
 philosophy: hub-and-spoke-runtime
 objective: >-
   Keep the active relay-kit runtime adapter-neutral at the skill layer while preserving
@@ -53,6 +53,8 @@ layers:
     - release-readiness
     - accessibility-review
     - skill-gauntlet
+    - impact-radar
+    - runtime-doctor
     - migration-guard
     - context-continuity
     - handoff-context
@@ -123,3 +125,5 @@ legacy_compatibility:
     - Legacy workflow, rules, and shared assets belong to migration support only.
     - Legacy command and agent surfaces belong to migration support only.
     - Codex support assets may be materialized by the legacy generator under `.codex/support`, but they are not part of the active v3 runtime taxonomy.
+
+

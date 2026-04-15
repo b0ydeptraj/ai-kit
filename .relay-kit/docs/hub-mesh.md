@@ -70,6 +70,8 @@ Can hand off to:
 - doc-pointers
 - repo-map
 - memory-search
+- impact-radar
+- runtime-doctor
 - context-continuity
 - handoff-context
 
@@ -79,6 +81,7 @@ Can hand off to:
 - architect
 - scrum-master
 - research
+- impact-radar
 - context-continuity
 - ux-structure
 - mermaid-diagrams
@@ -91,6 +94,7 @@ Can hand off to:
 - browser-inspector
 - multimodal-evidence
 - memory-search
+- runtime-doctor
 
 ### fix-hub
 - developer
@@ -109,6 +113,8 @@ Can hand off to:
 - release-readiness
 - accessibility-review
 - skill-gauntlet
+- impact-radar
+- runtime-doctor
 - migration-guard
 - context-continuity
 - media-tooling
@@ -122,6 +128,8 @@ Can hand off to:
 - release-readiness
 - accessibility-review
 - skill-gauntlet
+- impact-radar
+- runtime-doctor
 - migration-guard
 - context-continuity
 - mermaid-diagrams

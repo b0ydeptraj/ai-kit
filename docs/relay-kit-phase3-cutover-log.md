@@ -99,3 +99,13 @@ Complete phase-3 cutover with canonical runtime paths and no active compatibilit
 ## Notes
 - Historical compatibility docs remain intentionally allowlisted for traceability.
 - Active runtime surfaces are expected to contain no old compatibility tokens.
+
+## Post-cutover extension update (2026-04-15)
+- Medium-risk template scrub batch completed and validated.
+- Added and activated utility providers:
+  - impact-radar
+  - runtime-doctor
+- Runtime regeneration completed for `.claude/skills`, `.agent/skills`, `.codex/skills`, and `.relay-kit/docs`.
+- Additional validation evidence:
+  - `py -3.12 scripts/runtime_doctor.py . --strict` -> pass
+  - adapter smoke for codex, claude, antigravity, generic -> pass

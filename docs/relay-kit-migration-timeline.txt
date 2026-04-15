@@ -94,3 +94,27 @@ Mục tiêu:
 - migration-guard (uu tien trung binh, chi mo khi chuan bi rename lon)
   - gate rieng cho phase `.ai-kit` -> `.relay-kit`
   - cover alias removal va path rename
+
+8. Update 2026-04-15 (post-cutover implementation)
+
+- impact-radar: implemented and integrated into v3 runtime.
+  - script: scripts/impact_radar.py
+  - utility provider wiring: ai_kit_v3/registry/topology.py and ai_kit_v3/registry/skills.py
+  - manifest wiring: skills.manifest.yaml
+
+- runtime-doctor: implemented and integrated into v3 runtime.
+  - script: scripts/runtime_doctor.py
+  - utility provider wiring: ai_kit_v3/registry/topology.py and ai_kit_v3/registry/skills.py
+  - manifest wiring: skills.manifest.yaml
+
+- Medium-risk template/runtime scrub: completed for all entries tracked in template scrub backlog.
+
+- Validation evidence (2026-04-15):
+  - py -3.12 scripts/validate_runtime.py -> pass
+  - py -3.12 scripts/skill_gauntlet.py . --strict -> pass
+  - py -3.12 scripts/migration_guard.py . --strict -> pass
+  - py -3.12 scripts/runtime_doctor.py . --strict -> pass
+  - py -3.12 relay_kit_public_cli.py C:\temp\rk-codex --codex -> pass
+  - py -3.12 relay_kit_public_cli.py C:\temp\rk-claude --claude -> pass
+  - py -3.12 relay_kit_public_cli.py C:\temp\rk-antigravity --antigravity -> pass
+  - py -3.12 relay_kit_public_cli.py C:\temp\rk-generic --generic -> pass
