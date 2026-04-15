@@ -1,5 +1,8 @@
 ﻿# Relay-kit Phase 3 Physical Rename Runbook
 
+> Historical runbook: physical rename step was completed on `2026-04-14`; this file is retained for audit/recovery reference.
+
+
 This runbook is for Batch 4 only.
 
 ## Goal
@@ -35,3 +38,4 @@ If any gate fails after physical rename:
 2. Reopen terminal at previous path.
 3. Re-run validation to confirm baseline state.
 4. Fix issues in a new commit and repeat Batch 4.
+

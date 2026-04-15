@@ -1,4 +1,7 @@
-# round4-design
+﻿# round4-design
+
+> Historical note: this document is kept for migration/design traceability. Active runtime naming is `relay_kit.py`, `relay_kit_legacy.py`, `.relay-kit/`, and `.relay-kit-prompts/`.
+
 
 Round 4 focuses on hardening the 4-layer model rather than adding more disconnected prompts.
 
@@ -33,3 +36,4 @@ Round 4 focuses on hardening the 4-layer model rather than adding more disconnec
 - `round2` should keep working and should not implicitly emit round3 or round4 extras in a clean output directory.
 - `round3` should keep working and should not emit round4-only extras in a clean output directory.
 - `round4` should emit the full hardened topology.
+

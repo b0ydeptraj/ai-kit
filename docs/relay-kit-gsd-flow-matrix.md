@@ -1,4 +1,7 @@
-# Relay-kit vs GSD flow matrix (2026-04-02)
+﻿# Relay-kit vs GSD flow matrix (2026-04-02)
+
+> Historical comparison note: produced during pre-cutover hardening and retained for architectural context.
+
 
 This note compares Relay-kit against:
 
@@ -42,3 +45,4 @@ Goal: identify equivalent flows already present in Relay-kit and tighten them wi
 - No new skills created.
 - No topology or bundle rename.
 - No `.ai-kit` -> `.relay-kit` physical rename in this phase.
+

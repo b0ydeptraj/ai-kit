@@ -1,4 +1,6 @@
-# discipline-utilities-baseline-proposal
+﻿# discipline-utilities-baseline-proposal
+
+> Post-cutover update (2026-04-15): paths and runtime naming below use canonical Relay-kit locations.
 
 ## Status
 
@@ -21,11 +23,11 @@ Current skills in scope:
 
 The current baseline already has a clear 4-layer model and strict bundle gating:
 
-- runtime entrypoint: `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\python_kit.py`
-- bundle registry: `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\ai_kit_v3\generator.py`
-- bundle gating: `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\ai_kit_v3\registry\gating.py`
-- skill registry: `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\ai_kit_v3\registry\skills.py`
-- topology docs: `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.ai-kit\docs\layer-model.md`
+- runtime entrypoint: `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\relay_kit.py`
+- bundle registry: `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\ai_kit_v3\generator.py`
+- bundle gating: `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\ai_kit_v3\registry\gating.py`
+- skill registry: `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\ai_kit_v3\registry\skills.py`
+- topology docs: `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.relay-kit\docs\layer-model.md`
 
 That means any future fold must preserve:
 
@@ -73,9 +75,9 @@ Red flags:
 
 The skill must behave the same when generated into:
 
-- `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\`
-- `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.agent\skills\`
-- `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.codex\skills\`
+- `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.claude\skills\`
+- `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.agent\skills\`
+- `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.codex\skills\`
 
 If one adapter needs special caveats, the skill should stay optional.
 
@@ -105,12 +107,12 @@ The current overlay is wired into the runtime as follows.
 Evidence:
 
 - runtime skill exists in:
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\root-cause-debugging\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.agent\skills\root-cause-debugging\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.codex\skills\root-cause-debugging\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.claude\skills\root-cause-debugging\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.agent\skills\root-cause-debugging\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.codex\skills\root-cause-debugging\SKILL.md`
 - referenced from:
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\debug-hub\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\execution-loop\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.claude\skills\debug-hub\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.claude\skills\execution-loop\SKILL.md`
 
 Assessment after gauntlet:
 
@@ -132,11 +134,11 @@ Future fold eligibility:
 Evidence:
 
 - runtime skill exists in:
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\test-first-development\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.agent\skills\test-first-development\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.codex\skills\test-first-development\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.claude\skills\test-first-development\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.agent\skills\test-first-development\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.codex\skills\test-first-development\SKILL.md`
 - referenced from:
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\developer\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.claude\skills\developer\SKILL.md`
 
 Assessment after gauntlet:
 
@@ -158,13 +160,13 @@ Future fold eligibility:
 Evidence:
 
 - runtime skill exists in:
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\evidence-before-completion\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.agent\skills\evidence-before-completion\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.codex\skills\evidence-before-completion\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.claude\skills\evidence-before-completion\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.agent\skills\evidence-before-completion\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.codex\skills\evidence-before-completion\SKILL.md`
 - referenced from:
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\test-hub\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\qa-governor\SKILL.md`
-  - `C:\Users\b0ydeptrai\OneDrive\Documents\python-kit\.claude\skills\execution-loop\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.claude\skills\test-hub\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.claude\skills\qa-governor\SKILL.md`
+  - `C:\Users\b0ydeptrai\OneDrive\Documents\relay-kit\.claude\skills\execution-loop\SKILL.md`
 
 Assessment after gauntlet:
 
@@ -245,3 +247,5 @@ The promoted result is now:
 - `test-first-development` remains optional until one more cycle proves lower ceremony on ordinary implementation work
 
 That preserves the current 4-layer architecture, keeps `round4` clean, and converts the strongest two utilities into official baseline behavior based on evidence rather than intuition.
+
+

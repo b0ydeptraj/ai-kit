@@ -1,4 +1,7 @@
-# Relay-kit `.ai-kit` to `.relay-kit` Migration Matrix
+﻿# Relay-kit `.ai-kit` to `.relay-kit` Migration Matrix
+
+> Archived migration record: phase-2 planning artifact kept for audit history. Phase-3 cutover completed on `2026-04-14` and canonical runtime root is `.relay-kit/`.
+
 
 Updated: 2026-04-01  
 Owner: phase-2 migration lane
@@ -46,4 +49,5 @@ It defines what stays now, what gets compatibility preparation now, and what is 
 - Public CLI surface is stable (`--codex`, `--claude`, `--antigravity`).
 - Runtime generation and validation remain green without physical `.ai-kit` rename.
 - Phase-3 work can execute as a bounded path-flip batch plus compatibility cycle.
+
 

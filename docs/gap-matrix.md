@@ -1,4 +1,7 @@
-# BMAD ↔ ai-kit gap matrix after round 2
+﻿# BMAD â†” ai-kit gap matrix after round 2
+
+> Historical note: this document is kept for migration/design traceability. Active runtime naming is `relay_kit.py`, `relay_kit_legacy.py`, `.relay-kit/`, and `.relay-kit-prompts/`.
+
 
 | Capability | Current ai-kit v2 state | Added in this upgrade | Practical effect |
 |---|---|---|---|
@@ -10,3 +13,4 @@
 | Runtime skill cleanliness | `execution-loop` currently leaks authoring text into runtime skill | Clean `execution-loop` template | Safer, more professional skill output |
 | Generator maintainability | Heavy `PROMPTS` dict in a single script | Registry modules (`skills`, `artifacts`, `workflows`, `support_refs`) | Easier to extend without breaking cross-skill linkage |
 | Legacy support skill durability | `project-architecture`, `api-integration`, `data-persistence`, `testing-patterns` are prompt snippets in the old generator | Registry-native support skills + `.ai-kit/references/` templates | Architecture, API, persistence, and test knowledge become living shared references |
+

@@ -1,4 +1,7 @@
-# Round 2 changelog
+﻿# Round 2 changelog
+
+> Historical note: this document is kept for migration/design traceability. Active runtime naming is `relay_kit.py`, `relay_kit_legacy.py`, `.relay-kit/`, and `.relay-kit-prompts/`.
+
 
 ## New bundle options
 
@@ -30,3 +33,4 @@
 Round 1 introduced orchestration, routing, and artifact contracts.
 
 Round 2 upgrades the most important legacy analysis skills from loose generator prompts into registry-native support skills with stable output locations that can be consumed by Architect, Developer, QA, and code review flows.
+

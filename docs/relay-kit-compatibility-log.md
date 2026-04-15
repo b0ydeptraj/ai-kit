@@ -1,11 +1,14 @@
-# Relay-kit compatibility cycle log
+﻿# Relay-kit compatibility cycle log
+
+> Archived status: compatibility soak cycle closed on `2026-04-14` during phase-3 cutover. This log is retained as historical evidence.
+
 
 - Cycle start commit: `8cc21b6`
 - Technical rename commit: `d5928c9`
 - Cycle start date: `2026-03-17`
 - Cycle target length: `14 days`
-- Current status: `active`
-- Removal decision: `not ready`
+- Current status: `closed`
+- Removal decision: `completed`
 
 ## Summary template
 
@@ -32,7 +35,7 @@ Manual gate:
 - Cycle end date: `TBD`
 - Blocking issues: `0`
 - Open medium+ issues: `0`
-- Removal decision: `not ready`
+- Removal decision: `completed`
 
 ## Minimum evidence required
 
@@ -366,3 +369,5 @@ run-relay-kit-checkpoint.cmd
   - `pass`
 - Notes:
   - auto-generated checkpoint
+
+

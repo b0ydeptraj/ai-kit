@@ -1,4 +1,4 @@
-[English](README.md) | [Tiếng Việt](README.vi.md)
+﻿[English](README.md) | [Tiáº¿ng Viá»‡t](README.vi.md)
 
 # Relay-kit
 
@@ -205,6 +205,10 @@ Phase 3 cutover is active and canonical runtime paths are now:
 Historical compatibility timeline and removal log:
 - [`docs/relay-kit-compatibility-cycle.md`](docs/relay-kit-compatibility-cycle.md)
 
+## Public docs index
+
+- [docs/public-docs-index.md](docs/public-docs-index.md)
+
 ## Deeper docs
 
 - Start flow:
@@ -234,3 +238,5 @@ Historical compatibility timeline and removal log:
 ## Legacy note
 
 Legacy kits still exist for migration and compatibility work. They are not the main Relay-kit runtime story.
+
+

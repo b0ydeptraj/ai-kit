@@ -1,4 +1,7 @@
-# Round 3 design notes
+﻿# Round 3 design notes
+
+> Historical note: this document is kept for migration/design traceability. Active runtime naming is `relay_kit.py`, `relay_kit_legacy.py`, `.relay-kit/`, and `.relay-kit-prompts/`.
+
 
 Round 3 keeps the round 2 registry structure but adds a clearer 4-layer topology.
 
@@ -50,3 +53,4 @@ This layer remains mostly legacy and stateless. Round 3 does not rewrite those u
 - add `round3` bundles
 - preserve `python_kit_legacy.py`
 - avoid destructive refactors of legacy utility packs
+
