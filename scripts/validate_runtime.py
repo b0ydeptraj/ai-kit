@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Validate Relay-kit runtime integrity for the post-cutover model."""
 
 from __future__ import annotations
@@ -31,6 +31,7 @@ ROUND4_DISCIPLINE_SKILLS = {
     "root-cause-debugging",
     "evidence-before-completion",
     "test-first-development",
+    "srs-clarifier",
 }
 BASELINE_NEXT_APPROVED = {
     "root-cause-debugging",
@@ -153,6 +154,18 @@ def validate_migration_guard() -> None:
     )
 
 
+def validate_srs_guard() -> None:
+    run_command(
+        [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "srs_guard.py"),
+            str(REPO_ROOT),
+            "--strict",
+        ],
+        "srs_guard",
+    )
+
+
 def validate_context_continuity_utility() -> None:
     temp_dir = Path(tempfile.mkdtemp(prefix="relay-kit-continuity-"))
     try:
@@ -227,7 +240,7 @@ def validate_adapter_targets() -> None:
 
 def validate_list_output() -> None:
     output = run_cli(CANONICAL_ENTRYPOINT, "--list-skills")
-    for bundle in ("round4", "discipline-utilities", "baseline", "baseline-next"):
+    for bundle in ("round4", "discipline-utilities", "srs-first", "baseline", "baseline-next"):
         if bundle not in output:
             fail(f"{CANONICAL_ENTRYPOINT} --list-skills output is missing bundle: {bundle}")
 
@@ -311,6 +324,7 @@ def validate_generated_bundle(bundle: str) -> None:
                     "root-cause-debugging",
                     "test-first-development",
                     "evidence-before-completion",
+                    "srs-clarifier",
                 },
             )
 
@@ -392,8 +406,9 @@ def main() -> int:
     validate_skill_gauntlet()
     validate_context_continuity_utility()
     validate_migration_guard()
+    validate_srs_guard()
     validate_checked_in_docs()
-    for bundle in ("round4", "discipline-utilities", "baseline", "baseline-next"):
+    for bundle in ("round4", "discipline-utilities", "srs-first", "baseline", "baseline-next"):
         validate_generated_bundle(bundle)
         validate_generated_generic_bundle(bundle)
     validate_legacy_generation()
