@@ -16,6 +16,7 @@ Use this page as the public entrypoint for current runtime behavior.
 - `docs/relay-kit-srs-first-nontech.md`
 - `docs/relay-kit-5min-quickstart.md`
 - `docs/relay-kit-beta-soak-log.md`
+- `docs/relay-kit-release-gate-snapshot-2026-04-17.md`
 - `docs/history/relay-kit-compatibility-cycle.md` (archived checklist with final decision)
 
 Canonical runtime naming:

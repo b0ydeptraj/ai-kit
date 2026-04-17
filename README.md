@@ -168,6 +168,7 @@ More detail:
 - [`docs/relay-kit-srs-first-nontech.md`](docs/relay-kit-srs-first-nontech.md)
 - [`docs/relay-kit-5min-quickstart.md`](docs/relay-kit-5min-quickstart.md)
 - [`docs/relay-kit-beta-soak-log.md`](docs/relay-kit-beta-soak-log.md)
+- [`docs/relay-kit-release-gate-snapshot-2026-04-17.md`](docs/relay-kit-release-gate-snapshot-2026-04-17.md)
 
 ## How it works
 

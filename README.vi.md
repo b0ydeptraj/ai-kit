@@ -154,6 +154,7 @@ Xem chi tiết hơn:
 - [`docs/relay-kit-context-continuity.md`](docs/relay-kit-context-continuity.md)
 - [`docs/relay-kit-5min-quickstart.md`](docs/relay-kit-5min-quickstart.md)
 - [`docs/relay-kit-beta-soak-log.md`](docs/relay-kit-beta-soak-log.md)
+- [`docs/relay-kit-release-gate-snapshot-2026-04-17.md`](docs/relay-kit-release-gate-snapshot-2026-04-17.md)
 
 ## Nó hoạt động như thế nào
 

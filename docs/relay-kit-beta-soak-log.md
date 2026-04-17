@@ -27,3 +27,11 @@ python scripts/soak_beta.py /path/to/project-a /path/to/project-b --append-repor
   - `.relay-kit/docs`
   - `.relay-kit/references`
 - `scripts/validate_runtime.py` still passes at repo root after soak.
+
+## Soak checkpoint 2026-04-17 15:39:50
+
+| Project | Status | Duration (s) | Missing dirs |
+|---|---|---:|---|
+| `C:\Users\b0ydeptrai\OneDrive\Documents\prompt-genius` | `pass` | `0.13` | - |
+| `C:\Users\b0ydeptrai\OneDrive\Documents\fakeinfo-fix` | `pass` | `0.11` | - |
+| `C:\Users\b0ydeptrai\OneDrive\Documents\donut` | `pass` | `0.11` | - |
