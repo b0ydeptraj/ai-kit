@@ -14,6 +14,7 @@ Use this page as the public entrypoint for current runtime behavior.
 - `docs/relay-kit-context-continuity.md`
 - `docs/relay-kit-context-continuity-design-note.md`
 - `docs/relay-kit-srs-first-nontech.md`
+- `docs/relay-kit-5min-quickstart.md`
 - `docs/history/relay-kit-compatibility-cycle.md` (archived checklist with final decision)
 
 Canonical runtime naming:

@@ -152,6 +152,7 @@ Xem chi tiết hơn:
 - [`docs/relay-kit-accessibility-review.md`](docs/relay-kit-accessibility-review.md)
 - [`docs/relay-kit-skill-gauntlet.md`](docs/relay-kit-skill-gauntlet.md)
 - [`docs/relay-kit-context-continuity.md`](docs/relay-kit-context-continuity.md)
+- [`docs/relay-kit-5min-quickstart.md`](docs/relay-kit-5min-quickstart.md)
 
 ## Nó hoạt động như thế nào
 

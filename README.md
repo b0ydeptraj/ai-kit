@@ -76,6 +76,12 @@ List available skills and bundles:
 python relay_kit.py --list-skills
 ```
 
+Run 1-command onboarding smoke:
+
+```bash
+python scripts/smoke_onboarding.py
+```
+
 Generate the active baseline:
 
 ```bash
@@ -160,6 +166,7 @@ More detail:
 - [`docs/relay-kit-skill-gauntlet.md`](docs/relay-kit-skill-gauntlet.md)
 - [`docs/relay-kit-context-continuity.md`](docs/relay-kit-context-continuity.md)
 - [`docs/relay-kit-srs-first-nontech.md`](docs/relay-kit-srs-first-nontech.md)
+- [`docs/relay-kit-5min-quickstart.md`](docs/relay-kit-5min-quickstart.md)
 
 ## How it works
 
