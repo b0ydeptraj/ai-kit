@@ -92,9 +92,26 @@ def spec_for(name: str):
 
 
 
+def bundle_skill_names(bundle: str) -> List[str]:
+    """Return a stable, duplicate-free skill list for a bundle."""
+    seen: dict[str, None] = {}
+    for name in BUNDLES[bundle]:
+        seen.setdefault(name, None)
+    return list(seen.keys())
+
+
+
+def _ordered_unique_paths(paths: List[Path]) -> List[Path]:
+    unique: dict[Path, Path] = {}
+    for path in paths:
+        unique[path] = path
+    return [unique[path] for path in sorted(unique, key=lambda item: item.as_posix())]
+
+
+
 def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
     written: List[Path] = []
-    skill_names = BUNDLES[bundle]
+    skill_names = bundle_skill_names(bundle)
     relative_targets = targets_for(ai)
     if ai == "generic":
         for name in skill_names:
@@ -104,7 +121,7 @@ def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
             for output in mirrored_generic_paths(project_path, f"{name}.md"):
                 write_text(output, render_skill(spec))
                 written.append(output)
-        return written
+        return _ordered_unique_paths(written)
 
     ensure_dirs(project_path, relative_targets)
     for rel_target in relative_targets:
@@ -115,7 +132,7 @@ def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
             output = project_path / rel_target / name / "SKILL.md"
             write_text(output, render_skill(spec))
             written.append(output)
-    return written
+    return _ordered_unique_paths(written)
 
 
 
@@ -235,7 +252,7 @@ def generate_relay_bundle(project_path: str, ai: str, bundle: str, with_contract
         written.extend(emit_reference_templates(base, bundle))
     if with_docs:
         written.extend(emit_docs(base, bundle))
-    return written
+    return _ordered_unique_paths(written)
 
 
 
