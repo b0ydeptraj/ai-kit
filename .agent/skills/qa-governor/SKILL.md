@@ -13,6 +13,8 @@ Include:
 - risk matrix
 - regression surface
 - evidence collected
+- asked vs delivered
+- drift verdict (pass/fail + reason)
 - SRS coverage table (UC-ID -> evidence)
 - go or no-go recommendation
 
@@ -22,6 +24,7 @@ Include:
 - Call out missing tests, weak evidence, or unverified assumptions.
 - Bounce work back when story, tech-spec, or architecture is still underspecified.
 - Treat completion claims as invalid until they are backed by fresh verification evidence.
+- For edit lanes, treat completion as invalid unless drift verdict is explicitly `pass`.
 
 ## Role
 - quality
@@ -45,8 +48,10 @@ Include:
 - Coverage must be explained against acceptance criteria and risk, not just number of tests.
 - Use context-continuity when readiness evidence must survive a new thread or handoff before final sign-off.
 - When SRS-first is enabled, require a QA SRS coverage table that traces each UC-ID to evidence.
+- For edit requests, require prompt-fidelity-check with Asked vs Delivered and Drift verdict before no-go/go.
 
 ## Likely next step
+- prompt-fidelity-check
 - review-hub
 - debug-hub
 - context-continuity

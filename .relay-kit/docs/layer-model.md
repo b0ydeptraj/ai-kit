@@ -28,7 +28,10 @@ Stateless capabilities and analysis helpers. These should be called by hubs or o
 - doc-pointers
 - sequential-thinking
 - problem-solving
+- intent-lock
+- entity-lock
 - multimodal-evidence
+- prompt-fidelity-check
 - browser-inspector
 - repo-map
 - memory-search
@@ -43,6 +46,9 @@ Stateless capabilities and analysis helpers. These should be called by hubs or o
 - mermaid-diagrams
 - ux-structure
 - media-tooling
+- aesthetic
+- frontend-design
+- ui-styling
 
 ## layer-4-specialists-and-standalones
 Role specialists, native support skills, and domain standalones that actually produce architecture, stories, code, and quality evidence.

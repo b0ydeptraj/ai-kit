@@ -21,8 +21,17 @@ Break hard debugging or planning problems into explicit steps without claiming o
 ### problem-solving
 Generate options, trade-offs, and root-cause hypotheses grounded in current evidence.
 
+### intent-lock
+Lock allowed versus forbidden changes and done criteria before edit requests can proceed.
+
+### entity-lock
+Map target and non-target media or UI entities to stable IDs before edit operations run.
+
 ### multimodal-evidence
 Interpret screenshots, diagrams, logs, or media artifacts and hand observations back to the active hub.
+
+### prompt-fidelity-check
+Prove delivered behavior matches requested behavior with asked-versus-delivered drift verdict.
 
 ### browser-inspector
 Collect browser-side evidence such as console, network, layout, and performance observations.

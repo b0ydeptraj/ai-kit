@@ -15,6 +15,18 @@ Turn a symptom into evidence and a decision, not into random edits.
    - `test-hub` for missing or weak evidence,
    - `plan-hub` when the issue is upstream ambiguity.
 
+## Failure decision rules
+- If no evidence changed after two loops, escalate to scout-hub for context refresh.
+- If root cause crosses subsystem boundaries, route to workflow-router for lane reclassification.
+- Capture the exact command or artifact that disproved each rejected hypothesis.
+
+## Evidence quality bar
+- Reproduction signal is stable across at least one rerun.
+- Notes include what changed between attempts.
+- Proposed fix path names impacted files and boundary risks.
+- Missing evidence is explicit, not implied.
+- Next hub is chosen from evidence, not preference.
+
 ## Role
 - debug-hub
 
@@ -38,6 +50,13 @@ Turn a symptom into evidence and a decision, not into random edits.
 - Escalate to plan-hub if the 'bug' is actually an unclear requirement or architectural mismatch.
 
 ## Likely next step
+- root-cause-debugging
+- sequential-thinking
+- problem-solving
+- browser-inspector
+- multimodal-evidence
+- memory-search
+- runtime-doctor
 - fix-hub
 - test-hub
 - plan-hub

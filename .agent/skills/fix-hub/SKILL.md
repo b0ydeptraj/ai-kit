@@ -12,6 +12,21 @@ Convert a known problem into a bounded implementation path that can be executed 
 3. Hand off to `developer` for execution.
 4. Route to `test-hub` immediately after implementation evidence exists.
 
+## Fix guardrails
+- Keep API and persistence changes explicit by listing affected contracts and tables.
+- Use support skills before coding when boundary risk is high.
+- If the fix adds new behavior, require a test-first note before implementation handoff.
+
+## Implementation handoff checklist
+- Files to edit are listed with scope boundaries.
+- Non-goals are explicit to prevent scope creep.
+- Verification commands are ready before coding starts.
+- Migration or compatibility risks are named when present.
+- Rollback hint is recorded for high-impact changes.
+- Reviewer owner for the fix path is identified.
+- Expected blast radius is summarized in one sentence.
+- Required post-fix monitoring signal is named.
+
 ## Role
 - fix-hub
 
@@ -34,7 +49,15 @@ Convert a known problem into a bounded implementation path that can be executed 
 - If the fix expands the contract or architecture, route back through workflow-router or plan-hub.
 
 ## Likely next step
+- project-architecture
+- dependency-management
+- api-integration
+- data-persistence
 - developer
+- execution-loop
+- test-first-development
+- accessibility-review
+- handoff-context
 - test-hub
 - review-hub
 - workflow-router

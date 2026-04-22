@@ -26,6 +26,7 @@ STATE_FILES = [
     ".relay-kit/state/team-board.md",
     ".relay-kit/state/lane-registry.md",
     ".relay-kit/state/handoff-log.md",
+    ".relay-kit/state/fidelity-policy.json",
 ]
 
 ADAPTERS = [

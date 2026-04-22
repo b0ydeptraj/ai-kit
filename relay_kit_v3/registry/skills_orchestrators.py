@@ -8,20 +8,22 @@ from .skill_models import SkillSpec
 ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
     "workflow-router": SkillSpec(
         name="workflow-router",
-        description="Use when a request arrives, the user asks what to do next, or scope or complexity is unclear. Route a request through the right delivery track, choose the active orchestrator or hub, keep workflow-state current, and enforce SRS-first policy when it is enabled.",
+        description="Use when a request arrives, the user asks what to do next, or scope or complexity is unclear. Route a request through the right delivery track, enforce intent-fidelity locks for edit work, choose the active orchestrator or hub, keep workflow-state current, and enforce SRS-first policy when it is enabled.",
         role="routing-kernel",
         layer="layer-1-orchestrators",
         inputs=["user request", ".relay-kit/contracts/project-context.md (if present)", ".relay-kit/state/workflow-state.md (if present)", ".relay-kit/state/team-board.md (if present)"],
-        outputs=[".relay-kit/state/workflow-state.md", ".relay-kit/contracts/srs-spec.md when SRS-first applies", ".relay-kit/contracts/tech-spec.md or product-brief.md kickoff", ".relay-kit/state/team-board.md when parallel lanes are needed"],
+        outputs=[".relay-kit/state/workflow-state.md", ".relay-kit/contracts/intent-contract.md when edit work is in scope", ".relay-kit/contracts/entity-map.md when media or UI edits are in scope", ".relay-kit/contracts/srs-spec.md when SRS-first applies", ".relay-kit/contracts/tech-spec.md or product-brief.md kickoff", ".relay-kit/state/team-board.md when parallel lanes are needed"],
         references=[
             "Prefer existing project-context over assumptions.",
             "Escalate from quick-flow to product-flow whenever hidden complexity appears.",
             "Hand off to bootstrap when base artifacts are missing, to cook for a single request, and to team when multiple lanes must move in parallel.",
             "If session continuity is weak, run context-continuity checkpoint or rehydrate before routing deeper work.",
             "For existing codebases, prefer scout-hub plus repo-map before planning when dependency boundaries are still unclear.",
+            "For edit requests, run `intent-lock` before implementation handoff and mark lock status in workflow-state.",
+            "For media or UI edits with multiple similar targets, require `entity-lock` before allowing transformations.",
             "If `.relay-kit/state/srs-policy.json` enables SRS-first, require `srs-spec.md` before declaring product-flow or enterprise-flow planning-ready.",
         ],
-        next_steps=["bootstrap", "cook", "team", "context-continuity", "scout-hub", "plan-hub", "debug-hub"],
+        next_steps=["bootstrap", "cook", "team", "context-continuity", "intent-lock", "entity-lock", "scout-hub", "plan-hub", "debug-hub"],
         body=dedent(
             """\
             # Mission
@@ -29,27 +31,29 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
 
             ## Mandatory routing procedure
             1. Read `.relay-kit/contracts/project-context.md` and `.relay-kit/state/workflow-state.md` if they exist.
-            2. Score the request on five axes: ambiguity, breadth of change, architecture risk, operational risk, and coordination cost.
-            3. Classify complexity:
+            2. Restate the request in one sentence and classify request class in workflow-state (`edit`, `read-only`, or `unknown`).
+            3. If request class is `edit`, run `intent-lock` before implementation hub handoff; if media/UI entities are involved, run `entity-lock` too.
+            4. Score the request on five axes: ambiguity, breadth of change, architecture risk, operational risk, and coordination cost.
+            5. Classify complexity:
                - `L0`: single bug or tiny refactor
                - `L1`: small feature or bug cluster
                - `L2`: multi-component feature slice
                - `L3`: product or platform change with design trade-offs
                - `L4`: enterprise, compliance, or scale-sensitive work
-            4. Choose track:
+            6. Choose track:
                - `L0-L1` -> quick-flow
                - `L2-L3` -> product-flow
                - `L4` -> enterprise-flow
-            5. Choose the layer-1 entrypoint:
+            7. Choose the layer-1 entrypoint:
                - use `bootstrap` if state, context, or artifacts are missing
                - use `cook` for one active request in one lane
                - use `team` if more than one lane, owner, or branch of work must be coordinated
-            6. Choose the first layer-2 hub:
+            8. Choose the first layer-2 hub:
                - `scout-hub` when the codebase area is unclear
                - `plan-hub` when planning artifacts are missing or stale
                - `debug-hub` when the request starts from a failure or regression
-            7. Mark the lane mode explicitly as one of: discovery, planning, implementation, or verification.
-            8. Update `.relay-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
+            9. Mark the lane mode explicitly as one of: discovery, planning, implementation, or verification.
+            10. Update `.relay-kit/state/workflow-state.md` with track choice, next skill, blockers, and intent/entity lock status.
 
             ## SRS-first gate
             - Read `.relay-kit/state/srs-policy.json` when present.
@@ -162,7 +166,7 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             "If completion is claimed, force test-hub or review-hub before accepting it.",
             "If the lane is pausing or switching owners, trigger context-continuity checkpoint before handoff.",
         ],
-        next_steps=["brainstorm-hub", "scout-hub", "plan-hub", "debug-hub", "fix-hub", "test-hub", "review-hub", "context-continuity"],
+        next_steps=["brainstorm-hub", "scout-hub", "plan-hub", "debug-hub", "fix-hub", "intent-lock", "entity-lock", "test-hub", "review-hub", "context-continuity"],
         body=dedent(
             """\
             # Mission
@@ -177,6 +181,8 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
 
             ## Safety rules
             - Never jump straight from vague intent to implementation.
+            - If request class is `edit` and intent-lock is not pass, run `intent-lock` before implementation.
+            - If media/UI edit targets are ambiguous, run `entity-lock` and hold until IDs are stable.
             - When evidence is weak, prefer scout-hub, debug-hub, or test-hub over optimistic implementation.
             - When scope shifts, send the lane back through workflow-router.
             - When implementation starts, route through plan-hub or fix-hub with an explicit artifact target.

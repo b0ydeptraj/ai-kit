@@ -51,8 +51,11 @@ Route to `developer` only when the active story or tech-spec is ready for implem
 
 ## Likely next step
 - analyst
+- research
 - pm
 - architect
+- mermaid-diagrams
+- srs-clarifier
 - scrum-master
 - developer
 - review-hub

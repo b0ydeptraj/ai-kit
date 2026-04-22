@@ -2,34 +2,44 @@
 
 > Path: `.relay-kit/contracts/qa-report.md`
 > Purpose: Record acceptance coverage, risk review, regression impact, and remaining gaps before declaring work complete.
-> Used by: qa-governor, developer, test-hub, review-hub
+> Used by: qa-governor, developer, test-hub, review-hub, prompt-fidelity-check
 
 ## Scope checked
-Fill in only with evidence, decisions, or open questions relevant to this artifact.
+Describe what surfaces and lanes were verified.
 
 TBD
 
 ## Acceptance coverage
-Fill in only with evidence, decisions, or open questions relevant to this artifact.
+Map acceptance criteria to evidence.
 
 TBD
 
 ## Risk matrix
-Fill in only with evidence, decisions, or open questions relevant to this artifact.
+List remaining risks with severity and owner.
 
 TBD
 
 ## Regression surface
-Fill in only with evidence, decisions, or open questions relevant to this artifact.
+List areas that could regress from this change.
 
 TBD
 
 ## Evidence collected
-Fill in only with evidence, decisions, or open questions relevant to this artifact.
+Record commands, logs, or artifacts used as proof.
+
+TBD
+
+## Asked vs Delivered
+Table comparing user request points to actual delivered behavior.
+
+TBD
+
+## Drift verdict (pass/fail + reason)
+Explicitly state whether delivery drifted from the request and why.
 
 TBD
 
 ## Go / no-go recommendation
-Fill in only with evidence, decisions, or open questions relevant to this artifact.
+Final release/readiness recommendation.
 
 TBD

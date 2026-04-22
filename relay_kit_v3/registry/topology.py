@@ -9,7 +9,10 @@ UTILITY_PROVIDER_NAMES = [
     "doc-pointers",
     "sequential-thinking",
     "problem-solving",
+    "intent-lock",
+    "entity-lock",
     "multimodal-evidence",
+    "prompt-fidelity-check",
     "browser-inspector",
     "repo-map",
     "memory-search",
@@ -123,10 +126,10 @@ HUB_SUPPORT_MAP = {
         "handoff-context",
     ],
     "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "impact-radar", "context-continuity", "ux-structure", "mermaid-diagrams", "srs-clarifier", "frontend-design", "ui-styling"],
-    "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "browser-inspector", "multimodal-evidence", "memory-search", "runtime-doctor"],
+    "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "intent-lock", "entity-lock", "browser-inspector", "multimodal-evidence", "memory-search", "runtime-doctor"],
     "fix-hub": ["developer", "execution-loop", "project-architecture", "api-integration", "data-persistence", "accessibility-review", "handoff-context"],
-    "test-hub": ["qa-governor", "testing-patterns", "execution-loop", "multimodal-evidence", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "media-tooling", "ui-styling"],
-    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "doc-pointers", "memory-search", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "mermaid-diagrams", "aesthetic", "frontend-design", "ui-styling"],
+    "test-hub": ["qa-governor", "testing-patterns", "execution-loop", "intent-lock", "entity-lock", "multimodal-evidence", "prompt-fidelity-check", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "media-tooling", "ui-styling"],
+    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "intent-lock", "entity-lock", "prompt-fidelity-check", "doc-pointers", "memory-search", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "mermaid-diagrams", "aesthetic", "frontend-design", "ui-styling"],
 }
 
 
@@ -135,7 +138,10 @@ UTILITY_PROVIDER_RULES = {
     "doc-pointers": "Find the most relevant local or external docs fragments and hand back citations or exact file paths.",
     "sequential-thinking": "Break hard debugging or planning problems into explicit steps without claiming ownership of the overall lane.",
     "problem-solving": "Generate options, trade-offs, and root-cause hypotheses grounded in current evidence.",
+    "intent-lock": "Lock allowed versus forbidden changes and done criteria before edit requests can proceed.",
+    "entity-lock": "Map target and non-target media or UI entities to stable IDs before edit operations run.",
     "multimodal-evidence": "Interpret screenshots, diagrams, logs, or media artifacts and hand observations back to the active hub.",
+    "prompt-fidelity-check": "Prove delivered behavior matches requested behavior with asked-versus-delivered drift verdict.",
     "browser-inspector": "Collect browser-side evidence such as console, network, layout, and performance observations.",
     "repo-map": "Produce fast repo maps and dependency summaries for unfamiliar areas.",
     "memory-search": "Retrieve prior decisions, debug evidence, and handoff context from `.relay-kit/state` and `.relay-kit/contracts` without mutating artifacts.",
@@ -353,6 +359,10 @@ def render_bundle_gating() -> str:
         | baseline | round4 scope + approved discipline utilities | round4 docs | support references |
 
 
+        Policy files emitted with contracts:
+        - `.relay-kit/state/srs-policy.json`
+        - `.relay-kit/state/fidelity-policy.json`
+
         Use temporary output directories when you need to prove gating behavior without contamination from prior generated files.
         """
     )
@@ -369,6 +379,7 @@ def render_round4_changelog() -> str:
         - promotes layer-3 utility providers to first-class registry skills
         - adds `lane-registry.md` and `handoff-log.md` for safer multi-lane work
         - upgrades workflow-state and team-board with utility-provider and lock tracking
+        - adds hard intent-fidelity flow (`intent-lock`, `entity-lock`, `prompt-fidelity-check`) for edit requests
         - adds docs for utility providers, standalone taxonomy, bundle gating, and parallelism rules
         - keeps round2 and round3 compatibility available while adding new round4 bundles
         """

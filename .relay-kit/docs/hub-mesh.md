@@ -60,6 +60,9 @@ Can hand off to:
 - pm
 - research
 - ux-structure
+- aesthetic
+- frontend-design
+- ui-styling
 
 ### scout-hub
 - project-architecture
@@ -86,12 +89,16 @@ Can hand off to:
 - ux-structure
 - mermaid-diagrams
 - srs-clarifier
+- frontend-design
+- ui-styling
 
 ### debug-hub
 - developer
 - testing-patterns
 - problem-solving
 - sequential-thinking
+- intent-lock
+- entity-lock
 - browser-inspector
 - multimodal-evidence
 - memory-search
@@ -110,7 +117,10 @@ Can hand off to:
 - qa-governor
 - testing-patterns
 - execution-loop
+- intent-lock
+- entity-lock
 - multimodal-evidence
+- prompt-fidelity-check
 - release-readiness
 - accessibility-review
 - skill-gauntlet
@@ -119,11 +129,15 @@ Can hand off to:
 - migration-guard
 - context-continuity
 - media-tooling
+- ui-styling
 
 ### review-hub
 - qa-governor
 - testing-patterns
 - project-architecture
+- intent-lock
+- entity-lock
+- prompt-fidelity-check
 - doc-pointers
 - memory-search
 - release-readiness
@@ -134,3 +148,6 @@ Can hand off to:
 - migration-guard
 - context-continuity
 - mermaid-diagrams
+- aesthetic
+- frontend-design
+- ui-styling

@@ -66,11 +66,24 @@ def classify(path: str) -> set[str]:
     return labels
 
 
-def suggested_gates(areas: set[str]) -> list[str]:
+def suggested_gates(areas: set[str], files: list[str]) -> list[str]:
+    normalized_files = [path.replace("\\", "/") for path in files]
+    fidelity_sensitive = any(
+        path in {"relay_kit_v3/fidelity_policy.py", "scripts/prompt_fidelity_guard.py"}
+        or path.startswith("relay_kit_v3/registry/skills_")
+        or path.startswith("relay_kit_v3/registry/topology.py")
+        or path.startswith("relay_kit_v3/registry/workflows.py")
+        or path.startswith("scripts/validate_runtime.py")
+        or path.startswith("scripts/deep_checkpoint.py")
+        for path in normalized_files
+    )
+
     gates = [
         "py -3.12 scripts/validate_runtime.py",
         "py -3.12 scripts/skill_gauntlet.py . --strict",
     ]
+    if fidelity_sensitive:
+        gates.append("py -3.12 scripts/prompt_fidelity_guard.py . --strict")
     if {"runtime-core", "scripts-gates", "adapter-surface", "artifacts-state"} & areas:
         gates.append("py -3.12 scripts/migration_guard.py . --strict")
     if {"adapter-surface", "templates", "packaging-cli"} & areas:
@@ -110,7 +123,7 @@ def main() -> int:
         "changed_files": len(files),
         "areas": sorted(all_areas),
         "risk_level": risk_level(all_areas, len(files)),
-        "suggested_gates": suggested_gates(all_areas),
+        "suggested_gates": suggested_gates(all_areas, files),
         "area_breakdown": area_map,
     }
 

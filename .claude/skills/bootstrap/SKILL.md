@@ -17,6 +17,16 @@ Prepare the runtime so later steps have an authoritative baseline instead of rel
 - Bootstrap does not do deep planning.
 - Bootstrap does not declare work ready; it only makes later work safer.
 - When in doubt, prefer creating the minimal state needed to hand off cleanly.
+- Record the exact artifact owner for the next lane before handing off.
+- If bootstrap detects stale assumptions, force scout-hub before planning.
+- If continuity artifacts conflict with repo reality, route to workflow-router for reclassification.
+
+## Ready-to-handoff checklist
+- Workflow-state points to one explicit next skill.
+- Project-context has known unknowns clearly marked.
+- Team-board ownership is set when multiple lanes exist.
+- Required contracts for the next lane are present.
+- Bootstrap output includes one blocking risk and one mitigation step.
 
 ## Role
 - session-bootstrap

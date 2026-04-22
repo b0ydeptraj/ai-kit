@@ -17,6 +17,18 @@ End with one of only three outcomes:
 2. the idea is too weak and should stop, or
 3. one specific question must be answered before planning continues.
 
+## Decision hygiene
+- Name the trade-off that was chosen and one option explicitly rejected.
+- Flag assumptions that still need evidence and route them to research or analyst.
+- If UI quality is part of the goal, route through aesthetic/frontend-design/ui-styling before implementation.
+
+## Ideation quality checks
+- Problem statement is specific enough to test.
+- Success signal is measurable, not aspirational.
+- At least one non-goal is explicit to constrain scope.
+- One risky assumption is called out for validation.
+- Next planning owner is explicit before handoff.
+
 ## Role
 - ideation-hub
 
@@ -38,5 +50,10 @@ End with one of only three outcomes:
 ## Likely next step
 - analyst
 - pm
+- research
+- ux-structure
+- aesthetic
+- frontend-design
+- ui-styling
 - plan-hub
 - workflow-router

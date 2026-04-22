@@ -10,6 +10,7 @@ Make completion a deliberate alignment check, not just a feeling that enough has
 - Do requirements, architecture, and implementation still describe the same change?
 - Does quality evidence actually cover the promised behavior and regression surface?
 - Is the active lane done, or is it merely unblocked enough to continue elsewhere?
+- For edit lanes, does Asked vs Delivered show zero forbidden drift with a pass verdict?
 
 ## Output contract
 End with one explicit verdict:
@@ -45,11 +46,25 @@ End with one explicit verdict:
 - Do not hide disagreement between artifacts; name it and route accordingly.
 - Use `.relay-kit/docs/review-loop.md` and `.relay-kit/docs/branch-completion.md` for review handling and end-of-branch discipline.
 - If work crosses sessions, require context-continuity artifacts before accepting final completion claims.
+- For edit requests, require prompt-fidelity-check with drift verdict pass before go-forward verdict.
 
 ## Likely next step
 - plan-hub
 - debug-hub
 - fix-hub
 - test-hub
+- prompt-fidelity-check
 - context-continuity
+- release-readiness
+- skill-gauntlet
+- impact-radar
+- migration-guard
+- doc-pointers
+- memory-search
+- repo-map
+- research
+- mermaid-diagrams
+- aesthetic
+- frontend-design
+- ui-styling
 - workflow-router

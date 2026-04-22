@@ -16,6 +16,18 @@ Gather the minimum reliable context the next lane needs so nobody plans or fixes
 ## Output contract
 Name exactly what became clearer, what is still unknown, which sources might be stale, and which hub or specialist should use the refreshed context next.
 
+## Recon guardrails
+- Prioritize support skills that match the active subsystem rather than scanning everything.
+- Record one concrete risk and one safe next step before leaving scout-hub.
+- If findings show architectural drift, route to plan-hub with dependency and boundary notes.
+
+## Recon checklist
+- Entry points and key modules are named with file paths.
+- Dependency direction is captured for touched subsystems.
+- Data/API boundaries are listed when relevant.
+- Stale docs are flagged with recommended refresh owner.
+- The next hub is selected with a clear reason.
+
 ## Role
 - recon-hub
 
@@ -39,6 +51,17 @@ Name exactly what became clearer, what is still unknown, which sources might be 
 - Run a freshness pass first: stale assumptions or stale artifacts should be called out explicitly before planning.
 
 ## Likely next step
+- project-architecture
+- dependency-management
+- api-integration
+- data-persistence
+- testing-patterns
+- doc-pointers
+- repo-map
+- memory-search
+- impact-radar
+- runtime-doctor
+- handoff-context
 - plan-hub
 - debug-hub
 - review-hub

@@ -15,8 +15,20 @@ Run the day-to-day loop for one request without letting it skip gates or get stu
 
 ## Safety rules
 - Never jump straight from vague intent to implementation.
+- If request class is `edit` and intent-lock is not pass, run `intent-lock` before implementation.
+- If media/UI edit targets are ambiguous, run `entity-lock` and hold until IDs are stable.
 - When evidence is weak, prefer scout-hub, debug-hub, or test-hub over optimistic implementation.
 - When scope shifts, send the lane back through workflow-router.
+- When implementation starts, route through plan-hub or fix-hub with an explicit artifact target.
+- Before claiming completion, force test-hub and review-hub evidence checkpoints.
+- If the next handoff is ambiguous, pause and rewrite workflow-state before proceeding.
+
+## Lane execution checks
+- Current objective and acceptance signal are both visible in workflow-state.
+- The selected hub has a concrete artifact target.
+- Evidence gaps are named before coding decisions.
+- Handoff includes blockers, assumptions, and validation plan.
+- Lane closes only after review-hub verdict is explicit.
 
 ## Role
 - lane-conductor
@@ -46,6 +58,8 @@ Run the day-to-day loop for one request without letting it skip gates or get stu
 - plan-hub
 - debug-hub
 - fix-hub
+- intent-lock
+- entity-lock
 - test-hub
 - review-hub
 - context-continuity

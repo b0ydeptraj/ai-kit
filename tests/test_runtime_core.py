@@ -10,6 +10,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from relay_kit_v3.generator import BUNDLES, generate_relay_bundle
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
+from relay_kit_v3.registry.workflows import render_workflow_state
 
 
 RUNTIME_DIRS = (".claude/skills", ".agent/skills", ".codex/skills")
@@ -79,3 +80,12 @@ def test_cli_list_skills_hides_removed_baseline_next() -> None:
         check=True,
     )
     assert "baseline-next" not in result.stdout
+
+
+def test_workflow_state_template_has_intent_fidelity_lock_fields() -> None:
+    template = render_workflow_state()
+    assert "- Request class: unknown" in template
+    assert "- Media involved: unknown" in template
+    assert "- Intent-lock required: no" in template
+    assert "- Entity-lock required: no" in template
+    assert "- Prompt-fidelity-check status: not-run" in template

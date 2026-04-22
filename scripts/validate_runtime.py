@@ -177,6 +177,18 @@ def validate_srs_guard() -> None:
     )
 
 
+def validate_prompt_fidelity_guard() -> None:
+    run_command(
+        [
+            sys.executable,
+            str(REPO_ROOT / "scripts" / "prompt_fidelity_guard.py"),
+            str(REPO_ROOT),
+            "--strict",
+        ],
+        "prompt_fidelity_guard",
+    )
+
+
 def validate_context_continuity_utility() -> None:
     temp_dir = Path(tempfile.mkdtemp(prefix="relay-kit-continuity-"))
     try:
@@ -445,6 +457,7 @@ def main() -> int:
     validate_context_continuity_utility()
     validate_migration_guard()
     validate_srs_guard()
+    validate_prompt_fidelity_guard()
     validate_checked_in_docs()
     for bundle in ACTIVE_VALIDATION_BUNDLES:
         validate_generated_bundle(bundle)

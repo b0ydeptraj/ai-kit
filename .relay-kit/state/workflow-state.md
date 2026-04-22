@@ -29,6 +29,15 @@ TBD
 - Track: TBD
 - Why this track fits: TBD
 
+## Intent fidelity lock
+- Request class: unknown
+- Media involved: unknown
+- Intent-lock required: no
+- Intent-lock status: not-run
+- Entity-lock required: no
+- Entity-lock status: not-run
+- Prompt-fidelity-check status: not-run
+
 ## Completed artifacts
 - [ ] product-brief
 - [ ] PRD
@@ -37,6 +46,8 @@ TBD
 - [ ] story
 - [ ] tech-spec
 - [ ] investigation-notes
+- [ ] intent-contract
+- [ ] entity-map
 - [ ] qa-report
 - [ ] team-board
 - [ ] lane-registry

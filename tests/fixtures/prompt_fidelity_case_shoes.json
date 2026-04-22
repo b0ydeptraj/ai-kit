@@ -1,0 +1,18 @@
+{
+  "title": "shoe-only-two-entities",
+  "asked": "Chi sua 2 doi giay da khoanh.",
+  "allowed": [
+    "Edit P2 shoes style",
+    "Edit P7 shoes style"
+  ],
+  "forbidden": [
+    "Change face",
+    "Change body position",
+    "Add person",
+    "Remove person"
+  ],
+  "target_entities": [
+    "P2",
+    "P7"
+  ]
+}

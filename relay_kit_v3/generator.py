@@ -31,6 +31,7 @@ from .registry import (
     render_team_board,
     render_workflow_state,
 )
+from .fidelity_policy import ensure_fidelity_policy
 from .srs_policy import ensure_srs_policy
 from relay_kit_compat import (
     CANONICAL_ARTIFACT_ROOT,
@@ -156,6 +157,8 @@ def emit_contracts(project_path: Path, bundle: str) -> List[Path]:
 
     policy_path = ensure_srs_policy(project_path)
     written.append(policy_path)
+    fidelity_policy_path = ensure_fidelity_policy(project_path)
+    written.append(fidelity_policy_path)
     return written
 
 

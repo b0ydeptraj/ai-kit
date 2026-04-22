@@ -1,6 +1,6 @@
 ---
 name: media-tooling
-description: Use when screenshots, assets, or content files need transformation or evidence extraction for the current lane. Media handling utility.
+description: Use when screenshots, assets, or content files need transformation or evidence extraction under strict intent/entity lock constraints.
 ---
 
 # Mission
@@ -11,13 +11,13 @@ Handle media-specific steps that support the current lane without creating a par
 
 ## Typical tasks
 - Prepare screenshots or assets for evidence.
-- Describe required transforms or formats.
+- Describe required transforms or formats with target IDs.
 - Hand back what the next skill needs to continue.
 
 ## Working rules
 - Keep transformations reversible when possible.
-- Name exact asset sources and outputs.
-- Route any broader UX or product decisions back to the owning hub.
+- Name exact asset sources, outputs, and allowed edit targets.
+- Do not transform media before intent-lock and entity-lock are marked pass for edit lanes.
 
 ## Role
 - utility-provider
@@ -38,6 +38,8 @@ Handle media-specific steps that support the current lane without creating a par
 - Should stay stateless and task-scoped.
 
 ## Likely next step
+- entity-lock
+- prompt-fidelity-check
 - test-hub
 - review-hub
 - ux-structure

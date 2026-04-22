@@ -243,6 +243,7 @@ def run_gate_suite(
         ("skill_gauntlet", [sys.executable, "scripts/skill_gauntlet.py", "--strict"]),
         ("migration_guard", [sys.executable, "scripts/migration_guard.py", ".", "--strict"]),
         ("srs_guard", [sys.executable, "scripts/srs_guard.py", ".", "--strict"]),
+        ("prompt_fidelity_guard", [sys.executable, "scripts/prompt_fidelity_guard.py", ".", "--strict"]),
         ("pytest", [sys.executable, "-m", "pytest", "-q", "tests"]),
     ]
 

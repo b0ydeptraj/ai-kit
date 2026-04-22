@@ -84,6 +84,12 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--srs-scope", choices=["product-enterprise", "all"], help="SRS policy scope")
     parser.add_argument("--srs-risk", choices=["normal", "high"], help="SRS policy risk profile")
 
+    fidelity_switch = parser.add_mutually_exclusive_group()
+    fidelity_switch.add_argument("--enable-intent-fidelity", action="store_true", help="Enable intent-fidelity policy for this project")
+    fidelity_switch.add_argument("--disable-intent-fidelity", action="store_true", help="Disable intent-fidelity policy for this project")
+    parser.add_argument("--fidelity-gate", choices=["off", "warn", "hard"], help="Intent-fidelity policy gate mode")
+    parser.add_argument("--fidelity-scope", choices=["all-edits", "media-ui", "media-only"], help="Intent-fidelity policy scope")
+
     parser.add_argument("--legacy-kit", help="Optional preserved legacy kit")
     parser.add_argument("--skills", nargs="+", metavar="SKILL", help="Optional legacy skills")
     parser.add_argument("--list-skills", action="store_true", help="List bundles and legacy kits")
@@ -136,6 +142,14 @@ def _build_relay_argv(args: argparse.Namespace) -> list[str]:
         relay_argv.extend(["--srs-scope", args.srs_scope])
     if args.srs_risk:
         relay_argv.extend(["--srs-risk", args.srs_risk])
+    if args.enable_intent_fidelity:
+        relay_argv.append("--enable-intent-fidelity")
+    if args.disable_intent_fidelity:
+        relay_argv.append("--disable-intent-fidelity")
+    if args.fidelity_gate:
+        relay_argv.extend(["--fidelity-gate", args.fidelity_gate])
+    if args.fidelity_scope:
+        relay_argv.extend(["--fidelity-scope", args.fidelity_scope])
 
     if args.legacy_kit:
         relay_argv.extend(["--legacy-kit", args.legacy_kit])
