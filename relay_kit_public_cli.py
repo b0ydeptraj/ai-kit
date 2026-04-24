@@ -21,6 +21,7 @@ from pathlib import Path
 
 import relay_kit as relay_core
 from relay_kit_v3.evidence_ledger import append_event, ledger_path, new_run_id, parse_findings_count, summarize_events
+from relay_kit_v3.bundle_manifest import verify_manifest_file, write_manifest
 from relay_kit_v3.spec_export import write_spec
 
 
@@ -148,6 +149,29 @@ def _parse_spec_args(argv: list[str]) -> argparse.Namespace:
         "--output-file",
         default=None,
         help="Output path (default: <project>/.relay-kit/specs/relay-spec.json)",
+    )
+    return parser.parse_args(argv)
+
+
+def _parse_manifest_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit manifest",
+        description="Write or verify checksummed Relay-kit bundle manifests.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    write = subparsers.add_parser("write", help="Write a checksummed bundle manifest")
+    write.add_argument("project_path", nargs="?", default=".", help="Project root for default output")
+    write.add_argument(
+        "--output-file",
+        default=None,
+        help="Output path (default: <project>/.relay-kit/manifest/bundles.json)",
+    )
+    verify = subparsers.add_parser("verify", help="Verify a checksummed bundle manifest")
+    verify.add_argument("project_path", nargs="?", default=".", help="Project root for default manifest lookup")
+    verify.add_argument(
+        "--manifest-file",
+        default=None,
+        help="Manifest path (default: <project>/.relay-kit/manifest/bundles.json)",
     )
     return parser.parse_args(argv)
 
@@ -360,6 +384,24 @@ def run_spec(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_manifest(args: argparse.Namespace) -> int:
+    if args.action == "write":
+        output_path = write_manifest(args.project_path, args.output_file)
+        print(f"Wrote {output_path}")
+        return 0
+    if args.action == "verify":
+        manifest_path = Path(args.manifest_file) if args.manifest_file else Path(args.project_path) / ".relay-kit" / "manifest" / "bundles.json"
+        result = verify_manifest_file(manifest_path)
+        if result.ok:
+            print("Manifest verification passed.")
+            return 0
+        print("Manifest verification failed.")
+        for finding in result.findings:
+            print(f"- {finding}")
+        return 2
+    return 2
+
+
 def main(argv: list[str] | None = None) -> int:
     raw_argv = sys.argv[1:] if argv is None else argv
     if raw_argv and raw_argv[0] == "doctor":
@@ -368,6 +410,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_evidence(_parse_evidence_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "spec":
         return run_spec(_parse_spec_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "manifest":
+        return run_manifest(_parse_manifest_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "init":
         raw_argv = raw_argv[1:]
 

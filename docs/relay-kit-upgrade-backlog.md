@@ -506,7 +506,7 @@ Expected gain:
 ### 90 Days - Commercial Package
 
 - Add versioned upgrade/migration CLI.
-- Add signed or checksummed bundle manifest.
+- Done: add checksummed bundle manifest with `relay-kit manifest write` and `relay-kit manifest verify`.
 - Add Pro policy packs.
 - Add support workflow and SLA docs.
 - Add private registry or enterprise bundle story.

@@ -115,6 +115,13 @@ Export planning and QA contracts as machine-readable JSON:
 relay-kit spec export /path/to/project
 ```
 
+Write and verify the bundle checksum manifest:
+
+```bash
+relay-kit manifest write /path/to/project
+relay-kit manifest verify /path/to/project
+```
+
 Maintainer-only core entrypoint:
 
 ```bash
