@@ -6,6 +6,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit <project_path> --codex|--claude|--antigravity
   relay-kit doctor <project_path>
   relay-kit eval run <project_path>
+  relay-kit upgrade check <project_path>
 
 It maps to the existing canonical runtime entrypoint (`relay_kit.py`)
 without changing the underlying generation flow.
@@ -24,6 +25,7 @@ import relay_kit as relay_core
 from relay_kit_v3.evidence_ledger import append_event, ledger_path, new_run_id, parse_findings_count, summarize_events
 from relay_kit_v3.bundle_manifest import verify_manifest_file, write_manifest
 from relay_kit_v3.spec_export import write_spec
+from relay_kit_v3.upgrade import build_upgrade_report, render_report, write_version_marker
 
 
 REPO_ROOT = Path(__file__).resolve().parent
@@ -193,6 +195,38 @@ def _parse_eval_args(argv: list[str]) -> argparse.Namespace:
     run.add_argument("--output-file", default=None, help="Optional JSON report output path")
     run.add_argument("--json", action="store_true", help="Emit JSON report")
     run.add_argument("--strict", action="store_true", help="Return non-zero when any scenario fails")
+    return parser.parse_args(argv)
+
+
+def _parse_upgrade_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit upgrade",
+        description="Check and mark versioned Relay-kit runtime upgrades.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+
+    check = subparsers.add_parser("check", help="Check whether a project runtime is current")
+    check.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    check.add_argument("--manifest-file", default=None, help="Optional bundle manifest path")
+    check.add_argument("--json", action="store_true", help="Emit JSON report")
+    check.add_argument("--strict", action="store_true", help="Return non-zero when action is required")
+
+    plan = subparsers.add_parser("plan", help="Print an upgrade plan for this project")
+    plan.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    plan.add_argument("--manifest-file", default=None, help="Optional bundle manifest path")
+    plan.add_argument("--json", action="store_true", help="Emit JSON report")
+    plan.add_argument("--strict", action="store_true", help="Return non-zero when action is required")
+
+    mark = subparsers.add_parser("mark-current", help="Write the current Relay-kit runtime version marker")
+    mark.add_argument("project_path", nargs="?", default=".", help="Project root to update")
+    mark.add_argument("--bundle", default="baseline", help="Runtime bundle installed in the project")
+    mark.add_argument(
+        "--adapter",
+        action="append",
+        choices=["codex", "claude", "antigravity", "generic", "all"],
+        help="Installed adapter. Repeat for multiple adapters.",
+    )
+    mark.add_argument("--manifest-file", default=None, help="Optional bundle manifest path")
     return parser.parse_args(argv)
 
 
@@ -443,6 +477,29 @@ def run_eval(args: argparse.Namespace) -> int:
     return eval_workflows.main(eval_argv)
 
 
+def run_upgrade(args: argparse.Namespace) -> int:
+    if args.action in {"check", "plan"}:
+        report = build_upgrade_report(args.project_path, manifest_file=args.manifest_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            title = "Relay-kit upgrade plan" if args.action == "plan" else "Relay-kit upgrade check"
+            print(render_report(report, title=title))
+        if args.strict and report["status"] != "pass":
+            return 2
+        return 0
+    if args.action == "mark-current":
+        output_path = write_version_marker(
+            args.project_path,
+            bundle=args.bundle,
+            adapters=args.adapter,
+            manifest_file=args.manifest_file,
+        )
+        print(f"Wrote {output_path}")
+        return 0
+    return 2
+
+
 def main(argv: list[str] | None = None) -> int:
     raw_argv = sys.argv[1:] if argv is None else argv
     if raw_argv and raw_argv[0] == "doctor":
@@ -455,6 +512,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_manifest(_parse_manifest_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "eval":
         return run_eval(_parse_eval_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "upgrade":
+        return run_upgrade(_parse_upgrade_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "init":
         raw_argv = raw_argv[1:]
 

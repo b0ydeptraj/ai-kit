@@ -19,6 +19,7 @@ Source audit status:
 - Fixed in DX list-skills pass: preserved legacy kits are hidden from default `--list-skills` and require `--show-legacy`.
 - Fixed in runtime policy guard pass: `policy_guard.py` detects deterministic secret, path traversal, destructive shell, prompt-injection, and broad allowlist risks and runs from doctor/CI.
 - Fixed in workflow eval pass: `relay-kit eval run` reports scenario pass rate, predicted skill, top routes, and evidence-term findings from bundled fixtures.
+- Fixed in upgrade CLI pass: `relay-kit upgrade check|plan|mark-current` tracks installed runtime version and prints safe upgrade actions without auto-overwriting files.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -374,6 +375,31 @@ Acceptance criteria:
 - A bad route returns non-zero in strict mode.
 - The report includes enough detail to see why a scenario failed without rerunning the scorer manually.
 
+### P2 - Add Versioned Upgrade CLI
+
+Status:
+- Fixed on 2026-04-24 for the first conservative upgrade path.
+- Done: `relay-kit upgrade mark-current <project>` writes `.relay-kit/version.json` with package version, bundle, adapters, and manifest hash/status.
+- Done: `relay-kit upgrade check <project> --strict` fails when a project is untracked, behind current package version, has an invalid marker, or lacks a valid bundle manifest.
+- Done: `relay-kit upgrade plan <project>` prints concrete actions instead of overwriting runtime files automatically.
+- Verification: `python -m pytest tests/test_upgrade_cli.py -q` passes.
+
+Problem:
+- Commercial/enterprise users need a deterministic way to know what runtime version is installed and what upgrade actions are required.
+
+Fix:
+- Add `relay_kit_v3/upgrade.py`.
+- Add public CLI commands:
+  - `relay-kit upgrade check`
+  - `relay-kit upgrade plan`
+  - `relay-kit upgrade mark-current`
+- Keep apply/regenerate behavior manual until overwrite policy and rollback handling are stronger.
+
+Acceptance criteria:
+- Installed projects can record the Relay-kit package version and bundle manifest hash.
+- Strict check returns non-zero when upgrade action is required.
+- Plan output is copyable and does not mutate project files.
+
 ### P2 - Add Spec Export Contract
 
 Status:
@@ -530,7 +556,7 @@ Expected gain:
 
 ### 90 Days - Commercial Package
 
-- Add versioned upgrade/migration CLI.
+- Done first slice: add versioned upgrade/migration CLI.
 - Done: add checksummed bundle manifest with `relay-kit manifest write` and `relay-kit manifest verify`.
 - Add Pro policy packs.
 - Add support workflow and SLA docs.

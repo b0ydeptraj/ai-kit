@@ -129,6 +129,15 @@ relay-kit eval run /path/to/project --strict
 relay-kit eval run /path/to/project --json --output-file workflow-eval.json
 ```
 
+Track installed runtime version and print upgrade actions:
+
+```bash
+relay-kit manifest write /path/to/project
+relay-kit upgrade mark-current /path/to/project --bundle baseline --adapter codex
+relay-kit upgrade check /path/to/project --strict
+relay-kit upgrade plan /path/to/project
+```
+
 Maintainer-only core entrypoint:
 
 ```bash
