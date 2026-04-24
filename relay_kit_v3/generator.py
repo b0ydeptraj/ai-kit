@@ -30,6 +30,7 @@ from .registry import (
     render_team_board,
     render_workflow_state,
 )
+from .srs_policy import ensure_srs_policy
 from relay_kit_compat import (
     CANONICAL_ARTIFACT_ROOT,
     CANONICAL_LEGACY_ENTRYPOINT,
@@ -136,6 +137,8 @@ def emit_contracts(project_path: Path, bundle: str) -> List[Path]:
             content = render_artifact(contract)
         write_text(output, content)
         written.append(output)
+    policy_path = ensure_srs_policy(project_path)
+    written.append(policy_path)
     return written
 
 

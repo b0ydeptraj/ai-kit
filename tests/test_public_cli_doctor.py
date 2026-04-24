@@ -27,6 +27,7 @@ def test_public_cli_doctor_runs_core_gates(monkeypatch, capsys) -> None:
         "validate_runtime.py",
         "runtime_doctor.py",
         "migration_guard.py",
+        "srs_guard.py",
         "skill_gauntlet.py",
     }
     skill_gauntlet_call = next(call for call in calls if Path(call[1]).name == "skill_gauntlet.py")
@@ -42,3 +43,15 @@ def test_public_cli_doctor_returns_failure_when_a_gate_fails(monkeypatch) -> Non
     monkeypatch.setattr(relay_kit_public_cli.subprocess, "run", fake_run)
 
     assert relay_kit_public_cli.main(["doctor", ".", "--skip-tests"]) == 1
+
+
+def test_public_cli_forwards_srs_policy_flags() -> None:
+    args = relay_kit_public_cli._parse_args(
+        ["C:/tmp/project", "--codex", "--enable-srs-first", "--srs-gate", "hard", "--srs-scope", "all"]
+    )
+
+    relay_argv = relay_kit_public_cli._build_relay_argv(args)
+
+    assert "--enable-srs-first" in relay_argv
+    assert relay_argv[relay_argv.index("--srs-gate") + 1] == "hard"
+    assert relay_argv[relay_argv.index("--srs-scope") + 1] == "all"

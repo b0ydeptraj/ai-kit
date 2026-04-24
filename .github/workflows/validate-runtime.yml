@@ -33,6 +33,9 @@ jobs:
       - name: Run migration guard
         run: python scripts/migration_guard.py . --strict
 
+      - name: Run SRS guard
+        run: python scripts/srs_guard.py . --strict
+
       - name: Run skill gauntlet
         run: python scripts/skill_gauntlet.py . --strict --semantic
 

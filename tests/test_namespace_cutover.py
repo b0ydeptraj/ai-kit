@@ -28,6 +28,7 @@ def test_active_runtime_imports_use_relay_kit_v3_namespace() -> None:
         ROOT / "relay_kit_public_cli.py",
         ROOT / "scripts" / "runtime_doctor.py",
         ROOT / "scripts" / "skill_gauntlet.py",
+        ROOT / "scripts" / "srs_guard.py",
         ROOT / "scripts" / "validate_runtime.py",
     }
     direct_runtime_import_paths = checked_paths - {ROOT / "relay_kit_public_cli.py"}

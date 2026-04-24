@@ -14,6 +14,7 @@ Source audit status:
 - Fixed in doctor CLI pass: `relay-kit doctor` runs the core runtime gates and `scripts/` is packaged so the console command can find them.
 - Fixed in namespace cutover pass: active runtime imports now use `relay_kit_v3`; `ai_kit_v3` remains only as a one-cycle compatibility shim and allowlisted migration token.
 - Fixed in semantic gauntlet baseline pass: `skill_gauntlet --semantic` checks registry parity, unknown next-step references, empty I/O contracts, and duplicate trigger descriptions within each adapter.
+- Fixed in SRS opt-in pass: policy-driven `srs_guard` runs from doctor/CI, defaults to off, and hard-fails only when SRS policy is enabled.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -148,6 +149,32 @@ Acceptance criteria:
   - migration-guard
   - context-continuity
   - evidence-before-completion
+
+### P1 - Add SRS-first Opt-in Gate
+
+Status:
+- Fixed on 2026-04-24.
+- Verification: `python scripts/srs_guard.py . --strict` skips cleanly when policy is off; `python -m pytest tests/test_srs_guard.py -q` covers off, hard-fail, traceable-pass, and CLI policy update paths.
+
+Problem:
+- SRS-first policy should help non-technical/product-heavy lanes without forcing quick-flow work through extra documents.
+
+Fix:
+- Add `.relay-kit/state/srs-policy.json` with `enabled=false` and `gate=off` by default.
+- Add `.relay-kit/contracts/srs-spec.md` without unresolved placeholders.
+- Add `relay_kit_v3/srs_policy.py` and `scripts/srs_guard.py`.
+- Add CLI policy flags:
+  - `--enable-srs-first`
+  - `--disable-srs-first`
+  - `--srs-gate off|warn|hard`
+  - `--srs-scope product-enterprise|all`
+  - `--srs-risk normal|high`
+- Wire SRS guard into `relay-kit doctor` and CI.
+
+Acceptance criteria:
+- Default doctor pass does not block when SRS policy is off.
+- `gate=hard` fails missing SRS/traceability.
+- Traceable SRS -> PRD -> story -> QA evidence passes.
 
 ### P1 - Resolve Developer/Test-first Contract Mismatch
 

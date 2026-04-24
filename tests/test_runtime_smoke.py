@@ -55,6 +55,13 @@ def test_migration_guard_strict_passes() -> None:
     assert "- findings: 0" in result.stdout
 
 
+def test_srs_guard_strict_passes_with_default_off_policy() -> None:
+    result = run_command("scripts/srs_guard.py", ".", "--strict")
+
+    assert_success(result)
+    assert "- status: skipped" in result.stdout
+
+
 def test_skill_gauntlet_strict_passes() -> None:
     result = run_command("scripts/skill_gauntlet.py", ".", "--strict", "--semantic")
 
