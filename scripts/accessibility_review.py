@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Tuple
@@ -44,6 +45,11 @@ def parse_args() -> argparse.Namespace:
         help="Optional checklist evidence file (.json or markdown with - [x] key format)",
     )
     parser.add_argument("--output-file", help="Optional output path for generated report")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Fail when no accessibility evidence report is supplied",
+    )
     parser.add_argument("--json", action="store_true", help="Emit JSON output")
     return parser.parse_args()
 
@@ -148,6 +154,10 @@ def main() -> int:
     args = parse_args()
     project_root = Path(args.project_path).resolve()
     verdict: AccessibilityVerdict | None = None
+
+    if args.strict and not args.report_file:
+        print("strict mode requires --report-file", file=sys.stderr)
+        return 2
 
     if args.report_file:
         report_path = Path(args.report_file)

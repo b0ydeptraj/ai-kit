@@ -235,6 +235,10 @@ Acceptance criteria:
 
 ### P2 - Make Release and Accessibility Gates Strict by Default
 
+Status:
+- Fixed on 2026-04-24.
+- Verification: `python -m pytest tests/test_strict_evidence_gates.py -q` covers missing-evidence strict failures plus pass/fail fixtures for both gates.
+
 Problem:
 - Release/a11y checks can look pass-like when no evidence file is supplied.
 

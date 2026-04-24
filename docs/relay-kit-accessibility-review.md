@@ -18,6 +18,8 @@ If any critical check fails or is missing, verdict must be `HOLD`.
 python scripts/accessibility_review.py /path/to/project --surface "checkout-flow"
 ```
 
+Checklist-only output is non-strict and must not be used as an accessibility pass verdict.
+
 ## Evaluate from a report file
 
 Markdown report format:
@@ -33,10 +35,11 @@ Markdown report format:
 Run gate:
 
 ```bash
-python scripts/accessibility_review.py /path/to/project --report-file a11y-report.md
+python scripts/accessibility_review.py /path/to/project --report-file a11y-report.md --strict
 ```
 
 Exit code:
 
 - `0`: pass
 - `2`: hold (critical failure or missing evidence)
+- `2`: strict mode was requested without `--report-file`

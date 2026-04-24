@@ -13,6 +13,8 @@
 python scripts/release_readiness.py /path/to/project --phase both
 ```
 
+Checklist-only output is non-strict and must not be used as a release verdict.
+
 ## Evaluate with machine-checkable signals
 
 Prepare a JSON file with booleans:
@@ -33,10 +35,11 @@ Prepare a JSON file with booleans:
 Run evaluation:
 
 ```bash
-python scripts/release_readiness.py /path/to/project --phase both --signals-file release-signals.json
+python scripts/release_readiness.py /path/to/project --phase both --signals-file release-signals.json --strict
 ```
 
 Exit code:
 
 - `0`: gate passed
 - `2`: hold (one or more signals failed or are missing)
+- `2`: strict mode was requested without `--signals-file`

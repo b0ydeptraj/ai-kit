@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Tuple
@@ -51,6 +52,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-file",
         help="Optional file path to write the generated checklist report",
+    )
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Fail when no machine-checkable signals file is supplied",
     )
     parser.add_argument("--json", action="store_true", help="Emit JSON result")
     return parser.parse_args()
@@ -142,6 +148,10 @@ def main() -> int:
     args = parse_args()
     project_root = Path(args.project_path).resolve()
     phases = selected_phases(args.phase)
+
+    if args.strict and not args.signals_file:
+        print("strict mode requires --signals-file", file=sys.stderr)
+        return 2
 
     results: List[GateResult] | None = None
     if args.signals_file:

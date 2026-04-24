@@ -1,0 +1,10 @@
+{
+  "build_passed": true,
+  "tests_passed": false,
+  "migration_plan_checked": true,
+  "rollback_plan_ready": true,
+  "healthcheck_ok": true,
+  "critical_user_flow_ok": true,
+  "error_rate_within_budget": true,
+  "rollback_signals_clear": true
+}
