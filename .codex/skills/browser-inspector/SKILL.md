@@ -6,8 +6,18 @@ description: Use when the active hub needs console, network, DOM, or performance
 # Mission
 Collect browser-native evidence that narrows a web issue fast.
 
+## Boundary
+- Use only when live browser state is needed: console, network, DOM, layout, accessibility tree, or performance.
+- Use multimodal-evidence instead for static screenshots or media artifacts without a live browser session.
+- Do not browse generally or claim the fix; return observations to the owning hub.
+
 ## Default outputs
 - browser-side evidence appended to investigation-notes or qa-report
+
+## Evidence contract
+- Input must include target URL or route, repro steps, expected behavior, actual symptom, and environment when known.
+- Output must include observed console/network/DOM/performance facts, reproduction confidence, and captured artifacts.
+- Reference the helper used when available, such as `templates/skills/browser-inspector/scripts/console.js`, `network.js`, `snapshot.js`, or `performance.js`.
 
 ## Typical tasks
 - Inspect console, network, layout, and performance clues.

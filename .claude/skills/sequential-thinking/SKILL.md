@@ -6,8 +6,18 @@ description: Use when a hub needs structured thought without changing ownership.
 # Mission
 Turn a messy question into a short sequence of evidence-backed steps.
 
+## Boundary
+- Use for ordering a known problem into steps, checkpoints, or observations.
+- Do not use for ranking competing solution options; hand that to problem-solving.
+- Do not become the decision owner; return the sequence to the active hub.
+
 ## Default outputs
 - ordered reasoning steps added to investigation-notes or the active artifact
+
+## Evidence contract
+- Input must include the active question, current artifact, and at least one known constraint or evidence source.
+- Output must be a numbered sequence with a reason for each step and the evidence or artifact it depends on.
+- End with the next most informative observation or test, not a completion claim.
 
 ## Typical tasks
 - Decompose the problem into checkpoints.

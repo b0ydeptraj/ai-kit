@@ -394,6 +394,12 @@ Acceptance criteria:
 
 ### P3 - Reduce Thin Utility Routing Noise
 
+Status:
+- Fixed on 2026-04-24 for the thin-utility contract gap.
+- Done: `problem-solving`, `sequential-thinking`, `browser-inspector`, and `multimodal-evidence` now have explicit boundary and evidence contract sections in the registry and generated runtime skills.
+- Verification: `python scripts/skill_gauntlet.py . --strict --semantic` reports 0 findings; `python -m pytest tests/test_utility_contracts.py tests/test_skill_gauntlet_semantic.py -q` passes.
+- Deferred: merging `prove-it`, `evidence-before-completion`, and `qa-governor` should be a separate routing-change proposal.
+
 Problem:
 - Some generic utility skills are thin and can create routing noise.
 

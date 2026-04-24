@@ -911,14 +911,37 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
 }
 
 
-def utility_provider_spec(name: str, description: str, outputs: list[str], references: list[str], next_steps: list[str], mission: str, tasks: list[str], rules: list[str]) -> SkillSpec:
+def utility_provider_spec(
+    name: str,
+    description: str,
+    outputs: list[str],
+    references: list[str],
+    next_steps: list[str],
+    mission: str,
+    tasks: list[str],
+    rules: list[str],
+    boundary: list[str] | None = None,
+    evidence_contract: list[str] | None = None,
+) -> SkillSpec:
     body_lines = [
         "# Mission",
         mission,
         "",
-        "## Default outputs",
     ]
+    if boundary:
+        body_lines.extend(["## Boundary"])
+        body_lines.extend([f"- {item}" for item in boundary])
+        body_lines.append("")
+    body_lines.extend([
+        "## Default outputs",
+    ])
     body_lines.extend([f"- {item}" for item in outputs])
+    if evidence_contract:
+        body_lines.extend([
+            "",
+            "## Evidence contract",
+        ])
+        body_lines.extend([f"- {item}" for item in evidence_contract])
     body_lines.extend([
         "",
         "## Typical tasks",
@@ -997,6 +1020,16 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         references=["Break work into explicit steps and checkpoints.", "Reasoning should support a decision, not become the decision owner."],
         next_steps=["debug-hub", "plan-hub", "fix-hub"],
         mission="Turn a messy question into a short sequence of evidence-backed steps.",
+        boundary=[
+            "Use for ordering a known problem into steps, checkpoints, or observations.",
+            "Do not use for ranking competing solution options; hand that to problem-solving.",
+            "Do not become the decision owner; return the sequence to the active hub.",
+        ],
+        evidence_contract=[
+            "Input must include the active question, current artifact, and at least one known constraint or evidence source.",
+            "Output must be a numbered sequence with a reason for each step and the evidence or artifact it depends on.",
+            "End with the next most informative observation or test, not a completion claim.",
+        ],
         tasks=["Decompose the problem into checkpoints.", "Identify what must be known before acting.", "Recommend the next most informative test or observation."],
         rules=["Keep the sequence short and testable.", "Tie each step to an artifact or evidence source.", "Do not claim completion for the lane."],
     ),
@@ -1007,6 +1040,16 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         references=["Root cause beats guess-and-patch.", "Surface trade-offs before implementation starts."],
         next_steps=["debug-hub", "plan-hub", "review-hub"],
         mission="Turn evidence into plausible options and ranked next moves.",
+        boundary=[
+            "Use for hypotheses, trade-offs, and option ranking after evidence exists.",
+            "Do not use for step ordering or checkpoint decomposition; hand that to sequential-thinking.",
+            "Do not own implementation, release, or completion verdicts.",
+        ],
+        evidence_contract=[
+            "Input must include current evidence, constraints, and the decision that needs options.",
+            "Output must separate option, supporting evidence, risk, cheapest validation, and recommended next owner.",
+            "Mark uncertainty explicitly when evidence is weak or conflicting.",
+        ],
         tasks=["Generate root-cause hypotheses.", "Compare implementation or mitigation options.", "Call out the cheapest validating experiment."],
         rules=["Ground every option in evidence already collected.", "State uncertainty instead of bluffing.", "Recommend escalation if the issue is really a planning problem."],
     ),
@@ -1017,6 +1060,16 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         references=["Describe what is visible and why it matters.", "Feed observations back to the owning hub."],
         next_steps=["debug-hub", "test-hub", "review-hub"],
         mission="Translate visual or media evidence into concrete observations the active lane can use.",
+        boundary=[
+            "Use only when an image, video, diagram, rendered UI, or media artifact is itself the evidence.",
+            "Use browser-inspector instead when the required evidence is live DOM, console, network, or performance state.",
+            "Do not infer hidden behavior from visuals alone; label visible facts separately from interpretation.",
+        ],
+        evidence_contract=[
+            "Input must identify the artifact path, source, timestamp or version, and the question being answered.",
+            "Output must list visible observations, confidence, affected acceptance criteria, and follow-up checks.",
+            "Reference any helper used, such as `templates/skills/multimodal-evidence/scripts/document_converter.py` or `media_optimizer.py`.",
+        ],
         tasks=["Inspect screenshots, diagrams, or logs embedded as images.", "Summarize what changed between before/after artifacts.", "Call out ambiguous areas that need manual confirmation."],
         rules=["Do not over-interpret weak signals.", "Tie observations to UI states, logs, or acceptance criteria.", "Keep the output compact and actionable."],
     ),
@@ -1027,6 +1080,16 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         references=["Collect evidence first, then suggest the next move.", "Capture the smallest reproducible browser path."],
         next_steps=["debug-hub", "test-hub", "review-hub"],
         mission="Collect browser-native evidence that narrows a web issue fast.",
+        boundary=[
+            "Use only when live browser state is needed: console, network, DOM, layout, accessibility tree, or performance.",
+            "Use multimodal-evidence instead for static screenshots or media artifacts without a live browser session.",
+            "Do not browse generally or claim the fix; return observations to the owning hub.",
+        ],
+        evidence_contract=[
+            "Input must include target URL or route, repro steps, expected behavior, actual symptom, and environment when known.",
+            "Output must include observed console/network/DOM/performance facts, reproduction confidence, and captured artifacts.",
+            "Reference the helper used when available, such as `templates/skills/browser-inspector/scripts/console.js`, `network.js`, `snapshot.js`, or `performance.js`.",
+        ],
         tasks=["Inspect console, network, layout, and performance clues.", "Note the exact page state and reproduction path.", "Return the evidence to the owning hub."],
         rules=["Prefer reproducible steps and specific requests over general browsing notes.", "Link evidence to the failing acceptance criterion or symptom.", "Do not claim the fix; supply the evidence."],
     ),

@@ -6,8 +6,18 @@ description: Use when screenshots, diagrams, rendered UIs, or media artifacts co
 # Mission
 Translate visual or media evidence into concrete observations the active lane can use.
 
+## Boundary
+- Use only when an image, video, diagram, rendered UI, or media artifact is itself the evidence.
+- Use browser-inspector instead when the required evidence is live DOM, console, network, or performance state.
+- Do not infer hidden behavior from visuals alone; label visible facts separately from interpretation.
+
 ## Default outputs
 - visual or media observations appended to the active artifact
+
+## Evidence contract
+- Input must identify the artifact path, source, timestamp or version, and the question being answered.
+- Output must list visible observations, confidence, affected acceptance criteria, and follow-up checks.
+- Reference any helper used, such as `templates/skills/multimodal-evidence/scripts/document_converter.py` or `media_optimizer.py`.
 
 ## Typical tasks
 - Inspect screenshots, diagrams, or logs embedded as images.

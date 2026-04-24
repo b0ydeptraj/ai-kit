@@ -6,8 +6,18 @@ description: Use when a hub needs hypotheses, trade-offs, or resolution paths gr
 # Mission
 Turn evidence into plausible options and ranked next moves.
 
+## Boundary
+- Use for hypotheses, trade-offs, and option ranking after evidence exists.
+- Do not use for step ordering or checkpoint decomposition; hand that to sequential-thinking.
+- Do not own implementation, release, or completion verdicts.
+
 ## Default outputs
 - options, hypotheses, and trade-offs appended to the active artifact
+
+## Evidence contract
+- Input must include current evidence, constraints, and the decision that needs options.
+- Output must separate option, supporting evidence, risk, cheapest validation, and recommended next owner.
+- Mark uncertainty explicitly when evidence is weak or conflicting.
 
 ## Typical tasks
 - Generate root-cause hypotheses.
