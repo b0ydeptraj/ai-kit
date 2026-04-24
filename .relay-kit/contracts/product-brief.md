@@ -7,29 +7,29 @@
 ## Problem statement
 What problem exists today, for whom, and why it matters now.
 
-TBD
+No evidence recorded yet.
 
 ## Target users and jobs-to-be-done
 Primary user segments and what they are trying to accomplish.
 
-TBD
+No evidence recorded yet.
 
 ## Desired outcomes and success signals
 Business/user outcomes and how success will be judged.
 
-TBD
+No evidence recorded yet.
 
 ## Assumptions and unknowns
 Anything still uncertain that can change scope or design.
 
-TBD
+No evidence recorded yet.
 
 ## Constraints and non-goals
 Budget, time, platform, compliance, and what will deliberately not be solved.
 
-TBD
+No evidence recorded yet.
 
 ## Open questions
 Questions that must be answered before PRD or architecture can be considered stable.
 
-TBD
+No evidence recorded yet.

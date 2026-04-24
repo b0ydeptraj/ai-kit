@@ -7,29 +7,29 @@
 ## Existing architecture
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Coding conventions
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Dependency and toolchain rules
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Domain and compliance constraints
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Known sharp edges
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Files or modules to mirror
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.

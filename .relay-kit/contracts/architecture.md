@@ -7,34 +7,34 @@
 ## Current-system constraints
 Patterns that already exist and should not be broken casually.
 
-TBD
+No evidence recorded yet.
 
 ## Proposed design
 High-level shape of the change and why it fits the current system.
 
-TBD
+No evidence recorded yet.
 
 ## Module boundaries
 What belongs where. Name modules, owners, and interfaces.
 
-TBD
+No evidence recorded yet.
 
 ## Data flow and integrations
 Request/response paths, persistence, external APIs, messaging.
 
-TBD
+No evidence recorded yet.
 
 ## Operational concerns
 Security, performance, migration, logging, rollout, failure handling.
 
-TBD
+No evidence recorded yet.
 
 ## Trade-offs and ADR notes
 What was chosen, what was rejected, and why.
 
-TBD
+No evidence recorded yet.
 
 ## Implementation readiness verdict
 Ready / blocked, with the exact missing inputs if blocked.
 
-TBD
+No evidence recorded yet.

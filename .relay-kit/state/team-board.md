@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-TBD
+No active shared objective recorded.
 
 ## Active orchestrator
 - team
@@ -9,9 +9,9 @@ TBD
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | TBD | TBD | TBD | TBD | queued | none | TBD |
-| lane-2 | TBD | TBD | TBD | TBD | parked | none | TBD |
-| lane-3 | TBD | TBD | TBD | TBD | parked | none | TBD |
+| primary | unassigned | none | none | none | queued | none | empty lane |
+| lane-2 | unassigned | none | none | none | parked | none | empty lane |
+| lane-3 | unassigned | none | none | none | parked | none | empty lane |
 
 ## Shared artifacts that must stay authoritative
 - `.relay-kit/state/workflow-state.md`
@@ -22,13 +22,13 @@ TBD
 - `.relay-kit/contracts/architecture.md`
 
 ## Merge order
-TBD
+Primary lane first when active; parallel lanes merge only after explicit handoff.
 
 ## Merge prerequisites
-TBD
+Passing gates, no active lock conflicts, and handoff evidence linked.
 
 ## Conflict risks
-TBD
+none recorded
 
 ## Decision log
-TBD
+no decisions recorded

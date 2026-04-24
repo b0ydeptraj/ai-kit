@@ -246,7 +246,6 @@ def render_artifact(contract: ArtifactContract) -> str:
         lines.append(f"## {section}")
         lines.append(hints.get(section, "Fill in only with evidence, decisions, or open questions relevant to this artifact."))
         lines.append("")
-        lines.append("TBD")
+        lines.append("No evidence recorded yet.")
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"
-

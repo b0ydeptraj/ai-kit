@@ -7,24 +7,24 @@
 ## Epic overview
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Per-epic goals
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Dependencies
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Definition of done
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Suggested order
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.

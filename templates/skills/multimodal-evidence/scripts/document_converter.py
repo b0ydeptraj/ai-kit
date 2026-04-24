@@ -16,6 +16,8 @@ Features:
 - Saves to docs/assets/document-extraction.md by default
 """
 
+from __future__ import annotations
+
 import argparse
 import os
 import sys
@@ -26,10 +28,20 @@ from typing import Optional, List, Dict, Any
 try:
     from google import genai
     from google.genai import types
-except ImportError:
+    GOOGLE_GENAI_IMPORT_ERROR: ImportError | None = None
+except ImportError as exc:
+    genai = None
+    types = None
+    GOOGLE_GENAI_IMPORT_ERROR = exc
+
+
+def require_google_genai() -> None:
+    """Fail at execution time when the optional Gemini SDK is unavailable."""
+    if GOOGLE_GENAI_IMPORT_ERROR is None:
+        return
     print("Error: google-genai package not installed")
     print("Install with: pip install google-genai")
-    sys.exit(1)
+    raise SystemExit(1) from GOOGLE_GENAI_IMPORT_ERROR
 
 try:
     from dotenv import load_dotenv
@@ -164,6 +176,7 @@ def convert_to_markdown(
     max_retries: int = 3
 ) -> Dict[str, Any]:
     """Convert a document to markdown using Gemini."""
+    require_google_genai()
 
     for attempt in range(max_retries):
         try:
@@ -239,6 +252,7 @@ def batch_convert(
     verbose: bool = False
 ) -> List[Dict[str, Any]]:
     """Batch convert multiple files to markdown."""
+    require_google_genai()
 
     api_key = find_api_key()
     if not api_key:

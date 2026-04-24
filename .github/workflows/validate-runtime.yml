@@ -18,5 +18,23 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install test dependencies
+        run: python -m pip install pytest
+
       - name: Validate runtime parity and bundle gating
         run: python scripts/validate_runtime.py
+
+      - name: Run runtime doctor template mode
+        run: python scripts/runtime_doctor.py . --strict
+
+      - name: Run runtime doctor live mode
+        run: python scripts/runtime_doctor.py . --strict --state-mode live
+
+      - name: Run migration guard
+        run: python scripts/migration_guard.py . --strict
+
+      - name: Run skill gauntlet
+        run: python scripts/skill_gauntlet.py . --strict
+
+      - name: Run runtime smoke tests
+        run: python -m pytest tests -q

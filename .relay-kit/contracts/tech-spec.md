@@ -7,24 +7,24 @@
 ## Change summary
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Root cause or context
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Files likely affected
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Implementation notes
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Verification steps
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.

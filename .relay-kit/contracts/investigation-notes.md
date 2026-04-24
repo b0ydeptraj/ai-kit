@@ -7,29 +7,29 @@
 ## Observed symptom
 What failed, when, and for whom.
 
-TBD
+No evidence recorded yet.
 
 ## Reproduction steps
 Fastest reliable way to reproduce the issue.
 
-TBD
+No evidence recorded yet.
 
 ## Evidence collected
 Logs, stack traces, screenshots, diffs, failing tests, or environment details.
 
-TBD
+No evidence recorded yet.
 
 ## Likely root cause
 Most plausible cause supported by evidence.
 
-TBD
+No evidence recorded yet.
 
 ## Non-causes ruled out
 Hypotheses already disproven so the next person does not repeat them.
 
-TBD
+No evidence recorded yet.
 
 ## Recommended next move
 Hand off to fix-hub, test-hub, or back to planning if scope drift is present.
 
-TBD
+No evidence recorded yet.

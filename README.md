@@ -1,4 +1,4 @@
-﻿[English](README.md) | [Tiáº¿ng Viá»‡t](README.vi.md)
+[English](README.md) | [Tiếng Việt](README.vi.md)
 
 # Relay-kit
 
@@ -24,6 +24,7 @@ pipx install "git+https://github.com/b0ydeptraj/Relay-kit.git"
 relay-kit "C:\\path\\to\\my-app" --codex
 relay-kit "C:\\path\\to\\my-app" --claude
 relay-kit "C:\\path\\to\\my-app" --antigravity
+relay-kit doctor "C:\\path\\to\\my-app"
 ```
 
 Use one adapter flag per run.
@@ -105,6 +106,7 @@ The public wrapper maps:
 Validate the runtime contract:
 
 ```bash
+relay-kit doctor /path/to/project
 python scripts/validate_runtime.py
 ```
 
@@ -238,5 +240,4 @@ Historical compatibility timeline and removal log:
 ## Legacy note
 
 Legacy kits still exist for migration and compatibility work. They are not the main Relay-kit runtime story.
-
 

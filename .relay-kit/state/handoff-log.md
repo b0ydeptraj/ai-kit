@@ -3,8 +3,8 @@
 ## Handoff entries
 | From | To | Lane | Trigger | Artifact touched | Evidence linked | Expected return condition |
 |---|---|---|---|---|---|---|
-| workflow-router | cook | primary | route selected | workflow-state | TBD | hub chosen |
-| TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| workflow-router | cook | primary | route selected | workflow-state | none recorded | hub chosen |
+| none | none | none | none | none | none | none |
 
 ## Rules
 - Every non-trivial handoff should update this log before the receiving skill starts work.

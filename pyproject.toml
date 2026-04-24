@@ -25,4 +25,11 @@ py-modules = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["ai_kit_v3*"]
+include = ["ai_kit_v3*", "scripts*"]
+
+[tool.setuptools.package-data]
+scripts = ["migration_guard_allowlist.txt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

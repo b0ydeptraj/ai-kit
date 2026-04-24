@@ -8,11 +8,11 @@
 ## Active lanes
 | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | Merge prerequisite | Status |
 |---|---|---|---|---|---|---|---|
-| primary | TBD | workflow-router | TBD | TBD | TBD | TBD | active |
-| lane-2 | TBD | team | TBD | TBD | TBD | TBD | parked |
-| lane-3 | TBD | team | TBD | TBD | TBD | TBD | parked |
+| primary | unassigned | workflow-router | none | none | none | none | active |
+| lane-2 | unassigned | team | none | none | none | none | parked |
+| lane-3 | unassigned | team | none | none | none | none | parked |
 
 ## Released locks
 | Lane | Artifact | Previous scope | Released because |
 |---|---|---|---|
-| TBD | TBD | TBD | TBD |
+| none | none | none | none |

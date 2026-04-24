@@ -38,33 +38,33 @@ def render_workflow_state() -> str:
         """        # workflow-state
 
         ## Current request
-        TBD
+        No active request recorded.
 
         ## Active lane
         - Lane id: primary
-        - Mode: serial or parallel TBD
-        - Lane owner: TBD
+        - Mode: serial
+        - Lane owner: unassigned
 
         ## Active orchestration
-        - Layer-1 orchestrator: TBD
-        - Layer-2 workflow hub: TBD
-        - Active specialist: TBD
+        - Layer-1 orchestrator: workflow-router
+        - Layer-2 workflow hub: none selected
+        - Active specialist: none
 
         ## Active utility providers
-        - Primary utility provider: TBD
-        - Additional utilities in play: TBD
+        - Primary utility provider: none
+        - Additional utilities in play: none
 
         ## Active standalone/domain skill
-        - Skill: TBD
-        - Why selected: TBD
+        - Skill: none selected
+        - Why selected: no standalone or domain skill selected
 
         ## Complexity level
-        - Level: TBD
-        - Reasoning: TBD
+        - Level: unclassified
+        - Reasoning: no active request classified
 
         ## Chosen track
-        - Track: TBD
-        - Why this track fits: TBD
+        - Track: unselected
+        - Why this track fits: no active track selected
 
         ## Completed artifacts
         - [ ] product-brief
@@ -82,19 +82,19 @@ def render_workflow_state() -> str:
         ## Ownership locks
         | Artifact | Owner lane | Lock scope | Status |
         |---|---|---|---|
-        | TBD | TBD | TBD | TBD |
+        | none | none | none | none |
 
         ## Next skill
-        TBD
+        workflow-router
 
         ## Known blockers
-        TBD
+        none recorded
 
         ## Escalation triggers noticed
-        TBD
+        none observed
 
         ## Notes
-        TBD
+        Empty live state initialized. Replace these values when a request is active.
         """
     )
 
@@ -105,7 +105,7 @@ def render_team_board() -> str:
         """        # team-board
 
         ## Shared objective
-        TBD
+        No active shared objective recorded.
 
         ## Active orchestrator
         - team
@@ -113,9 +113,9 @@ def render_team_board() -> str:
         ## Lanes
         | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
         |---|---|---|---|---|---|---|---|
-        | primary | TBD | TBD | TBD | TBD | queued | none | TBD |
-        | lane-2 | TBD | TBD | TBD | TBD | parked | none | TBD |
-        | lane-3 | TBD | TBD | TBD | TBD | parked | none | TBD |
+        | primary | unassigned | none | none | none | queued | none | empty lane |
+        | lane-2 | unassigned | none | none | none | parked | none | empty lane |
+        | lane-3 | unassigned | none | none | none | parked | none | empty lane |
 
         ## Shared artifacts that must stay authoritative
         - `.relay-kit/state/workflow-state.md`
@@ -126,16 +126,16 @@ def render_team_board() -> str:
         - `.relay-kit/contracts/architecture.md`
 
         ## Merge order
-        TBD
+        Primary lane first when active; parallel lanes merge only after explicit handoff.
 
         ## Merge prerequisites
-        TBD
+        Passing gates, no active lock conflicts, and handoff evidence linked.
 
         ## Conflict risks
-        TBD
+        none recorded
 
         ## Decision log
-        TBD
+        no decisions recorded
         """
     )
 
@@ -153,14 +153,14 @@ def render_lane_registry() -> str:
         ## Active lanes
         | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | Merge prerequisite | Status |
         |---|---|---|---|---|---|---|---|
-        | primary | TBD | workflow-router | TBD | TBD | TBD | TBD | active |
-        | lane-2 | TBD | team | TBD | TBD | TBD | TBD | parked |
-        | lane-3 | TBD | team | TBD | TBD | TBD | TBD | parked |
+        | primary | unassigned | workflow-router | none | none | none | none | active |
+        | lane-2 | unassigned | team | none | none | none | none | parked |
+        | lane-3 | unassigned | team | none | none | none | none | parked |
 
         ## Released locks
         | Lane | Artifact | Previous scope | Released because |
         |---|---|---|---|
-        | TBD | TBD | TBD | TBD |
+        | none | none | none | none |
         """
     )
 
@@ -173,8 +173,8 @@ def render_handoff_log() -> str:
         ## Handoff entries
         | From | To | Lane | Trigger | Artifact touched | Evidence linked | Expected return condition |
         |---|---|---|---|---|---|---|
-        | workflow-router | cook | primary | route selected | workflow-state | TBD | hub chosen |
-        | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+        | workflow-router | cook | primary | route selected | workflow-state | none recorded | hub chosen |
+        | none | none | none | none | none | none | none |
 
         ## Rules
         - Every non-trivial handoff should update this log before the receiving skill starts work.
@@ -182,4 +182,3 @@ def render_handoff_log() -> str:
         - If a handoff changes scope or ownership, update `workflow-state.md` and `lane-registry.md` in the same pass.
         """
     )
-

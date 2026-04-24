@@ -624,8 +624,8 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Use execution-loop as the execution engine.",
             "Pull in project-architecture, api-integration, data-persistence, and testing-patterns as needed.",
             "Hand off to test-hub or qa-governor; do not self-certify completion without evidence.",
-            "Default to `test-first-development` whenever the change introduces or fixes behavior that can be exercised with a test or clear reproduction harness.",
-            "If test-first is not practical, say why before coding and name the alternative failing signal you will use.",
+            "Use `test-first-development` when it is installed, selected, or provided by the active bundle; otherwise run the test-first loop directly inside this skill and name the fallback evidence path.",
+            "If a test-first loop is not practical, say why before coding and name the alternative failing signal you will use.",
             "Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data unless the repo or product explicitly requires non-ASCII content.",
             "If tasks are truly independent and the platform supports collaboration, follow `.relay-kit/docs/parallel-execution.md` before using subagent-style execution.",
         ],
@@ -638,9 +638,9 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             ## Mandatory behavior
             1. Read the active story or tech-spec completely before changing code.
             2. Pull only the support references needed for the specific files or boundaries involved.
-            3. Default to `test-first-development` whenever the behavior is testable.
+            3. Use `test-first-development` when it is installed, selected, or provided by the active bundle; otherwise run the test-first loop directly inside this skill.
             4. Capture the failing test or failing reproduction signal before the main implementation pass.
-            5. If test-first is not practical, say why and name the fallback evidence path before editing code.
+            5. If a test-first loop is not practical, say why and name the fallback evidence path before editing code.
             6. Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data. Do not add decorative icons, emojis, or unusual Unicode characters unless the existing repo or product content explicitly requires them.
             7. Execute through `execution-loop` rather than piling unrelated changes into one pass.
             8. Keep one behavior or fix slice per red-green cycle instead of widening scope during the green phase.
@@ -1457,5 +1457,4 @@ def render_skill(spec: SkillSpec) -> str:
     ])
     parts.extend(f"- {item}" for item in spec.next_steps)
     return "\n".join(parts).rstrip() + "\n"
-
 

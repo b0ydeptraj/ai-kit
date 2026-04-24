@@ -3,6 +3,7 @@
 
 This wrapper exposes a friendlier command surface:
   relay-kit <project_path> --codex|--claude|--antigravity
+  relay-kit doctor <project_path>
 
 It maps to the existing canonical runtime entrypoint (`relay_kit.py`)
 without changing the underlying generation flow.
@@ -11,10 +12,14 @@ without changing the underlying generation flow.
 from __future__ import annotations
 
 import argparse
+import subprocess
 import sys
 from pathlib import Path
 
 import relay_kit as relay_core
+
+
+REPO_ROOT = Path(__file__).resolve().parent
 
 
 def _parse_args(argv: list[str]) -> argparse.Namespace:
@@ -86,6 +91,17 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def _parse_doctor_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit doctor",
+        description="Run Relay-kit runtime verification gates.",
+    )
+    parser.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    parser.add_argument("--skip-tests", action="store_true", help="Skip the local pytest suite")
+    parser.add_argument("--verbose", action="store_true", help="Print stdout and stderr for passing gates")
+    return parser.parse_args(argv)
+
+
 def _resolve_ai(args: argparse.Namespace) -> str:
     if args.codex:
         return "codex"
@@ -131,8 +147,77 @@ def _build_relay_argv(args: argparse.Namespace) -> list[str]:
     return relay_argv
 
 
+def _doctor_commands(project_path: str, skip_tests: bool) -> list[tuple[str, list[str]]]:
+    commands = [
+        ("validate runtime", [sys.executable, str(REPO_ROOT / "scripts" / "validate_runtime.py")]),
+        (
+            "runtime doctor template",
+            [sys.executable, str(REPO_ROOT / "scripts" / "runtime_doctor.py"), project_path, "--strict"],
+        ),
+        (
+            "runtime doctor live",
+            [
+                sys.executable,
+                str(REPO_ROOT / "scripts" / "runtime_doctor.py"),
+                project_path,
+                "--strict",
+                "--state-mode",
+                "live",
+            ],
+        ),
+        (
+            "migration guard",
+            [sys.executable, str(REPO_ROOT / "scripts" / "migration_guard.py"), project_path, "--strict"],
+        ),
+        (
+            "skill gauntlet",
+            [sys.executable, str(REPO_ROOT / "scripts" / "skill_gauntlet.py"), project_path, "--strict"],
+        ),
+    ]
+
+    if not skip_tests and (REPO_ROOT / "tests").exists():
+        commands.append(("pytest", [sys.executable, "-m", "pytest", "tests", "-q"]))
+
+    return commands
+
+
+def _print_doctor_output(label: str, result: subprocess.CompletedProcess[str], verbose: bool) -> None:
+    status = "pass" if result.returncode == 0 else "fail"
+    print(f"- {label}: {status}")
+    if verbose or result.returncode != 0:
+        if result.stdout:
+            print(result.stdout.rstrip())
+        if result.stderr:
+            print(result.stderr.rstrip())
+
+
+def run_doctor(args: argparse.Namespace) -> int:
+    project_path = str(Path(args.project_path).resolve())
+    print("Relay-kit doctor")
+    print(f"- project: {project_path}")
+
+    exit_code = 0
+    for label, command in _doctor_commands(project_path, args.skip_tests):
+        result = subprocess.run(
+            command,
+            cwd=REPO_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        _print_doctor_output(label, result, args.verbose)
+        if result.returncode != 0:
+            exit_code = 1
+
+    return exit_code
+
+
 def main(argv: list[str] | None = None) -> int:
-    args = _parse_args(argv or sys.argv[1:])
+    raw_argv = sys.argv[1:] if argv is None else argv
+    if raw_argv and raw_argv[0] == "doctor":
+        return run_doctor(_parse_doctor_args(raw_argv[1:]))
+
+    args = _parse_args(raw_argv)
     relay_argv = _build_relay_argv(args)
 
     original_argv = sys.argv[:]

@@ -1,33 +1,33 @@
 # workflow-state
 
 ## Current request
-TBD
+No active request recorded.
 
 ## Active lane
 - Lane id: primary
-- Mode: serial or parallel TBD
-- Lane owner: TBD
+- Mode: serial
+- Lane owner: unassigned
 
 ## Active orchestration
-- Layer-1 orchestrator: TBD
-- Layer-2 workflow hub: TBD
-- Active specialist: TBD
+- Layer-1 orchestrator: workflow-router
+- Layer-2 workflow hub: none selected
+- Active specialist: none
 
 ## Active utility providers
-- Primary utility provider: TBD
-- Additional utilities in play: TBD
+- Primary utility provider: none
+- Additional utilities in play: none
 
 ## Active standalone/domain skill
-- Skill: TBD
-- Why selected: TBD
+- Skill: none selected
+- Why selected: no standalone or domain skill selected
 
 ## Complexity level
-- Level: TBD
-- Reasoning: TBD
+- Level: unclassified
+- Reasoning: no active request classified
 
 ## Chosen track
-- Track: TBD
-- Why this track fits: TBD
+- Track: unselected
+- Why this track fits: no active track selected
 
 ## Completed artifacts
 - [ ] product-brief
@@ -45,16 +45,16 @@ TBD
 ## Ownership locks
 | Artifact | Owner lane | Lock scope | Status |
 |---|---|---|---|
-| TBD | TBD | TBD | TBD |
+| none | none | none | none |
 
 ## Next skill
-TBD
+workflow-router
 
 ## Known blockers
-TBD
+none recorded
 
 ## Escalation triggers noticed
-TBD
+none observed
 
 ## Notes
-TBD
+Empty live state initialized. Replace these values when a request is active.
