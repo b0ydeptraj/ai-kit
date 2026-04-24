@@ -2,6 +2,7 @@
 """Public Relay-kit installer CLI.
 
 This wrapper exposes a friendlier command surface:
+  relay-kit init <project_path> --codex|--claude|--antigravity --baseline
   relay-kit <project_path> --codex|--claude|--antigravity
   relay-kit doctor <project_path>
 
@@ -41,6 +42,13 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     adapter.add_argument("--generic", action="store_true", help="Generate generic prompts output")
 
     parser.add_argument("--bundle", default="baseline", help="Bundle name (default: baseline)")
+    parser.add_argument(
+        "--baseline",
+        dest="bundle",
+        action="store_const",
+        const="baseline",
+        help="Generate the baseline bundle (default)",
+    )
     parser.add_argument("--no-bundle", action="store_true", help="Skip v3 bundle generation")
 
     parser.add_argument(
@@ -251,6 +259,8 @@ def main(argv: list[str] | None = None) -> int:
     raw_argv = sys.argv[1:] if argv is None else argv
     if raw_argv and raw_argv[0] == "doctor":
         return run_doctor(_parse_doctor_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "init":
+        raw_argv = raw_argv[1:]
 
     args = _parse_args(raw_argv)
     relay_argv = _build_relay_argv(args)

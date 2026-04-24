@@ -15,19 +15,25 @@ With Relay-kit, an agent gets:
 
 The result is simple: agents work with more structure, fewer random moves, and stronger proof before anything is called done.
 
-## Install and use (GitHub)
+## 5-minute start
 
-For users who just want to install and run:
+For users who just want to install Relay-kit and generate one runtime:
 
 ```bash
 pipx install "git+https://github.com/b0ydeptraj/Relay-kit.git"
-relay-kit "C:\\path\\to\\my-app" --codex
-relay-kit "C:\\path\\to\\my-app" --claude
-relay-kit "C:\\path\\to\\my-app" --antigravity
+relay-kit init "C:\\path\\to\\my-app" --codex --baseline
 relay-kit doctor "C:\\path\\to\\my-app"
 ```
 
-Use one adapter flag per run.
+Use one adapter flag per run. Replace `--codex` with `--claude` or `--antigravity` when that is the target agent.
+
+For a local repo checkout:
+
+```bash
+pipx install .
+relay-kit init /path/to/project --codex --baseline
+relay-kit doctor /path/to/project
+```
 
 ## Why use Relay-kit
 
@@ -68,46 +74,36 @@ It makes agents behave less like improvising interns and more like engineers wor
 - an active baseline that is validated instead of loosely assembled
 - a way to make work more consistent without forcing everything through raw chat memory
 
-## Quick start
+## Useful commands
 
-List available skills and bundles:
-
-```bash
-python relay_kit.py --list-skills
-```
-
-Generate the active baseline:
+List active bundles without legacy migration-only noise:
 
 ```bash
-python relay_kit.py . --bundle baseline --ai codex --emit-contracts --emit-docs --emit-reference-templates
+relay-kit --list-skills
 ```
 
-Public installer surface (local repo checkout):
+Show preserved legacy suites only when you need migration/debug detail:
 
 ```bash
-pipx install .
-relay-kit /path/to/project --codex
-relay-kit /path/to/project --claude
-relay-kit /path/to/project --antigravity
+relay-kit --list-skills --show-legacy
 ```
 
-Install directly from GitHub:
+Generate all active adapters:
 
 ```bash
-pipx install "git+https://github.com/b0ydeptraj/Relay-kit.git"
-relay-kit /path/to/project --codex
+relay-kit init /path/to/project --all --baseline
 ```
 
-The public wrapper maps:
-- `--codex` -> `--ai codex`
-- `--claude` -> `--ai claude`
-- `--antigravity` -> `--ai antigravity` (runtime target: `.agent/skills`)
-
-Validate the runtime contract:
+Run the support gate:
 
 ```bash
 relay-kit doctor /path/to/project
-python scripts/validate_runtime.py
+```
+
+Maintainer-only core entrypoint:
+
+```bash
+python relay_kit.py /path/to/project --bundle baseline --ai codex --emit-contracts --emit-docs --emit-reference-templates
 ```
 
 ## Start flow
@@ -240,4 +236,3 @@ Historical compatibility timeline and removal log:
 ## Legacy note
 
 Legacy kits still exist for migration and compatibility work. They are not the main Relay-kit runtime story.
-

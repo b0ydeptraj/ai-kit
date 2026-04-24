@@ -286,10 +286,11 @@ Acceptance criteria:
 ### P2 - Improve 5-minute Onboarding
 
 Status:
-- Partially fixed on 2026-04-24.
+- Fixed on 2026-04-24.
 - Done: `relay-kit doctor <project>` exists and README shows it in the install path.
 - Done: default `--list-skills` hides preserved legacy kits.
-- Remaining: simplify README to one happy path.
+- Done: `relay-kit init <project> --codex --baseline` is supported as the first-run happy path.
+- Verification: `python -m pytest tests/test_public_cli_doctor.py -q` covers the `init` alias and doctor command mapping.
 
 Problem:
 - New users can get confused by old and new entrypoints, bundle names, and exposed legacy kits.
