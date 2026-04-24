@@ -33,6 +33,9 @@ jobs:
       - name: Run migration guard
         run: python scripts/migration_guard.py . --strict
 
+      - name: Run policy guard
+        run: python scripts/policy_guard.py . --strict
+
       - name: Run SRS guard
         run: python scripts/srs_guard.py . --strict
 

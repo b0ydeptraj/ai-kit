@@ -27,6 +27,7 @@ def test_public_cli_doctor_runs_core_gates(monkeypatch, capsys) -> None:
         "validate_runtime.py",
         "runtime_doctor.py",
         "migration_guard.py",
+        "policy_guard.py",
         "srs_guard.py",
         "skill_gauntlet.py",
     }

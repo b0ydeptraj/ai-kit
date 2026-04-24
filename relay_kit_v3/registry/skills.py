@@ -1241,6 +1241,30 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "Keep findings deterministic so repeated runs produce stable verdicts.",
         ],
     ),
+    "policy-guard": utility_provider_spec(
+        name="policy-guard",
+        description="Use when high-risk agent operations need deterministic policy checks before trusting shell, path, secret, prompt, or allowlist changes.",
+        outputs=[
+            "policy risk findings appended to qa-report or workflow-state",
+            "explicit pass or hold verdict for high-risk runtime operations",
+        ],
+        references=[
+            "Use `python scripts/policy_guard.py <project> --strict` as the canonical policy gate.",
+            "Treat policy findings as release blockers until reviewed by qa-governor or review-hub.",
+        ],
+        next_steps=["qa-governor", "review-hub", "fix-hub"],
+        mission="Fail closed on deterministic high-risk agent operation patterns before they reach release or handoff.",
+        tasks=[
+            "Scan runtime and source surfaces for path traversal, destructive shell commands, hard-coded secrets, prompt-injection phrases, and broad migration allowlists.",
+            "Report exact file, line, and check names so the owning hub can fix or explicitly escalate.",
+            "Rerun the strict policy gate after any remediation before claiming the lane is safe.",
+        ],
+        rules=[
+            "Do not treat policy findings as cosmetic lint.",
+            "Prefer fixing the risky surface over allowlisting it.",
+            "Escalate to review-hub when a finding is intentional but operationally sensitive.",
+        ],
+    ),
     "context-continuity": utility_provider_spec(
         name="context-continuity",
         description="Use when work needs reliable continuity across long chats, new threads, AI switches, or resume-after-gap sessions.",
@@ -1457,4 +1481,3 @@ def render_skill(spec: SkillSpec) -> str:
     ])
     parts.extend(f"- {item}" for item in spec.next_steps)
     return "\n".join(parts).rstrip() + "\n"
-

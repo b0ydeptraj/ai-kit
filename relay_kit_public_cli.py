@@ -191,6 +191,10 @@ def _doctor_commands(project_path: str, skip_tests: bool) -> list[tuple[str, lis
             [sys.executable, str(REPO_ROOT / "scripts" / "migration_guard.py"), project_path, "--strict"],
         ),
         (
+            "policy guard",
+            [sys.executable, str(REPO_ROOT / "scripts" / "policy_guard.py"), project_path, "--strict"],
+        ),
+        (
             "srs guard",
             [sys.executable, str(REPO_ROOT / "scripts" / "srs_guard.py"), project_path, "--strict"],
         ),

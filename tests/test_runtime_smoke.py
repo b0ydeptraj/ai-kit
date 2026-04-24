@@ -55,6 +55,13 @@ def test_migration_guard_strict_passes() -> None:
     assert "- findings: 0" in result.stdout
 
 
+def test_policy_guard_strict_passes() -> None:
+    result = run_command("scripts/policy_guard.py", ".", "--strict")
+
+    assert_success(result)
+    assert "- findings: 0" in result.stdout
+
+
 def test_srs_guard_strict_passes_with_default_off_policy() -> None:
     result = run_command("scripts/srs_guard.py", ".", "--strict")
 

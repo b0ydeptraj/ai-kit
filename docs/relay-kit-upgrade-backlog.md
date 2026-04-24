@@ -17,6 +17,7 @@ Source audit status:
 - Fixed in semantic scenario pass: `skill_gauntlet --semantic` now runs 10 route/evidence scenario fixtures from `tests/fixtures/skill_gauntlet/scenarios.json`.
 - Fixed in SRS opt-in pass: policy-driven `srs_guard` runs from doctor/CI, defaults to off, and hard-fails only when SRS policy is enabled.
 - Fixed in DX list-skills pass: preserved legacy kits are hidden from default `--list-skills` and require `--show-legacy`.
+- Fixed in runtime policy guard pass: `policy_guard.py` detects deterministic secret, path traversal, destructive shell, prompt-injection, and broad allowlist risks and runs from doctor/CI.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -203,6 +204,10 @@ Acceptance criteria:
 - Runtime validation and skill gauntlet both pass.
 
 ### P1 - Add Runtime Policy Guard
+
+Status:
+- Fixed on 2026-04-24.
+- Verification: `python scripts/policy_guard.py . --strict` reports 0 findings; `python -m pytest tests/test_policy_guard.py -q` covers secret, path traversal, destructive shell, prompt-injection, and broad allowlist fixtures.
 
 Problem:
 - Relay-kit has discipline docs but lacks an enforceable policy guard for high-risk agent operations.
