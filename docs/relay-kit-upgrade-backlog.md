@@ -259,8 +259,8 @@ Acceptance criteria:
 ### P2 - Expand CI Beyond Runtime Validation
 
 Status:
-- Baseline fixed on 2026-04-24.
-- Remaining: add semantic gauntlet and policy guard jobs after those gates exist.
+- Fixed on 2026-04-24.
+- Verification: `.github/workflows/validate-runtime.yml` runs pytest, runtime doctor template/live, migration guard, policy guard, SRS guard, and semantic skill gauntlet.
 
 Problem:
 - CI is too narrow to catch the known drift classes.
