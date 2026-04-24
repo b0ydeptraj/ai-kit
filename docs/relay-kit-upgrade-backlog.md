@@ -20,6 +20,7 @@ Source audit status:
 - Fixed in runtime policy guard pass: `policy_guard.py` detects deterministic secret, path traversal, destructive shell, prompt-injection, and broad allowlist risks and runs from doctor/CI.
 - Fixed in workflow eval pass: `relay-kit eval run` reports scenario pass rate, predicted skill, top routes, and evidence-term findings from bundled fixtures.
 - Fixed in upgrade CLI pass: `relay-kit upgrade check|plan|mark-current` tracks installed runtime version and prints safe upgrade actions without auto-overwriting files.
+- Fixed in enterprise bundle pass: `--bundle enterprise` installs baseline plus the full discipline utility set and emits governance docs for paid/team usage.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -400,6 +401,32 @@ Acceptance criteria:
 - Strict check returns non-zero when upgrade action is required.
 - Plan output is copyable and does not mutate project files.
 
+### P2 - Add Enterprise Bundle Story
+
+Status:
+- Fixed on 2026-04-24 for the first enterprise packaging slice.
+- Done: `relay-kit init <project> --bundle enterprise` installs baseline plus the full discipline utility set, including `test-first-development`.
+- Done: enterprise generation emits baseline contracts, all support references, round4 docs, discipline docs, and `.relay-kit/docs/enterprise-bundle.md`.
+- Done: bundle manifest includes `enterprise` and verifies hashes.
+- Verification: `python -m pytest tests/test_enterprise_bundle.py -q` passes.
+
+Problem:
+- Paid/team users need a named governance profile that is stricter than baseline without changing onboarding defaults.
+
+Fix:
+- Add `enterprise` to `BUNDLES`.
+- Add enterprise bundle contract/doc/reference gating.
+- Document install and operating sequence:
+  - `relay-kit init --bundle enterprise`
+  - `relay-kit doctor`
+  - `relay-kit manifest write`
+  - `relay-kit upgrade mark-current --bundle enterprise`
+
+Acceptance criteria:
+- Enterprise bundle appears in `--list-skills`.
+- Enterprise install includes `test-first-development`.
+- Enterprise manifest is checksummed and verified by existing manifest logic.
+
 ### P2 - Add Spec Export Contract
 
 Status:
@@ -560,7 +587,7 @@ Expected gain:
 - Done: add checksummed bundle manifest with `relay-kit manifest write` and `relay-kit manifest verify`.
 - Add Pro policy packs.
 - Add support workflow and SLA docs.
-- Add private registry or enterprise bundle story.
+- Done first slice: add enterprise bundle story.
 - Done first slice: add scenario eval harness for real workflow quality.
 
 Expected gain:

@@ -39,6 +39,15 @@ from relay_kit_compat import (
 )
 
 
+def unique_names(*groups: List[str]) -> List[str]:
+    names: List[str] = []
+    for group in groups:
+        for name in group:
+            if name not in names:
+                names.append(name)
+    return names
+
+
 BUNDLES: Dict[str, List[str]] = {
     "bmad-core": list(CORE_SKILLS.keys()),
     "bmad-lite": list(CORE_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()),
@@ -56,6 +65,15 @@ BUNDLES: Dict[str, List[str]] = {
     "round4": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()) + list(NATIVE_SUPPORT_SKILLS.keys()),
     "baseline": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()) + list(NATIVE_SUPPORT_SKILLS.keys()) + list(BASELINE_NEXT_DISCIPLINE_SKILLS.keys()),
     "baseline-next": list(ORCHESTRATOR_SKILLS.keys()) + list(WORKFLOW_HUB_SKILLS.keys()) + list(ROLE_SKILLS.keys()) + list(UTILITY_PROVIDER_SKILLS.keys()) + list(CLEANUP_SKILLS.keys()) + list(NATIVE_SUPPORT_SKILLS.keys()) + list(BASELINE_NEXT_DISCIPLINE_SKILLS.keys()),
+    "enterprise": unique_names(
+        list(ORCHESTRATOR_SKILLS.keys()),
+        list(WORKFLOW_HUB_SKILLS.keys()),
+        list(ROLE_SKILLS.keys()),
+        list(UTILITY_PROVIDER_SKILLS.keys()),
+        list(CLEANUP_SKILLS.keys()),
+        list(NATIVE_SUPPORT_SKILLS.keys()),
+        list(DISCIPLINE_UTILITY_SKILLS.keys()),
+    ),
 }
 
 
@@ -63,6 +81,7 @@ DOC_STATIC_BUILDERS = {
     "legacy-role-map": lambda: _render_legacy_role_map(),
     "folder-structure": lambda: _render_folder_structure(),
     "native-support-skills": lambda: _render_native_support_map(),
+    "enterprise-bundle": lambda: _render_enterprise_bundle(),
 }
 
 
@@ -206,6 +225,45 @@ def _render_native_support_map() -> str:
         "Treat these as living reference skills. Refresh them when the codebase changes materially.",
     ]
     return "\n".join(support_map_lines).rstrip() + "\n"
+
+
+def _render_enterprise_bundle() -> str:
+    return """# enterprise-bundle
+
+The `enterprise` bundle is the paid/team governance profile.
+
+It starts from the baseline runtime and adds the full discipline utility set, including `test-first-development`.
+
+## Included Control Surface
+
+- all layer-1 orchestrators
+- all layer-2 workflow hubs
+- all role specialists
+- all utility providers
+- all native support skills
+- all discipline utilities
+- all artifact contracts used by baseline
+- all support reference templates
+- discipline docs for planning, workspace isolation, review, branch completion, and parallel execution
+
+## Intended Use
+
+Use `enterprise` when a project needs stricter repeatability, cross-session handoff, release gates, policy checks, and test-first implementation discipline by default.
+
+Use `baseline` when onboarding speed matters more than installing every discipline utility.
+
+## Operating Rule
+
+Enterprise installs should be followed by:
+
+```bash
+relay-kit doctor /path/to/project
+relay-kit manifest write /path/to/project
+relay-kit upgrade mark-current /path/to/project --bundle enterprise --adapter codex
+```
+
+For multi-adapter teams, repeat `--adapter` or use `--adapter all` in the marker command.
+"""
 
 
 

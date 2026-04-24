@@ -28,6 +28,16 @@ ROUND4_DOCS = ROUND3_DOCS + [
     "round4-changelog",
 ]
 
+DISCIPLINE_DOCS = [
+    "planning-discipline",
+    "parallel-execution",
+    "workspace-isolation",
+    "branch-completion",
+    "review-loop",
+]
+
+ENTERPRISE_DOCS = list(dict.fromkeys(ROUND4_DOCS + DISCIPLINE_DOCS + ["enterprise-bundle"]))
+
 
 BUNDLE_CONTRACT_NAMES: Dict[str, List[str]] = {
     "bmad-core": list(ROUND2_BASE_CONTRACTS),
@@ -46,6 +56,7 @@ BUNDLE_CONTRACT_NAMES: Dict[str, List[str]] = {
     "round4": list(ROUND2_BASE_CONTRACTS) + list(ROUND3_EXTRA_CONTRACTS) + list(ROUND4_EXTRA_CONTRACTS),
     "baseline": list(ROUND2_BASE_CONTRACTS) + list(ROUND3_EXTRA_CONTRACTS) + list(ROUND4_EXTRA_CONTRACTS),
     "baseline-next": list(ROUND2_BASE_CONTRACTS) + list(ROUND3_EXTRA_CONTRACTS) + list(ROUND4_EXTRA_CONTRACTS),
+    "enterprise": list(ROUND2_BASE_CONTRACTS) + list(ROUND3_EXTRA_CONTRACTS) + list(ROUND4_EXTRA_CONTRACTS),
 }
 
 BUNDLE_DOC_NAMES: Dict[str, List[str]] = {
@@ -65,6 +76,7 @@ BUNDLE_DOC_NAMES: Dict[str, List[str]] = {
     "round4": list(ROUND4_DOCS),
     "baseline": list(ROUND4_DOCS),
     "baseline-next": list(ROUND4_DOCS),
+    "enterprise": list(ENTERPRISE_DOCS),
 }
 
 REFERENCE_NAMES_FOR_BUNDLE: Dict[str, List[str]] = {
@@ -84,6 +96,7 @@ REFERENCE_NAMES_FOR_BUNDLE: Dict[str, List[str]] = {
     "round4": list(SUPPORT_REFERENCES.keys()),
     "baseline": list(SUPPORT_REFERENCES.keys()),
     "baseline-next": list(SUPPORT_REFERENCES.keys()),
+    "enterprise": list(SUPPORT_REFERENCES.keys()),
 }
 
 

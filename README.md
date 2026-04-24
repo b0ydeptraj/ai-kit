@@ -94,6 +94,15 @@ Generate all active adapters:
 relay-kit init /path/to/project --all --baseline
 ```
 
+Generate the enterprise governance bundle:
+
+```bash
+relay-kit init /path/to/project --all --bundle enterprise
+relay-kit doctor /path/to/project
+relay-kit manifest write /path/to/project
+relay-kit upgrade mark-current /path/to/project --bundle enterprise --adapter all
+```
+
 Run the support gate:
 
 ```bash

@@ -86,6 +86,7 @@ bundles:
     - round4
     - baseline
     - baseline-next
+    - enterprise
   additive_overlays:
     - utility-providers
     - discipline-utilities
@@ -93,6 +94,7 @@ bundles:
     - baseline is the current baseline.
     - round4 remains available as the previous compatibility baseline.
     - baseline-next is a compatibility alias for baseline during the promotion cycle.
+    - enterprise is the paid/team governance bundle with the full discipline utility set.
     - discipline-utilities remains optional until a future baseline absorbs approved skills.
 
 adapter_runtime:
@@ -125,5 +127,4 @@ legacy_compatibility:
     - Legacy workflow, rules, and shared assets belong to migration support only.
     - Legacy command and agent surfaces belong to migration support only.
     - Codex support assets may be materialized by the legacy generator under `.codex/support`, but they are not part of the active v3 runtime taxonomy.
-
 
