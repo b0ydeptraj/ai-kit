@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from ai_kit_v3.registry.artifacts import ARTIFACT_CONTRACTS, render_artifact
+from relay_kit_v3.registry.artifacts import ARTIFACT_CONTRACTS, render_artifact
 from scripts.runtime_doctor import check_contract_placeholders
 
 

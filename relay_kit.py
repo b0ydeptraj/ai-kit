@@ -14,7 +14,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from ai_kit_v3.generator import BUNDLES, create_bmad_upgrade, create_legacy_skills, load_legacy_module
+from relay_kit_v3.generator import BUNDLES, create_bmad_upgrade, create_legacy_skills, load_legacy_module
 from relay_kit_cycle_log import append_cycle_event, current_source
 from relay_kit_compat import (
     CANONICAL_ENTRYPOINT,

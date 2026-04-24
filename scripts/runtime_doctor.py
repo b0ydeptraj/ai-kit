@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """Check runtime drift and adapter parity for Relay-kit surfaces."""
 
 from __future__ import annotations
@@ -11,7 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from ai_kit_v3.registry.skills import ALL_V3_SKILLS
+from relay_kit_v3.registry.skills import ALL_V3_SKILLS
 
 
 REQUIRED_DOCS = [

@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Iterable, List, Sequence
 
 DEFAULT_TOKENS: Sequence[str] = (
+    "ai_kit_v3",
     ".ai-kit",
     ".python-kit-prompts",
     "python_kit.py",

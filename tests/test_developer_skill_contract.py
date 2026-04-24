@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from ai_kit_v3.registry.skills import ROLE_SKILLS
+from relay_kit_v3.registry.skills import ROLE_SKILLS
 
 
 ROOT = Path(__file__).resolve().parents[1]

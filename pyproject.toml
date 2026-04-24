@@ -25,7 +25,7 @@ py-modules = [
 ]
 
 [tool.setuptools.packages.find]
-include = ["ai_kit_v3*", "scripts*"]
+include = ["relay_kit_v3*", "ai_kit_v3", "scripts*"]
 
 [tool.setuptools.package-data]
 scripts = ["migration_guard_allowlist.txt"]

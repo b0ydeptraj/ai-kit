@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 AREA_RULES = [
-    ("runtime-core", ("ai_kit_v3/", "relay_kit.py", "relay_kit_legacy.py", "relay_kit_compat.py")),
+    ("runtime-core", ("relay_kit_v3/", "relay_kit.py", "relay_kit_legacy.py", "relay_kit_compat.py")),
     ("adapter-surface", (".claude/skills/", ".agent/skills/", ".codex/skills/", ".relay-kit-prompts/")),
     ("artifacts-state", (".relay-kit/",)),
     ("templates", ("templates/skills/", "templates/agent/")),

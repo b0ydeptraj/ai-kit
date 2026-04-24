@@ -14,7 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from ai_kit_v3.registry.skills import ALL_V3_SKILLS
+from relay_kit_v3.registry.skills import ALL_V3_SKILLS
 
 
 RUNTIME_ROOTS = [".claude/skills", ".agent/skills", ".codex/skills"]

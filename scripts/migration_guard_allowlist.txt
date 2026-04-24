@@ -11,6 +11,10 @@ apps/**/*|*
 CHANGELOG.md|*
 scripts/summarize_compat_cycle.py|*
 scripts/migration_guard.py|*
+scripts/migration_guard_allowlist.txt|ai_kit_v3
+pyproject.toml|ai_kit_v3
+ai_kit_v3/__init__.py|ai_kit_v3
+docs/relay-kit-upgrade-backlog.md|ai_kit_v3
 docs/codex-merge-prompt.md|*
 docs/codex-round3-merge-prompt.md|*
 docs/codex-round4-merge-prompt.md|*

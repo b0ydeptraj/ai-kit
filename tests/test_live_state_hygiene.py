@@ -4,7 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from ai_kit_v3.registry.workflows import (
+from relay_kit_v3.registry.workflows import (
     render_handoff_log,
     render_lane_registry,
     render_team_board,

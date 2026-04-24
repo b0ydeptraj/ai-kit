@@ -12,6 +12,7 @@ Source audit status:
 - Fixed in CI baseline pass: `.github/workflows/validate-runtime.yml` now runs pytest, runtime doctor template/live mode, migration guard, and skill gauntlet.
 - Fixed in README encoding pass: `README.md` language switcher is valid UTF-8 without BOM or mojibake.
 - Fixed in doctor CLI pass: `relay-kit doctor` runs the core runtime gates and `scripts/` is packaged so the console command can find them.
+- Fixed in namespace cutover pass: active runtime imports now use `relay_kit_v3`; `ai_kit_v3` remains only as a one-cycle compatibility shim and allowlisted migration token.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -83,6 +84,10 @@ Acceptance criteria:
 - A test fixture proves placeholder detection still catches regressions.
 
 ### P1 - Complete ai-kit -> relay-kit Cutover
+
+Status:
+- Fixed on 2026-04-24.
+- Verification: `python -m pytest tests/test_namespace_cutover.py -q` passes; `python scripts/migration_guard.py . --strict` reports 0 findings.
 
 Problem:
 - The repo still exposes legacy `ai_kit_v3` namespace in runtime/package surfaces.
@@ -384,7 +389,7 @@ Do not copy popularity. Copy the technical mechanics:
 3. Done: lazy import or optional-extra guard `google-genai`.
 4. Done: add smoke tests for runtime validation, runtime doctor, migration guard, skill gauntlet, and public CLI.
 5. Done: update CI to run `python -m pytest tests -q` and the core runtime gates.
-6. Pending: add migration guard tests for `ai_kit_v3`.
+6. Done: add migration guard tests for `ai_kit_v3`.
 7. Done: clean `.relay-kit/state/*.md` so live doctor can pass.
 8. Done: make developer skill test-first instruction conditional.
 9. Done: add `relay-kit doctor` as a single support entrypoint.
