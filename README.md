@@ -109,6 +109,12 @@ relay-kit doctor /path/to/project --json
 
 Doctor writes local JSONL events to `.relay-kit/evidence/events.jsonl`.
 
+Export planning and QA contracts as machine-readable JSON:
+
+```bash
+relay-kit spec export /path/to/project
+```
+
 Maintainer-only core entrypoint:
 
 ```bash

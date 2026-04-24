@@ -349,6 +349,25 @@ Acceptance criteria:
 - Every doctor/gate run writes a structured event.
 - A summary command can show recent failures and drift by gate.
 
+### P2 - Add Spec Export Contract
+
+Status:
+- Fixed on 2026-04-24 for export.
+- Done: `relay-kit spec export <project>` writes a machine-readable JSON contract with source artifact hashes, requirements, acceptance criteria, verification steps, evidence, files, risks, missing fields, and `verification_ready`.
+- Verification: `python -m pytest tests/test_spec_export.py -q` passes; a smoke export for this repo reports `verification_ready=false` when template placeholders lack real acceptance/evidence.
+- Deferred: import/sync back from OpenSpec-style artifacts remains future work.
+
+Problem:
+- Relay-kit contracts were readable by humans but not exportable as a machine-validated planning/evidence artifact.
+
+Fix:
+- Add a JSON export path for Relay planning and QA artifacts.
+- Treat template instructions and placeholders as missing evidence rather than valid acceptance criteria.
+
+Acceptance criteria:
+- Export includes source artifact hashes and machine-checkable missing fields.
+- Export does not mark placeholder contracts as ready.
+
 ### P2 - Narrow Migration Guard Allowlist
 
 Status:
@@ -426,7 +445,7 @@ Acceptance criteria:
 | Behavior skill tests | Add | P1 | `scripts/skill_gauntlet.py --semantic tests/fixtures/skill_gauntlet/*.yaml` |
 | Runtime policy guard | Add | P1 | `scripts/policy_guard.py` with deterministic security/path/shell checks |
 | Evidence ledger | Add | P2 | `.relay-kit/evidence/events.jsonl` plus `relay-kit evidence summary` |
-| Spec export/import | Add | P2 | Export Relay lane/story to OpenSpec-like ticket with files and verify fields |
+| Spec export/import | Add | P2 | Done: `relay-kit spec export` exports Relay contracts to JSON with files and verify fields. Import remains future work. |
 | Completion proof overlap | Merge or clarify | P3 | Consolidate `prove-it`, `evidence-before-completion`, `qa-governor` contracts |
 | Legacy kit exposure | Hide by default | P2 | `--list-skills` excludes migration-only/legacy unless `--legacy` |
 | Thin domain utilities | Strengthen | P3 | Add script refs, evidence contracts, and narrower triggers |

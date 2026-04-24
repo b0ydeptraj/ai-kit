@@ -21,6 +21,7 @@ from pathlib import Path
 
 import relay_kit as relay_core
 from relay_kit_v3.evidence_ledger import append_event, ledger_path, new_run_id, parse_findings_count, summarize_events
+from relay_kit_v3.spec_export import write_spec
 
 
 REPO_ROOT = Path(__file__).resolve().parent
@@ -132,6 +133,22 @@ def _parse_evidence_args(argv: list[str]) -> argparse.Namespace:
     summary.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
     summary.add_argument("--limit", type=int, default=20, help="Recent event count to show")
     summary.add_argument("--json", action="store_true", help="Emit JSON summary")
+    return parser.parse_args(argv)
+
+
+def _parse_spec_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit spec",
+        description="Export Relay-kit planning and QA contracts as machine-readable specs.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    export = subparsers.add_parser("export", help="Export Relay-kit contracts to JSON")
+    export.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    export.add_argument(
+        "--output-file",
+        default=None,
+        help="Output path (default: <project>/.relay-kit/specs/relay-spec.json)",
+    )
     return parser.parse_args(argv)
 
 
@@ -335,12 +352,22 @@ def run_evidence(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_spec(args: argparse.Namespace) -> int:
+    if args.action != "export":
+        return 2
+    output_path = write_spec(args.project_path, args.output_file)
+    print(f"Wrote {output_path}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     raw_argv = sys.argv[1:] if argv is None else argv
     if raw_argv and raw_argv[0] == "doctor":
         return run_doctor(_parse_doctor_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "evidence":
         return run_evidence(_parse_evidence_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "spec":
+        return run_spec(_parse_spec_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "init":
         raw_argv = raw_argv[1:]
 
