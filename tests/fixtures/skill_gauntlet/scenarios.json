@@ -1,0 +1,62 @@
+[
+  {
+    "id": "workflow-router-ambiguous-entry",
+    "prompt": "A new request arrived and the scope is unclear. Choose the track, active hub, next skill, and update workflow-state.",
+    "expected_skill": "workflow-router",
+    "expected_terms": ["track", "workflow-state", "next skill"]
+  },
+  {
+    "id": "cook-active-request-handoff",
+    "prompt": "One active request already has routing and state. Drive the next solid handoff without reopening planning.",
+    "expected_skill": "cook",
+    "expected_terms": ["active request", "handoff", "hub"]
+  },
+  {
+    "id": "plan-hub-stale-planning",
+    "prompt": "This work is larger than quick-flow and planning artifacts are stale. Use the planning hub to sequence analyst, PM, architect, and story slicing without losing context.",
+    "expected_skill": "plan-hub",
+    "expected_terms": ["planning", "PRD", "architecture"]
+  },
+  {
+    "id": "developer-implementation-ready",
+    "prompt": "The story is approved and planning is ready. Change code with controlled scope, test evidence, and update workflow-state.",
+    "expected_skill": "developer",
+    "expected_terms": ["code", "test evidence", "workflow-state"]
+  },
+  {
+    "id": "test-hub-risky-implementation",
+    "prompt": "Implementation exists after a risky refactor and confidence is low. Coordinate verification and collect regression evidence.",
+    "expected_skill": "test-hub",
+    "expected_terms": ["verification", "evidence", "regression"]
+  },
+  {
+    "id": "qa-governor-completion-risk",
+    "prompt": "Work is about to be called done. Check acceptance criteria, risk, regression scope, and write a QA report.",
+    "expected_skill": "qa-governor",
+    "expected_terms": ["acceptance criteria", "risk", "qa-report"]
+  },
+  {
+    "id": "release-readiness-predeploy",
+    "prompt": "Before deploy, produce a readiness verdict with smoke signals, rollback guardrails, and release evidence.",
+    "expected_skill": "release-readiness",
+    "expected_terms": ["smoke", "rollback", "readiness verdict"]
+  },
+  {
+    "id": "migration-guard-cutover",
+    "prompt": "A naming cutover might leave stale compatibility tokens behind. Scan source and runtime files with an allowlist gate.",
+    "expected_skill": "migration-guard",
+    "expected_terms": ["compatibility tokens", "allowlist", "cutover"]
+  },
+  {
+    "id": "context-continuity-new-thread",
+    "prompt": "The chat is getting long and may resume in a new thread. Create checkpoint, rehydrate context, handoff, and diff continuity.",
+    "expected_skill": "context-continuity",
+    "expected_terms": ["checkpoint", "rehydrate", "handoff"]
+  },
+  {
+    "id": "evidence-before-completion-proof",
+    "prompt": "The agent is about to say fixed and ready. Run one last evidence pass before making the completion claim.",
+    "expected_skill": "evidence-before-completion",
+    "expected_terms": ["completion claim", "evidence", "done"]
+  }
+]

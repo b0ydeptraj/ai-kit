@@ -5,10 +5,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Sequence
+from typing import Dict, List, Mapping, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
@@ -27,6 +28,31 @@ REQUIRED_HEADERS = [
     "## Reference skills and rules",
     "## Likely next step",
 ]
+DEFAULT_SCENARIO_FIXTURE = Path("tests") / "fixtures" / "skill_gauntlet" / "scenarios.json"
+STOPWORDS = {
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "be",
+    "before",
+    "by",
+    "for",
+    "from",
+    "has",
+    "in",
+    "into",
+    "is",
+    "it",
+    "of",
+    "on",
+    "or",
+    "the",
+    "this",
+    "to",
+    "with",
+}
 
 
 @dataclass(frozen=True)
@@ -51,6 +77,11 @@ def parse_args() -> argparse.Namespace:
         "--semantic",
         action="store_true",
         help="Also check registry parity, next-step references, and duplicate trigger descriptions.",
+    )
+    parser.add_argument(
+        "--scenario-fixtures",
+        default=str(DEFAULT_SCENARIO_FIXTURE),
+        help="JSON scenario fixture file used by --semantic checks.",
     )
     return parser.parse_args()
 
@@ -255,6 +286,153 @@ def collect_semantic_findings(base: Path, skill_files: Sequence[Path]) -> List[F
     return findings
 
 
+def tokenize(text: str) -> set[str]:
+    tokens = {
+        token.lower()
+        for token in re.findall(r"[a-zA-Z0-9][a-zA-Z0-9_-]*", text)
+        if len(token) > 2
+    }
+    expanded: set[str] = set()
+    for token in tokens:
+        expanded.add(token)
+        if "-" in token:
+            expanded.update(part for part in token.split("-") if len(part) > 2)
+    return {token for token in expanded if token not in STOPWORDS}
+
+
+def skill_search_text(spec) -> str:
+    return "\n".join(
+        [
+            spec.name.replace("-", " "),
+            spec.description,
+            spec.role,
+            spec.layer,
+            *spec.inputs,
+            *spec.outputs,
+            *spec.references,
+            *spec.next_steps,
+            spec.body,
+        ]
+    )
+
+
+def skill_route_text(spec) -> str:
+    return "\n".join(
+        [
+            spec.name.replace("-", " "),
+            spec.description,
+            spec.role,
+            spec.layer,
+            *spec.inputs,
+            *spec.outputs,
+            *spec.next_steps,
+        ]
+    )
+
+
+def score_prompt_against_skill(prompt: str, spec) -> int:
+    prompt_tokens = tokenize(prompt)
+    if not prompt_tokens:
+        return 0
+    spec_tokens = tokenize(skill_route_text(spec))
+    score = len(prompt_tokens & spec_tokens)
+
+    prompt_lower = prompt.lower()
+    for phrase_source, bonus in ((spec.name, 25), (spec.role, 20), (spec.layer, 10)):
+        phrase = str(phrase_source).replace("-", " ").lower()
+        if str(phrase_source).lower() in prompt_lower or phrase in prompt_lower:
+            score += bonus
+
+    description_tokens = tokenize(spec.description)
+    score += len(prompt_tokens & description_tokens) * 2
+    return score
+
+
+def rank_prompt_routes(prompt: str, registry: Mapping[str, object]) -> List[tuple[int, str]]:
+    ranked = [(score_prompt_against_skill(prompt, spec), name) for name, spec in registry.items()]
+    return sorted(ranked, key=lambda item: (-item[0], item[1]))
+
+
+def load_scenario_fixtures(base: Path, fixture_path: Path) -> list[dict[str, object]]:
+    path = fixture_path if fixture_path.is_absolute() else base / fixture_path
+    if not path.exists():
+        return []
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(payload, list):
+        raise ValueError(f"Scenario fixture must contain a list: {path}")
+    scenarios: list[dict[str, object]] = []
+    for item in payload:
+        if not isinstance(item, dict):
+            raise ValueError(f"Scenario fixture item must be an object: {path}")
+        scenarios.append(item)
+    return scenarios
+
+
+def rendered_skill_contract(spec) -> str:
+    return skill_search_text(spec).lower()
+
+
+def check_scenario_fixture(scenario: Mapping[str, object], registry: Mapping[str, object]) -> List[Finding]:
+    findings: List[Finding] = []
+    scenario_id = str(scenario.get("id", "")).strip() or "unnamed-scenario"
+    prompt = str(scenario.get("prompt", "")).strip()
+    expected_skill = str(scenario.get("expected_skill", "")).strip()
+
+    if not prompt:
+        return [Finding(f"scenario:{scenario_id}", "scenario-contract", "Missing prompt")]
+    if not expected_skill:
+        return [Finding(f"scenario:{scenario_id}", "scenario-contract", "Missing expected_skill")]
+    if expected_skill not in registry:
+        return [Finding(f"scenario:{scenario_id}", "scenario-contract", f"Unknown expected_skill: {expected_skill}")]
+
+    ranked = rank_prompt_routes(prompt, registry)
+    top_score, predicted = ranked[0] if ranked else (0, "")
+    if predicted != expected_skill:
+        top = ", ".join(f"{name}:{score}" for score, name in ranked[:5])
+        findings.append(
+            Finding(
+                f"scenario:{scenario_id}",
+                "scenario-route",
+                f"Expected {expected_skill}, predicted {predicted or '-'} with score {top_score}. Top routes: {top}",
+            )
+        )
+
+    expected_terms = scenario.get("expected_terms", [])
+    if not isinstance(expected_terms, list):
+        findings.append(Finding(f"scenario:{scenario_id}", "scenario-contract", "expected_terms must be a list"))
+        return findings
+
+    contract = rendered_skill_contract(registry[expected_skill])
+    missing_terms = [
+        str(term)
+        for term in expected_terms
+        if str(term).strip() and str(term).lower() not in contract
+    ]
+    if missing_terms:
+        findings.append(
+            Finding(
+                f"scenario:{scenario_id}",
+                "scenario-evidence-contract",
+                f"Expected skill {expected_skill} is missing scenario terms: {', '.join(missing_terms)}",
+            )
+        )
+
+    return findings
+
+
+def collect_scenario_findings(
+    base: Path,
+    registry: Mapping[str, object],
+    fixture_path: Path | None = None,
+) -> tuple[List[Finding], int]:
+    fixture_path = fixture_path or DEFAULT_SCENARIO_FIXTURE
+    scenarios = load_scenario_fixtures(base, fixture_path)
+    findings: List[Finding] = []
+    for scenario in scenarios:
+        findings.extend(check_scenario_fixture(scenario, registry))
+    return findings, len(scenarios)
+
+
 def collect_skills(base: Path) -> List[Path]:
     paths: List[Path] = []
     required_names = sorted(ALL_V3_SKILLS.keys())
@@ -272,10 +450,11 @@ def collect_skills(base: Path) -> List[Path]:
     return paths
 
 
-def report_payload(findings: List[Finding], checked_files: int, semantic: bool) -> Dict[str, object]:
+def report_payload(findings: List[Finding], checked_files: int, semantic: bool, scenario_count: int) -> Dict[str, object]:
     return {
         "checked_files": checked_files,
         "semantic": semantic,
+        "scenario_fixtures": scenario_count,
         "findings_count": len(findings),
         "findings": [
             {
@@ -288,10 +467,11 @@ def report_payload(findings: List[Finding], checked_files: int, semantic: bool) 
     }
 
 
-def render_text(findings: List[Finding], checked_files: int, semantic: bool) -> str:
+def render_text(findings: List[Finding], checked_files: int, semantic: bool, scenario_count: int) -> str:
     lines = [
         f"Checked {checked_files} SKILL.md files.",
         f"Semantic checks: {'on' if semantic else 'off'}",
+        f"Scenario fixtures: {scenario_count}",
         f"Findings: {len(findings)}",
     ]
     if findings:
@@ -322,12 +502,25 @@ def main() -> int:
         findings.extend(check_skill_file(path, base))
     if args.semantic:
         findings.extend(collect_semantic_findings(base, skill_files))
+        scenario_findings, scenario_count = collect_scenario_findings(
+            base,
+            ALL_V3_SKILLS,
+            Path(args.scenario_fixtures),
+        )
+        findings.extend(scenario_findings)
+    else:
+        scenario_count = 0
 
-    payload = report_payload(findings, checked_files=len(skill_files), semantic=args.semantic)
+    payload = report_payload(
+        findings,
+        checked_files=len(skill_files),
+        semantic=args.semantic,
+        scenario_count=scenario_count,
+    )
     if args.json:
         print(json.dumps(payload, ensure_ascii=True, indent=2))
     else:
-        print(render_text(findings, checked_files=len(skill_files), semantic=args.semantic))
+        print(render_text(findings, checked_files=len(skill_files), semantic=args.semantic, scenario_count=scenario_count))
 
     if args.strict and findings:
         return 2

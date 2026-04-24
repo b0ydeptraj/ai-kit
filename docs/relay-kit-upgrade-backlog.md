@@ -14,6 +14,7 @@ Source audit status:
 - Fixed in doctor CLI pass: `relay-kit doctor` runs the core runtime gates and `scripts/` is packaged so the console command can find them.
 - Fixed in namespace cutover pass: active runtime imports now use `relay_kit_v3`; `ai_kit_v3` remains only as a one-cycle compatibility shim and allowlisted migration token.
 - Fixed in semantic gauntlet baseline pass: `skill_gauntlet --semantic` checks registry parity, unknown next-step references, empty I/O contracts, and duplicate trigger descriptions within each adapter.
+- Fixed in semantic scenario pass: `skill_gauntlet --semantic` now runs 10 route/evidence scenario fixtures from `tests/fixtures/skill_gauntlet/scenarios.json`.
 - Fixed in SRS opt-in pass: policy-driven `srs_guard` runs from doctor/CI, defaults to off, and hard-fails only when SRS policy is enabled.
 - Fixed in DX list-skills pass: preserved legacy kits are hidden from default `--list-skills` and require `--show-legacy`.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
@@ -114,9 +115,9 @@ Acceptance criteria:
 ### P1 - Add Semantic Skill Gauntlet
 
 Status:
-- Baseline fixed on 2026-04-24.
-- Verification: `python scripts/skill_gauntlet.py . --strict --semantic` reports 0 findings and `python -m pytest tests/test_skill_gauntlet_semantic.py -q` passes.
-- Remaining: add route prompt scenario fixtures for the 10 critical workflows.
+- Fixed on 2026-04-24.
+- Verification: `python scripts/skill_gauntlet.py . --strict --semantic` reports 0 findings and 10 scenario fixtures; `python -m pytest tests/test_skill_gauntlet_semantic.py -q` passes.
+- Done: route prompt scenario fixtures cover the 10 critical workflows.
 
 Problem:
 - Current `skill_gauntlet` mostly checks structure, so it can pass while routing and handoff behavior drift.

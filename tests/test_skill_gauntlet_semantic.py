@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS, render_skill
-from scripts.skill_gauntlet import check_semantic_skill_file
+from scripts.skill_gauntlet import check_semantic_skill_file, collect_scenario_findings
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +26,7 @@ def test_semantic_skill_gauntlet_passes_current_runtime() -> None:
 
     assert result.returncode == 0, result.stdout + result.stderr
     assert "Semantic checks: on" in result.stdout
+    assert "Scenario fixtures: 10" in result.stdout
     assert "Findings: 0" in result.stdout
 
 
@@ -41,3 +42,26 @@ def test_semantic_skill_gauntlet_flags_unknown_next_step(tmp_path: Path) -> None
     findings = check_semantic_skill_file(skill_path, tmp_path, spec, set(ALL_V3_SKILLS))
 
     assert any(finding.check == "unknown-next-step" for finding in findings)
+
+
+def test_semantic_skill_gauntlet_flags_bad_scenario_route(tmp_path: Path) -> None:
+    fixture_dir = tmp_path / "tests" / "fixtures" / "skill_gauntlet"
+    fixture_dir.mkdir(parents=True)
+    (fixture_dir / "scenarios.json").write_text(
+        """
+        [
+          {
+            "id": "bad-route",
+            "prompt": "Work is about to be called done. Check acceptance criteria and write a QA report.",
+            "expected_skill": "workflow-router",
+            "expected_terms": ["workflow-state"]
+          }
+        ]
+        """,
+        encoding="utf-8",
+    )
+
+    findings, checked = collect_scenario_findings(tmp_path, ALL_V3_SKILLS)
+
+    assert checked == 1
+    assert any(finding.check == "scenario-route" for finding in findings)
