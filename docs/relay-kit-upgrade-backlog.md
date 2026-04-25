@@ -9,6 +9,7 @@ Source audit status:
 - Fixed in first P1 pass: checked-in live state and generated state templates no longer contain `TBD`; `runtime_doctor --state-mode live` passes.
 - Fixed in second P1 pass: `developer` no longer requires `test-first-development` when the active bundle does not provide it.
 - Fixed in third P1 pass: checked-in contract artifacts and generated contract templates no longer contain `TBD`; live-mode `runtime_doctor` now checks `.relay-kit/contracts/*.md`.
+- Strengthened in recursive contract placeholder pass: live-mode `runtime_doctor` now checks nested `.relay-kit/contracts/**/*.md` artifacts, including story files.
 - Fixed in CI baseline pass: `.github/workflows/validate-runtime.yml` now runs pytest, runtime doctor template/live mode, migration guard, and skill gauntlet.
 - Fixed in README encoding pass: `README.md` language switcher is valid UTF-8 without BOM or mojibake.
 - Fixed in doctor CLI pass: `relay-kit doctor` runs the core runtime gates and `scripts/` is packaged so the console command can find them.
@@ -73,6 +74,7 @@ Acceptance criteria:
 Status:
 - Fixed on 2026-04-24.
 - Verification: `python -m pytest tests/test_live_state_hygiene.py tests/test_contract_placeholder_hygiene.py -q` passes; `python scripts/runtime_doctor.py . --strict --state-mode live` reports 0 findings.
+- Strengthened on 2026-04-25: nested story contracts are included in live placeholder checks, and `.relay-kit/contracts/stories/story-001.md` no longer contains `TBD`.
 
 Problem:
 - Live state artifacts contain placeholders, so context continuity can look available while carrying empty state.

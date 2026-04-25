@@ -7,29 +7,29 @@
 ## Story statement
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Acceptance criteria
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Implementation notes
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Test notes
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Risks
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.
 
 ## Done checklist
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
-TBD
+No evidence recorded yet.

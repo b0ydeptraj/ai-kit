@@ -120,7 +120,7 @@ def check_contract_placeholders(root: Path, findings: list[str], mode: str) -> N
     contracts_dir = root / CONTRACTS_DIR
     if not contracts_dir.exists():
         return
-    for path in sorted(contracts_dir.glob("*.md")):
+    for path in sorted(contracts_dir.rglob("*.md")):
         content = path.read_text(encoding="utf-8")
         if "TBD" in content:
             rel = path.relative_to(root).as_posix()
