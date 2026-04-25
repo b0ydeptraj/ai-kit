@@ -1,4 +1,4 @@
-"""Export Relay-kit contracts into a machine-readable spec artifact."""
+"""Export Relay-kit contracts into a machine-readable contract artifact."""
 
 from __future__ import annotations
 
@@ -9,9 +9,9 @@ from pathlib import Path
 from typing import Any
 
 
-SCHEMA_VERSION = "relay-kit.spec-export.v1"
+SCHEMA_VERSION = "relay-kit.contract-export.v1"
 CONTRACT_ROOT = Path(".relay-kit") / "contracts"
-DEFAULT_OUTPUT = Path(".relay-kit") / "specs" / "relay-spec.json"
+DEFAULT_OUTPUT = Path(".relay-kit") / "contract-sync" / "relay-contract.json"
 PLACEHOLDER_LINES = {
     "TBD",
     "No evidence recorded yet.",
@@ -34,7 +34,7 @@ DEFAULT_ARTIFACTS = [
 ]
 
 
-def export_spec(project_root: Path | str, *, artifact_paths: list[str] | None = None) -> dict[str, Any]:
+def export_contracts(project_root: Path | str, *, artifact_paths: list[str] | None = None) -> dict[str, Any]:
     root = Path(project_root).resolve()
     artifacts = artifact_paths or DEFAULT_ARTIFACTS
     parsed = [_read_artifact(root, rel_path) for rel_path in artifacts]
@@ -100,13 +100,13 @@ def export_spec(project_root: Path | str, *, artifact_paths: list[str] | None = 
     }
 
 
-def write_spec(project_root: Path | str, output_file: Path | str | None = None) -> Path:
+def write_contract_export(project_root: Path | str, output_file: Path | str | None = None) -> Path:
     root = Path(project_root).resolve()
     output_path = Path(output_file) if output_file is not None else root / DEFAULT_OUTPUT
     if not output_path.is_absolute():
         output_path = root / output_path
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    payload = export_spec(root)
+    payload = export_contracts(root)
     output_path.write_text(json.dumps(payload, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
     return output_path
 

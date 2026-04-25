@@ -1,4 +1,4 @@
-"""Import machine-readable Relay specs back into Relay-kit contracts."""
+"""Import machine-readable Relay contract JSON back into Relay-kit contracts."""
 
 from __future__ import annotations
 
@@ -8,10 +8,10 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 from relay_kit_v3.registry.artifacts import ARTIFACT_CONTRACTS, ArtifactContract, render_artifact
-from relay_kit_v3.spec_export import DEFAULT_OUTPUT, PLACEHOLDER_LINES, SCHEMA_VERSION, parse_markdown_sections
+from relay_kit_v3.contract_export import DEFAULT_OUTPUT, PLACEHOLDER_LINES, SCHEMA_VERSION, parse_markdown_sections
 
 
-IMPORT_SCHEMA_VERSION = "relay-kit.spec-import.v1"
+IMPORT_SCHEMA_VERSION = "relay-kit.contract-import.v1"
 
 SECTION_MAPPINGS = [
     (".relay-kit/contracts/PRD.md", "Functional requirements", ("requirements",)),
@@ -28,31 +28,31 @@ SECTION_MAPPINGS = [
 CONTRACT_BY_PATH = {contract.path: contract for contract in ARTIFACT_CONTRACTS.values()}
 
 
-def import_spec(
+def import_contracts(
     project_root: Path | str,
     *,
-    spec_file: Path | str | None = None,
+    contract_file: Path | str | None = None,
     apply: bool = False,
     force: bool = False,
 ) -> dict[str, Any]:
     root = Path(project_root).resolve()
-    spec_path = _resolve_spec_file(root, spec_file)
+    contract_path = _resolve_contract_file(root, contract_file)
     findings: list[str] = []
 
     try:
-        payload = json.loads(spec_path.read_text(encoding="utf-8"))
+        payload = json.loads(contract_path.read_text(encoding="utf-8"))
     except FileNotFoundError:
-        return _report(root, spec_path, apply, force, "fail", [], [f"Spec file not found: {spec_path}"])
+        return _report(root, contract_path, apply, force, "fail", [], [f"Contract file not found: {contract_path}"])
     except json.JSONDecodeError as exc:
-        return _report(root, spec_path, apply, force, "fail", [], [f"Spec file is not valid JSON: {exc}"])
+        return _report(root, contract_path, apply, force, "fail", [], [f"Contract file is not valid JSON: {exc}"])
 
     schema_version = payload.get("schema_version") if isinstance(payload, Mapping) else None
     if schema_version != SCHEMA_VERSION:
-        findings.append(f"Unsupported spec schema_version: {schema_version!r}; expected {SCHEMA_VERSION!r}")
+        findings.append(f"Unsupported contract schema_version: {schema_version!r}; expected {SCHEMA_VERSION!r}")
     if not isinstance(payload, Mapping):
-        findings.append("Spec payload must be a JSON object")
+        findings.append("Contract payload must be a JSON object")
     if findings:
-        return _report(root, spec_path, apply, force, "fail", [], findings)
+        return _report(root, contract_path, apply, force, "fail", [], findings)
 
     updates = _updates_from_payload(payload)
     actions: list[dict[str, Any]] = []
@@ -106,14 +106,14 @@ def import_spec(
             path.write_text(content, encoding="utf-8")
 
     status = "hold" if any(action["status"] == "skipped-existing" for action in actions) else "pass"
-    return _report(root, spec_path, apply, force, status, actions, findings)
+    return _report(root, contract_path, apply, force, status, actions, findings)
 
 
-def render_import_report(report: Mapping[str, Any]) -> str:
+def render_contract_import_report(report: Mapping[str, Any]) -> str:
     lines = [
-        "Relay-kit spec import",
+        "Relay-kit contract import",
         f"- project: {report.get('project_path')}",
-        f"- spec: {report.get('spec_file')}",
+        f"- contract: {report.get('contract_file')}",
         f"- mode: {'apply' if report.get('apply') else 'dry-run'}",
         f"- status: {report.get('status')}",
         f"- actions: {len(report.get('actions', []))}",
@@ -146,8 +146,8 @@ def replace_markdown_section(content: str, section: str, values: Iterable[str]) 
     return "\n".join(lines).rstrip() + "\n"
 
 
-def _resolve_spec_file(root: Path, spec_file: Path | str | None) -> Path:
-    path = Path(spec_file) if spec_file is not None else root / DEFAULT_OUTPUT
+def _resolve_contract_file(root: Path, contract_file: Path | str | None) -> Path:
+    path = Path(contract_file) if contract_file is not None else root / DEFAULT_OUTPUT
     if not path.is_absolute():
         path = root / path
     return path.resolve()
@@ -193,7 +193,7 @@ def _read_or_render_contract(path: Path, target_path: str) -> str:
             path=target_path,
             purpose="Imported Relay-kit contract.",
             sections=[],
-            used_by=["spec-import"],
+            used_by=["contract-import"],
         )
     return render_artifact(contract)
 
@@ -223,7 +223,7 @@ def _section_bounds(lines: list[str], section: str) -> tuple[int | None, int]:
 
 def _report(
     root: Path,
-    spec_path: Path,
+    contract_path: Path,
     apply: bool,
     force: bool,
     status: str,
@@ -234,7 +234,7 @@ def _report(
         "schema_version": IMPORT_SCHEMA_VERSION,
         "status": status,
         "project_path": str(root),
-        "spec_file": str(spec_path),
+        "contract_file": str(contract_path),
         "apply": apply,
         "force": force,
         "actions": actions,

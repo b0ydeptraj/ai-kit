@@ -5,7 +5,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from relay_kit_v3 import spec_export
+from relay_kit_v3 import contract_export
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,7 +18,7 @@ def write_artifact(root: Path, rel_path: str, content: str) -> Path:
     return path
 
 
-def test_spec_export_collects_acceptance_and_verification(tmp_path: Path) -> None:
+def test_contract_export_collects_acceptance_and_verification(tmp_path: Path) -> None:
     write_artifact(
         tmp_path,
         ".relay-kit/contracts/stories/story-001.md",
@@ -33,7 +33,7 @@ def test_spec_export_collects_acceptance_and_verification(tmp_path: Path) -> Non
         - Export includes verification steps.
 
         ## Test notes
-        - Run `python -m pytest tests/test_spec_export.py -q`.
+        - Run `python -m pytest tests/test_contract_export.py -q`.
         """,
     )
     write_artifact(
@@ -46,25 +46,25 @@ def test_spec_export_collects_acceptance_and_verification(tmp_path: Path) -> Non
         - Both criteria covered by unit tests.
 
         ## Evidence collected
-        - `python -m pytest tests/test_spec_export.py -q` passed.
+        - `python -m pytest tests/test_contract_export.py -q` passed.
         """,
     )
 
-    payload = spec_export.export_spec(tmp_path)
+    payload = contract_export.export_contracts(tmp_path)
 
-    assert payload["schema_version"] == "relay-kit.spec-export.v1"
+    assert payload["schema_version"] == "relay-kit.contract-export.v1"
     assert payload["verification_ready"] is True
     assert payload["acceptance_criteria"] == [
         "Export includes acceptance criteria.",
         "Export includes verification steps.",
     ]
     assert payload["verification"]["evidence"] == [
-        "`python -m pytest tests/test_spec_export.py -q` passed."
+        "`python -m pytest tests/test_contract_export.py -q` passed."
     ]
     assert payload["source_files"][0]["sha256"]
 
 
-def test_spec_export_marks_placeholder_contract_not_ready(tmp_path: Path) -> None:
+def test_contract_export_marks_placeholder_contract_not_ready(tmp_path: Path) -> None:
     write_artifact(
         tmp_path,
         ".relay-kit/contracts/stories/story-001.md",
@@ -76,14 +76,14 @@ def test_spec_export_marks_placeholder_contract_not_ready(tmp_path: Path) -> Non
         """,
     )
 
-    payload = spec_export.export_spec(tmp_path)
+    payload = contract_export.export_contracts(tmp_path)
 
     assert payload["verification_ready"] is False
     assert "acceptance_criteria" in payload["missing_fields"]
     assert "verification_evidence" in payload["missing_fields"]
 
 
-def test_spec_export_ignores_template_instruction_lines(tmp_path: Path) -> None:
+def test_contract_export_ignores_template_instruction_lines(tmp_path: Path) -> None:
     write_artifact(
         tmp_path,
         ".relay-kit/contracts/PRD.md",
@@ -98,14 +98,14 @@ def test_spec_export_ignores_template_instruction_lines(tmp_path: Path) -> None:
         """,
     )
 
-    payload = spec_export.export_spec(tmp_path)
+    payload = contract_export.export_contracts(tmp_path)
 
     assert payload["requirements"] == []
     assert payload["acceptance_criteria"] == []
     assert "acceptance_criteria" in payload["missing_fields"]
 
 
-def test_public_cli_spec_export_writes_json(tmp_path: Path) -> None:
+def test_public_cli_contract_export_writes_json(tmp_path: Path) -> None:
     write_artifact(
         tmp_path,
         ".relay-kit/contracts/stories/story-001.md",
@@ -125,7 +125,7 @@ def test_public_cli_spec_export_writes_json(tmp_path: Path) -> None:
         [
             sys.executable,
             "relay_kit_public_cli.py",
-            "spec",
+            "contract",
             "export",
             str(tmp_path),
             "--output-file",

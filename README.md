@@ -124,9 +124,9 @@ Doctor writes local JSONL events to `.relay-kit/evidence/events.jsonl`.
 Export planning and QA contracts as machine-readable JSON:
 
 ```bash
-relay-kit spec export /path/to/project
-relay-kit spec import /path/to/project --spec-file /path/to/relay-spec.json
-relay-kit spec import /path/to/project --spec-file /path/to/relay-spec.json --apply
+relay-kit contract export /path/to/project
+relay-kit contract import /path/to/project --contract-file /path/to/relay-contract.json
+relay-kit contract import /path/to/project --contract-file /path/to/relay-contract.json --apply
 ```
 
 Write and verify the bundle checksum manifest:

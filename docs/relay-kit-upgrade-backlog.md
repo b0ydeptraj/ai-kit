@@ -26,7 +26,7 @@ Source audit status:
 - Fixed in support workflow pass: `relay-kit support bundle` creates redacted diagnostic JSON and docs define severity, evidence, support scope, and escalation workflow.
 - Fixed in trusted manifest pass: `relay-kit manifest stamp`, `relay-kit manifest verify --trusted`, and enterprise doctor require deterministic trust metadata for enterprise release evidence.
 - Fixed in governance reference pass: enterprise policy guard now fails required governance files that still contain unresolved `TBD` or template markers.
-- Fixed in spec import pass: `relay-kit spec import` can dry-run or apply OpenSpec-style Relay JSON back into PRD, story, tech-spec, and QA contracts without overwriting concrete sections unless `--force` is used.
+- Fixed in contract import pass: `relay-kit contract import` can dry-run or apply Relay contract JSON back into PRD, story, tech-spec, and QA contracts without overwriting concrete sections unless `--force` is used.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -508,14 +508,14 @@ Acceptance criteria:
 - Trusted verify catches manifest/trust drift.
 - Enterprise doctor fails closed when trust metadata is missing.
 
-### P2 - Add Spec Export and Import Contract
+### P2 - Add Contract Export and Import
 
 Status:
 - Fixed on 2026-04-24 for export.
-- Done: `relay-kit spec export <project>` writes a machine-readable JSON contract with source artifact hashes, requirements, acceptance criteria, verification steps, evidence, files, risks, missing fields, and `verification_ready`.
+- Done: `relay-kit contract export <project>` writes a machine-readable JSON contract with source artifact hashes, requirements, acceptance criteria, verification steps, evidence, files, risks, missing fields, and `verification_ready`.
 - Fixed on 2026-04-25 for import/sync back.
-- Done: `relay-kit spec import <project> --spec-file <relay-spec.json>` previews contract updates; `--apply` writes them; `--force` is required to overwrite concrete existing sections.
-- Verification: `python -m pytest tests/test_spec_export.py tests/test_spec_import.py -q` passes; a smoke export for this repo reports `verification_ready=false` when template placeholders lack real acceptance/evidence.
+- Done: `relay-kit contract import <project> --contract-file <relay-contract.json>` previews contract updates; `--apply` writes them; `--force` is required to overwrite concrete existing sections.
+- Verification: `python -m pytest tests/test_contract_export.py tests/test_contract_import.py -q` passes; a smoke export for this repo reports `verification_ready=false` when template placeholders lack real acceptance/evidence.
 
 Problem:
 - Relay-kit contracts were readable by humans but not exportable/importable as a machine-validated planning/evidence artifact.
@@ -607,7 +607,7 @@ Acceptance criteria:
 | Behavior skill tests | Add | P1 | `scripts/skill_gauntlet.py --semantic tests/fixtures/skill_gauntlet/*.yaml` |
 | Runtime policy guard | Add | P1 | `scripts/policy_guard.py` with deterministic security/path/shell checks |
 | Evidence ledger | Add | P2 | `.relay-kit/evidence/events.jsonl` plus `relay-kit evidence summary` |
-| Spec export/import | Add | P2 | Done: `relay-kit spec export` exports Relay contracts to JSON; `relay-kit spec import` previews/applies JSON back into Relay contracts with overwrite protection. |
+| Contract export/import | Add | P2 | Done: `relay-kit contract export` exports Relay contracts to JSON; `relay-kit contract import` previews/applies JSON back into Relay contracts with overwrite protection. |
 | Completion proof overlap | Merge or clarify | P3 | Done: `prove-it` delegates to `evidence-before-completion`; `qa-governor` owns readiness verdicts and `qa-report.md` |
 | Legacy kit exposure | Hide by default | P2 | `--list-skills` excludes migration-only/legacy unless `--legacy` |
 | Thin domain utilities | Strengthen | P3 | Add script refs, evidence contracts, and narrower triggers |
@@ -660,7 +660,7 @@ Expected gain:
 - Add strict release/a11y evidence gates.
 - Add policy guard.
 - Add evidence ledger and JSON doctor output.
-- Add OpenSpec/spec-kit-style artifact contract for stories and acceptance criteria.
+- Add Relay contract artifact sync for stories and acceptance criteria, informed by the OpenSpec/spec-kit benchmark but named and shaped as Relay-kit.
 
 Expected gain:
 - Routing, handoff, completion, and safety claims become executable.

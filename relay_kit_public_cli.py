@@ -9,7 +9,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit upgrade check <project_path>
   relay-kit policy check <project_path>
   relay-kit support bundle <project_path>
-  relay-kit spec import <project_path> --spec-file <relay-spec.json>
+  relay-kit contract import <project_path> --contract-file <relay-contract.json>
 
 It maps to the existing canonical runtime entrypoint (`relay_kit.py`)
 without changing the underlying generation flow.
@@ -28,8 +28,8 @@ import relay_kit as relay_core
 from relay_kit_v3.evidence_ledger import append_event, ledger_path, new_run_id, parse_findings_count, summarize_events
 from relay_kit_v3.bundle_manifest import verify_manifest_file, verify_trusted_manifest_file, write_manifest, write_trust_stamp
 from relay_kit_v3.policy_packs import DEFAULT_POLICY_PACK, POLICY_PACKS
-from relay_kit_v3.spec_export import write_spec
-from relay_kit_v3.spec_import import import_spec, render_import_report
+from relay_kit_v3.contract_export import write_contract_export
+from relay_kit_v3.contract_import import import_contracts, render_contract_import_report
 from relay_kit_v3.support_bundle import build_support_bundle, write_support_bundle
 from relay_kit_v3.upgrade import build_upgrade_report, render_report, write_version_marker
 
@@ -152,10 +152,10 @@ def _parse_evidence_args(argv: list[str]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def _parse_spec_args(argv: list[str]) -> argparse.Namespace:
+def _parse_contract_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        prog="relay-kit spec",
-        description="Export and import Relay-kit planning and QA contracts as machine-readable specs.",
+        prog="relay-kit contract",
+        description="Export and import Relay-kit planning and QA contracts as machine-readable contract JSON.",
     )
     subparsers = parser.add_subparsers(dest="action", required=True)
     export = subparsers.add_parser("export", help="Export Relay-kit contracts to JSON")
@@ -163,14 +163,14 @@ def _parse_spec_args(argv: list[str]) -> argparse.Namespace:
     export.add_argument(
         "--output-file",
         default=None,
-        help="Output path (default: <project>/.relay-kit/specs/relay-spec.json)",
+        help="Output path (default: <project>/.relay-kit/contract-sync/relay-contract.json)",
     )
-    import_cmd = subparsers.add_parser("import", help="Plan or apply Relay spec JSON into contracts")
+    import_cmd = subparsers.add_parser("import", help="Plan or apply Relay contract JSON into contracts")
     import_cmd.add_argument("project_path", nargs="?", default=".", help="Project root to update")
     import_cmd.add_argument(
-        "--spec-file",
+        "--contract-file",
         default=None,
-        help="Input spec path (default: <project>/.relay-kit/specs/relay-spec.json)",
+        help="Input contract JSON path (default: <project>/.relay-kit/contract-sync/relay-contract.json)",
     )
     import_cmd.add_argument("--apply", action="store_true", help="Write contract updates instead of dry-running")
     import_cmd.add_argument("--force", action="store_true", help="Overwrite concrete existing contract sections")
@@ -540,22 +540,22 @@ def run_evidence(args: argparse.Namespace) -> int:
     return 0
 
 
-def run_spec(args: argparse.Namespace) -> int:
+def run_contract(args: argparse.Namespace) -> int:
     if args.action == "export":
-        output_path = write_spec(args.project_path, args.output_file)
+        output_path = write_contract_export(args.project_path, args.output_file)
         print(f"Wrote {output_path}")
         return 0
     if args.action == "import":
-        report = import_spec(
+        report = import_contracts(
             args.project_path,
-            spec_file=args.spec_file,
+            contract_file=args.contract_file,
             apply=args.apply,
             force=args.force,
         )
         if args.json:
             print(json.dumps(report, ensure_ascii=True, indent=2))
         else:
-            print(render_import_report(report))
+            print(render_contract_import_report(report))
         if args.strict and report["status"] != "pass":
             return 2
         return 2 if report["status"] == "fail" else 0
@@ -686,8 +686,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_doctor(_parse_doctor_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "evidence":
         return run_evidence(_parse_evidence_args(raw_argv[1:]))
-    if raw_argv and raw_argv[0] == "spec":
-        return run_spec(_parse_spec_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "contract":
+        return run_contract(_parse_contract_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "manifest":
         return run_manifest(_parse_manifest_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "eval":
