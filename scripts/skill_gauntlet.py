@@ -53,6 +53,19 @@ STOPWORDS = {
     "to",
     "with",
 }
+OPTIONAL_ALIAS_CONTRACTS = {
+    "prove-it": [
+        "canonical skill: `evidence-before-completion`",
+        "claim-to-evidence",
+        "not a readiness verdict",
+        "does not write `qa-report.md`",
+    ],
+    "ready-check": [
+        "quality gate: `qa-governor`",
+        "go / no-go readiness",
+        "not a claim-to-evidence pass",
+    ],
+}
 
 
 @dataclass(frozen=True)
@@ -286,6 +299,32 @@ def collect_semantic_findings(base: Path, skill_files: Sequence[Path]) -> List[F
     return findings
 
 
+def collect_optional_alias_findings(base: Path) -> List[Finding]:
+    findings: List[Finding] = []
+    for root in RUNTIME_ROOTS:
+        for alias_name, required_terms in OPTIONAL_ALIAS_CONTRACTS.items():
+            path = base / root / alias_name / "SKILL.md"
+            if not path.exists():
+                continue
+            rel_path = path.relative_to(base).as_posix()
+            content = path.read_text(encoding="utf-8")
+            frontmatter = parse_frontmatter(content)
+            if frontmatter is None:
+                findings.append(Finding(rel_path, "optional-alias-contract", "Missing or malformed alias frontmatter"))
+                continue
+            description = frontmatter.get("description", "").strip()
+            if not description.startswith("Use when "):
+                findings.append(
+                    Finding(rel_path, "optional-alias-contract", "Alias description must start with 'Use when '")
+                )
+            for term in required_terms:
+                if term not in content:
+                    findings.append(
+                        Finding(rel_path, "optional-alias-contract", f"Missing required alias contract term: {term}")
+                    )
+    return findings
+
+
 def tokenize(text: str) -> set[str]:
     tokens = {
         token.lower()
@@ -514,6 +553,7 @@ def main() -> int:
         findings.extend(check_skill_file(path, base))
     if args.semantic:
         findings.extend(collect_semantic_findings(base, skill_files))
+        findings.extend(collect_optional_alias_findings(base))
         scenario_findings, scenario_count = collect_scenario_findings(
             base,
             ALL_V3_SKILLS,

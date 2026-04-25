@@ -26,6 +26,7 @@ Behind the scenes:
 How this differs from `review-pr`:
 - `review-pr` is for reviewing a branch or PR and deciding what must bounce back before merge
 - `ready-check` is for a go / no-go readiness or shipability verdict
+- this is not a claim-to-evidence pass
 - `prove-it` is for one last claim-to-evidence pass when the verdict still sounds too optimistic
 
 Typical handoff:

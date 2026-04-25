@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS, render_skill
-from scripts.skill_gauntlet import check_semantic_skill_file, collect_scenario_findings
+from scripts.skill_gauntlet import check_semantic_skill_file, collect_optional_alias_findings, collect_scenario_findings
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,7 +26,7 @@ def test_semantic_skill_gauntlet_passes_current_runtime() -> None:
 
     assert result.returncode == 0, result.stdout + result.stderr
     assert "Semantic checks: on" in result.stdout
-    assert "Scenario fixtures: 10" in result.stdout
+    assert "Scenario fixtures: 12" in result.stdout
     assert "Findings: 0" in result.stdout
 
 
@@ -69,3 +69,43 @@ def test_semantic_skill_gauntlet_flags_bad_scenario_route(tmp_path: Path) -> Non
 
     assert checked == 1
     assert any(finding.check == "scenario-route" for finding in findings)
+
+
+def test_semantic_skill_gauntlet_routes_claim_proof_to_evidence_utility(tmp_path: Path) -> None:
+    fixture_dir = tmp_path / "tests" / "fixtures" / "skill_gauntlet"
+    fixture_dir.mkdir(parents=True)
+    (fixture_dir / "scenarios.json").write_text(
+        """
+        [
+          {
+            "id": "completion-claim-proof",
+            "prompt": "List completion claims and map each claim to fresh proof output without deciding overall readiness.",
+            "expected_skill": "evidence-before-completion",
+            "expected_terms": ["claim-to-evidence", "proof output", "not a readiness verdict"]
+          }
+        ]
+        """,
+        encoding="utf-8",
+    )
+
+    findings, checked = collect_scenario_findings(
+        tmp_path,
+        ALL_V3_SKILLS,
+        Path("tests") / "fixtures" / "skill_gauntlet" / "scenarios.json",
+    )
+
+    assert checked == 1
+    assert findings == []
+
+
+def test_semantic_skill_gauntlet_flags_optional_alias_contract_drift(tmp_path: Path) -> None:
+    skill_path = tmp_path / ".codex" / "skills" / "prove-it" / "SKILL.md"
+    skill_path.parent.mkdir(parents=True)
+    skill_path.write_text(
+        "---\nname: prove-it\ndescription: Use when proving final work.\n---\n\n# Prove It\n\nLoose alias.\n",
+        encoding="utf-8",
+    )
+
+    findings = collect_optional_alias_findings(tmp_path)
+
+    assert any(finding.check == "optional-alias-contract" for finding in findings)

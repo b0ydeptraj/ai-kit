@@ -38,7 +38,7 @@ Convert release confidence into concrete pre and post deploy evidence instead of
 - explicit go, hold, or rollback recommendation tied to machine-checkable signals
 
 ## Reference skills and rules
-- Use `python scripts/release_readiness.py <project> --phase pre|post --signals-file <signals.json> --strict` for deterministic signal evaluation.
+- Use `python scripts/release_readiness.py <project> --phase pre|post` for deterministic checklists and signal evaluation.
 - Treat `ready-check` as review readiness, not automatic production readiness.
 
 ## Likely next step

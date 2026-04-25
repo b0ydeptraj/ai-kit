@@ -33,6 +33,7 @@ Common next step:
 - you already have code and evidence
 - you need a real go / no-go decision
 - the question is readiness, shipability, or whether the lane can be called done
+- you need `qa-governor` to write or refresh `qa-report.md`
 
 Typical outputs:
 
@@ -45,6 +46,7 @@ Typical outputs:
 - someone is about to say the work is done
 - the claim sounds stronger than the evidence
 - you want one last proof pass before accepting the verdict
+- you need a claim-to-evidence check, not a readiness verdict
 
 Typical outputs:
 
@@ -68,4 +70,4 @@ Typical outputs:
 ### Pressure-test a strong completion claim
 
 1. `prove-it`
-2. `ready-check`
+2. `ready-check` only when you still need a go / no-go readiness verdict

@@ -11,15 +11,18 @@ Use this when:
 - someone is about to say the work is done
 - the claim sounds stronger than the proof
 - you want one final claim-to-evidence check
+- you need to map each claim to fresh proof output
 
 What this alias should do:
 1. list the exact claims being made
-2. tie each claim to fresh proof
+2. tie each claim to fresh proof output
 3. send weak claims back for more testing or debugging
 
 Behind the scenes:
 - canonical skill: `evidence-before-completion`
-- common outputs: evidence added to `qa-report.md`, `workflow-state.md`, or the active artifact
+- this is not a readiness verdict
+- this alias does not write `qa-report.md`
+- common outputs: evidence added to `workflow-state.md` or the active artifact
 
 Typical handoff:
 - `ready-check`

@@ -654,14 +654,14 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
     ),
     "qa-governor": SkillSpec(
         name="qa-governor",
-        description="Use when work is about to be called done or implementation confidence is low. Check readiness and completion against acceptance criteria, risk, and regression scope, then write a QA report.",
+        description="Use when work needs a readiness verdict or implementation confidence is low. Check readiness against acceptance criteria, risk, and regression scope, then write a QA report.",
         role="quality",
         layer="layer-4-specialists-and-standalones",
         inputs=["PRD or tech-spec", "architecture or story", "evidence from tests and reviews"],
         outputs=[".relay-kit/contracts/qa-report.md"],
         references=[
             "Use testing-patterns as the evidence map for the project.",
-            "When discipline utilities are installed, use `evidence-before-completion` before making completion claims.",
+            "Use `evidence-before-completion` only for the narrow claim-to-evidence pass before this readiness gate.",
             "Use `.relay-kit/docs/review-loop.md` when review feedback must be validated before action.",
             "Coverage must be explained against acceptance criteria and risk, not just number of tests.",
             "Use context-continuity when readiness evidence must survive a new thread or handoff before final sign-off.",
@@ -670,7 +670,12 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         body=dedent(
             """\
             # Mission
-            Prevent premature completion claims and surface residual risk clearly.
+            Produce a readiness verdict and surface residual risk clearly.
+
+            ## Boundary
+            - Use qa-governor for readiness verdict, shipability, acceptance coverage, risk, and regression scope.
+            - This is not a one-claim proof pass; use evidence-before-completion for claim-to-evidence checks.
+            - End with a go or no-go recommendation grounded in evidence.
 
             ## Produce `qa-report.md`
             Include:
@@ -686,7 +691,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - Name the regression surface explicitly.
             - Call out missing tests, weak evidence, or unverified assumptions.
             - Bounce work back when story, tech-spec, or architecture is still underspecified.
-            - Treat completion claims as invalid until they are backed by fresh verification evidence.
+            - Treat completion claims as invalid until the claim-to-evidence pass has fresh verification evidence.
             """
         ).strip(),
     ),
@@ -1461,14 +1466,24 @@ DISCIPLINE_UTILITY_SKILLS: Dict[str, SkillSpec] = {
     ),
     "evidence-before-completion": utility_provider_spec(
         name="evidence-before-completion",
-        description="Use when a hub or specialist is about to say work is done, fixed, or ready. Completion-evidence utility.",
-        outputs=["fresh verification evidence and claim checks appended to qa-report, workflow-state, or the active artifact"],
-        references=["No completion claims without fresh verification output.", "Match every claim to the command or evidence that proves it."],
+        description="Use when a hub or specialist has specific completion claims to verify. Map each claim to fresh proof output before saying work is done, fixed, or ready. Claim-to-evidence utility.",
+        outputs=["fresh claim-to-evidence checks and proof output appended to workflow-state or the active artifact"],
+        references=["No completion claims without fresh verification output.", "Match every claim to the command or evidence that proves it.", "Hand formal readiness verdicts to qa-governor or ready-check."],
         next_steps=["test-hub", "qa-governor", "review-hub"],
         mission="Stop premature completion claims by forcing a claim-to-evidence check.",
+        boundary=[
+            "Use for specific completion claims that need proof output.",
+            "This is not a readiness verdict and does not decide shipability.",
+            "This utility does not own `qa-report.md`; qa-governor owns formal QA reports and go or no-go recommendations.",
+        ],
+        evidence_contract=[
+            "Input must include the exact claims being made and the newest available evidence.",
+            "Output must map each claim to a command, artifact, or observed proof output.",
+            "Reject any claim without fresh evidence and route back to testing or debugging.",
+        ],
         tasks=[
             "List the exact claims being made.",
-            "Name the command, artifact, or output that proves each claim.",
+            "Name the command, artifact, or proof output that proves each claim.",
             "Check whether expected artifact deltas actually exist for code-change claims.",
             "Reject claims that are not backed by fresh evidence.",
         ],

@@ -38,7 +38,7 @@ Turn accessibility from implicit best effort into a concrete review gate with ma
 - pass or hold verdict tied to keyboard, semantics, focus, and contrast evidence
 
 ## Reference skills and rules
-- Use `python scripts/accessibility_review.py <project> --report-file <a11y-report> --strict` to evaluate the gate checklist.
+- Use `python scripts/accessibility_review.py <project>` to generate or evaluate the gate checklist.
 - Treat accessibility as a required quality bar, not cosmetic polish.
 
 ## Likely next step

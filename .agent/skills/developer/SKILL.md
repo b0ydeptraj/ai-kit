@@ -11,7 +11,7 @@ Turn an approved story or tech-spec into code and evidence without reopening sol
 2. Pull only the support references needed for the specific files or boundaries involved.
 3. Use `test-first-development` when it is installed, selected, or provided by the active bundle; otherwise run the test-first loop directly inside this skill.
 4. Capture the failing test or failing reproduction signal before the main implementation pass.
-5. If test-first is not practical, say why and name the fallback evidence path before editing code.
+5. If a test-first loop is not practical, say why and name the fallback evidence path before editing code.
 6. Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data. Do not add decorative icons, emojis, or unusual Unicode characters unless the existing repo or product content explicitly requires them.
 7. Execute through `execution-loop` rather than piling unrelated changes into one pass.
 8. Keep one behavior or fix slice per red-green cycle instead of widening scope during the green phase.

@@ -28,8 +28,8 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
     payload = json.loads(result.stdout)
     assert payload["schema_version"] == "relay-kit.workflow-eval.v1"
     assert payload["status"] == "pass"
-    assert payload["scenario_count"] == 10
-    assert payload["passed"] == 10
+    assert payload["scenario_count"] == 12
+    assert payload["passed"] == 12
     assert payload["failed"] == 0
     assert payload["pass_rate"] == 1.0
     assert payload["results"][0]["top_routes"][0]["skill"] == payload["results"][0]["expected_skill"]

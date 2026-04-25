@@ -207,6 +207,8 @@ Default path for branch or PR review:
 2. `ready-check` if you need a real readiness or shipability verdict
 3. `prove-it` if the completion claim still sounds stronger than the proof
 
+Use `prove-it` for a narrow claim-to-evidence pass. Use `ready-check` when you need a go / no-go readiness verdict and `qa-report.md`.
+
 More detail:
 - [`docs/relay-kit-start-flow.md`](docs/relay-kit-start-flow.md)
 - [`docs/relay-kit-review-flow.md`](docs/relay-kit-review-flow.md)

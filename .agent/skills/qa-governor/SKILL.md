@@ -1,10 +1,15 @@
 ---
 name: qa-governor
-description: Use when work is about to be called done or implementation confidence is low. Check readiness and completion against acceptance criteria, risk, and regression scope, then write a QA report.
+description: Use when work needs a readiness verdict or implementation confidence is low. Check readiness against acceptance criteria, risk, and regression scope, then write a QA report.
 ---
 
 # Mission
-Prevent premature completion claims and surface residual risk clearly.
+Produce a readiness verdict and surface residual risk clearly.
+
+## Boundary
+- Use qa-governor for readiness verdict, shipability, acceptance coverage, risk, and regression scope.
+- This is not a one-claim proof pass; use evidence-before-completion for claim-to-evidence checks.
+- End with a go or no-go recommendation grounded in evidence.
 
 ## Produce `qa-report.md`
 Include:
@@ -20,7 +25,7 @@ Include:
 - Name the regression surface explicitly.
 - Call out missing tests, weak evidence, or unverified assumptions.
 - Bounce work back when story, tech-spec, or architecture is still underspecified.
-- Treat completion claims as invalid until they are backed by fresh verification evidence.
+- Treat completion claims as invalid until the claim-to-evidence pass has fresh verification evidence.
 
 ## Role
 - quality
@@ -38,7 +43,7 @@ Include:
 
 ## Reference skills and rules
 - Use testing-patterns as the evidence map for the project.
-- When discipline utilities are installed, use `evidence-before-completion` before making completion claims.
+- Use `evidence-before-completion` only for the narrow claim-to-evidence pass before this readiness gate.
 - Use `.relay-kit/docs/review-loop.md` when review feedback must be validated before action.
 - Coverage must be explained against acceptance criteria and risk, not just number of tests.
 - Use context-continuity when readiness evidence must survive a new thread or handoff before final sign-off.

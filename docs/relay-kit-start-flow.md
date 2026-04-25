@@ -46,7 +46,7 @@ Start with these public names:
 ### Final confidence check
 
 1. `prove-it`
-2. `ready-check`
+2. `ready-check` only when you still need a go / no-go readiness verdict
 
 ## Why this exists
 

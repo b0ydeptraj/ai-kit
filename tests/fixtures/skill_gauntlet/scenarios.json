@@ -58,5 +58,17 @@
     "prompt": "The agent is about to say fixed and ready. Run one last evidence pass before making the completion claim.",
     "expected_skill": "evidence-before-completion",
     "expected_terms": ["completion claim", "evidence", "done"]
+  },
+  {
+    "id": "completion-claim-proof-output",
+    "prompt": "List completion claims and map each claim to fresh proof output without deciding overall readiness.",
+    "expected_skill": "evidence-before-completion",
+    "expected_terms": ["claim-to-evidence", "proof output", "not a readiness verdict"]
+  },
+  {
+    "id": "qa-readiness-verdict",
+    "prompt": "Implementation evidence exists. Produce a formal go or no-go readiness verdict against acceptance criteria, risk, regression scope, and qa-report.",
+    "expected_skill": "qa-governor",
+    "expected_terms": ["readiness verdict", "go or no-go", "qa-report"]
   }
 ]

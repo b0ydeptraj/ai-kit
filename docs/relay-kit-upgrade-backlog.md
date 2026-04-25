@@ -14,7 +14,7 @@ Source audit status:
 - Fixed in doctor CLI pass: `relay-kit doctor` runs the core runtime gates and `scripts/` is packaged so the console command can find them.
 - Fixed in namespace cutover pass: active runtime imports now use `relay_kit_v3`; `ai_kit_v3` remains only as a one-cycle compatibility shim and allowlisted migration token.
 - Fixed in semantic gauntlet baseline pass: `skill_gauntlet --semantic` checks registry parity, unknown next-step references, empty I/O contracts, and duplicate trigger descriptions within each adapter.
-- Fixed in semantic scenario pass: `skill_gauntlet --semantic` now runs 10 route/evidence scenario fixtures from `tests/fixtures/skill_gauntlet/scenarios.json`.
+- Fixed in semantic scenario pass: `skill_gauntlet --semantic` now runs 12 route/evidence scenario fixtures from `tests/fixtures/skill_gauntlet/scenarios.json`.
 - Fixed in SRS opt-in pass: policy-driven `srs_guard` runs from doctor/CI, defaults to off, and hard-fails only when SRS policy is enabled.
 - Fixed in DX list-skills pass: preserved legacy kits are hidden from default `--list-skills` and require `--show-legacy`.
 - Fixed in runtime policy guard pass: `policy_guard.py` detects deterministic secret, path traversal, destructive shell, prompt-injection, and broad allowlist risks and runs from doctor/CI.
@@ -124,8 +124,8 @@ Acceptance criteria:
 
 Status:
 - Fixed on 2026-04-24.
-- Verification: `python scripts/skill_gauntlet.py . --strict --semantic` reports 0 findings and 10 scenario fixtures; `python -m pytest tests/test_skill_gauntlet_semantic.py -q` passes.
-- Done: route prompt scenario fixtures cover the 10 critical workflows.
+- Verification: `python scripts/skill_gauntlet.py . --strict --semantic` reports 0 findings and 12 scenario fixtures; `python -m pytest tests/test_skill_gauntlet_semantic.py -q` passes.
+- Done: route prompt scenario fixtures cover the 12 critical workflows.
 
 Problem:
 - Current `skill_gauntlet` mostly checks structure, so it can pass while routing and handoff behavior drift.
@@ -364,7 +364,7 @@ Status:
 - Done: `relay-kit eval run <project> --strict` reports pass rate, top routes, predicted skill, and per-scenario findings.
 - Done: default fixtures are bundled under `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, so installed CLI runs do not depend on repo test files.
 - Done: `relay-kit doctor` and CI run `scripts/eval_workflows.py . --strict`.
-- Verification: `python scripts/eval_workflows.py . --strict` reports 10/10 scenarios; `python -m pytest tests/test_workflow_eval.py -q` passes.
+- Verification: `python scripts/eval_workflows.py . --strict` reports 12/12 scenarios; `python -m pytest tests/test_workflow_eval.py -q` passes.
 
 Problem:
 - Semantic gauntlet proved static contract drift, but commercial quality needs a reportable scenario pass-rate signal.
@@ -572,8 +572,8 @@ Acceptance criteria:
 Status:
 - Fixed on 2026-04-24 for the thin-utility contract gap.
 - Done: `problem-solving`, `sequential-thinking`, `browser-inspector`, and `multimodal-evidence` now have explicit boundary and evidence contract sections in the registry and generated runtime skills.
-- Verification: `python scripts/skill_gauntlet.py . --strict --semantic` reports 0 findings; `python -m pytest tests/test_utility_contracts.py tests/test_skill_gauntlet_semantic.py -q` passes.
-- Deferred: merging `prove-it`, `evidence-before-completion`, and `qa-governor` should be a separate routing-change proposal.
+- Fixed on 2026-04-25 for completion proof overlap: `qa-governor` owns readiness verdicts and `qa-report.md`; `evidence-before-completion` owns narrow claim-to-evidence proof output; `prove-it` remains a public alias for `evidence-before-completion`.
+- Verification: `python scripts/skill_gauntlet.py . --strict --semantic` reports 0 findings; `python -m pytest tests/test_completion_contracts.py tests/test_utility_contracts.py tests/test_skill_gauntlet_semantic.py -q` passes.
 
 Problem:
 - Some generic utility skills are thin and can create routing noise.
@@ -602,7 +602,7 @@ Acceptance criteria:
 | Runtime policy guard | Add | P1 | `scripts/policy_guard.py` with deterministic security/path/shell checks |
 | Evidence ledger | Add | P2 | `.relay-kit/evidence/events.jsonl` plus `relay-kit evidence summary` |
 | Spec export/import | Add | P2 | Done: `relay-kit spec export` exports Relay contracts to JSON with files and verify fields. Import remains future work. |
-| Completion proof overlap | Merge or clarify | P3 | Consolidate `prove-it`, `evidence-before-completion`, `qa-governor` contracts |
+| Completion proof overlap | Merge or clarify | P3 | Done: `prove-it` delegates to `evidence-before-completion`; `qa-governor` owns readiness verdicts and `qa-report.md` |
 | Legacy kit exposure | Hide by default | P2 | `--list-skills` excludes migration-only/legacy unless `--legacy` |
 | Thin domain utilities | Strengthen | P3 | Add script refs, evidence contracts, and narrower triggers |
 
