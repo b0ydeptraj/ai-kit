@@ -24,6 +24,7 @@ Source audit status:
 - Fixed in Pro policy packs pass: `relay-kit policy check --pack baseline|team|enterprise` and `relay-kit doctor --policy-pack enterprise` enforce stronger governance surfaces for team/paid installs.
 - Fixed in support workflow pass: `relay-kit support bundle` creates redacted diagnostic JSON and docs define severity, evidence, support scope, and escalation workflow.
 - Fixed in trusted manifest pass: `relay-kit manifest stamp`, `relay-kit manifest verify --trusted`, and enterprise doctor require deterministic trust metadata for enterprise release evidence.
+- Fixed in governance reference pass: enterprise policy guard now fails required governance files that still contain unresolved `TBD` or template markers.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -434,6 +435,7 @@ Acceptance criteria:
 
 Status:
 - Fixed on 2026-04-24 for the first deterministic local policy pack slice.
+- Strengthened on 2026-04-25: required governance files now fail enterprise policy guard if they contain unresolved placeholder/template markers.
 - Done: `baseline`, `team`, and `enterprise` policy packs are defined in `relay_kit_v3/policy_packs.py`.
 - Done: `relay-kit policy list` and `relay-kit policy check <project> --pack enterprise --strict` are available.
 - Done: `relay-kit doctor <project> --policy-pack enterprise` passes the selected pack to policy guard.
@@ -451,6 +453,7 @@ Fix:
 Acceptance criteria:
 - Existing `policy_guard.py . --strict` behavior remains baseline-compatible.
 - Enterprise pack catches missing governance files in fixtures.
+- Enterprise pack catches placeholder-only required governance files in fixtures.
 - Enterprise pack passes on the checked-in Relay-kit runtime.
 
 ### P2 - Add Support Workflow and SLA Docs

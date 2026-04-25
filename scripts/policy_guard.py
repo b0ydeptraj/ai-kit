@@ -66,6 +66,11 @@ PROMPT_INJECTION_PATTERNS: Sequence[re.Pattern[str]] = (
 
 BROAD_ALLOWLIST_GLOBS = {"*", "**", "**/*", "*/*", "*/**"}
 
+REQUIRED_FILE_PLACEHOLDER_PATTERNS: Sequence[re.Pattern[str]] = (
+    re.compile(r"^\s*TBD\s*$", re.IGNORECASE),
+    re.compile(r"Record only codebase-specific facts, current conventions, or open risks", re.IGNORECASE),
+)
+
 
 @dataclass(frozen=True)
 class Finding:
@@ -162,7 +167,8 @@ def collect_allowlist_findings(path: Path, base: Path) -> list[Finding]:
 def collect_pack_findings(base: Path, pack_name: str | None = None) -> list[Finding]:
     pack = get_policy_pack(pack_name)
     findings: list[Finding] = []
-    for required_file in missing_required_files(base, pack):
+    missing = set(missing_required_files(base, pack))
+    for required_file in missing:
         findings.append(
             Finding(
                 required_file,
@@ -171,6 +177,21 @@ def collect_pack_findings(base: Path, pack_name: str | None = None) -> list[Find
                 f"Policy pack {pack.name!r} requires {required_file}",
             )
         )
+    for required_file in pack.required_files:
+        if required_file in missing:
+            continue
+        path = base / required_file
+        for line_no, line in enumerate(path.read_text(encoding="utf-8", errors="ignore").splitlines(), start=1):
+            if any(pattern.search(line) for pattern in REQUIRED_FILE_PLACEHOLDER_PATTERNS):
+                findings.append(
+                    Finding(
+                        required_file,
+                        line_no,
+                        "required-policy-file-placeholder",
+                        f"Policy pack {pack.name!r} requires concrete governance content in {required_file}",
+                    )
+                )
+                break
     return findings
 
 

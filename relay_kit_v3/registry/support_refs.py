@@ -140,9 +140,7 @@ def render_support_reference(doc: SupportReference) -> str:
     ]
     for section in doc.sections:
         lines.append(f"## {section}")
-        lines.append("Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.")
-        lines.append("")
-        lines.append("TBD")
+        lines.append("- Record codebase-specific facts, current conventions, or open risks before relying on this section.")
+        lines.append("- Include file paths, commands, owners, or known evidence gaps when available.")
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"
-

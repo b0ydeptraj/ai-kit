@@ -37,6 +37,7 @@ relay-kit doctor /path/to/project --policy-pack enterprise
 
 - all team checks
 - `relay-kit doctor --policy-pack enterprise` also requires a valid trusted bundle manifest
+- required governance files must contain concrete content, not unresolved `TBD`/template markers
 - requires security, testing, observability, review, and release governance surfaces:
   - `.relay-kit/references/security-patterns.md`
   - `.relay-kit/references/testing-patterns.md`

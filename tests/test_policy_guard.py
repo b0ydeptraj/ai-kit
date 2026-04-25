@@ -57,3 +57,17 @@ def test_policy_guard_flags_fixture_risks(tmp_path: Path) -> None:
     assert "destructive-shell" in checks
     assert "prompt-injection-phrase" in checks
     assert "broad-migration-allowlist" in checks
+
+
+def test_policy_guard_flags_placeholder_required_policy_file(tmp_path: Path) -> None:
+    pack = policy_guard.get_policy_pack("enterprise")
+    for required_file in pack.required_files:
+        path = tmp_path / required_file
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("# ready\n\nConcrete content.\n", encoding="utf-8")
+    placeholder_path = tmp_path / ".relay-kit" / "references" / "security-patterns.md"
+    placeholder_path.write_text("# security\n\nTBD\n", encoding="utf-8")
+
+    findings = policy_guard.collect_pack_findings(tmp_path, "enterprise")
+
+    assert any(finding.check == "required-policy-file-placeholder" for finding in findings)

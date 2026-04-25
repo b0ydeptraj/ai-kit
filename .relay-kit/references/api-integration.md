@@ -5,31 +5,31 @@
 > Used by: architect, developer, qa-governor
 
 ## Clients, transports, and endpoints
-Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
-
-TBD
+- Relay-kit core gates and public CLI do not call external HTTP or RPC services.
+- The primary integration surface is local process execution through Python scripts and generated adapter files.
+- Optional template tools may reference external providers, but those imports must remain lazy and outside root test collection.
 
 ## Authentication and secret handling
-Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
-
-TBD
+- No API credentials are required for `relay-kit init`, `doctor`, `manifest`, `policy`, `support`, `upgrade`, `spec`, `eval`, or `evidence` commands.
+- If a future integration needs credentials, the key source and redaction path must be documented before release.
+- Support diagnostics must not include raw API tokens.
 
 ## Retry, timeout, and idempotency rules
-Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
-
-TBD
+- Existing CLI/script gates are local and deterministic; retries are not part of normal behavior.
+- Manifest write/stamp and support bundle generation are idempotent local file writes.
+- Future network integrations need explicit timeout, retry, and failure-mode tests before entering enterprise flows.
 
 ## Request and response patterns
-Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
-
-TBD
+- Public commands print human-readable output by default and provide JSON flags for support, doctor, policy, upgrade, eval, and evidence surfaces where available.
+- Script gates return `0` on pass and non-zero in strict/failure modes.
+- Machine-readable contracts should include schema versions and stable fields.
 
 ## Error mapping and recovery
-Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
-
-TBD
+- CLI commands should fail cleanly with findings instead of tracebacks for expected user/runtime errors.
+- Trusted manifest verification reports missing or stale trust metadata as findings.
+- Support bundles capture diagnostics so recovery steps can be derived from current local evidence.
 
 ## Testing and mocking approach
-Record only codebase-specific facts, current conventions, or open risks. Include file paths when possible.
-
-TBD
+- Test local CLI integrations with `subprocess.run(..., capture_output=True, check=False)`.
+- Use monkeypatching for doctor subprocess orchestration tests.
+- New external API integrations need offline fakes or fixtures before they are allowed into root CI.

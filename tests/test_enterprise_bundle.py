@@ -6,7 +6,13 @@ from pathlib import Path
 
 from relay_kit_v3 import bundle_manifest
 from relay_kit_v3.generator import BUNDLES
-from relay_kit_v3.registry import BUNDLE_DOC_NAMES, REFERENCE_NAMES_FOR_BUNDLE, SUPPORT_REFERENCES, contract_names_for_bundle
+from relay_kit_v3.registry import (
+    BUNDLE_DOC_NAMES,
+    REFERENCE_NAMES_FOR_BUNDLE,
+    SUPPORT_REFERENCES,
+    contract_names_for_bundle,
+    render_support_reference,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,6 +42,13 @@ def test_enterprise_bundle_emits_governance_docs_and_all_references() -> None:
         "review-loop",
         "enterprise-bundle",
     }.issubset(docs)
+
+
+def test_rendered_support_references_have_no_tbd_markers() -> None:
+    for reference in SUPPORT_REFERENCES.values():
+        text = render_support_reference(reference)
+
+        assert "TBD" not in text, reference.path
 
 
 def test_bundle_manifest_includes_enterprise_bundle() -> None:
