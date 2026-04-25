@@ -8,6 +8,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit eval run <project_path>
   relay-kit upgrade check <project_path>
   relay-kit policy check <project_path>
+  relay-kit support bundle <project_path>
 
 It maps to the existing canonical runtime entrypoint (`relay_kit.py`)
 without changing the underlying generation flow.
@@ -27,6 +28,7 @@ from relay_kit_v3.evidence_ledger import append_event, ledger_path, new_run_id, 
 from relay_kit_v3.bundle_manifest import verify_manifest_file, write_manifest
 from relay_kit_v3.policy_packs import DEFAULT_POLICY_PACK, POLICY_PACKS
 from relay_kit_v3.spec_export import write_spec
+from relay_kit_v3.support_bundle import build_support_bundle, write_support_bundle
 from relay_kit_v3.upgrade import build_upgrade_report, render_report, write_version_marker
 
 
@@ -251,6 +253,26 @@ def _parse_policy_args(argv: list[str]) -> argparse.Namespace:
     check.add_argument("--pack", choices=sorted(POLICY_PACKS), default=DEFAULT_POLICY_PACK)
     check.add_argument("--strict", action="store_true", help="Return non-zero when findings exist")
     check.add_argument("--json", action="store_true", help="Emit JSON report")
+    return parser.parse_args(argv)
+
+
+def _parse_support_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit support",
+        description="Prepare Relay-kit support diagnostics.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    bundle = subparsers.add_parser("bundle", help="Write a support diagnostic JSON bundle")
+    bundle.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    bundle.add_argument(
+        "--policy-pack",
+        choices=sorted(POLICY_PACKS),
+        default=DEFAULT_POLICY_PACK,
+        help="Policy pack used for support diagnostics",
+    )
+    bundle.add_argument("--output-file", default=None, help="Output path (default: <project>/.relay-kit/support/support-bundle.json)")
+    bundle.add_argument("--evidence-limit", type=int, default=20, help="Recent evidence ledger events to include")
+    bundle.add_argument("--json", action="store_true", help="Emit bundle payload and output path as JSON")
     return parser.parse_args(argv)
 
 
@@ -549,6 +571,30 @@ def run_policy(args: argparse.Namespace) -> int:
     return 2
 
 
+def run_support(args: argparse.Namespace) -> int:
+    if args.action != "bundle":
+        return 2
+    output_path = write_support_bundle(
+        args.project_path,
+        policy_pack=args.policy_pack,
+        output_file=args.output_file,
+        evidence_limit=args.evidence_limit,
+    )
+    if args.json:
+        payload = {
+            "output_file": str(output_path),
+            "bundle": build_support_bundle(
+                args.project_path,
+                policy_pack=args.policy_pack,
+                evidence_limit=args.evidence_limit,
+            ),
+        }
+        print(json.dumps(payload, ensure_ascii=True, indent=2))
+        return 0
+    print(f"Wrote {output_path}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     raw_argv = sys.argv[1:] if argv is None else argv
     if raw_argv and raw_argv[0] == "doctor":
@@ -565,6 +611,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_upgrade(_parse_upgrade_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "policy":
         return run_policy(_parse_policy_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "support":
+        return run_support(_parse_support_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "init":
         raw_argv = raw_argv[1:]
 

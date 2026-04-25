@@ -22,6 +22,7 @@ Source audit status:
 - Fixed in upgrade CLI pass: `relay-kit upgrade check|plan|mark-current` tracks installed runtime version and prints safe upgrade actions without auto-overwriting files.
 - Fixed in enterprise bundle pass: `--bundle enterprise` installs baseline plus the full discipline utility set and emits governance docs for paid/team usage.
 - Fixed in Pro policy packs pass: `relay-kit policy check --pack baseline|team|enterprise` and `relay-kit doctor --policy-pack enterprise` enforce stronger governance surfaces for team/paid installs.
+- Fixed in support workflow pass: `relay-kit support bundle` creates redacted diagnostic JSON and docs define severity, evidence, support scope, and escalation workflow.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -451,6 +452,31 @@ Acceptance criteria:
 - Enterprise pack catches missing governance files in fixtures.
 - Enterprise pack passes on the checked-in Relay-kit runtime.
 
+### P2 - Add Support Workflow and SLA Docs
+
+Status:
+- Fixed on 2026-04-25 for the first commercial support workflow slice.
+- Done: `relay-kit support bundle <project> --policy-pack enterprise` writes `.relay-kit/support/support-bundle.json`.
+- Done: support bundle includes evidence summary, upgrade report, manifest status, policy findings, workflow eval summary, severity levels, and required commands.
+- Done: support diagnostics apply basic redaction for obvious token/private-key patterns.
+- Done: `.relay-kit/contracts/support-request.md` gives a support request template.
+- Done: `docs/relay-kit-support-sla.md` defines severity, triage targets, required diagnostics, included/excluded scope, and escalation flow.
+- Verification: `python -m pytest tests/test_support_bundle.py -q` passes.
+
+Problem:
+- Paid users need a support motion, not only runtime gates. Without support severity, required evidence, and diagnostic packaging, commercial readiness remains vague.
+
+Fix:
+- Add `relay_kit_v3/support_bundle.py`.
+- Add public CLI:
+  - `relay-kit support bundle`
+- Add checked-in support request contract and support SLA docs.
+
+Acceptance criteria:
+- A support bundle can be generated without network access.
+- The bundle has a stable schema and does not include obvious secret token strings.
+- Support request docs name exact commands and evidence files.
+
 ### P2 - Add Spec Export Contract
 
 Status:
@@ -610,7 +636,7 @@ Expected gain:
 - Done first slice: add versioned upgrade/migration CLI.
 - Done: add checksummed bundle manifest with `relay-kit manifest write` and `relay-kit manifest verify`.
 - Done first slice: add Pro policy packs.
-- Add support workflow and SLA docs.
+- Done first slice: add support workflow and SLA docs.
 - Done first slice: add enterprise bundle story.
 - Done first slice: add scenario eval harness for real workflow quality.
 

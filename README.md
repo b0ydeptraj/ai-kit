@@ -139,6 +139,12 @@ relay-kit policy list
 relay-kit policy check /path/to/project --pack enterprise --strict
 ```
 
+Prepare a support diagnostics bundle:
+
+```bash
+relay-kit support bundle /path/to/project --policy-pack enterprise
+```
+
 Measure workflow routing quality with bundled scenarios:
 
 ```bash

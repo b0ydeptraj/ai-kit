@@ -18,6 +18,7 @@ relay-kit init /path/to/project --all --bundle enterprise
 relay-kit doctor /path/to/project --policy-pack enterprise
 relay-kit manifest write /path/to/project
 relay-kit upgrade mark-current /path/to/project --bundle enterprise --adapter all
+relay-kit support bundle /path/to/project --policy-pack enterprise
 ```
 
 ## When To Use
@@ -30,6 +31,7 @@ Use `enterprise` for teams that need:
 - cross-session continuity and handoff contracts
 - repeatable upgrade tracking through manifests and version markers
 - enterprise policy-pack checks for security, testing, observability, review, and handoff surfaces
+- support diagnostics that package evidence for paid/team support
 
 Use `baseline` when the priority is a smaller first install surface.
 
@@ -39,7 +41,6 @@ This bundle is the first enterprise packaging slice. It does not yet include:
 
 - private registry distribution
 - signed manifests
-- support SLA workflow
 - organization-managed policy pack overrides
 
 Those can build on this bundle without changing the baseline install path.
