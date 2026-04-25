@@ -23,6 +23,7 @@ Source audit status:
 - Fixed in enterprise bundle pass: `--bundle enterprise` installs baseline plus the full discipline utility set and emits governance docs for paid/team usage.
 - Fixed in Pro policy packs pass: `relay-kit policy check --pack baseline|team|enterprise` and `relay-kit doctor --policy-pack enterprise` enforce stronger governance surfaces for team/paid installs.
 - Fixed in support workflow pass: `relay-kit support bundle` creates redacted diagnostic JSON and docs define severity, evidence, support scope, and escalation workflow.
+- Fixed in trusted manifest pass: `relay-kit manifest stamp` and `relay-kit manifest verify --trusted` require deterministic trust metadata for enterprise release evidence.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -477,6 +478,28 @@ Acceptance criteria:
 - The bundle has a stable schema and does not include obvious secret token strings.
 - Support request docs name exact commands and evidence files.
 
+### P2 - Add Trusted Manifest Verification
+
+Status:
+- Fixed on 2026-04-25 for the first non-cryptographic trust metadata slice.
+- Done: `relay-kit manifest stamp <project> --issuer <issuer> --channel <channel>` writes `.relay-kit/manifest/trust.json`.
+- Done: `relay-kit manifest verify <project> --trusted` requires valid manifest checksum plus trust metadata.
+- Done: trusted verification fails when a skill hash is tampered, manifest hash is stale, or trust metadata is missing.
+- Verification: `python -m pytest tests/test_bundle_manifest.py -q` passes.
+
+Problem:
+- Enterprise users need a stricter release evidence path than a standalone checksum manifest.
+
+Fix:
+- Add deterministic trust metadata with issuer, channel, package metadata, manifest hash, and trust hash.
+- Keep normal `manifest verify` behavior unchanged.
+- Clearly document that this is not cryptographic signing.
+
+Acceptance criteria:
+- Normal manifest verify still works without trust metadata.
+- Trusted verify fails closed without trust metadata.
+- Trusted verify catches manifest/trust drift.
+
 ### P2 - Add Spec Export Contract
 
 Status:
@@ -635,6 +658,7 @@ Expected gain:
 
 - Done first slice: add versioned upgrade/migration CLI.
 - Done: add checksummed bundle manifest with `relay-kit manifest write` and `relay-kit manifest verify`.
+- Done first slice: add trusted manifest metadata with `relay-kit manifest stamp` and `relay-kit manifest verify --trusted`.
 - Done first slice: add Pro policy packs.
 - Done first slice: add support workflow and SLA docs.
 - Done first slice: add enterprise bundle story.

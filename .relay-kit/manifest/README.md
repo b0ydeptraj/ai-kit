@@ -2,4 +2,6 @@
 
 `relay-kit manifest write` writes the checksummed bundle registry manifest here by default.
 
-`bundles.json` is generated release evidence and is ignored by git.
+`relay-kit manifest stamp` writes deterministic trust metadata here by default.
+
+`bundles.json` and `trust.json` are generated release evidence and are ignored by git.

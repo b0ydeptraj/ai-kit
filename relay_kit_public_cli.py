@@ -25,7 +25,7 @@ from pathlib import Path
 
 import relay_kit as relay_core
 from relay_kit_v3.evidence_ledger import append_event, ledger_path, new_run_id, parse_findings_count, summarize_events
-from relay_kit_v3.bundle_manifest import verify_manifest_file, write_manifest
+from relay_kit_v3.bundle_manifest import verify_manifest_file, verify_trusted_manifest_file, write_manifest, write_trust_stamp
 from relay_kit_v3.policy_packs import DEFAULT_POLICY_PACK, POLICY_PACKS
 from relay_kit_v3.spec_export import write_spec
 from relay_kit_v3.support_bundle import build_support_bundle, write_support_bundle
@@ -179,6 +179,20 @@ def _parse_manifest_args(argv: list[str]) -> argparse.Namespace:
         default=None,
         help="Output path (default: <project>/.relay-kit/manifest/bundles.json)",
     )
+    stamp = subparsers.add_parser("stamp", help="Write deterministic trust metadata for a manifest")
+    stamp.add_argument("project_path", nargs="?", default=".", help="Project root for default manifest/trust paths")
+    stamp.add_argument(
+        "--manifest-file",
+        default=None,
+        help="Manifest path (default: <project>/.relay-kit/manifest/bundles.json)",
+    )
+    stamp.add_argument(
+        "--trust-file",
+        default=None,
+        help="Trust metadata path (default: <project>/.relay-kit/manifest/trust.json)",
+    )
+    stamp.add_argument("--issuer", default="local", help="Trust stamp issuer label")
+    stamp.add_argument("--channel", default="local", help="Release channel label")
     verify = subparsers.add_parser("verify", help="Verify a checksummed bundle manifest")
     verify.add_argument("project_path", nargs="?", default=".", help="Project root for default manifest lookup")
     verify.add_argument(
@@ -186,6 +200,12 @@ def _parse_manifest_args(argv: list[str]) -> argparse.Namespace:
         default=None,
         help="Manifest path (default: <project>/.relay-kit/manifest/bundles.json)",
     )
+    verify.add_argument(
+        "--trust-file",
+        default=None,
+        help="Trust metadata path (default: beside manifest as trust.json)",
+    )
+    verify.add_argument("--trusted", action="store_true", help="Require deterministic trust metadata")
     return parser.parse_args(argv)
 
 
@@ -500,13 +520,31 @@ def run_manifest(args: argparse.Namespace) -> int:
         output_path = write_manifest(args.project_path, args.output_file)
         print(f"Wrote {output_path}")
         return 0
+    if args.action == "stamp":
+        try:
+            output_path = write_trust_stamp(
+                args.project_path,
+                manifest_file=args.manifest_file,
+                trust_file=args.trust_file,
+                issuer=args.issuer,
+                channel=args.channel,
+            )
+        except ValueError as exc:
+            print(f"Manifest trust stamp failed: {exc}")
+            return 2
+        print(f"Wrote {output_path}")
+        return 0
     if args.action == "verify":
         manifest_path = Path(args.manifest_file) if args.manifest_file else Path(args.project_path) / ".relay-kit" / "manifest" / "bundles.json"
-        result = verify_manifest_file(manifest_path)
+        result = (
+            verify_trusted_manifest_file(manifest_path, args.trust_file)
+            if args.trusted
+            else verify_manifest_file(manifest_path)
+        )
         if result.ok:
-            print("Manifest verification passed.")
+            print("Trust verification passed." if args.trusted else "Manifest verification passed.")
             return 0
-        print("Manifest verification failed.")
+        print("Trust verification failed." if args.trusted else "Manifest verification failed.")
         for finding in result.findings:
             print(f"- {finding}")
         return 2

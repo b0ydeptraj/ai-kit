@@ -20,6 +20,18 @@ Verify a manifest:
 relay-kit manifest verify /path/to/project --manifest-file /path/to/bundles.json
 ```
 
+Write deterministic trust metadata:
+
+```bash
+relay-kit manifest stamp /path/to/project --issuer relay-kit --channel enterprise
+```
+
+Verify with trust metadata:
+
+```bash
+relay-kit manifest verify /path/to/project --trusted
+```
+
 The manifest includes:
 
 - schema version
@@ -29,4 +41,14 @@ The manifest includes:
 - SHA-256 hash for each rendered skill contract
 - full manifest hash
 
-This is a checksum gate, not cryptographic signing. Signing can be layered on top once release keys and distribution policy exist.
+The trust metadata includes:
+
+- schema version
+- trust model
+- issuer label
+- release channel label
+- package metadata
+- manifest hash
+- trust hash over the trust metadata
+
+This is a checksum and deterministic trust-stamp gate, not cryptographic signing. It proves the manifest and trust metadata stayed internally consistent after stamping. It does not prove identity the way Ed25519, Sigstore, or KMS-backed signing would.

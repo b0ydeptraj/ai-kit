@@ -130,6 +130,8 @@ Write and verify the bundle checksum manifest:
 ```bash
 relay-kit manifest write /path/to/project
 relay-kit manifest verify /path/to/project
+relay-kit manifest stamp /path/to/project --issuer relay-kit --channel enterprise
+relay-kit manifest verify /path/to/project --trusted
 ```
 
 Run policy guard packs:
