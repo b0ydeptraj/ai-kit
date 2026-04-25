@@ -36,6 +36,13 @@ def test_support_bundle_contains_required_diagnostics(tmp_path: Path) -> None:
     assert "relay-kit doctor" in payload["support"]["required_commands"][0]
 
 
+def test_support_bundle_enterprise_requires_trusted_manifest_diagnostic(tmp_path: Path) -> None:
+    payload = support_bundle.build_support_bundle(tmp_path, policy_pack="enterprise")
+    commands = payload["support"]["required_commands"]
+
+    assert f"relay-kit manifest verify {tmp_path} --trusted" in commands
+
+
 def test_support_bundle_redacts_obvious_secret_strings(tmp_path: Path) -> None:
     append_event(
         tmp_path,

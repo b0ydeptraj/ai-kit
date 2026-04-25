@@ -56,6 +56,31 @@ def test_public_cli_doctor_forwards_policy_pack(monkeypatch) -> None:
 
     policy_guard_call = next(call for call in calls if Path(call[1]).name == "policy_guard.py")
     assert policy_guard_call[-2:] == ["--pack", "enterprise"]
+    trusted_manifest_call = next(call for call in calls if Path(call[1]).name == "relay_kit_public_cli.py")
+    assert trusted_manifest_call[2:4] == ["manifest", "verify"]
+    assert trusted_manifest_call[-1] == "--trusted"
+
+
+def test_public_cli_doctor_enterprise_fails_without_trusted_manifest(monkeypatch, capsys) -> None:
+    def fake_run(command, cwd, text, capture_output, check):  # noqa: ANN001
+        if Path(command[1]).name == "relay_kit_public_cli.py":
+            return subprocess.CompletedProcess(
+                command,
+                2,
+                stdout="Trust verification failed.\n- missing trust metadata: trust.json\n",
+                stderr="",
+            )
+        return subprocess.CompletedProcess(command, 0, stdout="ok\n", stderr="")
+
+    monkeypatch.setattr(relay_kit_public_cli.subprocess, "run", fake_run)
+    monkeypatch.setattr(relay_kit_public_cli, "append_event", lambda project_root, event: Path(project_root))
+
+    exit_code = relay_kit_public_cli.main(["doctor", ".", "--skip-tests", "--policy-pack", "enterprise"])
+
+    output = capsys.readouterr().out
+    assert exit_code == 1
+    assert "- trusted manifest: fail" in output
+    assert "missing trust metadata" in output
 
 
 def test_public_cli_doctor_returns_failure_when_a_gate_fails(monkeypatch) -> None:

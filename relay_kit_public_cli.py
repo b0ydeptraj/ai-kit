@@ -387,25 +387,45 @@ def _doctor_commands(project_path: str, skip_tests: bool, policy_pack: str = DEF
                 policy_pack,
             ],
         ),
-        (
-            "srs guard",
-            [sys.executable, str(REPO_ROOT / "scripts" / "srs_guard.py"), project_path, "--strict"],
-        ),
-        (
-            "skill gauntlet",
-            [
-                sys.executable,
-                str(REPO_ROOT / "scripts" / "skill_gauntlet.py"),
-                project_path,
-                "--strict",
-                "--semantic",
-            ],
-        ),
-        (
-            "workflow eval",
-            [sys.executable, str(REPO_ROOT / "scripts" / "eval_workflows.py"), project_path, "--strict"],
-        ),
     ]
+
+    if policy_pack == "enterprise":
+        commands.append(
+            (
+                "trusted manifest",
+                [
+                    sys.executable,
+                    str(REPO_ROOT / "relay_kit_public_cli.py"),
+                    "manifest",
+                    "verify",
+                    project_path,
+                    "--trusted",
+                ],
+            )
+        )
+
+    commands.extend(
+        [
+            (
+                "srs guard",
+                [sys.executable, str(REPO_ROOT / "scripts" / "srs_guard.py"), project_path, "--strict"],
+            ),
+            (
+                "skill gauntlet",
+                [
+                    sys.executable,
+                    str(REPO_ROOT / "scripts" / "skill_gauntlet.py"),
+                    project_path,
+                    "--strict",
+                    "--semantic",
+                ],
+            ),
+            (
+                "workflow eval",
+                [sys.executable, str(REPO_ROOT / "scripts" / "eval_workflows.py"), project_path, "--strict"],
+            ),
+        ]
+    )
 
     if not skip_tests and (REPO_ROOT / "tests").exists():
         commands.append(("pytest", [sys.executable, "-m", "pytest", "tests", "-q"]))

@@ -21,7 +21,7 @@ Run these before opening a support request:
 relay-kit support bundle /path/to/project --policy-pack enterprise
 relay-kit doctor /path/to/project --policy-pack enterprise --json
 relay-kit policy check /path/to/project --pack enterprise --strict --json
-relay-kit manifest verify /path/to/project
+relay-kit manifest verify /path/to/project --trusted
 relay-kit upgrade check /path/to/project --json
 relay-kit eval run /path/to/project --strict --json
 ```

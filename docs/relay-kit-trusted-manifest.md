@@ -12,6 +12,14 @@ relay-kit manifest stamp /path/to/project --issuer relay-kit --channel enterpris
 relay-kit manifest verify /path/to/project --trusted
 ```
 
+Enterprise doctor uses the same trusted verification gate:
+
+```bash
+relay-kit doctor /path/to/project --policy-pack enterprise
+```
+
+If `.relay-kit/manifest/trust.json` is missing or stale, enterprise doctor fails.
+
 Custom paths:
 
 ```bash

@@ -98,8 +98,9 @@ Generate the enterprise governance bundle:
 
 ```bash
 relay-kit init /path/to/project --all --bundle enterprise
-relay-kit doctor /path/to/project
 relay-kit manifest write /path/to/project
+relay-kit manifest stamp /path/to/project --issuer relay-kit --channel enterprise
+relay-kit doctor /path/to/project --policy-pack enterprise
 relay-kit upgrade mark-current /path/to/project --bundle enterprise --adapter all
 ```
 
@@ -107,6 +108,7 @@ Run the support gate:
 
 ```bash
 relay-kit doctor /path/to/project
+relay-kit manifest verify /path/to/project --trusted
 relay-kit doctor /path/to/project --policy-pack enterprise
 ```
 

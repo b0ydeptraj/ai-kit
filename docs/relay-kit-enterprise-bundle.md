@@ -15,8 +15,9 @@ It is not a popularity tier. It changes the installed runtime surface:
 
 ```bash
 relay-kit init /path/to/project --all --bundle enterprise
-relay-kit doctor /path/to/project --policy-pack enterprise
 relay-kit manifest write /path/to/project
+relay-kit manifest stamp /path/to/project --issuer relay-kit --channel enterprise
+relay-kit doctor /path/to/project --policy-pack enterprise
 relay-kit upgrade mark-current /path/to/project --bundle enterprise --adapter all
 relay-kit support bundle /path/to/project --policy-pack enterprise
 ```
@@ -30,6 +31,7 @@ Use `enterprise` for teams that need:
 - policy guard checks before high-risk operations
 - cross-session continuity and handoff contracts
 - repeatable upgrade tracking through manifests and version markers
+- trusted manifest metadata enforced by enterprise doctor
 - enterprise policy-pack checks for security, testing, observability, review, and handoff surfaces
 - support diagnostics that package evidence for paid/team support
 

@@ -45,5 +45,13 @@ jobs:
       - name: Run workflow eval
         run: python scripts/eval_workflows.py . --strict
 
+      - name: Write trusted manifest evidence
+        run: |
+          python relay_kit_public_cli.py manifest write .
+          python relay_kit_public_cli.py manifest stamp . --issuer ci --channel enterprise
+
+      - name: Run public enterprise doctor
+        run: python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise
+
       - name: Run runtime smoke tests
         run: python -m pytest tests -q

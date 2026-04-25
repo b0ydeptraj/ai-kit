@@ -23,7 +23,7 @@ Source audit status:
 - Fixed in enterprise bundle pass: `--bundle enterprise` installs baseline plus the full discipline utility set and emits governance docs for paid/team usage.
 - Fixed in Pro policy packs pass: `relay-kit policy check --pack baseline|team|enterprise` and `relay-kit doctor --policy-pack enterprise` enforce stronger governance surfaces for team/paid installs.
 - Fixed in support workflow pass: `relay-kit support bundle` creates redacted diagnostic JSON and docs define severity, evidence, support scope, and escalation workflow.
-- Fixed in trusted manifest pass: `relay-kit manifest stamp` and `relay-kit manifest verify --trusted` require deterministic trust metadata for enterprise release evidence.
+- Fixed in trusted manifest pass: `relay-kit manifest stamp`, `relay-kit manifest verify --trusted`, and enterprise doctor require deterministic trust metadata for enterprise release evidence.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -484,6 +484,7 @@ Status:
 - Fixed on 2026-04-25 for the first non-cryptographic trust metadata slice.
 - Done: `relay-kit manifest stamp <project> --issuer <issuer> --channel <channel>` writes `.relay-kit/manifest/trust.json`.
 - Done: `relay-kit manifest verify <project> --trusted` requires valid manifest checksum plus trust metadata.
+- Done: `relay-kit doctor <project> --policy-pack enterprise` includes the trusted manifest gate.
 - Done: trusted verification fails when a skill hash is tampered, manifest hash is stale, or trust metadata is missing.
 - Verification: `python -m pytest tests/test_bundle_manifest.py -q` passes.
 
@@ -499,6 +500,7 @@ Acceptance criteria:
 - Normal manifest verify still works without trust metadata.
 - Trusted verify fails closed without trust metadata.
 - Trusted verify catches manifest/trust drift.
+- Enterprise doctor fails closed when trust metadata is missing.
 
 ### P2 - Add Spec Export Contract
 

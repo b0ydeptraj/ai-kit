@@ -11,6 +11,7 @@ relay-kit policy list
 relay-kit policy check /path/to/project --pack baseline --strict
 relay-kit policy check /path/to/project --pack team --strict
 relay-kit policy check /path/to/project --pack enterprise --strict
+relay-kit manifest verify /path/to/project --trusted
 relay-kit doctor /path/to/project --policy-pack enterprise
 ```
 
@@ -35,6 +36,7 @@ relay-kit doctor /path/to/project --policy-pack enterprise
 `enterprise`
 
 - all team checks
+- `relay-kit doctor --policy-pack enterprise` also requires a valid trusted bundle manifest
 - requires security, testing, observability, review, and release governance surfaces:
   - `.relay-kit/references/security-patterns.md`
   - `.relay-kit/references/testing-patterns.md`

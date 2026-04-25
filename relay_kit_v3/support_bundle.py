@@ -137,10 +137,13 @@ def severity_levels() -> list[dict[str, str]]:
 
 def required_commands(project_root: Path, policy_pack: str) -> list[str]:
     project = _shell_arg(project_root)
+    manifest_verify = f"relay-kit manifest verify {project}"
+    if policy_pack == "enterprise":
+        manifest_verify += " --trusted"
     return [
         f"relay-kit doctor {project} --policy-pack {policy_pack} --json",
         f"relay-kit policy check {project} --pack {policy_pack} --strict --json",
-        f"relay-kit manifest verify {project}",
+        manifest_verify,
         f"relay-kit upgrade check {project} --json",
         f"relay-kit eval run {project} --strict --json",
         f"relay-kit support bundle {project} --policy-pack {policy_pack}",
