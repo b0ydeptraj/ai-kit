@@ -32,7 +32,13 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
     assert payload["passed"] == 12
     assert payload["failed"] == 0
     assert payload["pass_rate"] == 1.0
+    assert payload["quality"]["min_route_margin"] >= 1
+    assert payload["quality"]["evidence_term_coverage"] == 1.0
+    assert payload["thresholds"]["min_route_margin"] == 1
+    assert "qa-governor" in payload["quality"]["expected_skill_counts"]
     assert payload["results"][0]["top_routes"][0]["skill"] == payload["results"][0]["expected_skill"]
+    assert payload["results"][0]["route_margin"] >= 1
+    assert payload["results"][0]["evidence_coverage"] == 1.0
 
 
 def test_workflow_eval_strict_fails_bad_route_fixture(tmp_path: Path) -> None:
@@ -81,6 +87,61 @@ def test_workflow_eval_writes_report_file(tmp_path: Path) -> None:
     assert payload["status"] == "pass"
     assert "- pass rate: 1.00" in result.stdout
     assert "- findings: 0" in result.stdout
+
+
+def test_workflow_eval_strict_fails_when_route_margin_is_below_threshold() -> None:
+    result = run_command(
+        "scripts/eval_workflows.py",
+        ".",
+        "--min-route-margin",
+        "2",
+        "--strict",
+        "--json",
+    )
+
+    assert result.returncode == 2
+    payload = json.loads(result.stdout)
+    assert payload["status"] == "fail"
+    assert payload["quality"]["min_route_margin"] == 1
+    assert any(finding["check"] == "quality-threshold" for finding in payload["findings"])
+
+
+def test_workflow_eval_detects_baseline_regression(tmp_path: Path) -> None:
+    fixture = tmp_path / "scenarios.json"
+    fixture.write_text(
+        """
+        [
+          {
+            "id": "one-pass",
+            "prompt": "A new request arrived and the scope is unclear. Choose the track and next skill.",
+            "expected_skill": "workflow-router",
+            "expected_terms": ["track", "next skill"]
+          }
+        ]
+        """,
+        encoding="utf-8",
+    )
+    baseline = tmp_path / "baseline.json"
+    baseline.write_text(
+        json.dumps({"pass_rate": 1.0, "scenario_count": 2, "quality": {"average_route_margin": 99.0}}),
+        encoding="utf-8",
+    )
+
+    result = run_command(
+        "scripts/eval_workflows.py",
+        ".",
+        "--scenario-fixtures",
+        str(fixture),
+        "--baseline-file",
+        str(baseline),
+        "--strict",
+        "--json",
+    )
+
+    assert result.returncode == 2
+    payload = json.loads(result.stdout)
+    assert payload["baseline"]["scenario_count_delta"] == -1
+    assert any(finding["check"] == "baseline-regression" for finding in payload["findings"])
 
 
 def test_public_cli_eval_run_uses_workflow_eval(monkeypatch, capsys) -> None:

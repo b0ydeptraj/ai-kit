@@ -20,6 +20,7 @@ Source audit status:
 - Fixed in DX list-skills pass: preserved legacy kits are hidden from default `--list-skills` and require `--show-legacy`.
 - Fixed in runtime policy guard pass: `policy_guard.py` detects deterministic secret, path traversal, destructive shell, prompt-injection, and broad allowlist risks and runs from doctor/CI.
 - Fixed in workflow eval pass: `relay-kit eval run` reports scenario pass rate, predicted skill, top routes, and evidence-term findings from bundled fixtures.
+- Fixed in workflow eval quality pass: `relay-kit eval run` now reports route margin, route confidence, evidence coverage, skill distribution, quality thresholds, and baseline regression checks.
 - Fixed in upgrade CLI pass: `relay-kit upgrade check|plan|mark-current` tracks installed runtime version and prints safe upgrade actions without auto-overwriting files.
 - Fixed in enterprise bundle pass: `--bundle enterprise` installs baseline plus the full discipline utility set and emits governance docs for paid/team usage.
 - Fixed in Pro policy packs pass: `relay-kit policy check --pack baseline|team|enterprise` and `relay-kit doctor --policy-pack enterprise` enforce stronger governance surfaces for team/paid installs.
@@ -676,6 +677,7 @@ Expected gain:
 - Done first slice: add support workflow and SLA docs.
 - Done first slice: add enterprise bundle story.
 - Done first slice: add scenario eval harness for real workflow quality.
+- Done second slice: add eval quality metrics, configurable thresholds, and baseline regression comparison.
 - Done first slice: add `relay-kit readiness check` as the single commercial readiness verdict.
 
 Expected gain:

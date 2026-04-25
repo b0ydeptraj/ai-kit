@@ -85,6 +85,8 @@ def build_support_bundle(
                 "passed": workflow_eval["passed"],
                 "failed": workflow_eval["failed"],
                 "pass_rate": workflow_eval["pass_rate"],
+                "quality": workflow_eval.get("quality", {}),
+                "thresholds": workflow_eval.get("thresholds", {}),
                 "findings_count": workflow_eval["findings_count"],
                 "findings": workflow_eval["findings"],
             },

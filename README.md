@@ -165,6 +165,7 @@ Measure workflow routing quality with bundled scenarios:
 ```bash
 relay-kit eval run /path/to/project --strict
 relay-kit eval run /path/to/project --json --output-file workflow-eval.json
+relay-kit eval run /path/to/project --strict --baseline-file previous-workflow-eval.json
 ```
 
 Track installed runtime version and print upgrade actions:
