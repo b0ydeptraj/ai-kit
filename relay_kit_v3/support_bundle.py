@@ -140,6 +140,7 @@ def required_commands(project_root: Path, policy_pack: str) -> list[str]:
     manifest_verify = f"relay-kit manifest verify {project}"
     if policy_pack == "enterprise":
         manifest_verify += " --trusted"
+    readiness_profile = "enterprise" if policy_pack == "enterprise" else "team"
     return [
         f"relay-kit doctor {project} --policy-pack {policy_pack} --json",
         f"relay-kit policy check {project} --pack {policy_pack} --strict --json",
@@ -147,6 +148,7 @@ def required_commands(project_root: Path, policy_pack: str) -> list[str]:
         f"relay-kit upgrade check {project} --json",
         f"relay-kit eval run {project} --strict --json",
         f"relay-kit support bundle {project} --policy-pack {policy_pack}",
+        f"relay-kit readiness check {project} --profile {readiness_profile} --json",
     ]
 
 

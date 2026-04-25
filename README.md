@@ -71,6 +71,7 @@ It makes agents behave less like improvising interns and more like engineers wor
 - an `accessibility-review` gate so frontend quality is not only visual
 - a `skill-gauntlet` regression gate to keep skill routing behavior stable
 - a `context-continuity` utility for checkpoint, rehydrate, handoff, and diff flows
+- a `readiness check` gate that combines tests, doctor, policy, manifest trust, upgrade, support, and contract sync proof
 - an active baseline that is validated instead of loosely assembled
 - a way to make work more consistent without forcing everything through raw chat memory
 
@@ -102,6 +103,7 @@ relay-kit manifest write /path/to/project
 relay-kit manifest stamp /path/to/project --issuer relay-kit --channel enterprise
 relay-kit doctor /path/to/project --policy-pack enterprise
 relay-kit upgrade mark-current /path/to/project --bundle enterprise --adapter all
+relay-kit readiness check /path/to/project --profile enterprise
 ```
 
 Run the support gate:
@@ -149,6 +151,13 @@ Prepare a support diagnostics bundle:
 
 ```bash
 relay-kit support bundle /path/to/project --policy-pack enterprise
+```
+
+Run the paid/team readiness gate:
+
+```bash
+relay-kit readiness check /path/to/project --profile enterprise
+relay-kit readiness check /path/to/project --profile enterprise --json
 ```
 
 Measure workflow routing quality with bundled scenarios:
@@ -288,6 +297,8 @@ Historical compatibility timeline and removal log:
   - [`docs/relay-kit-release-readiness.md`](docs/relay-kit-release-readiness.md)
 - Accessibility gate:
   - [`docs/relay-kit-accessibility-review.md`](docs/relay-kit-accessibility-review.md)
+- Commercial readiness gate:
+  - [`docs/relay-kit-readiness-check.md`](docs/relay-kit-readiness-check.md)
 - Skill behavior gauntlet:
   - [`docs/relay-kit-skill-gauntlet.md`](docs/relay-kit-skill-gauntlet.md)
 - Context continuity:

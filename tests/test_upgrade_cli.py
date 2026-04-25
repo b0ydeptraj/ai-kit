@@ -34,6 +34,8 @@ def test_upgrade_mark_current_with_manifest_passes_check(tmp_path: Path) -> None
     assert report["installed_version"] == report["target_version"]
     assert report["runtime"]["bundle"] == "baseline"
     assert report["runtime"]["adapters"] == ["codex"]
+    marker = json.loads(marker_path.read_text(encoding="utf-8"))
+    assert marker["manifest"]["path"] == ".relay-kit/manifest/bundles.json"
 
 
 def test_upgrade_report_detects_old_version(tmp_path: Path) -> None:

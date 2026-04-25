@@ -35,7 +35,7 @@ def write_version_marker(
             "adapters": _normalize_adapters(adapters or DEFAULT_ADAPTERS),
         },
         "manifest": {
-            "path": str(manifest_status["path"]),
+            "path": _project_relative_or_absolute(root, manifest_status["path"]),
             "status": manifest_status["status"],
             "hash": manifest_status["hash"],
         },
@@ -265,6 +265,13 @@ def _shell_arg(path: Path) -> str:
     if any(char.isspace() for char in value):
         return f'"{value}"'
     return value
+
+
+def _project_relative_or_absolute(root: Path, path: Path) -> str:
+    try:
+        return path.resolve().relative_to(root).as_posix()
+    except ValueError:
+        return str(path)
 
 
 def _utc_timestamp() -> str:

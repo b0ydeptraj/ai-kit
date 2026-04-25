@@ -10,6 +10,7 @@ Use this page as the public entrypoint for current runtime behavior.
 - `docs/relay-kit-memory-search.md`
 - `docs/relay-kit-release-readiness.md`
 - `docs/relay-kit-accessibility-review.md`
+- `docs/relay-kit-readiness-check.md`
 - `docs/relay-kit-skill-gauntlet.md`
 - `docs/relay-kit-context-continuity.md`
 - `docs/relay-kit-context-continuity-design-note.md`

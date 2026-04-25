@@ -9,6 +9,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit upgrade check <project_path>
   relay-kit policy check <project_path>
   relay-kit support bundle <project_path>
+  relay-kit readiness check <project_path>
   relay-kit contract import <project_path> --contract-file <relay-contract.json>
 
 It maps to the existing canonical runtime entrypoint (`relay_kit.py`)
@@ -28,6 +29,7 @@ import relay_kit as relay_core
 from relay_kit_v3.evidence_ledger import append_event, ledger_path, new_run_id, parse_findings_count, summarize_events
 from relay_kit_v3.bundle_manifest import verify_manifest_file, verify_trusted_manifest_file, write_manifest, write_trust_stamp
 from relay_kit_v3.policy_packs import DEFAULT_POLICY_PACK, POLICY_PACKS
+from relay_kit_v3.readiness import build_readiness_report, render_readiness_report
 from relay_kit_v3.contract_export import write_contract_export
 from relay_kit_v3.contract_import import import_contracts, render_contract_import_report
 from relay_kit_v3.support_bundle import build_support_bundle, write_support_bundle
@@ -174,7 +176,7 @@ def _parse_contract_args(argv: list[str]) -> argparse.Namespace:
     )
     import_cmd.add_argument("--apply", action="store_true", help="Write contract updates instead of dry-running")
     import_cmd.add_argument("--force", action="store_true", help="Overwrite concrete existing contract sections")
-    import_cmd.add_argument("--strict", action="store_true", help="Return non-zero on invalid specs or skipped conflicts")
+    import_cmd.add_argument("--strict", action="store_true", help="Return non-zero on invalid contract JSON or skipped conflicts")
     import_cmd.add_argument("--json", action="store_true", help="Emit machine-readable import report")
     return parser.parse_args(argv)
 
@@ -306,6 +308,20 @@ def _parse_support_args(argv: list[str]) -> argparse.Namespace:
     bundle.add_argument("--output-file", default=None, help="Output path (default: <project>/.relay-kit/support/support-bundle.json)")
     bundle.add_argument("--evidence-limit", type=int, default=20, help="Recent evidence ledger events to include")
     bundle.add_argument("--json", action="store_true", help="Emit bundle payload and output path as JSON")
+    return parser.parse_args(argv)
+
+
+def _parse_readiness_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit readiness",
+        description="Run the commercial readiness gate suite.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    check = subparsers.add_parser("check", help="Check whether Relay-kit is ready for paid/team use")
+    check.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    check.add_argument("--profile", choices=["team", "enterprise"], default="enterprise")
+    check.add_argument("--skip-tests", action="store_true", help="Skip pytest inside the readiness suite")
+    check.add_argument("--json", action="store_true", help="Emit machine-readable readiness report")
     return parser.parse_args(argv)
 
 
@@ -680,6 +696,17 @@ def run_support(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_readiness(args: argparse.Namespace) -> int:
+    if args.action != "check":
+        return 2
+    report = build_readiness_report(args.project_path, profile=args.profile, skip_tests=args.skip_tests)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_readiness_report(report))
+    return 0 if report["status"] == "pass" else 2
+
+
 def main(argv: list[str] | None = None) -> int:
     raw_argv = sys.argv[1:] if argv is None else argv
     if raw_argv and raw_argv[0] == "doctor":
@@ -698,6 +725,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_policy(_parse_policy_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "support":
         return run_support(_parse_support_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "readiness":
+        return run_readiness(_parse_readiness_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "init":
         raw_argv = raw_argv[1:]
 

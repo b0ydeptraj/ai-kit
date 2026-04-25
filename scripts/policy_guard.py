@@ -32,6 +32,8 @@ DEFAULT_FILE_SUFFIXES = {
 
 DEFAULT_EXCLUDED_SEGMENTS = {
     ".git",
+    ".pytest_cache",
+    ".tmp",
     "__pycache__",
     "build",
     "dist",
@@ -102,7 +104,8 @@ def candidate_files(base: Path) -> Iterable[Path]:
     for path in sorted(base.rglob("*")):
         if not path.is_file():
             continue
-        if is_excluded(path):
+        rel_path = path.relative_to(base)
+        if is_excluded(rel_path):
             continue
         if path.suffix.lower() not in DEFAULT_FILE_SUFFIXES:
             continue

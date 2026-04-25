@@ -27,11 +27,13 @@ Source audit status:
 - Fixed in trusted manifest pass: `relay-kit manifest stamp`, `relay-kit manifest verify --trusted`, and enterprise doctor require deterministic trust metadata for enterprise release evidence.
 - Fixed in governance reference pass: enterprise policy guard now fails required governance files that still contain unresolved `TBD` or template markers.
 - Fixed in contract import pass: `relay-kit contract import` can dry-run or apply Relay contract JSON back into PRD, story, tech-spec, and QA contracts without overwriting concrete sections unless `--force` is used.
+- Fixed in readiness gate pass: `relay-kit readiness check` aggregates pytest, doctor, trusted manifest, policy, workflow eval, support bundle, upgrade, contract sync, and commercial docs into one paid/team verdict.
+- Verified in local readiness pass: `relay-kit readiness check . --profile enterprise --json` returns `commercial-ready-candidate` with 106 tests passing and 0 findings.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
-- Current readiness: limited beta / internal expert use.
-- Commercial readiness: not ready.
+- Current readiness: local commercial-ready candidate.
+- Commercial readiness: locally gated by `relay-kit readiness check`; remote CI, release upload, and paid support operations still need release-lane verification.
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
 
@@ -674,6 +676,7 @@ Expected gain:
 - Done first slice: add support workflow and SLA docs.
 - Done first slice: add enterprise bundle story.
 - Done first slice: add scenario eval harness for real workflow quality.
+- Done first slice: add `relay-kit readiness check` as the single commercial readiness verdict.
 
 Expected gain:
 - Relay-kit becomes sellable as a governance layer with measurable quality signals.
@@ -691,6 +694,7 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - Default onboarding reaches first value in under 5 minutes.
 - Evidence ledger records gate runs and findings.
 - Paid support/upgrade path is documented.
+- `relay-kit readiness check --profile enterprise` returns `commercial-ready-candidate` for the release candidate.
 
 Review-hub verdict for this backlog:
 - Go forward by fixing P0 first, then P1 items in order.
