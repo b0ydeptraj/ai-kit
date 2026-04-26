@@ -376,11 +376,12 @@ def _parse_signal_args(argv: list[str]) -> argparse.Namespace:
         description="Export Relay-kit Pulse and evidence signals as local telemetry artifacts.",
     )
     subparsers = parser.add_subparsers(dest="action", required=True)
-    export = subparsers.add_parser("export", help="Write Relay signal JSON and JSONL")
+    export = subparsers.add_parser("export", help="Write Relay signal JSON, JSONL, and optional OTLP JSON")
     export.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
     export.add_argument("--pulse-file", default=None, help="Pulse report JSON file")
     export.add_argument("--output-dir", default=None, help="Output directory (default: <project>/.relay-kit/signals)")
     export.add_argument("--event-limit", type=int, default=50, help="Recent evidence events to export")
+    export.add_argument("--otlp", action="store_true", help="Also write Relay OTLP-compatible JSON")
     export.add_argument("--json", action="store_true", help="Emit machine-readable output paths and export payload")
     return parser.parse_args(argv)
 
@@ -831,7 +832,7 @@ def run_signal(args: argparse.Namespace) -> int:
         pulse_file=args.pulse_file,
         event_limit=args.event_limit,
     )
-    outputs = write_signal_export(args.project_path, payload, output_dir=args.output_dir)
+    outputs = write_signal_export(args.project_path, payload, output_dir=args.output_dir, include_otlp=args.otlp)
     if args.json:
         print(
             json.dumps(
@@ -846,6 +847,8 @@ def run_signal(args: argparse.Namespace) -> int:
     else:
         print(f"Wrote {outputs['json']}")
         print(f"Wrote {outputs['jsonl']}")
+        if "otlp" in outputs:
+            print(f"Wrote {outputs['otlp']}")
         print(f"Signals: {payload['summary']['signal_count']}")
     return 0
 

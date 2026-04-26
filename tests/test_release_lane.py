@@ -58,7 +58,10 @@ include = ["relay_kit_v3*", "scripts*"]
     (support / ".gitignore").write_text("support-bundle.json\n", encoding="utf-8")
     signals = root / ".relay-kit" / "signals"
     signals.mkdir(parents=True, exist_ok=True)
-    (signals / ".gitignore").write_text("relay-signals.json\nrelay-signals.jsonl\n", encoding="utf-8")
+    (signals / ".gitignore").write_text(
+        "relay-signals.json\nrelay-signals.jsonl\nrelay-signals-otlp.json\n",
+        encoding="utf-8",
+    )
 
 
 def test_release_lane_report_passes_complete_project(tmp_path: Path) -> None:

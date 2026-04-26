@@ -15,7 +15,9 @@ SCHEMA_VERSION = "relay-kit.signal-export.v1"
 DEFAULT_OUTPUT_DIR = Path(".relay-kit") / "signals"
 DEFAULT_JSON_OUTPUT = "relay-signals.json"
 DEFAULT_JSONL_OUTPUT = "relay-signals.jsonl"
+DEFAULT_OTLP_OUTPUT = "relay-signals-otlp.json"
 DEFAULT_PULSE_FILE = PULSE_OUTPUT_DIR / "pulse-report.json"
+OTLP_SCOPE_NAME = "relay-kit.signal-export"
 
 
 def build_signal_export(
@@ -58,6 +60,7 @@ def write_signal_export(
     payload: Mapping[str, Any],
     *,
     output_dir: Path | str | None = None,
+    include_otlp: bool = False,
 ) -> dict[str, Path]:
     root = Path(project_root).resolve()
     target_dir = _resolve_output_dir(root, output_dir)
@@ -74,7 +77,52 @@ def write_signal_export(
         if isinstance(signal, Mapping)
     ]
     jsonl_path.write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")
-    return {"json": json_path, "jsonl": jsonl_path}
+
+    outputs = {"json": json_path, "jsonl": jsonl_path}
+    if include_otlp:
+        otlp_path = target_dir / DEFAULT_OTLP_OUTPUT
+        otlp_path.write_text(json.dumps(build_otlp_export(payload), ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+        outputs["otlp"] = otlp_path
+    return outputs
+
+
+def build_otlp_export(payload: Mapping[str, Any]) -> dict[str, Any]:
+    resource = _otlp_attributes(_mapping(payload.get("resource")))
+    metric_records = [
+        _otlp_metric(signal)
+        for signal in payload.get("signals", [])
+        if isinstance(signal, Mapping) and signal.get("kind") == "metric"
+    ]
+    log_records = [
+        _otlp_log_record(signal)
+        for signal in payload.get("signals", [])
+        if isinstance(signal, Mapping) and signal.get("kind") == "event"
+    ]
+
+    return {
+        "resourceMetrics": [
+            {
+                "resource": {"attributes": resource},
+                "scopeMetrics": [
+                    {
+                        "scope": {"name": OTLP_SCOPE_NAME, "version": str(payload.get("schema_version", SCHEMA_VERSION))},
+                        "metrics": [item for item in metric_records if item is not None],
+                    }
+                ],
+            }
+        ],
+        "resourceLogs": [
+            {
+                "resource": {"attributes": resource},
+                "scopeLogs": [
+                    {
+                        "scope": {"name": OTLP_SCOPE_NAME, "version": str(payload.get("schema_version", SCHEMA_VERSION))},
+                        "logRecords": [item for item in log_records if item is not None],
+                    }
+                ],
+            }
+        ],
+    }
 
 
 def build_resource(root: Path, pulse_report: Mapping[str, Any]) -> dict[str, str]:
@@ -152,6 +200,80 @@ def metric(name: str, value: int | float | None, unit: str, attributes: Mapping[
         "time_unix_nano": timestamp_to_unix_nano(utc_timestamp()),
         "attributes": dict(attributes),
     }
+
+
+def _otlp_metric(signal: Mapping[str, Any]) -> dict[str, Any] | None:
+    name = str(signal.get("name", ""))
+    if not name:
+        return None
+    value = signal.get("value")
+    if value is None:
+        return None
+    point: dict[str, Any] = {
+        "attributes": _otlp_attributes(_mapping(signal.get("attributes"))),
+    }
+    time_unix_nano = signal.get("time_unix_nano")
+    if time_unix_nano:
+        point["timeUnixNano"] = str(time_unix_nano)
+    if isinstance(value, bool):
+        point["asInt"] = "1" if value else "0"
+    elif isinstance(value, int):
+        point["asInt"] = str(value)
+    elif isinstance(value, float):
+        point["asDouble"] = value
+    else:
+        numeric = _number(value)
+        if numeric is None:
+            return None
+        point["asDouble"] = numeric
+    return {
+        "name": name,
+        "unit": str(signal.get("unit", "1")),
+        "gauge": {"dataPoints": [point]},
+    }
+
+
+def _otlp_log_record(signal: Mapping[str, Any]) -> dict[str, Any] | None:
+    name = str(signal.get("name", ""))
+    if not name:
+        return None
+    attributes = _mapping(signal.get("attributes"))
+    record: dict[str, Any] = {
+        "severityText": _severity_for_status(str(attributes.get("relay.status", ""))),
+        "body": {"stringValue": name},
+        "attributes": _otlp_attributes(attributes),
+    }
+    time_unix_nano = signal.get("time_unix_nano")
+    if time_unix_nano:
+        record["timeUnixNano"] = str(time_unix_nano)
+    return record
+
+
+def _otlp_attributes(attributes: Mapping[str, Any]) -> list[dict[str, Any]]:
+    return [
+        {"key": str(key), "value": _otlp_value(value)}
+        for key, value in sorted(attributes.items(), key=lambda item: str(item[0]))
+        if value is not None
+    ]
+
+
+def _otlp_value(value: Any) -> dict[str, Any]:
+    if isinstance(value, bool):
+        return {"boolValue": value}
+    if isinstance(value, int):
+        return {"intValue": str(value)}
+    if isinstance(value, float):
+        return {"doubleValue": value}
+    return {"stringValue": str(value)}
+
+
+def _severity_for_status(status: str) -> str:
+    normalized = status.lower()
+    if normalized in {"fail", "failed", "error"}:
+        return "ERROR"
+    if normalized in {"warn", "warning", "attention"}:
+        return "WARN"
+    return "INFO"
 
 
 def timestamp_to_unix_nano(value: Any) -> int | None:

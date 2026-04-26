@@ -1,6 +1,6 @@
 # Relay-kit Signal Export
 
-`relay-kit signal export` writes local JSON and JSONL signal artifacts from Pulse and the evidence ledger.
+`relay-kit signal export` writes local JSON, JSONL, and optional Relay OTLP signal artifacts from Pulse and the evidence ledger.
 
 This is Relay-kit's first telemetry export surface. It is intentionally local-only: no network calls, no backend, and no external dashboard dependency.
 
@@ -12,6 +12,7 @@ relay-kit signal export /path/to/project --json
 relay-kit signal export /path/to/project --pulse-file /path/to/pulse-report.json
 relay-kit signal export /path/to/project --output-dir /path/to/signals
 relay-kit signal export /path/to/project --event-limit 100
+relay-kit signal export /path/to/project --otlp
 ```
 
 Default output:
@@ -19,6 +20,12 @@ Default output:
 ```text
 .relay-kit/signals/relay-signals.json
 .relay-kit/signals/relay-signals.jsonl
+```
+
+With `--otlp`, Relay-kit also writes:
+
+```text
+.relay-kit/signals/relay-signals-otlp.json
 ```
 
 ## Inputs
@@ -56,6 +63,8 @@ Event signals include recent evidence ledger events under:
 - `relay.evidence.event`
 
 Each JSONL row contains the shared resource metadata and one signal object.
+
+The OTLP file uses OpenTelemetry-compatible `resourceMetrics` and `resourceLogs` JSON sections. It is dependency-free and local-only; Relay-kit does not send telemetry over the network.
 
 ## Release Use
 

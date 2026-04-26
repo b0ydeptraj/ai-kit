@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Publish Relay-kit v3.3.0 after PR #1 merged, GitHub Actions passed, local commercial-readiness gates passed, and draft release evidence was created.
+Continue post-release commercial polish after publishing Relay-kit v3.3.0; current slice adds Relay OTLP export for signal observability.
 
 ## Active lane
 - Lane id: primary
@@ -10,16 +10,16 @@ Publish Relay-kit v3.3.0 after PR #1 merged, GitHub Actions passed, local commer
 
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: test-hub
+- Layer-2 workflow hub: fix-hub
 - Active specialist: developer
 
 ## Active utility providers
-- Primary utility provider: release-readiness
-- Additional utilities in play: evidence-before-completion, testing-patterns
+- Primary utility provider: testing-patterns
+- Additional utilities in play: evidence-before-completion
 
 ## Active standalone/domain skill
-- Skill: release-readiness
-- Why selected: local gates are implemented; remaining risk is integration/release evidence.
+- Skill: developer
+- Why selected: the release is published; remaining work is bounded code polish with tests.
 
 ## Complexity level
 - Level: L4
@@ -48,7 +48,7 @@ Publish Relay-kit v3.3.0 after PR #1 merged, GitHub Actions passed, local commer
 | none | none | none | none |
 
 ## Next skill
-workflow-router
+test-hub
 
 ## Known blockers
 Package upload or marketplace publication remains a separate external release action.
@@ -62,3 +62,5 @@ Release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
 Tag commit: d46f9c934805010cbf64fca00c28c6bc9dc233a9.
 Remote CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/24955362678 completed successfully.
 Local release evidence: release verify passed, runtime validation passed, migration guard passed, package install smoke passed, pre-release and post-release readiness strict gates passed, and enterprise readiness returned `commercial-ready-candidate`.
+Current branch: `codex/relay-otlp-export`.
+Current post-release polish evidence: `python -m pytest tests\test_signal_export.py -q` passed; `python -m pytest -q --basetemp=.tmp\pytest-otlp-export` passed with 125 tests.

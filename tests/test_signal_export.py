@@ -74,6 +74,24 @@ def test_signal_export_writes_json_and_jsonl(tmp_path: Path) -> None:
     assert json.loads(jsonl_lines[0])["resource"]["service.name"] == "relay-kit"
 
 
+def test_signal_export_writes_otlp_when_requested(tmp_path: Path) -> None:
+    pulse_file = write_pulse_report(tmp_path)
+    append_event(tmp_path, {"command": "doctor", "gate": "policy guard", "status": "pass", "findings_count": 0})
+    payload = signal_export.build_signal_export(tmp_path, pulse_file=pulse_file)
+
+    outputs = signal_export.write_signal_export(
+        tmp_path,
+        payload,
+        output_dir=tmp_path / "signals",
+        include_otlp=True,
+    )
+    otlp = json.loads(outputs["otlp"].read_text(encoding="utf-8"))
+
+    assert outputs["otlp"].name == "relay-signals-otlp.json"
+    assert otlp["resourceMetrics"][0]["scopeMetrics"][0]["metrics"][0]["name"] == "relay.pulse.score"
+    assert otlp["resourceLogs"][0]["scopeLogs"][0]["logRecords"][0]["body"]["stringValue"] == "relay.evidence.event"
+
+
 def test_public_cli_signal_export_json(tmp_path: Path, capsys) -> None:
     write_pulse_report(tmp_path)
 
@@ -84,3 +102,13 @@ def test_public_cli_signal_export_json(tmp_path: Path, capsys) -> None:
     assert payload["export"]["schema_version"] == "relay-kit.signal-export.v1"
     assert Path(payload["outputs"]["json"]).exists()
     assert Path(payload["outputs"]["jsonl"]).exists()
+
+
+def test_public_cli_signal_export_otlp(tmp_path: Path, capsys) -> None:
+    write_pulse_report(tmp_path)
+
+    exit_code = relay_kit_public_cli.main(["signal", "export", str(tmp_path), "--otlp", "--json"])
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == 0
+    assert Path(payload["outputs"]["otlp"]).exists()
