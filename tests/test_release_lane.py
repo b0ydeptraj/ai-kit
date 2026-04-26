@@ -37,6 +37,7 @@ include = ["relay_kit_v3*", "scripts*"]
                 "python scripts/eval_workflows.py . --strict",
                 "python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise",
                 "python -m pip wheel . --no-deps -w .tmp/wheelhouse",
+                "python scripts/package_smoke.py .",
                 "python -m pytest tests -q",
             ]
         )
@@ -103,6 +104,21 @@ def test_release_lane_report_fails_missing_package_smoke(tmp_path: Path) -> None
     assert report["status"] == "fail"
     ci_check = next(check for check in report["checks"] if check["id"] == "ci-runtime-gates")
     assert "python -m pip wheel . --no-deps -w .tmp/wheelhouse" in ci_check["details"]["missing"]
+
+
+def test_release_lane_report_fails_missing_package_install_smoke(tmp_path: Path) -> None:
+    write_release_lane_project(tmp_path)
+    workflow = tmp_path / ".github" / "workflows" / "validate-runtime.yml"
+    workflow.write_text(
+        workflow.read_text(encoding="utf-8").replace("python scripts/package_smoke.py .\n", ""),
+        encoding="utf-8",
+    )
+
+    report = release_lane.build_release_lane_report(tmp_path)
+
+    assert report["status"] == "fail"
+    ci_check = next(check for check in report["checks"] if check["id"] == "ci-runtime-gates")
+    assert "python scripts/package_smoke.py ." in ci_check["details"]["missing"]
 
 
 def test_public_cli_release_verify_json(tmp_path: Path, capsys) -> None:

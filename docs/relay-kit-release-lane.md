@@ -20,6 +20,7 @@ Default checks:
 - package include rules for `relay_kit_v3*` and `scripts*`
 - local CI workflow commands for runtime validation, doctor, migration, policy, semantic skill gauntlet, workflow eval, and pytest
 - local CI wheel build smoke command with `python -m pip wheel . --no-deps -w .tmp/wheelhouse`
+- local package install smoke command with `python scripts/package_smoke.py .`
 - commercial docs required for readiness, support, contracts, Pulse, signal export, and release smoke
 - release artifacts for manifest, trust metadata, and installed version marker
 - ignore policy for generated support and signal artifacts

@@ -34,6 +34,7 @@
 - `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`
 - `python relay_kit_public_cli.py signal export . --json`
 - `python relay_kit_public_cli.py release verify . --json`
+- `python scripts/package_smoke.py . --json`
 
 ## Coverage gaps and brittle areas
 - External benchmark repositories are not part of the Relay-kit runtime test suite.

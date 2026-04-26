@@ -59,5 +59,8 @@ jobs:
       - name: Build package smoke wheel
         run: python -m pip wheel . --no-deps -w .tmp/wheelhouse
 
+      - name: Run package install smoke
+        run: python scripts/package_smoke.py .
+
       - name: Run runtime smoke tests
         run: python -m pytest tests -q

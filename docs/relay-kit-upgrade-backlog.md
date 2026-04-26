@@ -28,6 +28,7 @@ Source audit status:
 - Fixed in readiness signal gate pass: `relay-kit readiness check` now requires the local signal export gate before returning a commercial-ready candidate.
 - Fixed in release-lane verification pass: `relay-kit release verify` checks package metadata, CI gate coverage, commercial docs, manifest/trust/version artifacts, and generated artifact ignore policy; readiness now includes this local gate.
 - Fixed in package smoke pass: release-lane CI coverage now requires `python -m pip wheel . --no-deps -w .tmp/wheelhouse`, and local wheel build was verified.
+- Fixed in package install smoke pass: `scripts/package_smoke.py` builds a wheel, installs it into a temporary virtualenv, and runs the installed `relay-kit --list-skills` console script.
 - Fixed in upgrade CLI pass: `relay-kit upgrade check|plan|mark-current` tracks installed runtime version and prints safe upgrade actions without auto-overwriting files.
 - Fixed in enterprise bundle pass: `--bundle enterprise` installs baseline plus the full discipline utility set and emits governance docs for paid/team usage.
 - Fixed in Pro policy packs pass: `relay-kit policy check --pack baseline|team|enterprise` and `relay-kit doctor --policy-pack enterprise` enforce stronger governance surfaces for team/paid installs.
