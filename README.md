@@ -71,7 +71,7 @@ It makes agents behave less like improvising interns and more like engineers wor
 - an `accessibility-review` gate so frontend quality is not only visual
 - a `skill-gauntlet` regression gate to keep skill routing behavior stable
 - a `context-continuity` utility for checkpoint, rehydrate, handoff, and diff flows
-- a `readiness check` gate that combines tests, doctor, policy, manifest trust, upgrade, support, and contract sync proof
+- a `readiness check` gate that combines tests, doctor, policy, manifest trust, upgrade, support, contract sync, and signal export proof
 - local Pulse reports and signal exports for quality review and support diagnostics
 - an active baseline that is validated instead of loosely assembled
 - a way to make work more consistent without forcing everything through raw chat memory

@@ -25,6 +25,7 @@ Source audit status:
 - Fixed in Pulse report pass: `relay-kit pulse build` writes static JSON/HTML quality reports from workflow eval, optional readiness, and evidence ledger signals.
 - Fixed in Pulse history pass: Pulse now appends compact history snapshots and reports trend deltas for score, pass rate, evidence coverage, route margin, and status changes.
 - Fixed in signal export pass: `relay-kit signal export` writes local JSON/JSONL telemetry-style signals from Pulse and the evidence ledger.
+- Fixed in readiness signal gate pass: `relay-kit readiness check` now requires the local signal export gate before returning a commercial-ready candidate.
 - Fixed in upgrade CLI pass: `relay-kit upgrade check|plan|mark-current` tracks installed runtime version and prints safe upgrade actions without auto-overwriting files.
 - Fixed in enterprise bundle pass: `--bundle enterprise` installs baseline plus the full discipline utility set and emits governance docs for paid/team usage.
 - Fixed in Pro policy packs pass: `relay-kit policy check --pack baseline|team|enterprise` and `relay-kit doctor --policy-pack enterprise` enforce stronger governance surfaces for team/paid installs.
@@ -32,7 +33,7 @@ Source audit status:
 - Fixed in trusted manifest pass: `relay-kit manifest stamp`, `relay-kit manifest verify --trusted`, and enterprise doctor require deterministic trust metadata for enterprise release evidence.
 - Fixed in governance reference pass: enterprise policy guard now fails required governance files that still contain unresolved `TBD` or template markers.
 - Fixed in contract import pass: `relay-kit contract import` can dry-run or apply Relay contract JSON back into PRD, story, tech-spec, and QA contracts without overwriting concrete sections unless `--force` is used.
-- Fixed in readiness gate pass: `relay-kit readiness check` aggregates pytest, doctor, trusted manifest, policy, workflow eval, support bundle, upgrade, contract sync, and commercial docs into one paid/team verdict.
+- Fixed in readiness gate pass: `relay-kit readiness check` aggregates pytest, doctor, trusted manifest, policy, workflow eval, support bundle, upgrade, contract sync, signal export, and commercial docs into one paid/team verdict.
 - Verified in local readiness pass: `relay-kit readiness check . --profile enterprise --json` returns `commercial-ready-candidate` with 106 tests passing and 0 findings.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
@@ -687,6 +688,7 @@ Expected gain:
 - Done first Pulse slice: add static JSON/HTML report generator for local quality review before dashboard/server work.
 - Done second Pulse slice: add local trend/history JSONL so Pulse can compare current quality against prior runs.
 - Done first signal export slice: add local JSON/JSONL telemetry-style export from Pulse and evidence ledger signals.
+- Done second signal export slice: readiness now verifies signal export as a required commercial gate.
 - Done first slice: add `relay-kit readiness check` as the single commercial readiness verdict.
 
 Expected gain:
@@ -706,6 +708,7 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - Evidence ledger records gate runs and findings.
 - Paid support/upgrade path is documented.
 - `relay-kit readiness check --profile enterprise` returns `commercial-ready-candidate` for the release candidate.
+- `relay-kit readiness check` proves signal export artifacts can be generated locally.
 
 Review-hub verdict for this backlog:
 - Go forward by fixing P0 first, then P1 items in order.

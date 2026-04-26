@@ -22,6 +22,7 @@ Use `--profile team` for non-enterprise projects. Use `--skip-tests` only after 
 - `support-bundle`: builds the redacted support diagnostic payload.
 - `upgrade-check`: verifies the installed runtime version marker and bundle manifest.
 - `contract-sync`: exports Relay contracts and dry-runs import validation.
+- `signal-export`: builds a local Pulse source and verifies Relay signal JSON/JSONL artifacts.
 - `commercial-docs`: checks SLA, enterprise bundle, contract sync, and support request docs.
 
 ## Verdicts

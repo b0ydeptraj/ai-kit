@@ -60,8 +60,12 @@ def test_readiness_report_returns_candidate_when_required_gates_pass(tmp_path: P
         "support-bundle",
         "upgrade-check",
         "contract-sync",
+        "signal-export",
         "commercial-docs",
     }
+    signal_gate = next(gate for gate in report["gates"] if gate["id"] == "signal-export")
+    assert signal_gate["status"] == "pass"
+    assert signal_gate["details"]["signal_count"] > 0
 
 
 def test_readiness_report_holds_when_required_gate_fails(tmp_path: Path) -> None:

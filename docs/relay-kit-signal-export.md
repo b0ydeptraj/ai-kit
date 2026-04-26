@@ -68,3 +68,5 @@ relay-kit signal export /path/to/project
 ```
 
 The export is a measurement artifact, not a readiness verdict. Use `relay-kit readiness check` for the commercial-ready gate.
+
+Enterprise readiness also runs a required `signal-export` gate to prove these artifacts can be generated for the current release lane.

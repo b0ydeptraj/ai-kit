@@ -60,6 +60,7 @@ def build_readiness_report(
     gates.append(_support_bundle_gate(root, selected_profile, support))
     gates.append(_upgrade_gate(root, upgrade))
     gates.append(_contract_sync_gate(root, contract_export, contract_import))
+    gates.append(_signal_export_gate(root, selected_profile))
     gates.append(_commercial_docs_gate(root))
 
     required_failures = [gate for gate in gates if gate["required"] and gate["status"] not in {"pass", "skipped"}]
@@ -298,6 +299,54 @@ def _contract_sync_gate(
         }
     except Exception as exc:  # pragma: no cover - defensive gate summary
         return _exception_gate("contract-sync", "contract sync", exc)
+
+
+def _signal_export_gate(root: Path, profile: str) -> dict[str, Any]:
+    try:
+        from relay_kit_v3.pulse import build_pulse_report, write_pulse_report
+        from relay_kit_v3.signal_export import SCHEMA_VERSION as SIGNAL_EXPORT_SCHEMA_VERSION
+        from relay_kit_v3.signal_export import build_signal_export, write_signal_export
+
+        with tempfile.TemporaryDirectory(prefix="relay-readiness-pulse-") as temp_dir:
+            pulse_report = build_pulse_report(
+                root,
+                profile=profile,
+                include_readiness=False,
+                skip_tests=True,
+                output_dir=Path(temp_dir),
+            )
+            pulse_outputs = write_pulse_report(
+                root,
+                pulse_report,
+                output_dir=Path(temp_dir),
+                record_history=False,
+            )
+            payload = build_signal_export(root, pulse_file=pulse_outputs["json"])
+        outputs = write_signal_export(root, payload)
+        summary = payload.get("summary", {})
+        signal_count = int(summary.get("signal_count", 0))
+        ok = (
+            payload.get("schema_version") == SIGNAL_EXPORT_SCHEMA_VERSION
+            and signal_count > 0
+            and outputs["json"].exists()
+            and outputs["jsonl"].exists()
+        )
+        return {
+            "id": "signal-export",
+            "label": "signal export",
+            "status": "pass" if ok else "fail",
+            "required": True,
+            "summary": f"signals: {signal_count}; schema: {payload.get('schema_version')}",
+            "details": {
+                "signal_count": signal_count,
+                "metric_count": summary.get("metric_count", 0),
+                "event_count": summary.get("event_count", 0),
+                "json": str(outputs["json"]),
+                "jsonl": str(outputs["jsonl"]),
+            },
+        }
+    except Exception as exc:  # pragma: no cover - defensive gate summary
+        return _exception_gate("signal-export", "signal export", exc)
 
 
 def _commercial_docs_gate(root: Path) -> dict[str, Any]:
