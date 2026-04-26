@@ -42,10 +42,11 @@ Source audit status:
 - Verified in local readiness pass: `relay-kit readiness check . --profile enterprise --json` returns `commercial-ready-candidate` with 123 tests passing and 0 findings.
 - Fixed in release publication pass: `v3.3.0` is published with PR #1, CI success, release-lane proof, package smoke, enterprise readiness, post-release readiness, and rollback evidence.
 - Fixed in Relay OTLP export pass: `relay-kit signal export --otlp` writes dependency-free OTLP-compatible `relay-signals-otlp.json` with `resourceMetrics` and `resourceLogs` for external observability pipelines.
+- Fixed in next-dev version hygiene pass: `main` now uses PEP 440 package version `3.4.0.dev0` after the published `v3.3.0` tag, with runtime version marker and trusted manifest regenerated for the next-dev channel.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
-- Current readiness: published `v3.3.0` with local commercial-ready candidate evidence; post-release polish is adding external-observability export.
+- Current readiness: published `v3.3.0` with local commercial-ready candidate evidence; `main` has moved to `3.4.0.dev0` for post-release development.
 - Commercial readiness: locally gated by `relay-kit readiness check` plus `relay-kit release verify`; remote CI is green for the release commit, while package publication and paid support operations still need external release evidence.
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
