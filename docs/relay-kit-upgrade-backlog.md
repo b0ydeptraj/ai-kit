@@ -32,6 +32,7 @@ Source audit status:
 - Fixed in Pro policy packs pass: `relay-kit policy check --pack baseline|team|enterprise` and `relay-kit doctor --policy-pack enterprise` enforce stronger governance surfaces for team/paid installs.
 - Fixed in support workflow pass: `relay-kit support bundle` creates redacted diagnostic JSON and docs define severity, evidence, support scope, and escalation workflow.
 - Fixed in support signal summary pass: support bundles include signal export summary/output paths and required diagnostics include `relay-kit signal export`.
+- Fixed in support release summary pass: support bundles include release-lane status/findings/residual risks so paid support can inspect release prerequisites from one diagnostic file.
 - Fixed in trusted manifest pass: `relay-kit manifest stamp`, `relay-kit manifest verify --trusted`, and enterprise doctor require deterministic trust metadata for enterprise release evidence.
 - Fixed in governance reference pass: enterprise policy guard now fails required governance files that still contain unresolved `TBD` or template markers.
 - Fixed in contract import pass: `relay-kit contract import` can dry-run or apply Relay contract JSON back into PRD, story, tech-spec, and QA contracts without overwriting concrete sections unless `--force` is used.

@@ -12,6 +12,7 @@ from typing import Any
 from relay_kit_v3 import bundle_manifest
 from relay_kit_v3.evidence_ledger import summarize_events
 from relay_kit_v3.policy_packs import DEFAULT_POLICY_PACK, get_policy_pack
+from relay_kit_v3.release_lane import build_release_lane_report
 from relay_kit_v3.upgrade import build_upgrade_report, inspect_manifest
 from scripts import eval_workflows, policy_guard
 
@@ -43,6 +44,7 @@ def build_support_bundle(
         root,
         profile="enterprise" if pack.name == "enterprise" else "team",
     )
+    release_lane = build_release_lane_summary(root)
 
     payload: dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
@@ -96,6 +98,7 @@ def build_support_bundle(
                 "findings": workflow_eval["findings"],
             },
             "signal_export": signal_export,
+            "release_lane": release_lane,
         },
     }
     return redact_value(payload)
@@ -205,6 +208,27 @@ def build_signal_export_summary(root: Path, *, profile: str) -> dict[str, Any]:
         }
 
 
+def build_release_lane_summary(root: Path) -> dict[str, Any]:
+    try:
+        report = build_release_lane_report(root)
+        checks = report.get("checks", [])
+        return {
+            "schema_version": report.get("schema_version"),
+            "status": report.get("status"),
+            "checks_count": len(checks) if isinstance(checks, list) else 0,
+            "findings_count": len(report.get("findings", [])),
+            "findings": report.get("findings", []),
+            "residual_risks": report.get("residual_risks", []),
+        }
+    except Exception as exc:  # pragma: no cover - defensive diagnostic payload
+        return {
+            "schema_version": "relay-kit.release-lane.v1",
+            "status": "fail",
+            "checks_count": 0,
+            "findings_count": 1,
+            "findings": [{"gate": "release-lane", "status": "fail", "summary": f"{type(exc).__name__}: {exc}"}],
+            "residual_risks": [],
+        }
 def redact_value(value: Any) -> Any:
     if isinstance(value, str):
         redacted = value

@@ -78,6 +78,6 @@ Excluded:
 
 1. User runs `relay-kit support bundle`.
 2. User opens a support request with severity and required diagnostics.
-3. Triage validates the bundle schema, package version, manifest status, upgrade status, policy findings, workflow eval status, and signal export summary.
+3. Triage validates the bundle schema, package version, manifest status, upgrade status, policy findings, workflow eval status, signal export summary, and release-lane summary.
 4. If the issue is reproducible in Relay-kit, it becomes a fix lane.
 5. If the issue is project-specific, support returns a scoped recommendation and the evidence gap.
