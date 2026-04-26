@@ -32,6 +32,7 @@
 - `python scripts/skill_gauntlet.py . --strict --semantic`
 - `python scripts/eval_workflows.py . --strict`
 - `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`
+- `python relay_kit_public_cli.py signal export . --json`
 
 ## Coverage gaps and brittle areas
 - External benchmark repositories are not part of the Relay-kit runtime test suite.

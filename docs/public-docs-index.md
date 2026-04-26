@@ -12,6 +12,7 @@ Use this page as the public entrypoint for current runtime behavior.
 - `docs/relay-kit-accessibility-review.md`
 - `docs/relay-kit-readiness-check.md`
 - `docs/relay-kit-pulse-report.md`
+- `docs/relay-kit-signal-export.md`
 - `docs/relay-kit-skill-gauntlet.md`
 - `docs/relay-kit-context-continuity.md`
 - `docs/relay-kit-context-continuity-design-note.md`

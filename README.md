@@ -72,6 +72,7 @@ It makes agents behave less like improvising interns and more like engineers wor
 - a `skill-gauntlet` regression gate to keep skill routing behavior stable
 - a `context-continuity` utility for checkpoint, rehydrate, handoff, and diff flows
 - a `readiness check` gate that combines tests, doctor, policy, manifest trust, upgrade, support, and contract sync proof
+- local Pulse reports and signal exports for quality review and support diagnostics
 - an active baseline that is validated instead of loosely assembled
 - a way to make work more consistent without forcing everything through raw chat memory
 
@@ -159,6 +160,13 @@ Build a local Pulse quality report:
 relay-kit pulse build /path/to/project
 relay-kit pulse build /path/to/project --include-readiness --json
 relay-kit pulse build /path/to/project --history-limit 50
+```
+
+Export Pulse and evidence ledger signals:
+
+```bash
+relay-kit signal export /path/to/project
+relay-kit signal export /path/to/project --json
 ```
 
 Run the paid/team readiness gate:
@@ -310,6 +318,8 @@ Historical compatibility timeline and removal log:
   - [`docs/relay-kit-readiness-check.md`](docs/relay-kit-readiness-check.md)
 - Pulse quality report:
   - [`docs/relay-kit-pulse-report.md`](docs/relay-kit-pulse-report.md)
+- Signal export:
+  - [`docs/relay-kit-signal-export.md`](docs/relay-kit-signal-export.md)
 - Skill behavior gauntlet:
   - [`docs/relay-kit-skill-gauntlet.md`](docs/relay-kit-skill-gauntlet.md)
 - Context continuity:

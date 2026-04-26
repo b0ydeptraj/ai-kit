@@ -23,6 +23,7 @@ Source audit status:
 - Fixed in workflow eval quality pass: `relay-kit eval run` now reports route margin, route confidence, evidence coverage, skill distribution, quality thresholds, and baseline regression checks.
 - Fixed in Pulse report pass: `relay-kit pulse build` writes static JSON/HTML quality reports from workflow eval, optional readiness, and evidence ledger signals.
 - Fixed in Pulse history pass: Pulse now appends compact history snapshots and reports trend deltas for score, pass rate, evidence coverage, route margin, and status changes.
+- Fixed in signal export pass: `relay-kit signal export` writes local JSON/JSONL telemetry-style signals from Pulse and the evidence ledger.
 - Fixed in upgrade CLI pass: `relay-kit upgrade check|plan|mark-current` tracks installed runtime version and prints safe upgrade actions without auto-overwriting files.
 - Fixed in enterprise bundle pass: `--bundle enterprise` installs baseline plus the full discipline utility set and emits governance docs for paid/team usage.
 - Fixed in Pro policy packs pass: `relay-kit policy check --pack baseline|team|enterprise` and `relay-kit doctor --policy-pack enterprise` enforce stronger governance surfaces for team/paid installs.
@@ -682,6 +683,7 @@ Expected gain:
 - Done second slice: add eval quality metrics, configurable thresholds, and baseline regression comparison.
 - Done first Pulse slice: add static JSON/HTML report generator for local quality review before dashboard/server work.
 - Done second Pulse slice: add local trend/history JSONL so Pulse can compare current quality against prior runs.
+- Done first signal export slice: add local JSON/JSONL telemetry-style export from Pulse and evidence ledger signals.
 - Done first slice: add `relay-kit readiness check` as the single commercial readiness verdict.
 
 Expected gain:

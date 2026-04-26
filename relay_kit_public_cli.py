@@ -11,6 +11,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit support bundle <project_path>
   relay-kit readiness check <project_path>
   relay-kit pulse build <project_path>
+  relay-kit signal export <project_path>
   relay-kit contract import <project_path> --contract-file <relay-contract.json>
 
 It maps to the existing canonical runtime entrypoint (`relay_kit.py`)
@@ -32,6 +33,7 @@ from relay_kit_v3.bundle_manifest import verify_manifest_file, verify_trusted_ma
 from relay_kit_v3.policy_packs import DEFAULT_POLICY_PACK, POLICY_PACKS
 from relay_kit_v3.pulse import build_pulse_report, write_pulse_report
 from relay_kit_v3.readiness import build_readiness_report, render_readiness_report
+from relay_kit_v3.signal_export import build_signal_export, write_signal_export
 from relay_kit_v3.contract_export import write_contract_export
 from relay_kit_v3.contract_import import import_contracts, render_contract_import_report
 from relay_kit_v3.support_bundle import build_support_bundle, write_support_bundle
@@ -349,6 +351,21 @@ def _parse_pulse_args(argv: list[str]) -> argparse.Namespace:
     build.add_argument("--history-limit", type=int, default=20, help="Historical Pulse snapshots to include")
     build.add_argument("--no-history", action="store_true", help="Do not append this run to Pulse history")
     build.add_argument("--json", action="store_true", help="Emit machine-readable output paths and report")
+    return parser.parse_args(argv)
+
+
+def _parse_signal_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit signal",
+        description="Export Relay-kit Pulse and evidence signals as local telemetry artifacts.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    export = subparsers.add_parser("export", help="Write Relay signal JSON and JSONL")
+    export.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    export.add_argument("--pulse-file", default=None, help="Pulse report JSON file")
+    export.add_argument("--output-dir", default=None, help="Output directory (default: <project>/.relay-kit/signals)")
+    export.add_argument("--event-limit", type=int, default=50, help="Recent evidence events to export")
+    export.add_argument("--json", action="store_true", help="Emit machine-readable output paths and export payload")
     return parser.parse_args(argv)
 
 
@@ -777,6 +794,33 @@ def run_pulse(args: argparse.Namespace) -> int:
     return 0 if report["status"] in {"pass", "attention"} else 2
 
 
+def run_signal(args: argparse.Namespace) -> int:
+    if args.action != "export":
+        return 2
+    payload = build_signal_export(
+        args.project_path,
+        pulse_file=args.pulse_file,
+        event_limit=args.event_limit,
+    )
+    outputs = write_signal_export(args.project_path, payload, output_dir=args.output_dir)
+    if args.json:
+        print(
+            json.dumps(
+                {
+                    "outputs": {name: str(path) for name, path in outputs.items()},
+                    "export": payload,
+                },
+                ensure_ascii=True,
+                indent=2,
+            )
+        )
+    else:
+        print(f"Wrote {outputs['json']}")
+        print(f"Wrote {outputs['jsonl']}")
+        print(f"Signals: {payload['summary']['signal_count']}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     raw_argv = sys.argv[1:] if argv is None else argv
     if raw_argv and raw_argv[0] == "doctor":
@@ -799,6 +843,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_readiness(_parse_readiness_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "pulse":
         return run_pulse(_parse_pulse_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "signal":
+        return run_signal(_parse_signal_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "init":
         raw_argv = raw_argv[1:]
 

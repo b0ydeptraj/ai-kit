@@ -66,3 +66,9 @@ relay-kit pulse build /path/to/project --workflow-eval-file workflow-eval.json -
 ```
 
 Use the HTML file for human review and the JSON file for support bundles or future dashboards.
+
+To export Pulse plus recent evidence events as local telemetry-style artifacts, run:
+
+```bash
+relay-kit signal export /path/to/project
+```
