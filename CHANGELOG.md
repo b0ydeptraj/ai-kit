@@ -2,6 +2,18 @@
 
 All notable changes to `Relay-kit` are documented here.
 
+## Next - 3.4.0.dev0
+
+### Added
+
+- Added `relay-kit signal export --otlp` to write dependency-free Relay OTLP
+  signal artifacts for external observability pipelines.
+
+### Changed
+
+- Bumped post-`v3.3.0` mainline package metadata to `3.4.0.dev0` so new
+  development builds cannot be confused with the published `v3.3.0` release.
+
 ## v3.3.0 - 2026-04-14
 
 ### Added

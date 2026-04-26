@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Continue post-release commercial polish after publishing Relay-kit v3.3.0; current slice adds Relay OTLP export for signal observability.
+Move post-release `main` to the `3.4.0.dev0` next-dev line after publishing `v3.3.0` and merging OTLP signal export.
 
 ## Active lane
 - Lane id: primary
@@ -62,5 +62,5 @@ Release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
 Tag commit: d46f9c934805010cbf64fca00c28c6bc9dc233a9.
 Remote CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/24955362678 completed successfully.
 Local release evidence: release verify passed, runtime validation passed, migration guard passed, package install smoke passed, pre-release and post-release readiness strict gates passed, and enterprise readiness returned `commercial-ready-candidate`.
-Current branch: `codex/relay-otlp-export`.
-Current post-release polish evidence: `python -m pytest tests\test_signal_export.py -q` passed; `python -m pytest -q --basetemp=.tmp\pytest-otlp-export` passed with 125 tests.
+Current branch: `codex/version-next-dev`.
+Current post-release polish evidence: OTLP signal export merged in PR #2 with CI success. This slice bumps package metadata to `3.4.0.dev0`, regenerates the runtime version marker, and stamps next-dev trust metadata.
