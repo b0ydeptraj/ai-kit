@@ -70,5 +70,53 @@
     "prompt": "Implementation evidence exists. Produce a formal go or no-go readiness verdict against acceptance criteria, risk, regression scope, and qa-report.",
     "expected_skill": "qa-governor",
     "expected_terms": ["readiness verdict", "go or no-go", "qa-report"]
+  },
+  {
+    "id": "api-integration-network-client",
+    "prompt": "Use api-integration for network-facing code. We are changing API clients, webhooks, auth, retries, timeouts, and error mapping for an external service.",
+    "expected_skill": "api-integration",
+    "expected_terms": ["clients", "auth", "retries"]
+  },
+  {
+    "id": "data-persistence-schema-change",
+    "prompt": "Use data-persistence before touching schemas, repositories, migrations, transactions, caches, and consistency boundaries.",
+    "expected_skill": "data-persistence",
+    "expected_terms": ["schemas", "migrations", "transactions"]
+  },
+  {
+    "id": "dependency-management-package-upgrade",
+    "prompt": "Use dependency-management because a package is being added or upgraded and lockfiles, version pinning, toolchain, and CI drift must be checked.",
+    "expected_skill": "dependency-management",
+    "expected_terms": ["lockfiles", "version pinning", "dependency risks"]
+  },
+  {
+    "id": "accessibility-review-before-ready",
+    "prompt": "Use accessibility-review before completion claims for frontend work. Check keyboard navigation, visible focus, semantic structure, labels, contrast, and hold verdict evidence.",
+    "expected_skill": "accessibility-review",
+    "expected_terms": ["keyboard", "focus", "contrast"]
+  },
+  {
+    "id": "policy-guard-high-risk-operation",
+    "prompt": "Use policy-guard for high-risk agent operations. Scan shell commands, path traversal, hard-coded secrets, prompt-injection phrases, broad allowlists, and fail closed.",
+    "expected_skill": "policy-guard",
+    "expected_terms": ["path traversal", "hard-coded secrets", "allowlists"]
+  },
+  {
+    "id": "impact-radar-runtime-blast-radius",
+    "prompt": "Use impact-radar before touching runtime, adapters, templates, scripts, docs, and packaging so blast radius and verification gates are explicit.",
+    "expected_skill": "impact-radar",
+    "expected_terms": ["blast radius", "risk level", "verification gates"]
+  },
+  {
+    "id": "project-architecture-drift-map",
+    "prompt": "Need project-architecture support, not architect planning. Analyze existing codebase shape, entry points, execution flow, dependency direction, architecture drift, hotspots, and update the living architecture reference.",
+    "expected_skill": "project-architecture",
+    "expected_terms": ["entry points", "dependency direction", "architecture drift"]
+  },
+  {
+    "id": "ux-structure-product-flow",
+    "prompt": "Use ux-structure when a user-facing flow needs sharper information hierarchy, cleaner interaction flow, loading empty error states, and less generic AI-looking UI.",
+    "expected_skill": "ux-structure",
+    "expected_terms": ["information hierarchy", "loading", "empty"]
   }
 ]

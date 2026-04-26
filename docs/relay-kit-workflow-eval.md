@@ -6,6 +6,7 @@ It is intentionally separate from `skill-gauntlet`:
 
 - `skill-gauntlet --semantic` protects the runtime skill files from drift.
 - `workflow eval` reports scenario pass rate, predicted skill, top routes, and missing evidence terms.
+- The bundled default suite covers 20 scenarios across routing, implementation, QA, release, policy, architecture, UX, dependency, API, and data workflows.
 
 ## Commands
 

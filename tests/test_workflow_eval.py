@@ -28,8 +28,8 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
     payload = json.loads(result.stdout)
     assert payload["schema_version"] == "relay-kit.workflow-eval.v1"
     assert payload["status"] == "pass"
-    assert payload["scenario_count"] == 12
-    assert payload["passed"] == 12
+    assert payload["scenario_count"] == 20
+    assert payload["passed"] == 20
     assert payload["failed"] == 0
     assert payload["pass_rate"] == 1.0
     assert payload["quality"]["min_route_margin"] >= 1
@@ -39,6 +39,25 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
     assert payload["results"][0]["top_routes"][0]["skill"] == payload["results"][0]["expected_skill"]
     assert payload["results"][0]["route_margin"] >= 1
     assert payload["results"][0]["evidence_coverage"] == 1.0
+
+
+def test_workflow_eval_default_suite_covers_production_team_skills() -> None:
+    result = run_command("scripts/eval_workflows.py", ".", "--strict", "--json")
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    payload = json.loads(result.stdout)
+    expected_skills = set(payload["quality"]["unique_expected_skills"])
+    for skill in {
+        "api-integration",
+        "data-persistence",
+        "dependency-management",
+        "accessibility-review",
+        "policy-guard",
+        "impact-radar",
+        "project-architecture",
+        "ux-structure",
+    }:
+        assert skill in expected_skills
 
 
 def test_workflow_eval_strict_fails_bad_route_fixture(tmp_path: Path) -> None:

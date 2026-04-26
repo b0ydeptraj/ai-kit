@@ -26,7 +26,7 @@ def test_semantic_skill_gauntlet_passes_current_runtime() -> None:
 
     assert result.returncode == 0, result.stdout + result.stderr
     assert "Semantic checks: on" in result.stdout
-    assert "Scenario fixtures: 12" in result.stdout
+    assert "Scenario fixtures: 20" in result.stdout
     assert "Findings: 0" in result.stdout
 
 

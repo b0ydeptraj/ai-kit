@@ -21,6 +21,7 @@ Source audit status:
 - Fixed in runtime policy guard pass: `policy_guard.py` detects deterministic secret, path traversal, destructive shell, prompt-injection, and broad allowlist risks and runs from doctor/CI.
 - Fixed in workflow eval pass: `relay-kit eval run` reports scenario pass rate, predicted skill, top routes, and evidence-term findings from bundled fixtures.
 - Fixed in workflow eval quality pass: `relay-kit eval run` now reports route margin, route confidence, evidence coverage, skill distribution, quality thresholds, and baseline regression checks.
+- Fixed in workflow eval expansion pass: bundled workflow scenarios increased from 12 to 20 and now cover API, data, dependency, accessibility, policy, impact, architecture, and UX support flows.
 - Fixed in Pulse report pass: `relay-kit pulse build` writes static JSON/HTML quality reports from workflow eval, optional readiness, and evidence ledger signals.
 - Fixed in Pulse history pass: Pulse now appends compact history snapshots and reports trend deltas for score, pass rate, evidence coverage, route margin, and status changes.
 - Fixed in signal export pass: `relay-kit signal export` writes local JSON/JSONL telemetry-style signals from Pulse and the evidence ledger.
@@ -372,8 +373,9 @@ Status:
 - Fixed on 2026-04-24 for the first measurable routing suite.
 - Done: `relay-kit eval run <project> --strict` reports pass rate, top routes, predicted skill, and per-scenario findings.
 - Done: default fixtures are bundled under `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, so installed CLI runs do not depend on repo test files.
+- Done: default fixture coverage expanded to 20 scenarios, including production support lanes for API integration, data persistence, dependency management, accessibility, policy, impact, project architecture, and UX structure.
 - Done: `relay-kit doctor` and CI run `scripts/eval_workflows.py . --strict`.
-- Verification: `python scripts/eval_workflows.py . --strict` reports 12/12 scenarios; `python -m pytest tests/test_workflow_eval.py -q` passes.
+- Verification: `python scripts/eval_workflows.py . --strict` reports 20/20 scenarios; `python -m pytest tests/test_workflow_eval.py -q` passes.
 
 Problem:
 - Semantic gauntlet proved static contract drift, but commercial quality needs a reportable scenario pass-rate signal.
@@ -681,6 +683,7 @@ Expected gain:
 - Done first slice: add enterprise bundle story.
 - Done first slice: add scenario eval harness for real workflow quality.
 - Done second slice: add eval quality metrics, configurable thresholds, and baseline regression comparison.
+- Done third eval slice: expand bundled scenario coverage from 12 to 20 production/team workflows.
 - Done first Pulse slice: add static JSON/HTML report generator for local quality review before dashboard/server work.
 - Done second Pulse slice: add local trend/history JSONL so Pulse can compare current quality against prior runs.
 - Done first signal export slice: add local JSON/JSONL telemetry-style export from Pulse and evidence ledger signals.
