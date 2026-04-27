@@ -123,6 +123,7 @@ def test_readiness_report_returns_candidate_when_required_gates_pass(tmp_path: P
     signal_gate = next(gate for gate in report["gates"] if gate["id"] == "signal-export")
     assert signal_gate["status"] == "pass"
     assert signal_gate["details"]["signal_count"] > 0
+    assert Path(signal_gate["details"]["otlp"]).exists()
 
 
 def test_readiness_report_holds_when_required_gate_fails(tmp_path: Path) -> None:
@@ -168,6 +169,8 @@ def test_readiness_report_is_limited_beta_when_tests_are_skipped(tmp_path: Path)
     assert report["status"] == "pass"
     assert report["verdict"] == "limited-beta"
     assert any(gate["id"] == "pytest" and gate["status"] == "skipped" for gate in report["gates"])
+    signal_gate = next(gate for gate in report["gates"] if gate["id"] == "signal-export")
+    assert Path(signal_gate["details"]["otlp"]).name == "relay-signals-otlp.json"
 
 
 def test_readiness_report_team_profile_uses_non_enterprise_manifest_gate(tmp_path: Path) -> None:

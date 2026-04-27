@@ -8,6 +8,8 @@ All notable changes to `Relay-kit` are documented here.
 
 - Added `relay-kit signal export --otlp` to write dependency-free Relay OTLP
   signal artifacts for external observability pipelines.
+- Added OTLP artifact generation to readiness and support diagnostics so
+  commercial evidence includes external-observability output paths.
 
 ### Changed
 

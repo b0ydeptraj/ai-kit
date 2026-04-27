@@ -73,9 +73,9 @@ Use this command after Pulse when a support bundle, release review, or future da
 ```bash
 relay-kit readiness check /path/to/project --profile enterprise
 relay-kit pulse build /path/to/project --include-readiness
-relay-kit signal export /path/to/project
+relay-kit signal export /path/to/project --otlp
 ```
 
 The export is a measurement artifact, not a readiness verdict. Use `relay-kit readiness check` for the commercial-ready gate.
 
-Enterprise readiness also runs a required `signal-export` gate to prove these artifacts can be generated for the current release lane.
+Enterprise readiness also runs a required `signal-export` gate to prove JSON, JSONL, and OTLP artifacts can be generated for the current release lane.

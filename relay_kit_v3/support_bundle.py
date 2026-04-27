@@ -162,7 +162,7 @@ def required_commands(project_root: Path, policy_pack: str) -> list[str]:
         f"relay-kit readiness check {project} --profile {readiness_profile} --json",
         f"relay-kit release verify {project} --json",
         f"relay-kit pulse build {project} --include-readiness",
-        f"relay-kit signal export {project} --json",
+        f"relay-kit signal export {project} --otlp --json",
     ]
 
 
@@ -187,7 +187,7 @@ def build_signal_export_summary(root: Path, *, profile: str) -> dict[str, Any]:
                 record_history=False,
             )
             payload = build_signal_export(root, pulse_file=pulse_outputs["json"])
-        outputs = write_signal_export(root, payload)
+        outputs = write_signal_export(root, payload, include_otlp=True)
         summary = payload.get("summary", {})
         signal_count = int(summary.get("signal_count", 0))
         return {
@@ -197,6 +197,7 @@ def build_signal_export_summary(root: Path, *, profile: str) -> dict[str, Any]:
             "outputs": {
                 "json": str(outputs["json"]),
                 "jsonl": str(outputs["jsonl"]),
+                "otlp": str(outputs["otlp"]),
             },
         }
     except Exception as exc:  # pragma: no cover - defensive diagnostic payload

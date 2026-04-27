@@ -22,7 +22,7 @@ Use `--profile team` for non-enterprise projects. Use `--skip-tests` only after 
 - `support-bundle`: builds the redacted support diagnostic payload.
 - `upgrade-check`: verifies the installed runtime version marker and bundle manifest.
 - `contract-sync`: exports Relay contracts and dry-runs import validation.
-- `signal-export`: builds a local Pulse source and verifies Relay signal JSON/JSONL artifacts.
+- `signal-export`: builds a local Pulse source and verifies Relay signal JSON, JSONL, and OTLP artifacts.
 - `release-lane`: verifies local package, CI workflow, docs, manifest/trust/version, and artifact-ignore prerequisites.
 - `commercial-docs`: checks SLA, enterprise bundle, contract sync, and support request docs.
 
@@ -46,3 +46,5 @@ relay-kit readiness check /path/to/project --profile enterprise
 ```
 
 Do not call a package commercial-ready from local docs alone. The readiness report is the local proof artifact for that claim. Remote CI status and package upload still need external release evidence.
+
+The readiness `signal-export` gate writes `.relay-kit/signals/relay-signals.json`, `.relay-kit/signals/relay-signals.jsonl`, and `.relay-kit/signals/relay-signals-otlp.json`.

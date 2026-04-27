@@ -324,7 +324,7 @@ def _signal_export_gate(root: Path, profile: str) -> dict[str, Any]:
                 record_history=False,
             )
             payload = build_signal_export(root, pulse_file=pulse_outputs["json"])
-        outputs = write_signal_export(root, payload)
+        outputs = write_signal_export(root, payload, include_otlp=True)
         summary = payload.get("summary", {})
         signal_count = int(summary.get("signal_count", 0))
         ok = (
@@ -332,6 +332,7 @@ def _signal_export_gate(root: Path, profile: str) -> dict[str, Any]:
             and signal_count > 0
             and outputs["json"].exists()
             and outputs["jsonl"].exists()
+            and outputs["otlp"].exists()
         )
         return {
             "id": "signal-export",
@@ -345,6 +346,7 @@ def _signal_export_gate(root: Path, profile: str) -> dict[str, Any]:
                 "event_count": summary.get("event_count", 0),
                 "json": str(outputs["json"]),
                 "jsonl": str(outputs["jsonl"]),
+                "otlp": str(outputs["otlp"]),
             },
         }
     except Exception as exc:  # pragma: no cover - defensive gate summary

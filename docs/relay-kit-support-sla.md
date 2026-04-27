@@ -25,7 +25,7 @@ relay-kit manifest verify /path/to/project --trusted
 relay-kit upgrade check /path/to/project --json
 relay-kit eval run /path/to/project --strict --json
 relay-kit pulse build /path/to/project --include-readiness
-relay-kit signal export /path/to/project --json
+relay-kit signal export /path/to/project --otlp --json
 relay-kit release verify /path/to/project --json
 ```
 
@@ -34,6 +34,7 @@ Attach:
 - `.relay-kit/support/support-bundle.json`
 - `.relay-kit/signals/relay-signals.json`
 - `.relay-kit/signals/relay-signals.jsonl`
+- `.relay-kit/signals/relay-signals-otlp.json`
 - the failing command output
 - the support request template from `.relay-kit/contracts/support-request.md`
 
