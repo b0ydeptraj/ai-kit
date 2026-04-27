@@ -13,6 +13,8 @@ All notable changes to `Relay-kit` are documented here.
 
 ### Changed
 
+- Updated the runtime validation workflow to use Node 24-ready GitHub Actions
+  major versions for checkout and Python setup.
 - Bumped post-`v3.3.0` mainline package metadata to `3.4.0.dev0` so new
   development builds cannot be confused with the published `v3.3.0` release.
 

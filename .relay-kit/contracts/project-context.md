@@ -42,7 +42,8 @@
 - GitHub release `v3.3.0` published: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
 - PR #2 merged OTLP signal export: https://github.com/b0ydeptraj/Relay-kit/pull/2, merge commit `2d28d98c5f14cacd512688ca62abe601cf64ad4a`.
 - PR #3 merged the next-dev version bump: https://github.com/b0ydeptraj/Relay-kit/pull/3, merge commit `aaaac9b4f43dd6e96c181f1bc917994fac887f14`.
-- Latest confirmed main CI before this bootstrap: https://github.com/b0ydeptraj/Relay-kit/actions/runs/24956568795, conclusion `success`.
+- PR #5 merged OTLP readiness/support evidence: https://github.com/b0ydeptraj/Relay-kit/pull/5, merge commit `59d699d3a60daf41366ac3f4e9c8a2723340f9ab`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/24986151727, conclusion `success`.
 
 ## Known sharp edges
 
