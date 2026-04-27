@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Move post-release `main` to the `3.4.0.dev0` next-dev line after publishing `v3.3.0` and merging OTLP signal export.
+Refresh Relay-kit shared runtime context after `v3.3.0` publication, OTLP signal export, and the `3.4.0.dev0` next-dev version bump; hand off cleanly to `workflow-router`.
 
 ## Active lane
 - Lane id: primary
@@ -9,25 +9,25 @@ Move post-release `main` to the `3.4.0.dev0` next-dev line after publishing `v3.
 - Lane owner: Codex
 
 ## Active orchestration
-- Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: fix-hub
-- Active specialist: developer
+- Layer-1 orchestrator: bootstrap
+- Layer-2 workflow hub: none
+- Active specialist: none
 
 ## Active utility providers
-- Primary utility provider: testing-patterns
+- Primary utility provider: context-continuity
 - Additional utilities in play: evidence-before-completion
 
 ## Active standalone/domain skill
-- Skill: developer
-- Why selected: the release is published; remaining work is bounded code polish with tests.
+- Skill: bootstrap
+- Why selected: project-context, workflow-state, team-board, lane-registry, and handoff-log needed a current source-of-truth refresh before more feature work.
 
 ## Complexity level
-- Level: L4
-- Reasoning: release, packaging, CI, support diagnostics, and commercial-readiness gates are enterprise-sensitive.
+- Level: L2
+- Reasoning: this is a multi-artifact state refresh with low runtime risk but high coordination value for later lanes.
 
 ## Chosen track
-- Track: enterprise-flow
-- Why this track fits: the next step is integration and release proof, not another isolated runtime feature.
+- Track: product-flow
+- Why this track fits: no runtime behavior changes are planned in this slice; the work refreshes project context and handoff state.
 
 ## Completed artifacts
 - [ ] product-brief
@@ -37,10 +37,11 @@ Move post-release `main` to the `3.4.0.dev0` next-dev line after publishing `v3.
 - [ ] story
 - [ ] tech-spec
 - [ ] investigation-notes
+- [x] project-context
 - [x] qa-report
-- [ ] team-board
-- [ ] lane-registry
-- [ ] handoff-log
+- [x] team-board
+- [x] lane-registry
+- [x] handoff-log
 
 ## Ownership locks
 | Artifact | Owner lane | Lock scope | Status |
@@ -48,19 +49,23 @@ Move post-release `main` to the `3.4.0.dev0` next-dev line after publishing `v3.
 | none | none | none | none |
 
 ## Next skill
-test-hub
+workflow-router
 
 ## Known blockers
-Package upload or marketplace publication remains a separate external release action.
+Package upload, marketplace publication, and legal SLA commitments remain external release actions outside the local repo gates.
 
 ## Escalation triggers noticed
-Release and packaging changes touch CI workflow, public CLI, support diagnostics, readiness gates, and package installation proof.
+Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
-## Notes
-Merged PR: https://github.com/b0ydeptraj/Relay-kit/pull/1.
-Release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
-Tag commit: d46f9c934805010cbf64fca00c28c6bc9dc233a9.
-Remote CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/24955362678 completed successfully.
-Local release evidence: release verify passed, runtime validation passed, migration guard passed, package install smoke passed, pre-release and post-release readiness strict gates passed, and enterprise readiness returned `commercial-ready-candidate`.
-Current branch: `codex/version-next-dev`.
-Current post-release polish evidence: OTLP signal export merged in PR #2 with CI success. This slice bumps package metadata to `3.4.0.dev0`, regenerates the runtime version marker, and stamps next-dev trust metadata.
+## Current source of truth
+- Published release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
+- Published tag commit: `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
+- Current mainline package version: `3.4.0.dev0`.
+- Latest confirmed main CI before this bootstrap: https://github.com/b0ydeptraj/Relay-kit/actions/runs/24956568795, conclusion `success`.
+- PR #1 merged release readiness and package smoke gates: https://github.com/b0ydeptraj/Relay-kit/pull/1.
+- PR #2 merged Relay OTLP signal export: https://github.com/b0ydeptraj/Relay-kit/pull/2.
+- PR #3 merged next-dev version hygiene: https://github.com/b0ydeptraj/Relay-kit/pull/3.
+- Bootstrap local verification: `python scripts\runtime_doctor.py . --strict --state-mode live`, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, and `python -m pytest -q --basetemp=.tmp\pytest-bootstrap-current-state-2` passed.
+
+## Recommended next lane
+After this bootstrap merges and CI passes, route through `workflow-router` to pick the next implementation slice. Highest-value candidates are dashboard/eval expansion, richer telemetry/OTLP readiness integration, or package publication workflow hardening.

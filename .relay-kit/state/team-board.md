@@ -1,34 +1,33 @@
 # team-board
 
 ## Shared objective
-No active shared objective recorded.
+Keep Relay-kit post-release state current and ready for the next single-lane implementation slice.
 
 ## Active orchestrator
-- team
+- workflow-router
 
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | unassigned | none | none | none | queued | none | empty lane |
-| lane-2 | unassigned | none | none | none | parked | none | empty lane |
-| lane-3 | unassigned | none | none | none | parked | none | empty lane |
+| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after `v3.3.0`, OTLP export, and `3.4.0.dev0`. |
+| lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
+| lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
 ## Shared artifacts that must stay authoritative
+- `.relay-kit/contracts/project-context.md`
 - `.relay-kit/state/workflow-state.md`
 - `.relay-kit/state/lane-registry.md`
 - `.relay-kit/state/handoff-log.md`
-- `.relay-kit/contracts/project-context.md`
-- `.relay-kit/contracts/PRD.md`
-- `.relay-kit/contracts/architecture.md`
+- `.relay-kit/state/team-board.md`
 
 ## Merge order
-Primary lane first when active; parallel lanes merge only after explicit handoff.
+Primary lane only. Parallel lanes are parked until explicitly routed.
 
 ## Merge prerequisites
-Passing gates, no active lock conflicts, and handoff evidence linked.
+Runtime doctor live mode passed, enterprise doctor passed, root pytest passed. Remote CI must pass after merge.
 
 ## Conflict risks
-none recorded
+Low. This slice edits state/context artifacts only.
 
 ## Decision log
-no decisions recorded
+- 2026-04-27: Refresh state artifacts instead of starting a new feature slice because project-context was empty and workflow-state still referenced completed branch work.
