@@ -11,6 +11,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit support bundle <project_path>
   relay-kit readiness check <project_path>
   relay-kit release verify <project_path>
+  relay-kit publish plan <project_path>
   relay-kit pulse build <project_path>
   relay-kit signal export <project_path>
   relay-kit contract import <project_path> --contract-file <relay-contract.json>
@@ -33,6 +34,7 @@ from relay_kit_v3.evidence_ledger import append_event, ledger_path, new_run_id, 
 from relay_kit_v3.bundle_manifest import verify_manifest_file, verify_trusted_manifest_file, write_manifest, write_trust_stamp
 from relay_kit_v3.policy_packs import DEFAULT_POLICY_PACK, POLICY_PACKS
 from relay_kit_v3.pulse import build_pulse_report, write_pulse_report
+from relay_kit_v3.publication import build_publication_plan, render_publication_plan, write_publication_plan
 from relay_kit_v3.release_lane import build_release_lane_report, render_release_lane_report, write_release_lane_report
 from relay_kit_v3.readiness import build_readiness_report, render_readiness_report
 from relay_kit_v3.signal_export import build_signal_export, write_signal_export
@@ -347,6 +349,27 @@ def _parse_release_args(argv: list[str]) -> argparse.Namespace:
     verify.add_argument("--require-clean", action="store_true", help="Fail when the git worktree is dirty")
     verify.add_argument("--output-file", default=None, help="Optional JSON report output path")
     verify.add_argument("--json", action="store_true", help="Emit machine-readable release-lane report")
+    return parser.parse_args(argv)
+
+
+def _parse_publish_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit publish",
+        description="Plan package publication evidence without uploading artifacts.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    plan = subparsers.add_parser("plan", help="Check package publication prerequisites")
+    plan.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    plan.add_argument("--channel", choices=["pypi", "testpypi", "internal"], default="pypi")
+    plan.add_argument("--target-version", default=None, help="Expected package version")
+    plan.add_argument("--dist-dir", default=None, help="Distribution artifact directory (default: <project>/dist)")
+    plan.add_argument("--ci-url", default=None, help="Remote CI evidence URL")
+    plan.add_argument("--release-url", default=None, help="GitHub release or release-note URL")
+    plan.add_argument("--package-url", default=None, help="Package index evidence URL")
+    plan.add_argument("--allow-dev", action="store_true", help="Allow dev/local versions on the selected channel")
+    plan.add_argument("--output-file", default=None, help="Optional JSON report output path")
+    plan.add_argument("--strict", action="store_true", help="Return non-zero unless the publication plan is ready")
+    plan.add_argument("--json", action="store_true", help="Emit machine-readable publication plan")
     return parser.parse_args(argv)
 
 
@@ -791,6 +814,30 @@ def run_release(args: argparse.Namespace) -> int:
     return 0 if report["status"] == "pass" else 2
 
 
+def run_publish(args: argparse.Namespace) -> int:
+    if args.action != "plan":
+        return 2
+    report = build_publication_plan(
+        args.project_path,
+        channel=args.channel,
+        target_version=args.target_version,
+        dist_dir=args.dist_dir,
+        ci_url=args.ci_url,
+        release_url=args.release_url,
+        package_url=args.package_url,
+        allow_dev=args.allow_dev,
+    )
+    if args.output_file:
+        write_publication_plan(args.project_path, report, output_file=args.output_file)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_publication_plan(report))
+    if args.strict and report["status"] != "ready":
+        return 2
+    return 0
+
+
 def run_pulse(args: argparse.Namespace) -> int:
     if args.action != "build":
         return 2
@@ -875,6 +922,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_readiness(_parse_readiness_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "release":
         return run_release(_parse_release_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "publish":
+        return run_publish(_parse_publish_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "pulse":
         return run_pulse(_parse_pulse_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "signal":

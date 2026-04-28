@@ -22,6 +22,7 @@ Default checks:
 - local CI wheel build smoke command with `python -m pip wheel . --no-deps -w .tmp/wheelhouse`
 - local package install smoke command with `python scripts/package_smoke.py .`
 - commercial docs required for readiness, support, contracts, Pulse, signal export, and release smoke
+- publication plan docs for package-index release evidence
 - release artifacts for manifest, trust metadata, and installed version marker
 - ignore policy for generated support and signal artifacts
 - git branch/commit metadata when the project is a git checkout
@@ -38,6 +39,7 @@ relay-kit manifest stamp /path/to/project --issuer relay-kit --channel enterpris
 relay-kit upgrade mark-current /path/to/project --bundle enterprise --adapter all
 relay-kit readiness check /path/to/project --profile enterprise
 relay-kit release verify /path/to/project --json
+relay-kit publish plan /path/to/project --channel pypi --json
 ```
 
-The readiness command also includes a required local `release-lane` gate. Remote CI status and package upload still need external release evidence.
+The readiness command also includes a required local `release-lane` gate. `relay-kit publish plan` records the package-index evidence still needed before upload, but it does not upload artifacts.

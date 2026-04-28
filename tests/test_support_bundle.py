@@ -42,6 +42,7 @@ def test_support_bundle_contains_required_diagnostics(tmp_path: Path) -> None:
     assert "relay-kit doctor" in payload["support"]["required_commands"][0]
     assert any("relay-kit pulse build" in command for command in payload["support"]["required_commands"])
     assert any("relay-kit signal export" in command and "--otlp" in command for command in payload["support"]["required_commands"])
+    assert any("relay-kit publish plan" in command for command in payload["support"]["required_commands"])
 
 
 def test_support_bundle_enterprise_requires_trusted_manifest_diagnostic(tmp_path: Path) -> None:

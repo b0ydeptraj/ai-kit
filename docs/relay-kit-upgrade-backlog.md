@@ -44,12 +44,13 @@ Source audit status:
 - Fixed in Relay OTLP export pass: `relay-kit signal export --otlp` writes dependency-free OTLP-compatible `relay-signals-otlp.json` with `resourceMetrics` and `resourceLogs` for external observability pipelines.
 - Fixed in OTLP readiness/support pass: readiness and support diagnostics now generate and report the OTLP signal artifact, not only JSON and JSONL exports.
 - Fixed in CI action hardening pass: `.github/workflows/validate-runtime.yml` now uses Node 24-ready `actions/checkout@v6` and `actions/setup-python@v6`, with a regression test that prevents drifting back to the Node 20 action majors.
+- Fixed in publication plan pass: `relay-kit publish plan` now checks package metadata, release-lane status, dist wheel/sdist artifacts, version-channel safety, and external CI/release/package evidence URLs without uploading artifacts.
 - Fixed in next-dev version hygiene pass: `main` now uses PEP 440 package version `3.4.0.dev0` after the published `v3.3.0` tag, with runtime version marker and trusted manifest regenerated for the next-dev channel.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
 - Current readiness: published `v3.3.0` with local commercial-ready candidate evidence; `main` has moved to `3.4.0.dev0` for post-release development.
-- Commercial readiness: locally gated by `relay-kit readiness check` plus `relay-kit release verify`; remote CI is green for the release commit, while package publication and paid support operations still need external release evidence.
+- Commercial readiness: locally gated by `relay-kit readiness check`, `relay-kit release verify`, and `relay-kit publish plan`; remote CI is green for the release commit, while package upload and paid support operations still need external execution evidence.
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
 

@@ -43,8 +43,9 @@ relay-kit manifest write /path/to/project
 relay-kit manifest stamp /path/to/project --issuer relay-kit --channel enterprise
 relay-kit upgrade mark-current /path/to/project --bundle enterprise --adapter all
 relay-kit readiness check /path/to/project --profile enterprise
+relay-kit publish plan /path/to/project --channel pypi --json
 ```
 
-Do not call a package commercial-ready from local docs alone. The readiness report is the local proof artifact for that claim. Remote CI status and package upload still need external release evidence.
+Do not call a package commercial-ready from local docs alone. The readiness report is the local proof artifact for that claim. `relay-kit publish plan` records package-index prerequisites, while remote CI status and package upload still need external execution evidence.
 
 The readiness `signal-export` gate writes `.relay-kit/signals/relay-signals.json`, `.relay-kit/signals/relay-signals.jsonl`, and `.relay-kit/signals/relay-signals-otlp.json`.

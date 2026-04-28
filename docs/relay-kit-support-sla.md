@@ -27,6 +27,7 @@ relay-kit eval run /path/to/project --strict --json
 relay-kit pulse build /path/to/project --include-readiness
 relay-kit signal export /path/to/project --otlp --json
 relay-kit release verify /path/to/project --json
+relay-kit publish plan /path/to/project --channel pypi --json
 ```
 
 Attach:

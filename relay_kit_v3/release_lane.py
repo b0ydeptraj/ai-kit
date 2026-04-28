@@ -23,6 +23,7 @@ REQUIRED_RELEASE_DOCS = [
     "docs/relay-kit-signal-export.md",
     "docs/relay-kit-release-readiness.md",
     "docs/relay-kit-release-lane.md",
+    "docs/relay-kit-publication-plan.md",
 ]
 REQUIRED_CI_PATTERNS = [
     "python scripts/validate_runtime.py",

@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Harden the GitHub runtime validation workflow against the Node.js 20 action deprecation by upgrading first-party actions and adding a regression test.
+Add package publication workflow hardening so Relay-kit can produce a no-upload publish plan before package-index release.
 
 ## Active lane
 - Lane id: primary
@@ -19,15 +19,15 @@ Harden the GitHub runtime validation workflow against the Node.js 20 action depr
 
 ## Active standalone/domain skill
 - Skill: developer
-- Why selected: the next slice is a bounded CI hardening change with a direct regression test.
+- Why selected: the next slice is a bounded commercial-readiness code change with a direct red-green test.
 
 ## Complexity level
-- Level: L2
-- Reasoning: the change is limited to CI workflow action versions plus a regression test, but it protects the release gate.
+- Level: L3
+- Reasoning: package publication touches release evidence, version/channel policy, docs, support diagnostics, and CLI behavior.
 
 ## Chosen track
-- Track: product-flow
-- Why this track fits: the slice hardens release validation infrastructure without changing runtime contracts.
+- Track: enterprise-flow
+- Why this track fits: the slice hardens package publication evidence used for paid/team release claims.
 
 ## Completed artifacts
 - [ ] product-brief
@@ -61,13 +61,14 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Published release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
 - Published tag commit: `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
 - Current mainline package version: `3.4.0.dev0`.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/24986151727, conclusion `success`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/24987030132, conclusion `success`.
 - PR #1 merged release readiness and package smoke gates: https://github.com/b0ydeptraj/Relay-kit/pull/1.
 - PR #2 merged Relay OTLP signal export: https://github.com/b0ydeptraj/Relay-kit/pull/2.
 - PR #3 merged next-dev version hygiene: https://github.com/b0ydeptraj/Relay-kit/pull/3.
 - PR #5 merged OTLP readiness/support evidence: https://github.com/b0ydeptraj/Relay-kit/pull/5.
+- PR #6 merged CI action hardening: https://github.com/b0ydeptraj/Relay-kit/pull/6.
 - Bootstrap local verification: `python scripts\runtime_doctor.py . --strict --state-mode live`, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, and `python -m pytest -q --basetemp=.tmp\pytest-bootstrap-current-state-2` passed.
-- Current branch: `codex/actions-node24-ci`.
+- Current branch: `codex/publication-plan-gate`.
 
 ## Recommended next lane
 After this slice merges and CI passes, route through `workflow-router` to pick the next implementation slice. Highest-value candidates are dashboard/eval expansion or package publication workflow hardening.
