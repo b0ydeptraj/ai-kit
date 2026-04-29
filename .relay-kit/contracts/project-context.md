@@ -48,7 +48,8 @@
 - PR #8 merged backlog note hygiene: https://github.com/b0ydeptraj/Relay-kit/pull/8, merge commit `a999ce90c00b050b63f85c7d348e559aa4f3d0da`.
 - PR #9 merged Pulse publication dashboard: https://github.com/b0ydeptraj/Relay-kit/pull/9, merge commit `cd74d94c527f7e2c1f38c857f822221664da1bb6`.
 - PR #10 merged post-dashboard state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/10, merge commit `17de1b6cbd4b65049316305388233e0533daf281`.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25100614237, conclusion `success`.
+- PR #11 merged publication execution evidence: https://github.com/b0ydeptraj/Relay-kit/pull/11, merge commit `649c11f0117a191ddbc8b3ccfe3dcb2cdf6f3bf9`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25101734109, conclusion `success`.
 
 ## Known sharp edges
 
