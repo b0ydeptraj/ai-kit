@@ -45,6 +45,7 @@ Source audit status:
 - Fixed in OTLP readiness/support pass: readiness and support diagnostics now generate and report the OTLP signal artifact, not only JSON and JSONL exports.
 - Fixed in CI action hardening pass: `.github/workflows/validate-runtime.yml` now uses Node 24-ready `actions/checkout@v6` and `actions/setup-python@v6`, with a regression test that prevents drifting back to the Node 20 action majors.
 - Fixed in publication plan pass: `relay-kit publish plan` now checks package metadata, release-lane status, dist wheel/sdist artifacts, version-channel safety, and external CI/release/package evidence URLs without uploading artifacts.
+- Fixed in Pulse publication dashboard pass: `relay-kit pulse build` can include publication-plan data, the HTML report shows publication readiness, and signal export emits `relay.publication.ready`.
 - Fixed in next-dev version hygiene pass: `main` now uses PEP 440 package version `3.4.0.dev0` after the published `v3.3.0` tag, with runtime version marker and trusted manifest regenerated for the next-dev channel.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
@@ -704,6 +705,7 @@ Expected gain:
 - Done first release-lane slice: add `relay-kit release verify` and include it in readiness/support evidence.
 - Done first slice: add `relay-kit readiness check` as the single commercial readiness verdict.
 - Done first publication-plan slice: add `relay-kit publish plan` as the no-upload package publication evidence gate.
+- Done dashboard/eval expansion slice: Pulse can include publication-plan status in JSON/HTML and export publication readiness as a local signal metric.
 
 Expected gain:
 - Relay-kit becomes sellable as a governance layer with measurable quality signals.

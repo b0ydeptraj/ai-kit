@@ -52,6 +52,21 @@ def sample_readiness_report() -> dict[str, object]:
     }
 
 
+def sample_publication_plan(*, status: str = "ready") -> dict[str, object]:
+    findings = [] if status == "ready" else [{"gate": "distribution-artifacts", "status": "hold", "summary": "missing: wheel"}]
+    return {
+        "schema_version": "relay-kit.publication-plan.v1",
+        "status": status,
+        "channel": "pypi",
+        "version": "3.3.0",
+        "findings": findings,
+        "checks": [
+            {"id": "release-lane", "status": "pass"},
+            {"id": "distribution-artifacts", "status": "pass" if status == "ready" else "hold"},
+        ],
+    }
+
+
 def test_pulse_report_summarizes_eval_readiness_and_evidence(tmp_path: Path) -> None:
     append_event(tmp_path, {"command": "doctor", "gate": "policy guard", "status": "pass"})
     append_event(tmp_path, {"command": "doctor", "gate": "workflow eval", "status": "fail"})
@@ -71,6 +86,31 @@ def test_pulse_report_summarizes_eval_readiness_and_evidence(tmp_path: Path) -> 
     assert report["evidence"]["status_counts"]["fail"] == 1
 
 
+def test_pulse_report_includes_publication_plan_when_requested(tmp_path: Path) -> None:
+    report = pulse.build_pulse_report(
+        tmp_path,
+        workflow_eval_builder=lambda root: sample_eval_report(),
+        publication_builder=lambda root: sample_publication_plan(status="ready"),
+        include_publication=True,
+    )
+
+    assert report["publication"]["schema_version"] == "relay-kit.publication-plan.v1"
+    assert report["publication"]["status"] == "ready"
+    assert report["status"] == "pass"
+
+
+def test_pulse_report_marks_publication_hold_as_attention(tmp_path: Path) -> None:
+    report = pulse.build_pulse_report(
+        tmp_path,
+        workflow_eval_builder=lambda root: sample_eval_report(),
+        publication_builder=lambda root: sample_publication_plan(status="hold"),
+        include_publication=True,
+    )
+
+    assert report["status"] == "attention"
+    assert report["publication"]["findings"][0]["gate"] == "distribution-artifacts"
+
+
 def test_pulse_report_writes_json_and_html(tmp_path: Path) -> None:
     report = pulse.build_pulse_report(
         tmp_path,
@@ -85,6 +125,7 @@ def test_pulse_report_writes_json_and_html(tmp_path: Path) -> None:
     html = outputs["html"].read_text(encoding="utf-8")
     assert "Relay-kit Pulse" in html
     assert "Workflow quality" in html
+    assert "Publication readiness" in html
     assert "Trend" in html
 
 
@@ -140,3 +181,24 @@ def test_public_cli_pulse_build_json(tmp_path: Path, capsys) -> None:
     assert Path(payload["outputs"]["json"]).exists()
     assert Path(payload["outputs"]["html"]).exists()
     assert Path(payload["outputs"]["history"]).exists()
+
+
+def test_public_cli_pulse_build_accepts_publication_file(tmp_path: Path, capsys) -> None:
+    publication_file = tmp_path / "publication.json"
+    publication_file.write_text(json.dumps(sample_publication_plan(status="ready")), encoding="utf-8")
+
+    exit_code = relay_kit_public_cli.main(
+        [
+            "pulse",
+            "build",
+            str(tmp_path),
+            "--publication-file",
+            str(publication_file),
+            "--json",
+            "--no-history",
+        ]
+    )
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == 0
+    assert payload["report"]["publication"]["status"] == "ready"

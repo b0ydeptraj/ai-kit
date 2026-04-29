@@ -34,6 +34,12 @@ def write_pulse_report(root: Path) -> Path:
                     "status": "pass",
                     "verdict": "commercial-ready-candidate",
                 },
+                "publication": {
+                    "status": "ready",
+                    "channel": "pypi",
+                    "version": "3.3.0",
+                    "findings": [],
+                },
             }
         ),
         encoding="utf-8",
@@ -56,6 +62,7 @@ def test_signal_export_builds_metrics_and_events(tmp_path: Path) -> None:
     assert "relay.pulse.score" in metric_names
     assert "relay.workflow.pass_rate" in metric_names
     assert "relay.workflow.evidence_coverage" in metric_names
+    assert "relay.publication.ready" in metric_names
     assert "relay.evidence.event" in event_names
     assert payload["summary"]["signal_count"] == len(payload["signals"])
 

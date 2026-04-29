@@ -10,6 +10,8 @@ Pulse is Relay-kit's own report surface. It is not a copy of an external dashboa
 relay-kit pulse build /path/to/project
 relay-kit pulse build /path/to/project --include-readiness
 relay-kit pulse build /path/to/project --workflow-eval-file workflow-eval.json --readiness-file readiness.json
+relay-kit pulse build /path/to/project --include-publication
+relay-kit pulse build /path/to/project --publication-file publication-plan.json
 relay-kit pulse build /path/to/project --history-limit 50
 relay-kit pulse build /path/to/project --no-history
 ```
@@ -28,13 +30,14 @@ Pulse combines:
 
 - workflow eval status, pass rate, route margin, route confidence, evidence coverage, and skill distribution
 - readiness status and verdict when `--include-readiness` or `--readiness-file` is used
+- publication plan status, channel, version, and finding count when `--include-publication` or `--publication-file` is used
 - evidence ledger event counts, gate counts, and recent events
 - Pulse history snapshots from previous report builds
 
 ## Status
 
 - `pass`: workflow eval passed, readiness passed when included, and no recent failed evidence events are present
-- `attention`: core quality gates passed, but recent evidence contains failed events or included readiness is only `limited-beta`
+- `attention`: core quality gates passed, but recent evidence contains failed events, included readiness is only `limited-beta`, or included publication plan is not `ready`
 - `hold`: workflow eval or readiness is failing
 
 `pulse_score` is a local summary score built from pass rate, evidence coverage, readiness status, and recent evidence failures. Treat it as a triage signal, not a release attestation.
@@ -62,7 +65,8 @@ Run Pulse after eval/readiness evidence exists:
 ```bash
 relay-kit eval run /path/to/project --strict --json --output-file workflow-eval.json
 relay-kit readiness check /path/to/project --profile enterprise --json > readiness.json
-relay-kit pulse build /path/to/project --workflow-eval-file workflow-eval.json --readiness-file readiness.json
+relay-kit publish plan /path/to/project --channel pypi --json > publication-plan.json
+relay-kit pulse build /path/to/project --workflow-eval-file workflow-eval.json --readiness-file readiness.json --publication-file publication-plan.json
 ```
 
 Use the HTML file for human review and the JSON file for support bundles or future dashboards.
@@ -72,3 +76,5 @@ To export Pulse plus recent evidence events as local telemetry-style artifacts, 
 ```bash
 relay-kit signal export /path/to/project
 ```
+
+Signal export includes `relay.publication.ready` when a Pulse report contains publication-plan data.

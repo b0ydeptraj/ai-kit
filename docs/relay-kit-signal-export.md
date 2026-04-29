@@ -57,6 +57,7 @@ Metric signals include:
 - `relay.evidence.failures_total`
 - `relay.evidence.failures_recent`
 - `relay.readiness.ready`
+- `relay.publication.ready`
 
 Event signals include recent evidence ledger events under:
 
@@ -72,7 +73,8 @@ Use this command after Pulse when a support bundle, release review, or future da
 
 ```bash
 relay-kit readiness check /path/to/project --profile enterprise
-relay-kit pulse build /path/to/project --include-readiness
+relay-kit publish plan /path/to/project --channel pypi --json > publication-plan.json
+relay-kit pulse build /path/to/project --include-readiness --publication-file publication-plan.json
 relay-kit signal export /path/to/project --otlp
 ```
 

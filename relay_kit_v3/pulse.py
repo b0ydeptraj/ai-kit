@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Callable, Mapping
 
 from relay_kit_v3.evidence_ledger import LedgerSummary, summarize_events, utc_timestamp
+from relay_kit_v3.publication import build_publication_plan
 from relay_kit_v3.readiness import build_readiness_report
 from scripts import eval_workflows
 
@@ -20,6 +21,7 @@ HISTORY_FILE = "history.jsonl"
 
 WorkflowEvalBuilder = Callable[[Path], Mapping[str, Any]]
 ReadinessBuilder = Callable[[Path, str, bool], Mapping[str, Any]]
+PublicationBuilder = Callable[[Path], Mapping[str, Any]]
 EvidenceSummarizer = Callable[[Path, int], LedgerSummary]
 
 
@@ -32,10 +34,13 @@ def build_pulse_report(
     skip_tests: bool = True,
     workflow_eval_file: Path | str | None = None,
     readiness_file: Path | str | None = None,
+    publication_file: Path | str | None = None,
+    include_publication: bool = False,
     output_dir: Path | str | None = None,
     history_limit: int = 20,
     workflow_eval_builder: WorkflowEvalBuilder | None = None,
     readiness_builder: ReadinessBuilder | None = None,
+    publication_builder: PublicationBuilder | None = None,
     evidence_summarizer: EvidenceSummarizer | None = None,
 ) -> dict[str, Any]:
     root = Path(project_root).resolve()
@@ -48,9 +53,15 @@ def build_pulse_report(
         readiness_file=readiness_file,
         readiness_builder=readiness_builder,
     )
+    publication_report = _load_or_build_publication(
+        root,
+        include_publication=include_publication,
+        publication_file=publication_file,
+        publication_builder=publication_builder,
+    )
     evidence = _evidence_payload(root, evidence_limit, evidence_summarizer)
-    status = pulse_status(eval_report, readiness_report, evidence)
-    score = pulse_score(eval_report, readiness_report, evidence)
+    status = pulse_status(eval_report, readiness_report, publication_report, evidence)
+    score = pulse_score(eval_report, readiness_report, publication_report, evidence)
     trend = build_trend(
         root,
         output_dir=output_dir,
@@ -60,6 +71,7 @@ def build_pulse_report(
             profile=profile,
             workflow_eval=eval_report,
             readiness=readiness_report,
+            publication=publication_report,
             evidence=evidence,
         ),
         limit=history_limit,
@@ -73,6 +85,7 @@ def build_pulse_report(
         "profile": profile,
         "workflow_eval": eval_report,
         "readiness": readiness_report,
+        "publication": publication_report,
         "evidence": evidence,
         "trend": trend,
         "outputs": {
@@ -106,6 +119,7 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
     workflow_eval = _mapping(report.get("workflow_eval"))
     quality = _mapping(workflow_eval.get("quality"))
     readiness = _mapping(report.get("readiness"))
+    publication = _mapping(report.get("publication"))
     evidence = _mapping(report.get("evidence"))
     trend = _mapping(report.get("trend"))
     status_counts = _mapping(evidence.get("recent_status_counts"))
@@ -120,6 +134,7 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
         ("Evidence coverage", _percent(quality.get("evidence_term_coverage"))),
         ("Min route margin", str(quality.get("min_route_margin", "-"))),
         ("Readiness", str(readiness.get("verdict", "not-run"))),
+        ("Publication", str(publication.get("status", "not-run"))),
         ("Score delta", _signed(trend.get("pulse_score_delta"))),
         ("Ledger events", str(evidence.get("total_events", 0))),
         ("Recent failures", str(status_counts.get("fail", 0))),
@@ -133,6 +148,7 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
     if not rows:
         rows = '<tr><td colspan="4">No recent evidence events.</td></tr>'
     trend_rows = _trend_rows(trend)
+    publication_rows = _publication_rows(publication)
 
     report_json = escape(json.dumps(report, ensure_ascii=True, indent=2))
     return f"""<!doctype html>
@@ -263,6 +279,13 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
       </table>
     </section>
     <section class="panel">
+      <h2>Publication readiness</h2>
+      <table>
+        <tr><th>Signal</th><th>Value</th></tr>
+        {publication_rows}
+      </table>
+    </section>
+    <section class="panel">
       <h2>Recent evidence</h2>
       <table>
         <tr><th>Time</th><th>Gate</th><th>Status</th><th>Findings</th></tr>
@@ -282,6 +305,7 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
 def pulse_status(
     workflow_eval: Mapping[str, Any],
     readiness: Mapping[str, Any] | None,
+    publication: Mapping[str, Any] | None,
     evidence: Mapping[str, Any],
 ) -> str:
     if workflow_eval.get("status") != "pass":
@@ -289,6 +313,8 @@ def pulse_status(
     if readiness is not None and readiness.get("status") != "pass":
         return "hold"
     if readiness is not None and readiness.get("verdict") not in {None, "commercial-ready-candidate"}:
+        return "attention"
+    if publication is not None and publication.get("status") != "ready":
         return "attention"
     recent_status_counts = _mapping(evidence.get("recent_status_counts"))
     if int(recent_status_counts.get("fail", 0) or 0) > 0:
@@ -299,6 +325,7 @@ def pulse_status(
 def pulse_score(
     workflow_eval: Mapping[str, Any],
     readiness: Mapping[str, Any] | None,
+    publication: Mapping[str, Any] | None,
     evidence: Mapping[str, Any],
 ) -> int:
     quality = _mapping(workflow_eval.get("quality"))
@@ -312,9 +339,15 @@ def pulse_score(
         readiness_score = 10
     else:
         readiness_score = 0
+    if publication is None:
+        publication_score = 5
+    elif publication.get("status") == "ready":
+        publication_score = 5
+    else:
+        publication_score = 0
     fail_count = int(_mapping(evidence.get("recent_status_counts")).get("fail", 0) or 0)
     evidence_score = max(0, 5 - (fail_count * 2))
-    score = round((pass_rate * 70) + (evidence_coverage * 10) + readiness_score + evidence_score)
+    score = round((pass_rate * 65) + (evidence_coverage * 10) + readiness_score + publication_score + evidence_score)
     return max(0, min(100, int(score)))
 
 
@@ -391,6 +424,7 @@ def read_pulse_history(history_path: Path, *, limit: int = 20) -> list[dict[str,
 def pulse_history_snapshot(report: Mapping[str, Any]) -> dict[str, Any]:
     workflow_eval = _mapping(report.get("workflow_eval"))
     readiness = _mapping(report.get("readiness"))
+    publication = _mapping(report.get("publication"))
     evidence = _mapping(report.get("evidence"))
     return {
         "schema_version": HISTORY_SCHEMA_VERSION,
@@ -401,6 +435,7 @@ def pulse_history_snapshot(report: Mapping[str, Any]) -> dict[str, Any]:
             profile=str(report.get("profile", "")),
             workflow_eval=workflow_eval,
             readiness=readiness if readiness else None,
+            publication=publication if publication else None,
             evidence=evidence,
         ),
     }
@@ -413,6 +448,7 @@ def snapshot_from_values(
     profile: str,
     workflow_eval: Mapping[str, Any],
     readiness: Mapping[str, Any] | None,
+    publication: Mapping[str, Any] | None,
     evidence: Mapping[str, Any],
 ) -> dict[str, Any]:
     quality = _mapping(workflow_eval.get("quality"))
@@ -429,6 +465,8 @@ def snapshot_from_values(
         "min_route_margin": int(quality.get("min_route_margin", 0) or 0),
         "readiness_status": readiness.get("status") if readiness else None,
         "readiness_verdict": readiness.get("verdict") if readiness else None,
+        "publication_status": publication.get("status") if publication else None,
+        "publication_findings": len(publication.get("findings", [])) if publication else None,
         "recent_failures": int(recent_status_counts.get("fail", 0) or 0),
     }
 
@@ -465,6 +503,21 @@ def _load_or_build_readiness(
         )
     )
     return builder(root, profile, skip_tests)
+
+
+def _load_or_build_publication(
+    root: Path,
+    *,
+    include_publication: bool,
+    publication_file: Path | str | None,
+    publication_builder: PublicationBuilder | None,
+) -> Mapping[str, Any] | None:
+    if publication_file is not None:
+        return _read_json(root, publication_file)
+    if not include_publication:
+        return None
+    builder = publication_builder or (lambda project_root: build_publication_plan(project_root, channel="pypi"))
+    return builder(root)
 
 
 def _evidence_payload(
@@ -523,6 +576,23 @@ def _trend_rows(trend: Mapping[str, Any]) -> str:
         ("Average route margin", _signed(trend.get("average_route_margin_delta"))),
         ("Status changed", "yes" if trend.get("status_changed") else "no"),
     ]
+    return "\n".join(
+        f"<tr><td>{escape(label)}</td><td>{escape(value)}</td></tr>"
+        for label, value in rows
+    )
+
+
+def _publication_rows(publication: Mapping[str, Any]) -> str:
+    if not publication:
+        rows = [("Status", "not-run")]
+    else:
+        findings = publication.get("findings", [])
+        rows = [
+            ("Status", str(publication.get("status", "-"))),
+            ("Channel", str(publication.get("channel", "-"))),
+            ("Version", str(publication.get("version", "-"))),
+            ("Findings", str(len(findings) if isinstance(findings, list) else 0)),
+        ]
     return "\n".join(
         f"<tr><td>{escape(label)}</td><td>{escape(value)}</td></tr>"
         for label, value in rows

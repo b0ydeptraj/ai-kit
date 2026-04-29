@@ -6,6 +6,8 @@ All notable changes to `Relay-kit` are documented here.
 
 ### Added
 
+- Added Pulse publication-plan visibility and a `relay.publication.ready`
+  signal export metric for package release dashboards.
 - Added `relay-kit publish plan` to verify package publication prerequisites
   without uploading artifacts.
 - Added `relay-kit signal export --otlp` to write dependency-free Relay OTLP

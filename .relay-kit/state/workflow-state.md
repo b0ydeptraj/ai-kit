@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh the aggregate upgrade backlog and live workflow state after PR #7 so notes match the current main branch.
+Expand the Pulse dashboard and signal export so publication-plan readiness is visible alongside workflow eval, readiness, and evidence signals.
 
 ## Active lane
 - Lane id: primary
@@ -19,15 +19,15 @@ Refresh the aggregate upgrade backlog and live workflow state after PR #7 so not
 
 ## Active standalone/domain skill
 - Skill: developer
-- Why selected: the next slice is a bounded documentation/state hygiene change after a merged release-readiness feature.
+- Why selected: the next slice is the planned dashboard/eval expansion after publication workflow hardening.
 
 ## Complexity level
-- Level: L1
-- Reasoning: this pass updates planning/state artifacts only; runtime code is already merged.
+- Level: L2
+- Reasoning: the change touches Pulse report generation, CLI options, signal export metrics, docs, and tests.
 
 ## Chosen track
-- Track: quick-flow
-- Why this track fits: the slice removes note drift before the next feature lane.
+- Track: product-flow
+- Why this track fits: the slice expands the user-facing quality dashboard without changing release gates.
 
 ## Completed artifacts
 - [ ] product-brief
@@ -68,8 +68,9 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - PR #5 merged OTLP readiness/support evidence: https://github.com/b0ydeptraj/Relay-kit/pull/5.
 - PR #6 merged CI action hardening: https://github.com/b0ydeptraj/Relay-kit/pull/6.
 - PR #7 merged publication plan gate: https://github.com/b0ydeptraj/Relay-kit/pull/7.
+- PR #8 merged backlog note hygiene: https://github.com/b0ydeptraj/Relay-kit/pull/8.
 - Bootstrap local verification: `python scripts\runtime_doctor.py . --strict --state-mode live`, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, and `python -m pytest -q --basetemp=.tmp\pytest-bootstrap-current-state-2` passed.
-- Current main baseline: `ee18c590524154df9747787272b11cfc6b69b416`.
+- Current main baseline: `a999ce90c00b050b63f85c7d348e559aa4f3d0da`.
 
 ## Recommended next lane
-After this note hygiene slice merges and CI passes, the next feature lane should be dashboard/eval expansion.
+After this Pulse publication dashboard slice merges and CI passes, route through `workflow-router` for the next commercial-polish lane.
