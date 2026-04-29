@@ -183,6 +183,13 @@ relay-kit release verify /path/to/project
 relay-kit release verify /path/to/project --json
 ```
 
+Plan and record package publication evidence:
+
+```bash
+relay-kit publish plan /path/to/project --channel pypi --json
+relay-kit publish evidence /path/to/project --channel pypi --twine-check-file .tmp/twine-check.txt --upload-log-file .tmp/upload-log.txt --json
+```
+
 Measure workflow routing quality with bundled scenarios:
 
 ```bash
@@ -321,6 +328,8 @@ Historical compatibility timeline and removal log:
   - [`docs/relay-kit-release-readiness.md`](docs/relay-kit-release-readiness.md)
 - Release lane verification:
   - [`docs/relay-kit-release-lane.md`](docs/relay-kit-release-lane.md)
+- Publication planning and evidence:
+  - [`docs/relay-kit-publication-plan.md`](docs/relay-kit-publication-plan.md)
 - Accessibility gate:
   - [`docs/relay-kit-accessibility-review.md`](docs/relay-kit-accessibility-review.md)
 - Commercial readiness gate:

@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh live workflow state after PR #9 so the current source of truth matches main before the publication execution evidence lane.
+Implement the publication execution evidence lane so package publication has a machine-readable proof artifact after build/check/upload evidence exists.
 
 ## Active lane
 - Lane id: primary
@@ -19,15 +19,15 @@ Refresh live workflow state after PR #9 so the current source of truth matches m
 
 ## Active standalone/domain skill
 - Skill: developer
-- Why selected: the next slice is a bounded state hygiene update after a merged dashboard/eval expansion feature.
+- Why selected: the slice changes runtime code, CLI behavior, tests, and commercial publication docs with a bounded artifact contract.
 
 ## Complexity level
-- Level: L1
-- Reasoning: this pass updates live state and context only; runtime code is already merged.
+- Level: L2
+- Reasoning: this pass adds a new CLI subcommand and evidence schema, but it is scoped to publication evidence and support diagnostics.
 
 ## Chosen track
 - Track: quick-flow
-- Why this track fits: the slice removes state drift before the next feature lane.
+- Why this track fits: acceptance can be proven with focused unit tests, CLI smoke, doctor, and full pytest.
 
 ## Completed artifacts
 - [ ] product-brief
@@ -61,7 +61,7 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Published release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
 - Published tag commit: `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
 - Current mainline package version: `3.4.0.dev0`.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25092829908, conclusion `success`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25100614237, conclusion `success`.
 - PR #1 merged release readiness and package smoke gates: https://github.com/b0ydeptraj/Relay-kit/pull/1.
 - PR #2 merged Relay OTLP signal export: https://github.com/b0ydeptraj/Relay-kit/pull/2.
 - PR #3 merged next-dev version hygiene: https://github.com/b0ydeptraj/Relay-kit/pull/3.
@@ -70,8 +70,9 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - PR #7 merged publication plan gate: https://github.com/b0ydeptraj/Relay-kit/pull/7.
 - PR #8 merged backlog note hygiene: https://github.com/b0ydeptraj/Relay-kit/pull/8.
 - PR #9 merged Pulse publication dashboard: https://github.com/b0ydeptraj/Relay-kit/pull/9.
+- PR #10 merged post-dashboard state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/10.
 - Bootstrap local verification: `python scripts\runtime_doctor.py . --strict --state-mode live`, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, and `python -m pytest -q --basetemp=.tmp\pytest-bootstrap-current-state-2` passed.
-- Current main baseline: `cd74d94c527f7e2c1f38c857f822221664da1bb6`.
+- Current main baseline: `17de1b6cbd4b65049316305388233e0533daf281`.
 
 ## Recommended next lane
-After this state refresh merges and CI passes, start the publication execution evidence lane.
+After this publication evidence lane merges, move to commercial operations polish or package publication workflow hardening.

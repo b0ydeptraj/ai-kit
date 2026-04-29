@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 from typing import Any, Mapping
@@ -15,8 +16,10 @@ except ModuleNotFoundError:  # pragma: no cover - Python < 3.11 fallback
 
 
 SCHEMA_VERSION = "relay-kit.publication-plan.v1"
+EVIDENCE_SCHEMA_VERSION = "relay-kit.publication-evidence.v1"
 CHANNELS = {"pypi", "testpypi", "internal"}
 DEFAULT_OUTPUT = Path(".relay-kit") / "release" / "publication-plan.json"
+DEFAULT_EVIDENCE_OUTPUT = Path(".relay-kit") / "release" / "publication-evidence.json"
 
 
 def build_publication_plan(
@@ -87,6 +90,110 @@ def write_publication_plan(
     return output_path
 
 
+def build_publication_evidence(
+    project_root: Path | str,
+    *,
+    channel: str = "pypi",
+    dist_dir: Path | str | None = None,
+    ci_url: str | None = None,
+    release_url: str | None = None,
+    package_url: str | None = None,
+    twine_check_file: Path | str | None = None,
+    upload_log_file: Path | str | None = None,
+    publication_plan_file: Path | str | None = None,
+    allow_dev: bool = False,
+) -> dict[str, Any]:
+    root = Path(project_root).resolve()
+    selected_channel = channel.lower()
+    package = read_package_metadata(root)
+    version = str(package.get("version") or "")
+    name = str(package.get("name") or "")
+    dist_root = _resolve_dist_dir(root, dist_dir)
+    twine_path = _resolve_optional_path(root, twine_check_file)
+    upload_path = _resolve_optional_path(root, upload_log_file)
+    plan_path = _resolve_optional_path(root, publication_plan_file)
+
+    checks = [
+        package_metadata_check(package),
+        version_channel_check(version, selected_channel, target_version=None, allow_dev=allow_dev),
+        release_lane_check(root),
+        distribution_artifacts_check(dist_root, name=name, version=version),
+        external_evidence_check(selected_channel, ci_url=ci_url, release_url=release_url, package_url=package_url),
+        text_evidence_file_check(
+            "twine-check",
+            "twine check",
+            twine_path,
+            required_text="passed",
+            failure_tokens=("failed", "error"),
+        ),
+        text_evidence_file_check(
+            "upload-log",
+            "upload log",
+            upload_path,
+            required_text=None,
+            failure_tokens=("failed", "error", "traceback"),
+        ),
+    ]
+    if plan_path is not None:
+        checks.append(publication_plan_file_check(plan_path))
+
+    findings = [
+        {
+            "gate": check["id"],
+            "status": check["status"],
+            "summary": check.get("summary", ""),
+        }
+        for check in checks
+        if check["status"] != "pass"
+    ]
+    artifacts = distribution_artifacts(dist_root, name=name, version=version)
+    return {
+        "schema_version": EVIDENCE_SCHEMA_VERSION,
+        "status": "published" if not findings else "hold",
+        "project_path": str(root),
+        "channel": selected_channel,
+        "package_name": name,
+        "version": version,
+        "dist_dir": str(dist_root),
+        "external_evidence": {
+            "ci_url": ci_url,
+            "release_url": release_url,
+            "package_url": package_url,
+        },
+        "evidence_files": {
+            "twine_check_file": str(twine_path) if twine_path is not None else None,
+            "upload_log_file": str(upload_path) if upload_path is not None else None,
+            "publication_plan_file": str(plan_path) if plan_path is not None else None,
+        },
+        "distribution": {
+            "artifact_count": len(artifacts),
+            "artifacts": artifacts,
+        },
+        "checks": checks,
+        "checks_by_id": {str(check["id"]): check for check in checks},
+        "findings": findings,
+        "residual_risks": [
+            "External URLs are evidence pointers and are not fetched by this local command.",
+            "Package-index ownership and account controls remain external operational controls.",
+        ],
+    }
+
+
+def write_publication_evidence(
+    project_root: Path | str,
+    report: Mapping[str, Any],
+    *,
+    output_file: Path | str | None = None,
+) -> Path:
+    root = Path(project_root).resolve()
+    output_path = Path(output_file) if output_file is not None else root / DEFAULT_EVIDENCE_OUTPUT
+    if not output_path.is_absolute():
+        output_path = root / output_path
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(report, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+    return output_path
+
+
 def render_publication_plan(report: Mapping[str, Any]) -> str:
     lines = [
         "Relay-kit publication plan",
@@ -109,6 +216,27 @@ def render_publication_plan(report: Mapping[str, Any]) -> str:
     if commands:
         lines.append("- next commands:")
         lines.extend(f"  - {command}" for command in commands)
+    return "\n".join(lines)
+
+
+def render_publication_evidence(report: Mapping[str, Any]) -> str:
+    lines = [
+        "Relay-kit publication evidence",
+        f"- project: {report.get('project_path')}",
+        f"- channel: {report.get('channel')}",
+        f"- version: {report.get('version')}",
+        f"- status: {report.get('status')}",
+        f"- artifacts: {report.get('distribution', {}).get('artifact_count', 0)}",
+        f"- findings: {len(report.get('findings', []))}",
+    ]
+    checks = report.get("checks", [])
+    if checks:
+        lines.append("- check results:")
+        for check in checks:
+            if isinstance(check, Mapping):
+                lines.append(f"  - {check.get('label', check.get('id'))}: {check.get('status')}")
+                if check.get("summary") and check.get("status") != "pass":
+                    lines.append(f"    {check['summary']}")
     return "\n".join(lines)
 
 
@@ -188,12 +316,9 @@ def release_lane_check(root: Path) -> dict[str, Any]:
 
 def distribution_artifacts_check(dist_dir: Path, *, name: str, version: str) -> dict[str, Any]:
     missing: list[str] = []
-    wheel_files: list[str] = []
-    sdist_files: list[str] = []
-    if dist_dir.exists():
-        dist_name = normalize_distribution_name(name)
-        wheel_files = sorted(path.name for path in dist_dir.glob(f"{dist_name}-{version}-*.whl"))
-        sdist_files = sorted(path.name for path in dist_dir.glob(f"{dist_name}-{version}.tar.gz"))
+    wheel_paths, sdist_paths = matching_distribution_artifact_paths(dist_dir, name=name, version=version)
+    wheel_files = [path.name for path in wheel_paths]
+    sdist_files = [path.name for path in sdist_paths]
     if not wheel_files:
         missing.append("wheel")
     if not sdist_files:
@@ -205,6 +330,32 @@ def distribution_artifacts_check(dist_dir: Path, *, name: str, version: str) -> 
         "missing: " + ", ".join(missing) if missing else "wheel and sdist artifacts present",
         details={"missing": missing, "wheel_files": wheel_files, "sdist_files": sdist_files, "dist_dir": str(dist_dir)},
     )
+
+
+def distribution_artifacts(dist_dir: Path, *, name: str, version: str) -> list[dict[str, Any]]:
+    wheel_paths, sdist_paths = matching_distribution_artifact_paths(dist_dir, name=name, version=version)
+    artifacts: list[dict[str, Any]] = []
+    for kind, paths in (("wheel", wheel_paths), ("sdist", sdist_paths)):
+        for path in paths:
+            artifacts.append(
+                {
+                    "kind": kind,
+                    "name": path.name,
+                    "path": str(path),
+                    "size_bytes": path.stat().st_size,
+                    "sha256": sha256_file(path),
+                }
+            )
+    return artifacts
+
+
+def matching_distribution_artifact_paths(dist_dir: Path, *, name: str, version: str) -> tuple[list[Path], list[Path]]:
+    if not dist_dir.exists():
+        return [], []
+    dist_name = normalize_distribution_name(name)
+    wheel_paths = sorted(dist_dir.glob(f"{dist_name}-{version}-*.whl"))
+    sdist_paths = sorted(dist_dir.glob(f"{dist_name}-{version}.tar.gz"))
+    return wheel_paths, sdist_paths
 
 
 def external_evidence_check(
@@ -237,6 +388,81 @@ def external_evidence_check(
         "; ".join(summary_parts) if summary_parts else "external evidence URLs recorded",
         details={"missing": missing, "invalid": invalid, "ci_url": ci_url, "release_url": release_url, "package_url": package_url},
     )
+
+
+def text_evidence_file_check(
+    check_id: str,
+    label: str,
+    path: Path | None,
+    *,
+    required_text: str | None,
+    failure_tokens: tuple[str, ...],
+) -> dict[str, Any]:
+    if path is None:
+        return check(check_id, label, "hold", f"missing {label} file", details={"path": None})
+    if not path.exists():
+        return check(check_id, label, "hold", f"missing {label} file", details={"path": str(path)})
+    text = path.read_text(encoding="utf-8", errors="replace")
+    lowered = text.lower()
+    failures = [token for token in failure_tokens if token in lowered]
+    if not text.strip():
+        return check(check_id, label, "hold", f"{label} file is empty", details={"path": str(path), "size_bytes": 0})
+    if failures:
+        return check(
+            check_id,
+            label,
+            "hold",
+            f"{label} contains failure tokens: {', '.join(failures)}",
+            details={"path": str(path), "size_bytes": path.stat().st_size, "failure_tokens": failures},
+        )
+    if required_text and required_text.lower() not in lowered:
+        return check(
+            check_id,
+            label,
+            "hold",
+            f"{label} does not contain required text: {required_text}",
+            details={"path": str(path), "size_bytes": path.stat().st_size, "required_text": required_text},
+        )
+    return check(
+        check_id,
+        label,
+        "pass",
+        f"{label} evidence recorded",
+        details={"path": str(path), "size_bytes": path.stat().st_size},
+    )
+
+
+def publication_plan_file_check(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return check("publication-plan", "publication plan", "hold", "missing publication plan file", details={"path": str(path)})
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return check(
+            "publication-plan",
+            "publication plan",
+            "hold",
+            f"publication plan is not valid JSON: {exc}",
+            details={"path": str(path)},
+        )
+    status = payload.get("status")
+    if payload.get("schema_version") != SCHEMA_VERSION:
+        return check(
+            "publication-plan",
+            "publication plan",
+            "hold",
+            "publication plan schema does not match",
+            details={"path": str(path), "schema_version": payload.get("schema_version")},
+        )
+    if status != "ready":
+        return check(
+            "publication-plan",
+            "publication plan",
+            "hold",
+            f"publication plan status is {status}",
+            details={"path": str(path), "status": status},
+        )
+    return check("publication-plan", "publication plan", "pass", "publication plan is ready", details={"path": str(path)})
 
 
 def publication_commands(root: Path, channel: str) -> list[str]:
@@ -276,8 +502,23 @@ def normalize_distribution_name(name: str) -> str:
     return name.replace("-", "_")
 
 
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def _resolve_dist_dir(root: Path, dist_dir: Path | str | None) -> Path:
     path = Path(dist_dir) if dist_dir is not None else root / "dist"
+    return path if path.is_absolute() else root / path
+
+
+def _resolve_optional_path(root: Path, value: Path | str | None) -> Path | None:
+    if value is None:
+        return None
+    path = Path(value)
     return path if path.is_absolute() else root / path
 
 

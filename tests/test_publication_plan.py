@@ -47,11 +47,24 @@ include = ["relay_kit_v3*", "scripts*"]
         "relay-signals.json\nrelay-signals.jsonl\nrelay-signals-otlp.json\n",
         encoding="utf-8",
     )
+    release = root / ".relay-kit" / "release"
+    release.mkdir(parents=True, exist_ok=True)
+    (release / ".gitignore").write_text("publication-evidence.json\n", encoding="utf-8")
     if with_dist:
         dist = root / "dist"
         dist.mkdir()
         (dist / f"relay_kit-{version}-py3-none-any.whl").write_text("wheel\n", encoding="utf-8")
         (dist / f"relay_kit-{version}.tar.gz").write_text("sdist\n", encoding="utf-8")
+
+
+def write_publication_execution_evidence(root: Path) -> tuple[Path, Path]:
+    evidence_dir = root / ".tmp" / "publication"
+    evidence_dir.mkdir(parents=True, exist_ok=True)
+    twine_check = evidence_dir / "twine-check.txt"
+    upload_log = evidence_dir / "upload-log.txt"
+    twine_check.write_text("Checking dist/relay_kit-3.3.0.tar.gz: PASSED\n", encoding="utf-8")
+    upload_log.write_text("Uploading relay-kit 3.3.0 to PyPI: uploaded\n", encoding="utf-8")
+    return twine_check, upload_log
 
 
 def test_publication_plan_ready_when_release_dist_and_external_evidence_exist(tmp_path: Path) -> None:
@@ -136,3 +149,78 @@ def test_public_cli_publish_plan_json_and_strict(tmp_path: Path, capsys) -> None
     assert exit_code == 2
     assert payload["schema_version"] == "relay-kit.publication-plan.v1"
     assert payload["status"] == "hold"
+
+
+def test_publication_evidence_published_when_execution_evidence_exists(tmp_path: Path) -> None:
+    write_publication_project(tmp_path)
+    twine_check, upload_log = write_publication_execution_evidence(tmp_path)
+
+    report = publication.build_publication_evidence(
+        tmp_path,
+        channel="pypi",
+        ci_url="https://github.com/b0ydeptraj/Relay-kit/actions/runs/1",
+        release_url="https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0",
+        package_url="https://pypi.org/project/relay-kit/3.3.0/",
+        twine_check_file=twine_check,
+        upload_log_file=upload_log,
+    )
+
+    assert report["schema_version"] == "relay-kit.publication-evidence.v1"
+    assert report["status"] == "published"
+    assert report["findings"] == []
+    artifacts = report["distribution"]["artifacts"]
+    assert {artifact["kind"] for artifact in artifacts} == {"wheel", "sdist"}
+    assert all(len(artifact["sha256"]) == 64 for artifact in artifacts)
+    assert report["checks_by_id"]["twine-check"]["status"] == "pass"
+    assert report["checks_by_id"]["upload-log"]["status"] == "pass"
+
+
+def test_publication_evidence_holds_without_upload_log_or_package_url(tmp_path: Path) -> None:
+    write_publication_project(tmp_path)
+    twine_check, _upload_log = write_publication_execution_evidence(tmp_path)
+
+    report = publication.build_publication_evidence(
+        tmp_path,
+        channel="pypi",
+        ci_url="https://github.com/b0ydeptraj/Relay-kit/actions/runs/1",
+        release_url="https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0",
+        twine_check_file=twine_check,
+    )
+
+    assert report["status"] == "hold"
+    assert {finding["gate"] for finding in report["findings"]} >= {"external-evidence", "upload-log"}
+
+
+def test_public_cli_publish_evidence_writes_default_artifact(tmp_path: Path, capsys) -> None:
+    write_publication_project(tmp_path)
+    twine_check, upload_log = write_publication_execution_evidence(tmp_path)
+
+    exit_code = relay_kit_public_cli.main(
+        [
+            "publish",
+            "evidence",
+            str(tmp_path),
+            "--channel",
+            "pypi",
+            "--ci-url",
+            "https://github.com/b0ydeptraj/Relay-kit/actions/runs/1",
+            "--release-url",
+            "https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0",
+            "--package-url",
+            "https://pypi.org/project/relay-kit/3.3.0/",
+            "--twine-check-file",
+            str(twine_check),
+            "--upload-log-file",
+            str(upload_log),
+            "--strict",
+            "--json",
+        ]
+    )
+    payload = json.loads(capsys.readouterr().out)
+    output_path = tmp_path / ".relay-kit" / "release" / "publication-evidence.json"
+
+    assert exit_code == 0
+    assert payload["output_file"] == str(output_path)
+    assert output_path.exists()
+    assert payload["evidence"]["schema_version"] == "relay-kit.publication-evidence.v1"
+    assert payload["evidence"]["status"] == "published"

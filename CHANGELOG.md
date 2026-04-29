@@ -8,6 +8,9 @@ All notable changes to `Relay-kit` are documented here.
 
 - Added Pulse publication-plan visibility and a `relay.publication.ready`
   signal export metric for package release dashboards.
+- Added `relay-kit publish evidence` to write a publication execution evidence
+  artifact with dist hashes, twine-check proof, upload log proof, and external
+  CI/release/package URLs.
 - Added `relay-kit publish plan` to verify package publication prerequisites
   without uploading artifacts.
 - Added `relay-kit signal export --otlp` to write dependency-free Relay OTLP
@@ -19,6 +22,8 @@ All notable changes to `Relay-kit` are documented here.
 
 - Updated the runtime validation workflow to use Node 24-ready GitHub Actions
   major versions for checkout and Python setup.
+- Extended release-lane generated-artifact ignore checks to include
+  `.relay-kit/release/publication-evidence.json`.
 - Bumped post-`v3.3.0` mainline package metadata to `3.4.0.dev0` so new
   development builds cannot be confused with the published `v3.3.0` release.
 

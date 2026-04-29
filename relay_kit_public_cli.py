@@ -12,6 +12,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit readiness check <project_path>
   relay-kit release verify <project_path>
   relay-kit publish plan <project_path>
+  relay-kit publish evidence <project_path>
   relay-kit pulse build <project_path>
   relay-kit signal export <project_path>
   relay-kit contract import <project_path> --contract-file <relay-contract.json>
@@ -34,7 +35,14 @@ from relay_kit_v3.evidence_ledger import append_event, ledger_path, new_run_id, 
 from relay_kit_v3.bundle_manifest import verify_manifest_file, verify_trusted_manifest_file, write_manifest, write_trust_stamp
 from relay_kit_v3.policy_packs import DEFAULT_POLICY_PACK, POLICY_PACKS
 from relay_kit_v3.pulse import build_pulse_report, write_pulse_report
-from relay_kit_v3.publication import build_publication_plan, render_publication_plan, write_publication_plan
+from relay_kit_v3.publication import (
+    build_publication_evidence,
+    build_publication_plan,
+    render_publication_evidence,
+    render_publication_plan,
+    write_publication_evidence,
+    write_publication_plan,
+)
 from relay_kit_v3.release_lane import build_release_lane_report, render_release_lane_report, write_release_lane_report
 from relay_kit_v3.readiness import build_readiness_report, render_readiness_report
 from relay_kit_v3.signal_export import build_signal_export, write_signal_export
@@ -355,7 +363,7 @@ def _parse_release_args(argv: list[str]) -> argparse.Namespace:
 def _parse_publish_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="relay-kit publish",
-        description="Plan package publication evidence without uploading artifacts.",
+        description="Plan and record package publication evidence without uploading artifacts.",
     )
     subparsers = parser.add_subparsers(dest="action", required=True)
     plan = subparsers.add_parser("plan", help="Check package publication prerequisites")
@@ -370,6 +378,25 @@ def _parse_publish_args(argv: list[str]) -> argparse.Namespace:
     plan.add_argument("--output-file", default=None, help="Optional JSON report output path")
     plan.add_argument("--strict", action="store_true", help="Return non-zero unless the publication plan is ready")
     plan.add_argument("--json", action="store_true", help="Emit machine-readable publication plan")
+
+    evidence = subparsers.add_parser("evidence", help="Record package publication execution evidence")
+    evidence.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    evidence.add_argument("--channel", choices=["pypi", "testpypi", "internal"], default="pypi")
+    evidence.add_argument("--dist-dir", default=None, help="Distribution artifact directory (default: <project>/dist)")
+    evidence.add_argument("--ci-url", default=None, help="Remote CI evidence URL")
+    evidence.add_argument("--release-url", default=None, help="GitHub release or release-note URL")
+    evidence.add_argument("--package-url", default=None, help="Package index evidence URL")
+    evidence.add_argument("--twine-check-file", default=None, help="Captured output from python -m twine check dist/*")
+    evidence.add_argument("--upload-log-file", default=None, help="Captured package upload log or package-index confirmation")
+    evidence.add_argument("--publication-plan-file", default=None, help="Optional publication-plan JSON to bind to this evidence")
+    evidence.add_argument("--allow-dev", action="store_true", help="Allow dev/local versions on the selected channel")
+    evidence.add_argument(
+        "--output-file",
+        default=None,
+        help="JSON report output path (default: <project>/.relay-kit/release/publication-evidence.json)",
+    )
+    evidence.add_argument("--strict", action="store_true", help="Return non-zero unless publication evidence is complete")
+    evidence.add_argument("--json", action="store_true", help="Emit machine-readable publication evidence")
     return parser.parse_args(argv)
 
 
@@ -817,27 +844,58 @@ def run_release(args: argparse.Namespace) -> int:
 
 
 def run_publish(args: argparse.Namespace) -> int:
-    if args.action != "plan":
-        return 2
-    report = build_publication_plan(
-        args.project_path,
-        channel=args.channel,
-        target_version=args.target_version,
-        dist_dir=args.dist_dir,
-        ci_url=args.ci_url,
-        release_url=args.release_url,
-        package_url=args.package_url,
-        allow_dev=args.allow_dev,
-    )
-    if args.output_file:
-        write_publication_plan(args.project_path, report, output_file=args.output_file)
-    if args.json:
-        print(json.dumps(report, ensure_ascii=True, indent=2))
-    else:
-        print(render_publication_plan(report))
-    if args.strict and report["status"] != "ready":
-        return 2
-    return 0
+    if args.action == "plan":
+        report = build_publication_plan(
+            args.project_path,
+            channel=args.channel,
+            target_version=args.target_version,
+            dist_dir=args.dist_dir,
+            ci_url=args.ci_url,
+            release_url=args.release_url,
+            package_url=args.package_url,
+            allow_dev=args.allow_dev,
+        )
+        if args.output_file:
+            write_publication_plan(args.project_path, report, output_file=args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_publication_plan(report))
+        if args.strict and report["status"] != "ready":
+            return 2
+        return 0
+    if args.action == "evidence":
+        report = build_publication_evidence(
+            args.project_path,
+            channel=args.channel,
+            dist_dir=args.dist_dir,
+            ci_url=args.ci_url,
+            release_url=args.release_url,
+            package_url=args.package_url,
+            twine_check_file=args.twine_check_file,
+            upload_log_file=args.upload_log_file,
+            publication_plan_file=args.publication_plan_file,
+            allow_dev=args.allow_dev,
+        )
+        output_path = write_publication_evidence(args.project_path, report, output_file=args.output_file)
+        if args.json:
+            print(
+                json.dumps(
+                    {
+                        "output_file": str(output_path),
+                        "evidence": report,
+                    },
+                    ensure_ascii=True,
+                    indent=2,
+                )
+            )
+        else:
+            print(render_publication_evidence(report))
+            print(f"Wrote {output_path}")
+        if args.strict and report["status"] != "published":
+            return 2
+        return 0
+    return 2
 
 
 def run_pulse(args: argparse.Namespace) -> int:

@@ -162,6 +162,10 @@ def required_commands(project_root: Path, policy_pack: str) -> list[str]:
         f"relay-kit readiness check {project} --profile {readiness_profile} --json",
         f"relay-kit release verify {project} --json",
         f"relay-kit publish plan {project} --channel pypi --json",
+        (
+            f"relay-kit publish evidence {project} --channel pypi "
+            "--twine-check-file <twine-check-output> --upload-log-file <upload-log-output> --json"
+        ),
         f"relay-kit pulse build {project} --include-readiness",
         f"relay-kit signal export {project} --otlp --json",
     ]
