@@ -44,7 +44,8 @@
 - PR #3 merged the next-dev version bump: https://github.com/b0ydeptraj/Relay-kit/pull/3, merge commit `aaaac9b4f43dd6e96c181f1bc917994fac887f14`.
 - PR #5 merged OTLP readiness/support evidence: https://github.com/b0ydeptraj/Relay-kit/pull/5, merge commit `59d699d3a60daf41366ac3f4e9c8a2723340f9ab`.
 - PR #6 merged CI action hardening: https://github.com/b0ydeptraj/Relay-kit/pull/6, merge commit `a2353e0d39f23a319deb5d341e9eff7189638021`.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/24987030132, conclusion `success`.
+- PR #7 merged publication plan gate: https://github.com/b0ydeptraj/Relay-kit/pull/7, merge commit `ee18c590524154df9747787272b11cfc6b69b416`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25064747698, conclusion `success`.
 
 ## Known sharp edges
 

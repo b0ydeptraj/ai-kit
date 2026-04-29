@@ -624,13 +624,14 @@ Acceptance criteria:
 
 | Gap | Action | Priority | Concrete work |
 | --- | --- | --- | --- |
-| Behavior skill tests | Add | P1 | `scripts/skill_gauntlet.py --semantic tests/fixtures/skill_gauntlet/*.yaml` |
-| Runtime policy guard | Add | P1 | `scripts/policy_guard.py` with deterministic security/path/shell checks |
-| Evidence ledger | Add | P2 | `.relay-kit/evidence/events.jsonl` plus `relay-kit evidence summary` |
+| Behavior skill tests | Done | P1 | `scripts/skill_gauntlet.py --semantic` plus bundled routing/evidence scenarios. |
+| Runtime policy guard | Done | P1 | `scripts/policy_guard.py` with deterministic secret, path, shell, prompt, and allowlist checks. |
+| Evidence ledger | Done | P2 | `.relay-kit/evidence/events.jsonl` plus `relay-kit evidence summary`. |
 | Contract export/import | Add | P2 | Done: `relay-kit contract export` exports Relay contracts to JSON; `relay-kit contract import` previews/applies JSON back into Relay contracts with overwrite protection. |
 | Completion proof overlap | Merge or clarify | P3 | Done: `prove-it` delegates to `evidence-before-completion`; `qa-governor` owns readiness verdicts and `qa-report.md` |
-| Legacy kit exposure | Hide by default | P2 | `--list-skills` excludes migration-only/legacy unless `--legacy` |
-| Thin domain utilities | Strengthen | P3 | Add script refs, evidence contracts, and narrower triggers |
+| Legacy kit exposure | Done | P2 | `--list-skills` excludes migration-only/legacy unless `--show-legacy` is used. |
+| Thin domain utilities | Done | P3 | Utility skills have explicit boundary and evidence contract sections; completion-proof ownership is clarified. |
+| Publication planning | Done | P2 | `relay-kit publish plan` checks release-lane status, version/channel safety, dist artifacts, and external evidence URLs without uploading artifacts. |
 
 ## Benchmark Lessons to Import
 
@@ -702,6 +703,7 @@ Expected gain:
 - Done second signal export slice: readiness now verifies signal export as a required commercial gate.
 - Done first release-lane slice: add `relay-kit release verify` and include it in readiness/support evidence.
 - Done first slice: add `relay-kit readiness check` as the single commercial readiness verdict.
+- Done first publication-plan slice: add `relay-kit publish plan` as the no-upload package publication evidence gate.
 
 Expected gain:
 - Relay-kit becomes sellable as a governance layer with measurable quality signals.
@@ -722,7 +724,8 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - `relay-kit readiness check --profile enterprise` returns `commercial-ready-candidate` for the release candidate.
 - `relay-kit readiness check` proves signal export artifacts can be generated locally.
 - `relay-kit release verify` passes for local release-lane prerequisites.
+- `relay-kit publish plan --channel pypi --strict` reaches `ready` only after release-lane, dist artifacts, version/channel policy, and external CI/release/package evidence are present.
 
 Review-hub verdict for this backlog:
-- Go forward by fixing P0 first, then P1 items in order.
-- Do not start commercial packaging before P0 and P1 are closed.
+- P0/P1/P2/P3 audit backlog items are implemented as first production-ready slices.
+- Continue with dashboard/eval expansion, package publication execution evidence, and commercial operations polish.
