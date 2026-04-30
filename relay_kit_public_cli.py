@@ -13,6 +13,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit release verify <project_path>
   relay-kit publish plan <project_path>
   relay-kit publish evidence <project_path>
+  relay-kit publish trail <project_path>
   relay-kit pulse build <project_path>
   relay-kit signal export <project_path>
   relay-kit contract import <project_path> --contract-file <relay-contract.json>
@@ -38,10 +39,14 @@ from relay_kit_v3.pulse import build_pulse_report, write_pulse_report
 from relay_kit_v3.publication import (
     build_publication_evidence,
     build_publication_plan,
+    build_publication_trail,
     render_publication_evidence,
     render_publication_plan,
+    render_publication_trail,
     write_publication_evidence,
     write_publication_plan,
+    write_publication_trail,
+    write_publication_trail_markdown,
 )
 from relay_kit_v3.release_lane import build_release_lane_report, render_release_lane_report, write_release_lane_report
 from relay_kit_v3.readiness import build_readiness_report, render_readiness_report
@@ -397,6 +402,34 @@ def _parse_publish_args(argv: list[str]) -> argparse.Namespace:
     )
     evidence.add_argument("--strict", action="store_true", help="Return non-zero unless publication evidence is complete")
     evidence.add_argument("--json", action="store_true", help="Emit machine-readable publication evidence")
+
+    trail = subparsers.add_parser("trail", help="Write a publication execution trail with capture commands")
+    trail.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    trail.add_argument("--channel", choices=["pypi", "testpypi", "internal"], default="pypi")
+    trail.add_argument("--target-version", default=None, help="Expected package version")
+    trail.add_argument("--dist-dir", default=None, help="Distribution artifact directory (default: <project>/dist)")
+    trail.add_argument(
+        "--evidence-dir",
+        default=None,
+        help="Directory for captured twine/upload logs (default: <project>/.tmp/relay-publication/<version>)",
+    )
+    trail.add_argument("--ci-url", default=None, help="Remote CI evidence URL")
+    trail.add_argument("--release-url", default=None, help="GitHub release or release-note URL")
+    trail.add_argument("--package-url", default=None, help="Package index evidence URL")
+    trail.add_argument("--shell", choices=["powershell", "bash"], default="powershell")
+    trail.add_argument("--allow-dev", action="store_true", help="Allow dev/local versions on the selected channel")
+    trail.add_argument(
+        "--output-file",
+        default=None,
+        help="JSON trail output path (default: <project>/.relay-kit/release/publication-trail.json)",
+    )
+    trail.add_argument(
+        "--markdown-file",
+        default=None,
+        help="Markdown trail output path (default: <project>/.relay-kit/release/publication-trail.md)",
+    )
+    trail.add_argument("--strict", action="store_true", help="Return non-zero unless the publication trail is ready")
+    trail.add_argument("--json", action="store_true", help="Emit machine-readable publication trail")
     return parser.parse_args(argv)
 
 
@@ -893,6 +926,40 @@ def run_publish(args: argparse.Namespace) -> int:
             print(render_publication_evidence(report))
             print(f"Wrote {output_path}")
         if args.strict and report["status"] != "published":
+            return 2
+        return 0
+    if args.action == "trail":
+        report = build_publication_trail(
+            args.project_path,
+            channel=args.channel,
+            target_version=args.target_version,
+            dist_dir=args.dist_dir,
+            evidence_dir=args.evidence_dir,
+            ci_url=args.ci_url,
+            release_url=args.release_url,
+            package_url=args.package_url,
+            shell=args.shell,
+            allow_dev=args.allow_dev,
+        )
+        output_path = write_publication_trail(args.project_path, report, output_file=args.output_file)
+        markdown_path = write_publication_trail_markdown(args.project_path, report, output_file=args.markdown_file)
+        if args.json:
+            print(
+                json.dumps(
+                    {
+                        "output_file": str(output_path),
+                        "markdown_file": str(markdown_path),
+                        "trail": report,
+                    },
+                    ensure_ascii=True,
+                    indent=2,
+                )
+            )
+        else:
+            print(render_publication_trail(report))
+            print(f"Wrote {output_path}")
+            print(f"Wrote {markdown_path}")
+        if args.strict and report["status"] != "ready":
             return 2
         return 0
     return 2

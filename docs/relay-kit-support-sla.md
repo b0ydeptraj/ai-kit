@@ -27,8 +27,9 @@ relay-kit eval run /path/to/project --strict --json
 relay-kit pulse build /path/to/project --include-readiness
 relay-kit signal export /path/to/project --otlp --json
 relay-kit release verify /path/to/project --json
+relay-kit publish trail /path/to/project --channel pypi --json
 relay-kit publish plan /path/to/project --channel pypi --json
-relay-kit publish evidence /path/to/project --channel pypi --twine-check-file .tmp/twine-check.txt --upload-log-file .tmp/upload-log.txt --json
+relay-kit publish evidence /path/to/project --channel pypi --twine-check-file .tmp/twine-check.txt --upload-log-file .tmp/upload-log.txt --publication-plan-file .relay-kit/release/publication-plan.json --json
 ```
 
 Attach:
@@ -37,6 +38,7 @@ Attach:
 - `.relay-kit/signals/relay-signals.json`
 - `.relay-kit/signals/relay-signals.jsonl`
 - `.relay-kit/signals/relay-signals-otlp.json`
+- `.relay-kit/release/publication-trail.json` when the issue involves package publication workflow
 - `.relay-kit/release/publication-evidence.json` when the issue involves package publication
 - the failing command output
 - the support request template from `.relay-kit/contracts/support-request.md`

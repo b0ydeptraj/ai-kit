@@ -186,8 +186,9 @@ relay-kit release verify /path/to/project --json
 Plan and record package publication evidence:
 
 ```bash
+relay-kit publish trail /path/to/project --channel pypi --json
 relay-kit publish plan /path/to/project --channel pypi --json
-relay-kit publish evidence /path/to/project --channel pypi --twine-check-file .tmp/twine-check.txt --upload-log-file .tmp/upload-log.txt --json
+relay-kit publish evidence /path/to/project --channel pypi --twine-check-file .tmp/twine-check.txt --upload-log-file .tmp/upload-log.txt --publication-plan-file .relay-kit/release/publication-plan.json --json
 ```
 
 Measure workflow routing quality with bundled scenarios:

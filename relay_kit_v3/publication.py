@@ -17,9 +17,13 @@ except ModuleNotFoundError:  # pragma: no cover - Python < 3.11 fallback
 
 SCHEMA_VERSION = "relay-kit.publication-plan.v1"
 EVIDENCE_SCHEMA_VERSION = "relay-kit.publication-evidence.v1"
+TRAIL_SCHEMA_VERSION = "relay-kit.publication-trail.v1"
 CHANNELS = {"pypi", "testpypi", "internal"}
+SHELLS = {"powershell", "bash"}
 DEFAULT_OUTPUT = Path(".relay-kit") / "release" / "publication-plan.json"
 DEFAULT_EVIDENCE_OUTPUT = Path(".relay-kit") / "release" / "publication-evidence.json"
+DEFAULT_TRAIL_OUTPUT = Path(".relay-kit") / "release" / "publication-trail.json"
+DEFAULT_TRAIL_MARKDOWN = Path(".relay-kit") / "release" / "publication-trail.md"
 
 
 def build_publication_plan(
@@ -194,6 +198,122 @@ def write_publication_evidence(
     return output_path
 
 
+def build_publication_trail(
+    project_root: Path | str,
+    *,
+    channel: str = "pypi",
+    target_version: str | None = None,
+    dist_dir: Path | str | None = None,
+    evidence_dir: Path | str | None = None,
+    ci_url: str | None = None,
+    release_url: str | None = None,
+    package_url: str | None = None,
+    shell: str = "powershell",
+    allow_dev: bool = False,
+) -> dict[str, Any]:
+    root = Path(project_root).resolve()
+    selected_channel = channel.lower()
+    selected_shell = shell.lower()
+    package = read_package_metadata(root)
+    version = str(package.get("version") or "")
+    name = str(package.get("name") or "")
+    dist_root = _resolve_dist_dir(root, dist_dir)
+    evidence_root = _resolve_evidence_dir(root, evidence_dir, version=target_version or version)
+    twine_check = evidence_root / "twine-check.txt"
+    upload_log = evidence_root / "upload-log.txt"
+    plan_file = root / DEFAULT_OUTPUT
+    evidence_file = root / DEFAULT_EVIDENCE_OUTPUT
+
+    checks = [
+        package_metadata_check(package),
+        version_channel_check(version, selected_channel, target_version=target_version, allow_dev=allow_dev),
+        release_lane_check(root),
+        external_evidence_check(selected_channel, ci_url=ci_url, release_url=release_url, package_url=package_url),
+        shell_check(selected_shell),
+    ]
+    findings = [
+        {
+            "gate": check["id"],
+            "status": check["status"],
+            "summary": check.get("summary", ""),
+        }
+        for check in checks
+        if check["status"] != "pass"
+    ]
+    return {
+        "schema_version": TRAIL_SCHEMA_VERSION,
+        "status": "ready" if not findings else "hold",
+        "project_path": str(root),
+        "channel": selected_channel,
+        "shell": selected_shell,
+        "package_name": name,
+        "version": version,
+        "dist_dir": str(dist_root),
+        "evidence_dir": str(evidence_root),
+        "external_evidence": {
+            "ci_url": ci_url,
+            "release_url": release_url,
+            "package_url": package_url,
+        },
+        "evidence_paths": {
+            "publication_plan_file": str(plan_file),
+            "twine_check_file": str(twine_check),
+            "upload_log_file": str(upload_log),
+            "publication_evidence_file": str(evidence_file),
+        },
+        "checks": checks,
+        "findings": findings,
+        "steps": publication_trail_steps(
+            root,
+            selected_channel,
+            selected_shell,
+            dist_root=dist_root,
+            twine_check_file=twine_check,
+            upload_log_file=upload_log,
+            publication_plan_file=plan_file,
+            publication_evidence_file=evidence_file,
+            ci_url=ci_url,
+            release_url=release_url,
+            package_url=package_url,
+            allow_dev=allow_dev,
+        ),
+        "residual_risks": [
+            "Trail commands are local instructions; they do not verify package-index account ownership.",
+            "Upload commands should be run only after the plan step returns ready.",
+        ],
+    }
+
+
+def write_publication_trail(
+    project_root: Path | str,
+    report: Mapping[str, Any],
+    *,
+    output_file: Path | str | None = None,
+) -> Path:
+    root = Path(project_root).resolve()
+    output_path = Path(output_file) if output_file is not None else root / DEFAULT_TRAIL_OUTPUT
+    if not output_path.is_absolute():
+        output_path = root / output_path
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(report, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+    return output_path
+
+
+def write_publication_trail_markdown(
+    project_root: Path | str,
+    report: Mapping[str, Any],
+    *,
+    output_file: Path | str | None = None,
+) -> Path:
+    root = Path(project_root).resolve()
+    output_path = Path(output_file) if output_file is not None else root / DEFAULT_TRAIL_MARKDOWN
+    if not output_path.is_absolute():
+        output_path = root / output_path
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(render_publication_trail_markdown(report) + "\n", encoding="utf-8")
+    return output_path
+
+
 def render_publication_plan(report: Mapping[str, Any]) -> str:
     lines = [
         "Relay-kit publication plan",
@@ -238,6 +358,59 @@ def render_publication_evidence(report: Mapping[str, Any]) -> str:
                 if check.get("summary") and check.get("status") != "pass":
                     lines.append(f"    {check['summary']}")
     return "\n".join(lines)
+
+
+def render_publication_trail(report: Mapping[str, Any]) -> str:
+    lines = [
+        "Relay-kit publication trail",
+        f"- project: {report.get('project_path')}",
+        f"- channel: {report.get('channel')}",
+        f"- version: {report.get('version')}",
+        f"- shell: {report.get('shell')}",
+        f"- status: {report.get('status')}",
+        f"- steps: {len(report.get('steps', []))}",
+        f"- findings: {len(report.get('findings', []))}",
+    ]
+    for finding in report.get("findings", []):
+        if isinstance(finding, Mapping):
+            lines.append(f"  - {finding.get('gate')}: {finding.get('summary')}")
+    return "\n".join(lines)
+
+
+def render_publication_trail_markdown(report: Mapping[str, Any]) -> str:
+    shell = str(report.get("shell") or "bash")
+    code_fence = "powershell" if shell == "powershell" else "bash"
+    lines = [
+        "# Relay-kit Publication Trail",
+        "",
+        f"- Project: `{report.get('project_path')}`",
+        f"- Channel: `{report.get('channel')}`",
+        f"- Version: `{report.get('version')}`",
+        f"- Status: `{report.get('status')}`",
+        "",
+        "## Evidence Paths",
+        "",
+    ]
+    paths = report.get("evidence_paths", {})
+    if isinstance(paths, Mapping):
+        for key, value in paths.items():
+            lines.append(f"- `{key}`: `{value}`")
+    lines.extend(["", "## Steps", ""])
+    for step in report.get("steps", []):
+        if isinstance(step, Mapping):
+            lines.extend(
+                [
+                    f"### {step.get('label', step.get('id'))}",
+                    "",
+                    f"- Purpose: {step.get('purpose', '')}",
+                    "",
+                    f"```{code_fence}",
+                    str(step.get("command", "")),
+                    "```",
+                    "",
+                ]
+            )
+    return "\n".join(lines).rstrip()
 
 
 def read_package_metadata(root: Path) -> dict[str, Any]:
@@ -465,6 +638,111 @@ def publication_plan_file_check(path: Path) -> dict[str, Any]:
     return check("publication-plan", "publication plan", "pass", "publication plan is ready", details={"path": str(path)})
 
 
+def shell_check(shell: str) -> dict[str, Any]:
+    return check(
+        "shell",
+        "shell",
+        "pass" if shell in SHELLS else "hold",
+        "shell is supported" if shell in SHELLS else f"unsupported shell: {shell}",
+        details={"shell": shell, "supported": sorted(SHELLS)},
+    )
+
+
+def publication_trail_steps(
+    root: Path,
+    channel: str,
+    shell: str,
+    *,
+    dist_root: Path,
+    twine_check_file: Path,
+    upload_log_file: Path,
+    publication_plan_file: Path,
+    publication_evidence_file: Path,
+    ci_url: str | None,
+    release_url: str | None,
+    package_url: str | None,
+    allow_dev: bool,
+) -> list[dict[str, str]]:
+    project = _shell_arg(root)
+    dist_arg = _shell_arg(dist_root)
+    twine_arg = _shell_arg(twine_check_file)
+    upload_arg = _shell_arg(upload_log_file)
+    plan_arg = _shell_arg(publication_plan_file)
+    evidence_arg = _shell_arg(publication_evidence_file)
+    plan_command = _publish_plan_command(
+        project,
+        channel,
+        ci_url=ci_url,
+        release_url=release_url,
+        package_url=package_url,
+        output_file=plan_arg,
+        allow_dev=allow_dev,
+    )
+    evidence_command = _publish_evidence_command(
+        project,
+        channel,
+        ci_url=ci_url,
+        release_url=release_url,
+        package_url=package_url,
+        twine_check_file=twine_arg,
+        upload_log_file=upload_arg,
+        publication_plan_file=plan_arg,
+        output_file=evidence_arg,
+        allow_dev=allow_dev,
+    )
+    return [
+        {
+            "id": "readiness",
+            "label": "Readiness gate",
+            "purpose": "Verify commercial readiness gates before building artifacts.",
+            "command": f"relay-kit readiness check {project} --profile enterprise --json",
+        },
+        {
+            "id": "release-verify",
+            "label": "Release lane gate",
+            "purpose": "Verify release-lane prerequisites and clean final-cut policy.",
+            "command": f"relay-kit release verify {project} --require-clean --json",
+        },
+        {
+            "id": "build",
+            "label": "Build distributions",
+            "purpose": "Create the wheel and sdist that will be hashed in publication evidence.",
+            "command": f"python -m build --sdist --wheel --outdir {dist_arg}",
+        },
+        {
+            "id": "twine-check",
+            "label": "Capture twine check",
+            "purpose": "Capture package metadata validation output for the evidence artifact.",
+            "command": capture_command(f"python -m twine check {dist_arg}/*", twine_check_file, shell),
+        },
+        {
+            "id": "publication-plan",
+            "label": "Write publication plan",
+            "purpose": "Confirm the package is ready before upload.",
+            "command": plan_command,
+        },
+        {
+            "id": "upload",
+            "label": "Capture upload confirmation",
+            "purpose": "Run the package upload and capture the confirmation log.",
+            "command": capture_command(upload_command(channel), upload_log_file, shell),
+        },
+        {
+            "id": "publication-evidence",
+            "label": "Write publication evidence",
+            "purpose": "Bind dist hashes, twine output, upload log, and external URLs into one artifact.",
+            "command": evidence_command,
+        },
+    ]
+
+
+def capture_command(command: str, output_file: Path, shell: str) -> str:
+    output = _shell_arg(output_file)
+    if shell == "bash":
+        return f"{command} 2>&1 | tee {output}"
+    return f"& {command} 2>&1 | Tee-Object -FilePath {output}"
+
+
 def publication_commands(root: Path, channel: str) -> list[str]:
     project = _shell_arg(root)
     upload_command = "python -m twine upload dist/*"
@@ -479,6 +757,77 @@ def publication_commands(root: Path, channel: str) -> list[str]:
         "python -m twine check dist/*",
         upload_command,
     ]
+
+
+def upload_command(channel: str) -> str:
+    if channel == "testpypi":
+        return "python -m twine upload --repository testpypi dist/*"
+    if channel == "internal":
+        return "python -m twine upload --repository-url <internal-index-url> dist/*"
+    return "python -m twine upload dist/*"
+
+
+def _publish_plan_command(
+    project: str,
+    channel: str,
+    *,
+    ci_url: str | None,
+    release_url: str | None,
+    package_url: str | None,
+    output_file: str,
+    allow_dev: bool,
+) -> str:
+    parts = ["relay-kit publish plan", project, "--channel", channel]
+    parts.extend(_url_args(ci_url=ci_url, release_url=release_url, package_url=package_url))
+    parts.extend(["--output-file", output_file, "--strict", "--json"])
+    if allow_dev:
+        parts.append("--allow-dev")
+    return " ".join(parts)
+
+
+def _publish_evidence_command(
+    project: str,
+    channel: str,
+    *,
+    ci_url: str | None,
+    release_url: str | None,
+    package_url: str | None,
+    twine_check_file: str,
+    upload_log_file: str,
+    publication_plan_file: str,
+    output_file: str,
+    allow_dev: bool,
+) -> str:
+    parts = ["relay-kit publish evidence", project, "--channel", channel]
+    parts.extend(_url_args(ci_url=ci_url, release_url=release_url, package_url=package_url))
+    parts.extend(
+        [
+            "--twine-check-file",
+            twine_check_file,
+            "--upload-log-file",
+            upload_log_file,
+            "--publication-plan-file",
+            publication_plan_file,
+            "--output-file",
+            output_file,
+            "--strict",
+            "--json",
+        ]
+    )
+    if allow_dev:
+        parts.append("--allow-dev")
+    return " ".join(parts)
+
+
+def _url_args(*, ci_url: str | None, release_url: str | None, package_url: str | None) -> list[str]:
+    args: list[str] = []
+    if ci_url:
+        args.extend(["--ci-url", _shell_value(ci_url)])
+    if release_url:
+        args.extend(["--release-url", _shell_value(release_url)])
+    if package_url:
+        args.extend(["--package-url", _shell_value(package_url)])
+    return args
 
 
 def check(
@@ -522,6 +871,11 @@ def _resolve_optional_path(root: Path, value: Path | str | None) -> Path | None:
     return path if path.is_absolute() else root / path
 
 
+def _resolve_evidence_dir(root: Path, value: Path | str | None, *, version: str) -> Path:
+    path = Path(value) if value is not None else root / ".tmp" / "relay-publication" / version
+    return path if path.is_absolute() else root / path
+
+
 def _is_dev_version(version: str) -> bool:
     lowered = version.lower()
     return ".dev" in lowered or "+" in lowered
@@ -537,6 +891,12 @@ def _mapping(value: object) -> Mapping[str, Any]:
 
 def _shell_arg(path: Path) -> str:
     value = str(path)
+    if any(char.isspace() for char in value):
+        return f'"{value}"'
+    return value
+
+
+def _shell_value(value: str) -> str:
     if any(char.isspace() for char in value):
         return f'"{value}"'
     return value

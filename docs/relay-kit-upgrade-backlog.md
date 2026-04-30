@@ -47,12 +47,13 @@ Source audit status:
 - Fixed in publication plan pass: `relay-kit publish plan` now checks package metadata, release-lane status, dist wheel/sdist artifacts, version-channel safety, and external CI/release/package evidence URLs without uploading artifacts.
 - Fixed in Pulse publication dashboard pass: `relay-kit pulse build` can include publication-plan data, the HTML report shows publication readiness, and signal export emits `relay.publication.ready`.
 - Fixed in publication execution evidence pass: `relay-kit publish evidence` now writes `.relay-kit/release/publication-evidence.json` with wheel/sdist SHA-256 hashes, twine-check output proof, upload/package-index confirmation proof, and external CI/release/package URLs.
+- Fixed in publication trail hardening pass: `relay-kit publish trail` now writes JSON/Markdown runbooks with deterministic capture paths and copyable commands for readiness, release verify, build, twine-check capture, plan, upload-log capture, and evidence generation.
 - Fixed in next-dev version hygiene pass: `main` now uses PEP 440 package version `3.4.0.dev0` after the published `v3.3.0` tag, with runtime version marker and trusted manifest regenerated for the next-dev channel.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
 - Current readiness: published `v3.3.0` with local commercial-ready candidate evidence; `main` has moved to `3.4.0.dev0` for post-release development.
-- Commercial readiness: locally gated by `relay-kit readiness check`, `relay-kit release verify`, `relay-kit publish plan`, and `relay-kit publish evidence`; remote CI is green for the release commit, while legal SLA commitments still remain external operational work.
+- Commercial readiness: locally gated by `relay-kit readiness check`, `relay-kit release verify`, `relay-kit publish trail`, `relay-kit publish plan`, and `relay-kit publish evidence`; remote CI is green for the release commit, while legal SLA commitments still remain external operational work.
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
 
@@ -634,6 +635,7 @@ Acceptance criteria:
 | Legacy kit exposure | Done | P2 | `--list-skills` excludes migration-only/legacy unless `--show-legacy` is used. |
 | Thin domain utilities | Done | P3 | Utility skills have explicit boundary and evidence contract sections; completion-proof ownership is clarified. |
 | Publication planning | Done | P2 | `relay-kit publish plan` checks release-lane status, version/channel safety, dist artifacts, and external evidence URLs without uploading artifacts. |
+| Publication trail hardening | Done | P2 | `relay-kit publish trail` writes copyable shell commands and deterministic evidence paths so publish evidence is captured consistently. |
 | Publication execution evidence | Done | P2 | `relay-kit publish evidence` records dist artifact hashes, twine-check output, upload confirmation, and package-index URLs into a machine-readable evidence file. |
 
 ## Benchmark Lessons to Import
@@ -709,6 +711,7 @@ Expected gain:
 - Done first publication-plan slice: add `relay-kit publish plan` as the no-upload package publication evidence gate.
 - Done dashboard/eval expansion slice: Pulse can include publication-plan status in JSON/HTML and export publication readiness as a local signal metric.
 - Done first publication-execution slice: add `relay-kit publish evidence` as the post-upload evidence artifact for support and release review.
+- Done first publication workflow hardening slice: add `relay-kit publish trail` for deterministic capture commands and evidence paths.
 
 Expected gain:
 - Relay-kit becomes sellable as a governance layer with measurable quality signals.
@@ -730,8 +733,9 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - `relay-kit readiness check` proves signal export artifacts can be generated locally.
 - `relay-kit release verify` passes for local release-lane prerequisites.
 - `relay-kit publish plan --channel pypi --strict` reaches `ready` only after release-lane, dist artifacts, version/channel policy, and external CI/release/package evidence are present.
+- `relay-kit publish trail --channel pypi --strict` reaches `ready` only after metadata, version/channel policy, release-lane status, shell support, and external CI/release/package URLs are present.
 - `relay-kit publish evidence --channel pypi --strict` reaches `published` only after wheel/sdist hashes, twine-check proof, upload confirmation, and external CI/release/package evidence are present.
 
 Review-hub verdict for this backlog:
 - P0/P1/P2/P3 audit backlog items are implemented as first production-ready slices.
-- Continue with commercial operations polish, package publication workflow hardening, and broader dashboard/eval signals.
+- Continue with commercial operations polish, dashboard/eval signal expansion, and optional publish trail execution automation after the non-upload trail has soaked.

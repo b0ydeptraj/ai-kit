@@ -2,7 +2,7 @@
 
 > Path: `.relay-kit/contracts/project-context.md`
 > Purpose: Current source-of-truth context for Relay-kit work after the `v3.3.0` release and `3.4.0.dev0` next-dev bump.
-> Last refreshed: 2026-04-29
+> Last refreshed: 2026-04-30
 
 ## Existing architecture
 
@@ -32,7 +32,7 @@
 ## Domain and compliance constraints
 
 - Relay-kit is positioned as an agent workflow governance kit, not a CrewAI/n8n-style full agent runtime.
-- Commercial readiness is gated by `relay-kit readiness check . --profile enterprise --json`, `relay-kit release verify . --json`, `relay-kit publish plan . --channel pypi --json`, and `relay-kit publish evidence . --channel pypi --json` when package upload evidence exists.
+- Commercial readiness is gated by `relay-kit readiness check . --profile enterprise --json`, `relay-kit release verify . --json`, `relay-kit publish trail . --channel pypi --json`, `relay-kit publish plan . --channel pypi --json`, and `relay-kit publish evidence . --channel pypi --json` when package upload evidence exists.
 - Enterprise trust metadata is deterministic, not cryptographic. `relay-kit manifest verify . --trusted` is required before enterprise readiness claims.
 - Release/publication evidence must distinguish local readiness from external package upload, marketplace publication, and legal SLA commitments.
 
@@ -49,7 +49,8 @@
 - PR #9 merged Pulse publication dashboard: https://github.com/b0ydeptraj/Relay-kit/pull/9, merge commit `cd74d94c527f7e2c1f38c857f822221664da1bb6`.
 - PR #10 merged post-dashboard state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/10, merge commit `17de1b6cbd4b65049316305388233e0533daf281`.
 - PR #11 merged publication execution evidence: https://github.com/b0ydeptraj/Relay-kit/pull/11, merge commit `649c11f0117a191ddbc8b3ccfe3dcb2cdf6f3bf9`.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25101734109, conclusion `success`.
+- PR #12 merged post-publication-evidence state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/12, merge commit `e2a823b2ec21d3b9acac1d315ae39a7be49fe3d8`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25101938306, conclusion `success`.
 
 ## Known sharp edges
 

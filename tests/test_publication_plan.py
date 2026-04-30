@@ -49,7 +49,10 @@ include = ["relay_kit_v3*", "scripts*"]
     )
     release = root / ".relay-kit" / "release"
     release.mkdir(parents=True, exist_ok=True)
-    (release / ".gitignore").write_text("publication-evidence.json\n", encoding="utf-8")
+    (release / ".gitignore").write_text(
+        "publication-evidence.json\npublication-trail.json\npublication-trail.md\n",
+        encoding="utf-8",
+    )
     if with_dist:
         dist = root / "dist"
         dist.mkdir()
@@ -224,3 +227,68 @@ def test_public_cli_publish_evidence_writes_default_artifact(tmp_path: Path, cap
     assert output_path.exists()
     assert payload["evidence"]["schema_version"] == "relay-kit.publication-evidence.v1"
     assert payload["evidence"]["status"] == "published"
+
+
+def test_publication_trail_builds_capture_commands(tmp_path: Path) -> None:
+    write_publication_project(tmp_path, with_dist=False)
+
+    report = publication.build_publication_trail(
+        tmp_path,
+        channel="pypi",
+        ci_url="https://github.com/b0ydeptraj/Relay-kit/actions/runs/1",
+        release_url="https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0",
+        package_url="https://pypi.org/project/relay-kit/3.3.0/",
+        shell="powershell",
+    )
+
+    assert report["schema_version"] == "relay-kit.publication-trail.v1"
+    assert report["status"] == "ready"
+    expected_twine_path = str(Path(".tmp") / "relay-publication" / "3.3.0" / "twine-check.txt")
+    assert report["evidence_paths"]["twine_check_file"].endswith(expected_twine_path)
+    command_text = "\n".join(step["command"] for step in report["steps"])
+    assert "Tee-Object" in command_text
+    assert "python -m twine check" in command_text
+    assert "python -m twine upload dist/*" in command_text
+    assert "relay-kit publish evidence" in command_text
+
+
+def test_publication_trail_holds_when_external_evidence_urls_are_missing(tmp_path: Path) -> None:
+    write_publication_project(tmp_path, with_dist=False)
+
+    report = publication.build_publication_trail(tmp_path, channel="pypi")
+
+    assert report["status"] == "hold"
+    assert any(finding["gate"] == "external-evidence" for finding in report["findings"])
+
+
+def test_public_cli_publish_trail_writes_json_and_markdown(tmp_path: Path, capsys) -> None:
+    write_publication_project(tmp_path, with_dist=False)
+
+    exit_code = relay_kit_public_cli.main(
+        [
+            "publish",
+            "trail",
+            str(tmp_path),
+            "--channel",
+            "pypi",
+            "--ci-url",
+            "https://github.com/b0ydeptraj/Relay-kit/actions/runs/1",
+            "--release-url",
+            "https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0",
+            "--package-url",
+            "https://pypi.org/project/relay-kit/3.3.0/",
+            "--strict",
+            "--json",
+        ]
+    )
+    payload = json.loads(capsys.readouterr().out)
+    json_path = tmp_path / ".relay-kit" / "release" / "publication-trail.json"
+    markdown_path = tmp_path / ".relay-kit" / "release" / "publication-trail.md"
+
+    assert exit_code == 0
+    assert payload["output_file"] == str(json_path)
+    assert payload["markdown_file"] == str(markdown_path)
+    assert json_path.exists()
+    assert markdown_path.exists()
+    assert payload["trail"]["schema_version"] == "relay-kit.publication-trail.v1"
+    assert "relay-kit publish evidence" in markdown_path.read_text(encoding="utf-8")
