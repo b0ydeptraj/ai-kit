@@ -2,6 +2,12 @@
 
 Use this template when opening a Relay-kit support request.
 
+For structured intake, generate `.relay-kit/support/support-request.json` with:
+
+```bash
+relay-kit support request /path/to/project --severity P1 --policy-pack enterprise --json
+```
+
 ## Severity
 
 - P0: production-critical runtime install, doctor, policy, or upgrade path is blocked.
@@ -41,6 +47,7 @@ relay-kit policy check /path/to/project --pack enterprise --strict --json
 relay-kit manifest verify /path/to/project --trusted
 relay-kit upgrade check /path/to/project --json
 relay-kit eval run /path/to/project --strict --json
+relay-kit support request /path/to/project --severity P1 --policy-pack enterprise --json
 ```
 
 ## Recent Changes

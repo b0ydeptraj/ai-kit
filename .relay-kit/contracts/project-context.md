@@ -32,7 +32,7 @@
 ## Domain and compliance constraints
 
 - Relay-kit is positioned as an agent workflow governance kit, not a CrewAI/n8n-style full agent runtime.
-- Commercial readiness is gated by `relay-kit readiness check . --profile enterprise --json`, `relay-kit release verify . --json`, `relay-kit publish trail . --channel pypi --json`, `relay-kit publish plan . --channel pypi --json`, and `relay-kit publish evidence . --channel pypi --json` when package upload evidence exists.
+- Commercial readiness is gated by `relay-kit readiness check . --profile enterprise --json`, `relay-kit release verify . --json`, `relay-kit support request . --json`, `relay-kit publish trail . --channel pypi --json`, `relay-kit publish plan . --channel pypi --json`, and `relay-kit publish evidence . --channel pypi --json` when package upload evidence exists.
 - Enterprise trust metadata is deterministic, not cryptographic. `relay-kit manifest verify . --trusted` is required before enterprise readiness claims.
 - Release/publication evidence must distinguish local readiness from external package upload, marketplace publication, and legal SLA commitments.
 
@@ -66,5 +66,6 @@
 - Version and upgrade logic: `relay_kit_v3/upgrade.py`, `.relay-kit/version.json`, `pyproject.toml`
 - Release readiness logic: `relay_kit_v3/release_lane.py`, `relay_kit_v3/readiness.py`, `scripts/release_readiness.py`
 - Publication planning and evidence logic: `relay_kit_v3/publication.py`
+- Support diagnostics and request intake logic: `relay_kit_v3/support_bundle.py`, `relay_kit_v3/support_request.py`
 - Signal and observability logic: `relay_kit_v3/signal_export.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/evidence_ledger.py`
 - Tests to mirror for new CLI slices: `tests/test_signal_export.py`, `tests/test_release_lane.py`, `tests/test_readiness_check.py`, `tests/test_public_cli_doctor.py`

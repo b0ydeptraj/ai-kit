@@ -148,7 +148,7 @@ def release_artifacts_check(root: Path) -> dict[str, Any]:
 
 def artifact_ignore_policy_check(root: Path) -> dict[str, Any]:
     required_entries = {
-        ".relay-kit/support/.gitignore": ["support-bundle.json"],
+        ".relay-kit/support/.gitignore": ["support-bundle.json", "support-request.json"],
         ".relay-kit/signals/.gitignore": ["relay-signals.json", "relay-signals.jsonl", "relay-signals-otlp.json"],
         ".relay-kit/release/.gitignore": [
             "publication-evidence.json",

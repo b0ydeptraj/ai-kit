@@ -152,6 +152,7 @@ Prepare a support diagnostics bundle:
 
 ```bash
 relay-kit support bundle /path/to/project --policy-pack enterprise
+relay-kit support request /path/to/project --severity P1 --policy-pack enterprise --json
 ```
 
 Build a local Pulse quality report:

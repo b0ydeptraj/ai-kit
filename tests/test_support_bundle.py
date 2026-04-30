@@ -40,6 +40,7 @@ def test_support_bundle_contains_required_diagnostics(tmp_path: Path) -> None:
     assert payload["diagnostics"]["release_lane"]["schema_version"] == "relay-kit.release-lane.v1"
     assert payload["diagnostics"]["release_lane"]["status"] in {"pass", "fail"}
     assert "relay-kit doctor" in payload["support"]["required_commands"][0]
+    assert any("relay-kit support request" in command for command in payload["support"]["required_commands"])
     assert any("relay-kit pulse build" in command for command in payload["support"]["required_commands"])
     assert any("relay-kit signal export" in command and "--otlp" in command for command in payload["support"]["required_commands"])
     assert any("relay-kit publish trail" in command for command in payload["support"]["required_commands"])

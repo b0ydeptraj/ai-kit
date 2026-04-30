@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh live workflow state after PR #13 so the source of truth matches the merged publication trail hardening lane.
+Implement structured support request intake so paid/team support has a machine-readable request artifact, not only a Markdown template.
 
 ## Active lane
 - Lane id: primary
@@ -19,15 +19,15 @@ Refresh live workflow state after PR #13 so the source of truth matches the merg
 
 ## Active standalone/domain skill
 - Skill: developer
-- Why selected: this is a bounded state/context hygiene update after the publication trail feature merged.
+- Why selected: the slice changes CLI support behavior, support diagnostics, release-lane ignore policy, docs, and tests with a bounded schema.
 
 ## Complexity level
-- Level: L1
-- Reasoning: this pass updates live state and context only; runtime code is already merged.
+- Level: L2
+- Reasoning: this pass adds a new support intake artifact and validation path across CLI, support, docs, and release-lane fixtures.
 
 ## Chosen track
 - Track: quick-flow
-- Why this track fits: the slice removes state drift before the next feature lane.
+- Why this track fits: acceptance is covered by focused unit tests, CLI smoke, full pytest, doctor, and runtime doctor.
 
 ## Completed artifacts
 - [ ] product-brief
@@ -75,7 +75,7 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - PR #12 merged post-publication-evidence state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/12.
 - PR #13 merged publication trail hardening: https://github.com/b0ydeptraj/Relay-kit/pull/13.
 - Bootstrap local verification: `python scripts\runtime_doctor.py . --strict --state-mode live`, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, and `python -m pytest -q --basetemp=.tmp\pytest-bootstrap-current-state-2` passed.
-- Current main baseline: `ba765d77af7367550f18785fde3243d1b0b7af8f`.
+- Current main baseline: `877d236c0c15fb0503494ef896237c41562f9ae4`.
 
 ## Recommended next lane
-Next feature lane should be commercial operations polish or dashboard/eval signal expansion.
+After this support request intake lane merges, the next feature lane should be dashboard/eval signal expansion or optional support operations reporting.

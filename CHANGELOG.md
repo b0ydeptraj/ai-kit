@@ -14,6 +14,9 @@ All notable changes to `Relay-kit` are documented here.
 - Added `relay-kit publish evidence` to write a publication execution evidence
   artifact with dist hashes, twine-check proof, upload log proof, and external
   CI/release/package URLs.
+- Added `relay-kit support request` to write a redacted structured support
+  intake artifact with severity, environment, diagnostics, and readiness
+  findings.
 - Added `relay-kit publish plan` to verify package publication prerequisites
   without uploading artifacts.
 - Added `relay-kit signal export --otlp` to write dependency-free Relay OTLP
@@ -27,6 +30,8 @@ All notable changes to `Relay-kit` are documented here.
   major versions for checkout and Python setup.
 - Extended release-lane generated-artifact ignore checks to include publication
   trail and evidence artifacts under `.relay-kit/release/`.
+- Extended release-lane generated-artifact ignore checks to include
+  `.relay-kit/support/support-request.json`.
 - Bumped post-`v3.3.0` mainline package metadata to `3.4.0.dev0` so new
   development builds cannot be confused with the published `v3.3.0` release.
 

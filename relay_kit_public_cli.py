@@ -9,6 +9,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit upgrade check <project_path>
   relay-kit policy check <project_path>
   relay-kit support bundle <project_path>
+  relay-kit support request <project_path>
   relay-kit readiness check <project_path>
   relay-kit release verify <project_path>
   relay-kit publish plan <project_path>
@@ -54,6 +55,7 @@ from relay_kit_v3.signal_export import build_signal_export, write_signal_export
 from relay_kit_v3.contract_export import write_contract_export
 from relay_kit_v3.contract_import import import_contracts, render_contract_import_report
 from relay_kit_v3.support_bundle import build_support_bundle, write_support_bundle
+from relay_kit_v3.support_request import build_support_request, render_support_request, write_support_request
 from relay_kit_v3.upgrade import build_upgrade_report, render_report, write_version_marker
 
 
@@ -334,6 +336,33 @@ def _parse_support_args(argv: list[str]) -> argparse.Namespace:
     bundle.add_argument("--output-file", default=None, help="Output path (default: <project>/.relay-kit/support/support-bundle.json)")
     bundle.add_argument("--evidence-limit", type=int, default=20, help="Recent evidence ledger events to include")
     bundle.add_argument("--json", action="store_true", help="Emit bundle payload and output path as JSON")
+    request = subparsers.add_parser("request", help="Write and validate a support request intake JSON")
+    request.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    request.add_argument("--severity", choices=["P0", "P1", "P2", "P3"], default=None)
+    request.add_argument("--summary", default=None, help="One sentence describing the blocked workflow")
+    request.add_argument("--package-version", default=None, help="Relay-kit package version")
+    request.add_argument("--os", dest="operating_system", default=None, help="Operating system")
+    request.add_argument("--shell", default=None, help="Shell used for failing commands")
+    request.add_argument("--bundle", dest="installed_bundle", default=None, help="Installed Relay-kit bundle")
+    request.add_argument("--adapter", dest="adapter_target", default=None, help="Adapter target such as codex or claude")
+    request.add_argument("--policy-pack", default=None, help="Policy pack used for diagnostics")
+    request.add_argument("--expected", dest="expected_behavior", default=None, help="Expected behavior")
+    request.add_argument("--actual", dest="actual_behavior", default=None, help="Actual behavior")
+    request.add_argument("--recent-changes", default=None, help="Recent Relay-kit or runtime changes")
+    request.add_argument("--workaround", default=None, help="Current workaround, if any")
+    request.add_argument(
+        "--diagnostic-file",
+        action="append",
+        default=None,
+        help="Diagnostic file to attach. Repeat for multiple files.",
+    )
+    request.add_argument(
+        "--output-file",
+        default=None,
+        help="Output path (default: <project>/.relay-kit/support/support-request.json)",
+    )
+    request.add_argument("--strict", action="store_true", help="Return non-zero unless the support request is ready")
+    request.add_argument("--json", action="store_true", help="Emit machine-readable support request")
     return parser.parse_args(argv)
 
 
@@ -829,27 +858,62 @@ def run_policy(args: argparse.Namespace) -> int:
 
 
 def run_support(args: argparse.Namespace) -> int:
-    if args.action != "bundle":
-        return 2
-    output_path = write_support_bundle(
-        args.project_path,
-        policy_pack=args.policy_pack,
-        output_file=args.output_file,
-        evidence_limit=args.evidence_limit,
-    )
-    if args.json:
-        payload = {
-            "output_file": str(output_path),
-            "bundle": build_support_bundle(
-                args.project_path,
-                policy_pack=args.policy_pack,
-                evidence_limit=args.evidence_limit,
-            ),
-        }
-        print(json.dumps(payload, ensure_ascii=True, indent=2))
+    if args.action == "bundle":
+        output_path = write_support_bundle(
+            args.project_path,
+            policy_pack=args.policy_pack,
+            output_file=args.output_file,
+            evidence_limit=args.evidence_limit,
+        )
+        if args.json:
+            payload = {
+                "output_file": str(output_path),
+                "bundle": build_support_bundle(
+                    args.project_path,
+                    policy_pack=args.policy_pack,
+                    evidence_limit=args.evidence_limit,
+                ),
+            }
+            print(json.dumps(payload, ensure_ascii=True, indent=2))
+            return 0
+        print(f"Wrote {output_path}")
         return 0
-    print(f"Wrote {output_path}")
-    return 0
+    if args.action == "request":
+        report = build_support_request(
+            args.project_path,
+            severity=args.severity,
+            summary=args.summary,
+            package_version=args.package_version,
+            operating_system=args.operating_system,
+            shell=args.shell,
+            installed_bundle=args.installed_bundle,
+            adapter_target=args.adapter_target,
+            policy_pack=args.policy_pack,
+            expected_behavior=args.expected_behavior,
+            actual_behavior=args.actual_behavior,
+            recent_changes=args.recent_changes,
+            workaround=args.workaround,
+            diagnostic_files=args.diagnostic_file,
+        )
+        output_path = write_support_request(args.project_path, report, output_file=args.output_file)
+        if args.json:
+            print(
+                json.dumps(
+                    {
+                        "output_file": str(output_path),
+                        "request": report,
+                    },
+                    ensure_ascii=True,
+                    indent=2,
+                )
+            )
+        else:
+            print(render_support_request(report))
+            print(f"Wrote {output_path}")
+        if args.strict and report["status"] != "ready":
+            return 2
+        return 0
+    return 2
 
 
 def run_readiness(args: argparse.Namespace) -> int:

@@ -33,6 +33,7 @@ Source audit status:
 - Fixed in enterprise bundle pass: `--bundle enterprise` installs baseline plus the full discipline utility set and emits governance docs for paid/team usage.
 - Fixed in Pro policy packs pass: `relay-kit policy check --pack baseline|team|enterprise` and `relay-kit doctor --policy-pack enterprise` enforce stronger governance surfaces for team/paid installs.
 - Fixed in support workflow pass: `relay-kit support bundle` creates redacted diagnostic JSON and docs define severity, evidence, support scope, and escalation workflow.
+- Fixed in support request intake pass: `relay-kit support request` writes `.relay-kit/support/support-request.json` with severity, environment, diagnostic-file checks, required-field findings, and redaction.
 - Fixed in support signal summary pass: support bundles include signal export summary/output paths and required diagnostics include `relay-kit signal export`.
 - Fixed in support release summary pass: support bundles include release-lane status/findings/residual risks so paid support can inspect release prerequisites from one diagnostic file.
 - Fixed in trusted manifest pass: `relay-kit manifest stamp`, `relay-kit manifest verify --trusted`, and enterprise doctor require deterministic trust metadata for enterprise release evidence.
@@ -53,7 +54,7 @@ Source audit status:
 
 Current verdict:
 - Current readiness: published `v3.3.0` with local commercial-ready candidate evidence; `main` has moved to `3.4.0.dev0` for post-release development.
-- Commercial readiness: locally gated by `relay-kit readiness check`, `relay-kit release verify`, `relay-kit publish trail`, `relay-kit publish plan`, and `relay-kit publish evidence`; remote CI is green for the release commit, while legal SLA commitments still remain external operational work.
+- Commercial readiness: locally gated by `relay-kit readiness check`, `relay-kit release verify`, `relay-kit support request`, `relay-kit publish trail`, `relay-kit publish plan`, and `relay-kit publish evidence`; remote CI is green for the release commit, while legal SLA commitments still remain external operational work.
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
 
@@ -630,6 +631,7 @@ Acceptance criteria:
 | Behavior skill tests | Done | P1 | `scripts/skill_gauntlet.py --semantic` plus bundled routing/evidence scenarios. |
 | Runtime policy guard | Done | P1 | `scripts/policy_guard.py` with deterministic secret, path, shell, prompt, and allowlist checks. |
 | Evidence ledger | Done | P2 | `.relay-kit/evidence/events.jsonl` plus `relay-kit evidence summary`. |
+| Support request intake | Done | P2 | `relay-kit support request` validates required support fields and diagnostic artifacts before paid-support handoff. |
 | Contract export/import | Add | P2 | Done: `relay-kit contract export` exports Relay contracts to JSON; `relay-kit contract import` previews/applies JSON back into Relay contracts with overwrite protection. |
 | Completion proof overlap | Merge or clarify | P3 | Done: `prove-it` delegates to `evidence-before-completion`; `qa-governor` owns readiness verdicts and `qa-report.md` |
 | Legacy kit exposure | Done | P2 | `--list-skills` excludes migration-only/legacy unless `--show-legacy` is used. |
@@ -698,6 +700,7 @@ Expected gain:
 - Done first slice: add trusted manifest metadata with `relay-kit manifest stamp` and `relay-kit manifest verify --trusted`.
 - Done first slice: add Pro policy packs.
 - Done first slice: add support workflow and SLA docs.
+- Done second support slice: add structured support request intake with required field and diagnostic checks.
 - Done first slice: add enterprise bundle story.
 - Done first slice: add scenario eval harness for real workflow quality.
 - Done second slice: add eval quality metrics, configurable thresholds, and baseline regression comparison.
@@ -729,6 +732,7 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - Default onboarding reaches first value in under 5 minutes.
 - Evidence ledger records gate runs and findings.
 - Paid support/upgrade path is documented.
+- `relay-kit support request --strict` reaches `ready` only when severity, environment, behavior details, recent changes, workaround, and diagnostic artifacts are present.
 - `relay-kit readiness check --profile enterprise` returns `commercial-ready-candidate` for the release candidate.
 - `relay-kit readiness check` proves signal export artifacts can be generated locally.
 - `relay-kit release verify` passes for local release-lane prerequisites.

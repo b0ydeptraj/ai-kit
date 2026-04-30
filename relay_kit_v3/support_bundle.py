@@ -159,6 +159,7 @@ def required_commands(project_root: Path, policy_pack: str) -> list[str]:
         f"relay-kit upgrade check {project} --json",
         f"relay-kit eval run {project} --strict --json",
         f"relay-kit support bundle {project} --policy-pack {policy_pack}",
+        f"relay-kit support request {project} --severity P1 --policy-pack {policy_pack} --json",
         f"relay-kit readiness check {project} --profile {readiness_profile} --json",
         f"relay-kit release verify {project} --json",
         f"relay-kit publish trail {project} --channel pypi --json",

@@ -55,7 +55,7 @@ include = ["relay_kit_v3*", "scripts*"]
     (root / ".relay-kit" / "version.json").write_text("{}\n", encoding="utf-8")
     support = root / ".relay-kit" / "support"
     support.mkdir(parents=True, exist_ok=True)
-    (support / ".gitignore").write_text("support-bundle.json\n", encoding="utf-8")
+    (support / ".gitignore").write_text("support-bundle.json\nsupport-request.json\n", encoding="utf-8")
     signals = root / ".relay-kit" / "signals"
     signals.mkdir(parents=True, exist_ok=True)
     (signals / ".gitignore").write_text(

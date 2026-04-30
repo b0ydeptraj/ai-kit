@@ -30,6 +30,7 @@ relay-kit release verify /path/to/project --json
 relay-kit publish trail /path/to/project --channel pypi --json
 relay-kit publish plan /path/to/project --channel pypi --json
 relay-kit publish evidence /path/to/project --channel pypi --twine-check-file .tmp/twine-check.txt --upload-log-file .tmp/upload-log.txt --publication-plan-file .relay-kit/release/publication-plan.json --json
+relay-kit support request /path/to/project --severity P1 --policy-pack enterprise --json
 ```
 
 Attach:
@@ -40,6 +41,7 @@ Attach:
 - `.relay-kit/signals/relay-signals-otlp.json`
 - `.relay-kit/release/publication-trail.json` when the issue involves package publication workflow
 - `.relay-kit/release/publication-evidence.json` when the issue involves package publication
+- `.relay-kit/support/support-request.json`
 - the failing command output
 - the support request template from `.relay-kit/contracts/support-request.md`
 
@@ -49,6 +51,26 @@ Use:
 
 ```text
 .relay-kit/contracts/support-request.md
+```
+
+Or generate the structured request artifact:
+
+```bash
+relay-kit support request /path/to/project \
+  --severity P1 \
+  --summary "Enterprise doctor fails after manifest trust metadata drift." \
+  --package-version 3.4.0.dev0 \
+  --os Windows \
+  --shell PowerShell \
+  --bundle enterprise \
+  --adapter codex \
+  --policy-pack enterprise \
+  --expected "Enterprise doctor should pass with trusted manifest metadata." \
+  --actual "Trusted manifest verification fails after a local skill edit." \
+  --recent-changes "Regenerated skills and edited manifest metadata." \
+  --workaround "Regenerate manifest trust metadata before release." \
+  --strict \
+  --json
 ```
 
 The request must include:
@@ -84,6 +106,6 @@ Excluded:
 
 1. User runs `relay-kit support bundle`.
 2. User opens a support request with severity and required diagnostics.
-3. Triage validates the bundle schema, package version, manifest status, upgrade status, policy findings, workflow eval status, signal export summary, release-lane summary, and publication evidence when applicable.
+3. Triage validates the support request schema, bundle schema, package version, manifest status, upgrade status, policy findings, workflow eval status, signal export summary, release-lane summary, and publication evidence when applicable.
 4. If the issue is reproducible in Relay-kit, it becomes a fix lane.
 5. If the issue is project-specific, support returns a scoped recommendation and the evidence gap.
