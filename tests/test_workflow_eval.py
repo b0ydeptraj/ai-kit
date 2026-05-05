@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import subprocess
 import sys
+from collections import Counter
 from pathlib import Path
 
 import relay_kit_public_cli
@@ -15,6 +16,8 @@ from scripts.eval_workflows import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EXPECTED_DEFAULT_SCENARIOS = 37
+EXPECTED_PROFILED_SUPPORT_SCENARIOS = len(PROFILED_SUPPORT_EVIDENCE_TERMS) * 2
 
 
 def run_command(*args: str) -> subprocess.CompletedProcess[str]:
@@ -34,8 +37,8 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
     payload = json.loads(result.stdout)
     assert payload["schema_version"] == "relay-kit.workflow-eval.v1"
     assert payload["status"] == "pass"
-    assert payload["scenario_count"] == 31
-    assert payload["passed"] == 31
+    assert payload["scenario_count"] == EXPECTED_DEFAULT_SCENARIOS
+    assert payload["passed"] == EXPECTED_DEFAULT_SCENARIOS
     assert payload["failed"] == 0
     assert payload["pass_rate"] == 1.0
     assert payload["quality"]["min_route_margin"] >= 1
@@ -55,7 +58,14 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
     assert support_review["weak_profiled_support_route_count"] == 0
     support_contract = payload["quality"]["support_evidence_contract_review"]
     assert support_contract["profiled_support_skills"] == sorted(PROFILED_SUPPORT_EVIDENCE_TERMS)
-    assert support_contract["profiled_support_scenario_count"] == len(PROFILED_SUPPORT_EVIDENCE_TERMS)
+    assert support_contract["profiled_support_scenario_count"] == EXPECTED_PROFILED_SUPPORT_SCENARIOS
+    profiled_support_counts = Counter(
+        scenario["expected_skill"] for scenario in support_contract["scenarios"]
+    )
+    assert all(
+        profiled_support_counts[skill] >= 2
+        for skill in PROFILED_SUPPORT_EVIDENCE_TERMS
+    )
     assert support_contract["term_gap_count"] == 0
     assert support_contract["prompt_gap_count"] == 0
     assert payload["quality"]["coverage_gaps"]["missing_layers"] == []

@@ -17,6 +17,7 @@ from scripts.skill_gauntlet import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+EXPECTED_SCENARIO_FIXTURES = 37
 
 
 def run_command(*args: str) -> subprocess.CompletedProcess[str]:
@@ -34,7 +35,7 @@ def test_semantic_skill_gauntlet_passes_current_runtime() -> None:
 
     assert result.returncode == 0, result.stdout + result.stderr
     assert "Semantic checks: on" in result.stdout
-    assert "Scenario fixtures: 31" in result.stdout
+    assert f"Scenario fixtures: {EXPECTED_SCENARIO_FIXTURES}" in result.stdout
     assert "Findings: 0" in result.stdout
 
 

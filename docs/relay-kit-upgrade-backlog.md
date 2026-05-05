@@ -417,9 +417,10 @@ Status:
 - Fixed on 2026-04-24 for the first measurable routing suite.
 - Done: `relay-kit eval run <project> --strict` reports pass rate, top routes, predicted skill, and per-scenario findings.
 - Done: default fixtures are bundled under `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, so installed CLI runs do not depend on repo test files.
-- Done: default fixture coverage expanded to 31 scenarios, including production support lanes for API integration, data persistence, dependency management, browser inspection, media tooling, multimodal evidence, accessibility, policy, impact, project architecture, UX structure, bootstrap, debug/fix/review hubs, PM, architect, scrum-master, and runtime-doctor.
+- Done: default fixture coverage expanded to 37 scenarios, including production support lanes for API integration, data persistence, dependency management, browser inspection, media tooling, multimodal evidence, accessibility, policy, impact, project architecture, UX structure, bootstrap, debug/fix/review hubs, PM, architect, scrum-master, and runtime-doctor.
+- Done: profiled support evidence-contract coverage now includes at least two realistic fixtures per profiled support skill.
 - Done: `relay-kit doctor` and CI run `scripts/eval_workflows.py . --strict`.
-- Verification: `python scripts/eval_workflows.py . --strict --json` reports 31/31 scenarios; `python -m pytest tests/test_workflow_eval.py -q` passes in CI-compatible temp environments.
+- Verification: `python scripts/eval_workflows.py . --strict --json` reports 37/37 scenarios; `python -m pytest tests/test_workflow_eval.py -q` passes in CI-compatible temp environments.
 
 Problem:
 - Semantic gauntlet proved static contract drift, but commercial quality needs a reportable scenario pass-rate signal.

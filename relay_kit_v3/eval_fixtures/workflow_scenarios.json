@@ -108,6 +108,42 @@
     "expected_terms": ["transformations", "asset sources", "outputs"]
   },
   {
+    "id": "api-integration-payment-webhook-retry",
+    "prompt": "Use api-integration for payment webhook clients. Document auth, retries, timeouts, idempotency, request and response patterns, and error mapping for the external service.",
+    "expected_skill": "api-integration",
+    "expected_terms": ["clients", "auth", "retries"]
+  },
+  {
+    "id": "data-persistence-order-ledger-migration",
+    "prompt": "Use data-persistence for order ledger schemas, repositories, migrations, transactions, caches, consistency boundaries, and rollback notes.",
+    "expected_skill": "data-persistence",
+    "expected_terms": ["schemas", "migrations", "transactions"]
+  },
+  {
+    "id": "dependency-management-driver-upgrade-ci",
+    "prompt": "Use dependency-management before upgrading a browser driver package. Check package manager, lockfiles, version pinning, dependency risks, toolchain setup, CI drift, and transitive risk.",
+    "expected_skill": "dependency-management",
+    "expected_terms": ["lockfiles", "version pinning", "dependency risks"]
+  },
+  {
+    "id": "browser-inspector-checkout-console-network",
+    "prompt": "Use browser-inspector on a live checkout route. Collect console errors, network requests, DOM state, performance facts, reproduction confidence, and captured artifacts.",
+    "expected_skill": "browser-inspector",
+    "expected_terms": ["console", "network", "reproduction confidence"]
+  },
+  {
+    "id": "multimodal-evidence-design-regression",
+    "prompt": "Use multimodal-evidence for before and after static screenshot artifacts. Report visible observations, confidence, affected acceptance criteria, and follow-up checks without a live browser session.",
+    "expected_skill": "multimodal-evidence",
+    "expected_terms": ["visible observations", "confidence", "follow-up checks"]
+  },
+  {
+    "id": "media-tooling-asset-normalization",
+    "prompt": "Use media-tooling for content file transformations. Normalize image assets, preserve exact asset sources, write deterministic outputs, and package evidence for the active lane.",
+    "expected_skill": "media-tooling",
+    "expected_terms": ["transformations", "asset sources", "outputs"]
+  },
+  {
     "id": "accessibility-review-before-ready",
     "prompt": "Use accessibility-review before completion claims for frontend work. Check keyboard navigation, visible focus, semantic structure, labels, contrast, and hold verdict evidence.",
     "expected_skill": "accessibility-review",
