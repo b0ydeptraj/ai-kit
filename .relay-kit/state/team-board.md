@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-Keep Relay-kit skill-system state current after support route-noise review landed and ready for the next single-lane implementation slice.
+Keep Relay-kit skill-system state current after support evidence-contract checks landed and ready for the next single-lane implementation slice.
 
 ## Active orchestrator
 - workflow-router
@@ -9,7 +9,7 @@ Keep Relay-kit skill-system state current after support route-noise review lande
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PR #56 added support route-noise review and main CI passed. |
+| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PR #58 added support evidence-contract checks and main CI passed. |
 | lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
@@ -24,7 +24,7 @@ Keep Relay-kit skill-system state current after support route-noise review lande
 Primary lane only. Parallel lanes are parked until explicitly routed.
 
 ## Merge prerequisites
-Runtime doctor live mode passed, focused pytest passed, enterprise doctor passed, readiness enterprise passed, and main CI for PR #56 passed. Remote CI must pass after merge.
+Runtime doctor live mode passed, focused pytest passed, enterprise doctor passed, readiness enterprise passed, and main CI for PR #58 passed. Remote CI must pass after merge.
 
 ## Conflict risks
 Low. This slice edits state/context artifacts only.
@@ -55,3 +55,4 @@ Low. This slice edits state/context artifacts only.
 - 2026-05-04: Refresh state artifacts after PR #51 added risk-sensitive support skill `allowed-tools` profiles, main CI `25280359277` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-04: Refresh state artifacts after PR #54 added profiled support skill semantic fixtures, main CI `25311526666` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-04: Refresh state artifacts after PR #56 added support route-noise review, main CI `25312872220` passed, and local readiness returned `commercial-ready-candidate`.
+- 2026-05-05: Refresh state artifacts after PR #58 added support evidence-contract checks, main CI `25369174857` passed, and local readiness returned `commercial-ready-candidate`.
