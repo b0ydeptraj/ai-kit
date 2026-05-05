@@ -25,6 +25,7 @@
 | primary | `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, skill gauntlet/workflow eval tests, workflow eval docs | profiled support routing scenarios | PR #54 merged and CI passed |
 | primary | `scripts/eval_workflows.py`, workflow eval tests, workflow eval docs, Claude adoption matrix | support route-noise review | PR #56 merged and CI passed |
 | primary | `scripts/eval_workflows.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, workflow eval fixtures/docs/tests | support evidence-contract checks | PR #58 merged and CI passed |
+| primary | `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, workflow eval docs/tests, skill gauntlet semantic tests | support evidence real-world fixtures | PR #60 merged and CI passed |
 | primary | `pyproject.toml`, `.relay-kit/version.json` | next-dev version bump | PR #3 merged and CI passed |
 | primary | `scripts/eval_workflows.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, Pulse/signal docs/tests | workflow focus dashboard | PR #37 merged and CI passed |
 | primary | `relay_kit_v3/support_triage.py`, `relay_kit_v3/readiness.py`, `relay_kit_public_cli.py`, support docs/tests | support operations soak | PR #35 merged and CI passed |
