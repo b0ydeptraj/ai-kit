@@ -6,7 +6,12 @@ import sys
 from pathlib import Path
 
 import relay_kit_public_cli
-from scripts.eval_workflows import SUPPORT_ROUTE_MARGIN_THRESHOLD, support_route_review
+from scripts.eval_workflows import (
+    PROFILED_SUPPORT_EVIDENCE_TERMS,
+    SUPPORT_ROUTE_MARGIN_THRESHOLD,
+    support_evidence_contract_review,
+    support_route_review,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,6 +53,11 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
     assert support_review["missing_profiled_support_skills"] == []
     assert support_review["nearby_support_route_count"] == 0
     assert support_review["weak_profiled_support_route_count"] == 0
+    support_contract = payload["quality"]["support_evidence_contract_review"]
+    assert support_contract["profiled_support_skills"] == sorted(PROFILED_SUPPORT_EVIDENCE_TERMS)
+    assert support_contract["profiled_support_scenario_count"] == len(PROFILED_SUPPORT_EVIDENCE_TERMS)
+    assert support_contract["term_gap_count"] == 0
+    assert support_contract["prompt_gap_count"] == 0
     assert payload["quality"]["coverage_gaps"]["missing_layers"] == []
     assert payload["quality"]["coverage_gaps"]["covered_skill_count"] == len(payload["quality"]["unique_expected_skills"])
     assert payload["results"][0]["top_routes"][0]["skill"] == payload["results"][0]["expected_skill"]
@@ -138,6 +148,58 @@ def test_support_route_review_detects_nearby_profiled_support_noise() -> None:
     assert review["nearby_support_routes"][0]["support_competitors"] == [
         {"skill": "multimodal-evidence", "score": 19}
     ]
+
+
+def test_support_evidence_contract_review_detects_thin_profiled_support_terms() -> None:
+    review = support_evidence_contract_review(
+        [
+            {
+                "id": "thin-api",
+                "expected_skill": "api-integration",
+                "prompt": "Use api-integration for network-facing code and clients.",
+                "expected_terms": ["clients"],
+            }
+        ]
+    )
+
+    assert review["profiled_support_scenario_count"] == 1
+    assert review["term_gap_count"] == 1
+    assert review["prompt_gap_count"] == 1
+    assert review["term_gaps"][0]["missing_terms"] == ["auth", "retries"]
+    assert review["prompt_gaps"][0]["missing_terms"] == ["auth", "retries"]
+
+
+def test_workflow_eval_strict_fails_thin_profiled_support_contract(tmp_path: Path) -> None:
+    fixture = tmp_path / "scenarios.json"
+    fixture.write_text(
+        """
+        [
+          {
+            "id": "thin-api-contract",
+            "prompt": "Use api-integration for network-facing code and clients.",
+            "expected_skill": "api-integration",
+            "expected_terms": ["clients"]
+          }
+        ]
+        """,
+        encoding="utf-8",
+    )
+
+    result = run_command(
+        "scripts/eval_workflows.py",
+        ".",
+        "--scenario-fixtures",
+        str(fixture),
+        "--strict",
+        "--json",
+    )
+
+    assert result.returncode == 2
+    payload = json.loads(result.stdout)
+    assert any(finding["check"] == "support-evidence-contract" for finding in payload["findings"])
+    review = payload["quality"]["support_evidence_contract_review"]
+    assert review["term_gap_count"] == 1
+    assert review["prompt_gap_count"] == 1
 
 
 def test_workflow_eval_strict_fails_bad_route_fixture(tmp_path: Path) -> None:

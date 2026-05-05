@@ -85,7 +85,7 @@
   },
   {
     "id": "dependency-management-package-upgrade",
-    "prompt": "Use dependency-management because a package is being added or upgraded and lockfiles, version pinning, toolchain, and CI drift must be checked.",
+    "prompt": "Use dependency-management because a package is being added or upgraded and lockfiles, version pinning, dependency risks, toolchain, and CI drift must be checked.",
     "expected_skill": "dependency-management",
     "expected_terms": ["lockfiles", "version pinning", "dependency risks"]
   },
@@ -103,7 +103,7 @@
   },
   {
     "id": "media-tooling-evidence-assets",
-    "prompt": "Use media-tooling when screenshots, assets, or content files need transformation, reversible processing, exact asset sources, output paths, and evidence packaging for the current lane.",
+    "prompt": "Use media-tooling when screenshots, assets, or content files need transformations, reversible processing, exact asset sources, outputs, and evidence packaging for the current lane.",
     "expected_skill": "media-tooling",
     "expected_terms": ["transformations", "asset sources", "outputs"]
   },

@@ -150,6 +150,11 @@ def metric_signals(pulse_report: Mapping[str, Any]) -> list[dict[str, Any]]:
     coverage_gap_count = workflow_focus.get("coverage_gap_count")
     if coverage_gap_count is None:
         coverage_gap_count = len(_list(coverage_gaps.get("missing_layers"))) + len(_list(coverage_gaps.get("missing_roles")))
+    support_evidence_contract = _mapping(quality.get("support_evidence_contract_review"))
+    support_evidence_gap_count = workflow_focus.get("support_evidence_gap_count")
+    if support_evidence_gap_count is None:
+        support_evidence_gap_count = _number(support_evidence_contract.get("term_gap_count")) or 0
+        support_evidence_gap_count += _number(support_evidence_contract.get("prompt_gap_count")) or 0
     evidence = _mapping(pulse_report.get("evidence"))
     status_counts = _mapping(evidence.get("status_counts"))
     recent_status_counts = _mapping(evidence.get("recent_status_counts"))
@@ -169,6 +174,7 @@ def metric_signals(pulse_report: Mapping[str, Any]) -> list[dict[str, Any]]:
         metric("relay.workflow.min_route_margin", _number(quality.get("min_route_margin")), "1", base_attrs),
         metric("relay.workflow.weak_route_count", _number(workflow_focus.get("weak_route_count", quality.get("weak_route_count"))), "1", base_attrs),
         metric("relay.workflow.coverage_gap_count", _number(coverage_gap_count), "1", base_attrs),
+        metric("relay.workflow.support_evidence_gap_count", _number(support_evidence_gap_count), "1", base_attrs),
         metric("relay.gates.pass", _number(gate_status_counts.get("pass")), "1", base_attrs),
         metric("relay.gates.attention", _number(gate_status_counts.get("attention")), "1", base_attrs),
         metric("relay.gates.hold", _number(gate_status_counts.get("hold")), "1", base_attrs),

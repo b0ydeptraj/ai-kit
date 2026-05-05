@@ -43,6 +43,7 @@ def write_pulse_report(root: Path) -> Path:
                 "workflow_focus": {
                     "weak_route_count": 1,
                     "coverage_gap_count": 2,
+                    "support_evidence_gap_count": 3,
                     "next_actions": [{"action": "Review low-margin routes."}],
                 },
                 "readiness": {
@@ -115,6 +116,7 @@ def test_signal_export_builds_metrics_and_events(tmp_path: Path) -> None:
     assert "relay.workflow.expected_layer_count" in metric_names
     assert "relay.workflow.weak_route_count" in metric_names
     assert "relay.workflow.coverage_gap_count" in metric_names
+    assert "relay.workflow.support_evidence_gap_count" in metric_names
     assert "relay.gates.pass" in metric_names
     assert "relay.gates.attention" in metric_names
     assert "relay.gates.hold" in metric_names

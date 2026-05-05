@@ -7,7 +7,7 @@ It is intentionally separate from `skill-gauntlet`:
 - `skill-gauntlet --semantic` protects the runtime skill files from drift.
 - `workflow eval` reports scenario pass rate, predicted skill, top routes, layer/role coverage, and missing evidence terms.
 - The bundled default suite covers 31 scenarios across routing, implementation, QA, release, policy, architecture, UX, dependency, API, data, media, browser evidence, multimodal evidence, bootstrap, debug/fix/review hubs, PM, scrum, and runtime diagnostics workflows.
-- The quality block also reviews profiled support-skill routing noise across API, data, dependency, media, browser, and multimodal evidence utilities.
+- The quality block also reviews profiled support-skill routing noise and evidence-contract coverage across API, data, dependency, media, browser, and multimodal evidence utilities.
 
 ## Commands
 
@@ -57,6 +57,7 @@ The `quality` block includes:
 - `expected_role_counts`
 - `predicted_role_counts`
 - `support_route_review`
+- `support_evidence_contract_review`
 
 The `support_route_review` block includes:
 
@@ -70,6 +71,18 @@ The `support_route_review` block includes:
 - `nearby_support_routes`
 
 `nearby_support_routes` only reports profiled support-skill competitors that are within the support route margin threshold. This is meant to expose duplicate/noisy triggers without treating every distant top-route neighbor as a real collision.
+
+The `support_evidence_contract_review` block includes:
+
+- `profiled_support_skills`
+- `required_terms_by_skill`
+- `profiled_support_scenario_count`
+- `term_gap_count`
+- `term_gaps`
+- `prompt_gap_count`
+- `prompt_gaps`
+
+`term_gaps` reports profiled support scenarios whose `expected_terms` omit required evidence-contract terms. `prompt_gaps` reports scenarios whose prompt shape does not mention those required terms, even if the expected route still passes.
 
 Default thresholds are:
 

@@ -156,6 +156,28 @@ def test_pulse_report_summarizes_eval_readiness_and_evidence(tmp_path: Path) -> 
     assert report["evidence"]["status_counts"]["fail"] == 1
 
 
+def test_pulse_workflow_focus_surfaces_support_evidence_contract_gaps(tmp_path: Path) -> None:
+    eval_report = sample_eval_report()
+    quality = eval_report["quality"]  # type: ignore[index]
+    quality["support_evidence_contract_review"] = {
+        "term_gap_count": 1,
+        "prompt_gap_count": 2,
+        "term_gaps": [{"id": "thin-api", "expected_skill": "api-integration"}],
+        "prompt_gaps": [{"id": "thin-browser", "expected_skill": "browser-inspector"}],
+    }
+
+    report = pulse.build_pulse_report(
+        tmp_path,
+        workflow_eval_builder=lambda root: eval_report,
+    )
+
+    assert report["workflow_focus"]["support_evidence_gap_count"] == 3
+    assert any(
+        action["kind"] == "support-evidence-contract"
+        for action in report["workflow_focus"]["next_actions"]
+    )
+
+
 def test_pulse_report_includes_publication_plan_when_requested(tmp_path: Path) -> None:
     report = pulse.build_pulse_report(
         tmp_path,

@@ -38,6 +38,14 @@ PROFILED_SUPPORT_SKILLS = {
     "media-tooling",
     "multimodal-evidence",
 }
+PROFILED_SUPPORT_EVIDENCE_TERMS = {
+    "api-integration": ("clients", "auth", "retries"),
+    "browser-inspector": ("console", "network", "reproduction confidence"),
+    "data-persistence": ("schemas", "migrations", "transactions"),
+    "dependency-management": ("lockfiles", "version pinning", "dependency risks"),
+    "media-tooling": ("transformations", "asset sources", "outputs"),
+    "multimodal-evidence": ("visible observations", "confidence", "follow-up checks"),
+}
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -265,6 +273,7 @@ def quality_metrics(results: list[dict[str, object]]) -> dict[str, object]:
         "weak_route_count": len(weak_routes(results)),
         "weak_routes": weak_routes(results),
         "support_route_review": support_route_review(results),
+        "support_evidence_contract_review": support_evidence_contract_review(results),
         "coverage_gaps": coverage_gaps(
             expected_skills=expected_skills,
             expected_layers=expected_layers,
@@ -373,6 +382,70 @@ def support_route_review(results: list[dict[str, object]]) -> dict[str, object]:
         "weak_profiled_support_routes": weak_profiled[:WEAK_ROUTE_LIMIT],
         "nearby_support_route_count": len(nearby_support),
         "nearby_support_routes": nearby_support[:WEAK_ROUTE_LIMIT],
+    }
+
+
+def support_evidence_contract_review(results: list[dict[str, object]]) -> dict[str, object]:
+    profiled = sorted(PROFILED_SUPPORT_EVIDENCE_TERMS)
+    scenarios: list[dict[str, object]] = []
+    term_gaps: list[dict[str, object]] = []
+    prompt_gaps: list[dict[str, object]] = []
+
+    for result in results:
+        expected_skill = str(result.get("expected_skill", ""))
+        if expected_skill not in PROFILED_SUPPORT_EVIDENCE_TERMS:
+            continue
+
+        scenario_id = str(result.get("id", ""))
+        prompt = str(result.get("prompt", ""))
+        expected_terms = [str(term) for term in _list_value(result.get("expected_terms")) if str(term).strip()]
+        required_terms = list(PROFILED_SUPPORT_EVIDENCE_TERMS[expected_skill])
+        lower_expected_terms = {term.lower() for term in expected_terms}
+        lower_prompt = prompt.lower()
+        missing_expected_terms = [
+            term for term in required_terms if term.lower() not in lower_expected_terms
+        ]
+        missing_prompt_terms = [
+            term for term in required_terms if term.lower() not in lower_prompt
+        ]
+        scenario = {
+            "id": scenario_id,
+            "expected_skill": expected_skill,
+            "required_terms": required_terms,
+            "expected_terms": expected_terms,
+            "missing_expected_terms": missing_expected_terms,
+            "missing_prompt_terms": missing_prompt_terms,
+        }
+        scenarios.append(scenario)
+        if missing_expected_terms:
+            term_gaps.append(
+                {
+                    "id": scenario_id,
+                    "expected_skill": expected_skill,
+                    "missing_terms": missing_expected_terms,
+                }
+            )
+        if missing_prompt_terms:
+            prompt_gaps.append(
+                {
+                    "id": scenario_id,
+                    "expected_skill": expected_skill,
+                    "missing_terms": missing_prompt_terms,
+                }
+            )
+
+    return {
+        "profiled_support_skills": profiled,
+        "required_terms_by_skill": {
+            skill: list(terms)
+            for skill, terms in sorted(PROFILED_SUPPORT_EVIDENCE_TERMS.items())
+        },
+        "profiled_support_scenario_count": len(scenarios),
+        "scenarios": scenarios,
+        "term_gap_count": len(term_gaps),
+        "term_gaps": term_gaps[:WEAK_ROUTE_LIMIT],
+        "prompt_gap_count": len(prompt_gaps),
+        "prompt_gaps": prompt_gaps[:WEAK_ROUTE_LIMIT],
     }
 
 
@@ -491,6 +564,20 @@ def threshold_findings(
                     ),
                 }
             )
+    support_contract_review = quality.get("support_evidence_contract_review", {})
+    if isinstance(support_contract_review, Mapping):
+        term_gap_count = _int_value(support_contract_review.get("term_gap_count"))
+        prompt_gap_count = _int_value(support_contract_review.get("prompt_gap_count"))
+        if term_gap_count or prompt_gap_count:
+            findings.append(
+                {
+                    "check": "support-evidence-contract",
+                    "detail": (
+                        "profiled support scenarios have thin evidence contracts: "
+                        f"{term_gap_count} expected_terms gaps, {prompt_gap_count} prompt gaps"
+                    ),
+                }
+            )
     return findings
 
 
@@ -600,6 +687,10 @@ def _int_value(value: Any) -> int:
         return int(value)
     except (TypeError, ValueError):
         return 0
+
+
+def _list_value(value: Any) -> list[Any]:
+    return value if isinstance(value, list) else []
 
 
 def render_text(report: Mapping[str, object]) -> str:

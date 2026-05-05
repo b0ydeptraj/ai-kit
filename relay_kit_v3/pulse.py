@@ -483,10 +483,14 @@ def build_workflow_focus(workflow_eval: Mapping[str, Any]) -> dict[str, Any]:
         if isinstance(item, Mapping)
     ]
     coverage_gaps = _mapping(quality.get("coverage_gaps"))
+    support_evidence_contract = _mapping(quality.get("support_evidence_contract_review"))
     missing_layers = _list(coverage_gaps.get("missing_layers"))
     missing_roles = _list(coverage_gaps.get("missing_roles"))
     missing_skills = _list(coverage_gaps.get("missing_skills"))
     coverage_gap_count = len(missing_layers) + len(missing_roles)
+    term_gap_count = int(support_evidence_contract.get("term_gap_count", 0) or 0)
+    prompt_gap_count = int(support_evidence_contract.get("prompt_gap_count", 0) or 0)
+    support_evidence_gap_count = term_gap_count + prompt_gap_count
     next_actions: list[dict[str, str]] = []
     if weak_routes:
         next_actions.append(
@@ -509,9 +513,17 @@ def build_workflow_focus(workflow_eval: Mapping[str, Any]) -> dict[str, Any]:
                 "action": "Add scenarios for uncovered roles, starting with: " + ", ".join(str(item) for item in missing_roles[:5]),
             }
         )
+    if support_evidence_gap_count:
+        next_actions.append(
+            {
+                "kind": "support-evidence-contract",
+                "action": "Strengthen profiled support-skill scenario prompts and expected_terms so evidence contracts stay explicit.",
+            }
+        )
     return {
         "weak_route_count": len(weak_routes),
         "coverage_gap_count": coverage_gap_count,
+        "support_evidence_gap_count": support_evidence_gap_count,
         "weak_routes": weak_routes[:DRILLDOWN_LIMIT],
         "coverage_gaps": {
             "missing_layers": missing_layers,
@@ -520,6 +532,12 @@ def build_workflow_focus(workflow_eval: Mapping[str, Any]) -> dict[str, Any]:
             "covered_skill_count": coverage_gaps.get("covered_skill_count", 0),
             "registry_skill_count": coverage_gaps.get("registry_skill_count", 0),
             "covered_skill_ratio": coverage_gaps.get("covered_skill_ratio", 0.0),
+        },
+        "support_evidence_contract": {
+            "term_gap_count": term_gap_count,
+            "prompt_gap_count": prompt_gap_count,
+            "term_gaps": _list(support_evidence_contract.get("term_gaps"))[:DRILLDOWN_LIMIT],
+            "prompt_gaps": _list(support_evidence_contract.get("prompt_gaps"))[:DRILLDOWN_LIMIT],
         },
         "next_actions": next_actions,
     }
