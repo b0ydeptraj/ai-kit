@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh live workflow state after PR #58 so source-of-truth artifacts reflect profiled support evidence-contract checks.
+Refresh live workflow state after PR #60 so source-of-truth artifacts reflect real-world support evidence fixture expansion.
 
 ## Active lane
 - Lane id: primary
@@ -19,7 +19,7 @@ Refresh live workflow state after PR #58 so source-of-truth artifacts reflect pr
 
 ## Active standalone/domain skill
 - Skill: bootstrap
-- Why selected: this is a bounded state/context hygiene update after support evidence-contract checks merged and main CI passed.
+- Why selected: this is a bounded state/context hygiene update after support evidence fixture expansion merged and main CI passed.
 
 ## Complexity level
 - Level: L1
@@ -61,7 +61,7 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Published release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
 - Published tag commit: `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
 - Current mainline package version: `3.4.0.dev0`.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25369174857, conclusion `success`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25384576909, conclusion `success`.
 - PR #1 merged release readiness and package smoke gates: https://github.com/b0ydeptraj/Relay-kit/pull/1.
 - PR #2 merged Relay OTLP signal export: https://github.com/b0ydeptraj/Relay-kit/pull/2.
 - PR #3 merged next-dev version hygiene: https://github.com/b0ydeptraj/Relay-kit/pull/3.
@@ -120,7 +120,8 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - PR #54 merged profiled support routing scenarios: https://github.com/b0ydeptraj/Relay-kit/pull/54.
 - PR #56 merged support route-noise review: https://github.com/b0ydeptraj/Relay-kit/pull/56.
 - PR #58 merged support evidence-contract checks: https://github.com/b0ydeptraj/Relay-kit/pull/58.
-- Current main baseline: `b7a1c87e562a6de3794c82261c1de255f237882e`.
+- PR #60 merged support evidence real-world fixture expansion: https://github.com/b0ydeptraj/Relay-kit/pull/60.
+- Current main baseline: `2fb6518271f56ffe16c3be0dde966432c61c74bc`.
 - Workflow focus branch verification: `python -m pytest tests/test_workflow_eval.py tests/test_pulse_report.py tests/test_signal_export.py -q`, `python scripts\eval_workflows.py . --strict --json`, `python relay_kit_public_cli.py pulse build . --include-readiness --include-publication --include-support-request --no-history`, `python relay_kit_public_cli.py signal export . --otlp --json`, `python -m pytest tests -q` with 160 passed, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, `python scripts\runtime_doctor.py . --strict --state-mode live`, and `python relay_kit_public_cli.py readiness check . --profile enterprise` passed locally.
 - Support operations soak branch verification: `python -m pytest tests/test_support_triage.py -q`, `python -m pytest tests/test_support_request.py tests/test_support_bundle.py tests/test_support_triage.py -q`, `python -m pytest tests/test_readiness_check.py tests/test_support_triage.py tests/test_support_bundle.py -q`, `python relay_kit_public_cli.py support bundle . --policy-pack enterprise`, `python relay_kit_public_cli.py support request . --severity P1 ... --strict`, `python relay_kit_public_cli.py support triage . --strict`, `python relay_kit_public_cli.py support soak . --strict`, `python -m pytest tests -q` with 160 passed, `python relay_kit_public_cli.py readiness check . --profile enterprise`, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, and `python scripts\runtime_doctor.py . --strict --state-mode live` passed locally.
 - Commercial dossier branch verification: `python -m pytest tests/test_commercial_dossier.py tests/test_readiness_check.py tests/test_release_lane.py tests/test_publication_plan.py tests/test_support_bundle.py -q`, `python -m pytest tests -q` with 165 passed, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, `python relay_kit_public_cli.py release verify . --json`, `python relay_kit_public_cli.py readiness check . --profile enterprise --json`, `python scripts/package_smoke.py .`, and `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --skip-readiness-tests --strict --json` returned `hold` for missing final publication-status proof as intended.
@@ -135,6 +136,7 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Support skill semantic fixture verification: PR #54 expanded workflow scenarios to 31 and covers all profiled support skills; `python -m pytest tests -q` passed with 176 tests, workflow eval reported 31/31 scenarios, readiness enterprise returned `commercial-ready-candidate`, PR CI passed, and main CI passed.
 - Support route-noise review verification: PR #56 added `quality.support_route_review` to workflow eval; local `python -m pytest tests -q` passed with 177 tests, workflow eval reported 31/31 scenarios with 6/6 profiled support skills covered, 0 weak profiled support routes, 0 nearby support route collisions, readiness enterprise returned `commercial-ready-candidate`, PR CI passed, and main CI `25312872220` passed.
 - Support evidence-contract verification: PR #58 added `quality.support_evidence_contract_review` to workflow eval and `relay.workflow.support_evidence_gap_count` to signal export; local `python -m pytest tests -q` passed with 180 tests, workflow eval reported 31/31 scenarios with 0 support evidence gaps, readiness enterprise returned `commercial-ready-candidate`, PR CI passed, and main CI `25369174857` passed.
+- Support evidence fixture expansion verification: PR #60 expanded workflow eval to 37/37 scenarios with 12 profiled support evidence scenarios, 0 term gaps, 0 prompt gaps, and 0 nearby support collisions; local `python -m pytest tests -q` passed with 180 tests, readiness enterprise returned `commercial-ready-candidate`, PR CI passed, and main CI `25384576909` passed.
 
 ## Recommended next lane
-Next useful feature lane: broaden workflow eval support evidence checks into additional real-world fixtures, or continue PyPI publication only after PyPI credentials are available.
+Next useful feature lane: add a report-level support fixture depth review to workflow eval, or continue PyPI publication only after PyPI credentials are available.
