@@ -94,9 +94,10 @@
 - PR #60 merged support evidence real-world fixture expansion: https://github.com/b0ydeptraj/Relay-kit/pull/60, merge commit `2fb6518271f56ffe16c3be0dde966432c61c74bc`.
 - PR #62 merged support fixture depth review: https://github.com/b0ydeptraj/Relay-kit/pull/62, merge commit `a01f92aecaea48188a74fabc4ed9114b91ebe956`.
 - PR #64 merged workflow role coverage fixtures: https://github.com/b0ydeptraj/Relay-kit/pull/64, merge commit `cb8f79ab17d12fca31e09d74b5c154406ab41a4e`.
+- PR #66 merged workflow utility skill coverage fixtures: https://github.com/b0ydeptraj/Relay-kit/pull/66, merge commit `a13b2e248725806852c0ceb36e2f91c0bc71851b`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25421305874, conclusion `success`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25421911099, conclusion `success`.
 
 ## Known sharp edges
 
@@ -104,7 +105,7 @@
 - `.relay-kit/manifest/bundles.json` and `.relay-kit/manifest/trust.json` are ignored generated artifacts. Regenerate and verify them locally when version, skill hashes, or trust metadata changes.
 - Package smoke on Windows may emit a harmless virtualenv path casing or 8.3-name warning after successful JSON output.
 - Pulse now includes `gate_summary`, per-gate `drilldown` rows, `workflow_focus`, and optional `commercial_dossier`; signal export emits `relay.gates.*`, `relay.workflow.weak_route_count`, `relay.workflow.coverage_gap_count`, `relay.workflow.support_evidence_gap_count`, `relay.workflow.support_fixture_depth_gap_count`, and `relay.commercial_dossier.ready`; future dashboard/eval work should preserve those schema keys.
-- Workflow eval default fixtures now cover 43 production/team scenarios, cover all current registry roles, and signal export should report `relay.workflow.scenario_count=43` after a fresh Pulse build.
+- Workflow eval default fixtures now cover 55 production/team scenarios, cover all current registry roles and all 47 current registry skills, and signal export should report `relay.workflow.scenario_count=55` after a fresh Pulse build.
 - Workflow eval also reports weak route candidates and registry coverage gaps under `quality.weak_routes` and `quality.coverage_gaps`.
 - Workflow eval support route review currently covers 12 profiled support routes across 6/6 profiled support skills and reports 0 weak profiled support routes and 0 nearby support route collisions after PR #60.
 - Workflow eval support evidence-contract review currently covers 12 profiled support scenarios across 6/6 profiled support skills and reports 0 term gaps and 0 prompt gaps after PR #60.
