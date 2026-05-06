@@ -28,6 +28,7 @@
 | primary | `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, workflow eval docs/tests, skill gauntlet semantic tests | support evidence real-world fixtures | PR #60 merged and CI passed |
 | primary | `scripts/eval_workflows.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, workflow eval/Pulse/signal docs/tests | support fixture depth review | PR #62 merged and CI passed |
 | primary | `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, workflow eval docs/tests, skill gauntlet semantic tests | workflow role coverage fixtures | PR #64 merged and CI passed |
+| primary | `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, workflow eval docs/tests, skill gauntlet semantic tests | workflow utility skill coverage fixtures | PR #66 merged and CI passed |
 | primary | `pyproject.toml`, `.relay-kit/version.json` | next-dev version bump | PR #3 merged and CI passed |
 | primary | `scripts/eval_workflows.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, Pulse/signal docs/tests | workflow focus dashboard | PR #37 merged and CI passed |
 | primary | `relay_kit_v3/support_triage.py`, `relay_kit_v3/readiness.py`, `relay_kit_public_cli.py`, support docs/tests | support operations soak | PR #35 merged and CI passed |
