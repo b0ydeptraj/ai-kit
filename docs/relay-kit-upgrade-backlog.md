@@ -72,6 +72,7 @@ Source audit status:
 - Fixed in support skill semantic fixture pass: bundled workflow scenarios now cover all profiled support skills, including browser, media, and multimodal evidence routing, not only API/data/dependency.
 - Fixed in support route noise review pass: `relay-kit eval run` now reports profiled support-skill coverage, weak profiled support routes, and nearby support-skill competitors within the route-margin threshold.
 - Fixed in support evidence-contract check pass: `relay-kit eval run` now strict-fails profiled support scenarios whose prompt or expected terms omit required evidence-contract terms, and Pulse/signal export surface the support evidence gap count.
+- Fixed in workflow eval role coverage pass: bundled workflow scenarios increased from 37 to 43, covering all registry roles and adding analyst, brainstorm-hub, scout-hub, team, execution-loop, and testing-patterns routes.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -417,10 +418,10 @@ Status:
 - Fixed on 2026-04-24 for the first measurable routing suite.
 - Done: `relay-kit eval run <project> --strict` reports pass rate, top routes, predicted skill, and per-scenario findings.
 - Done: default fixtures are bundled under `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, so installed CLI runs do not depend on repo test files.
-- Done: default fixture coverage expanded to 37 scenarios, including production support lanes for API integration, data persistence, dependency management, browser inspection, media tooling, multimodal evidence, accessibility, policy, impact, project architecture, UX structure, bootstrap, debug/fix/review hubs, PM, architect, scrum-master, and runtime-doctor.
+- Done: default fixture coverage expanded to 43 scenarios, including production support lanes for API integration, data persistence, dependency management, browser inspection, media tooling, multimodal evidence, accessibility, policy, impact, project architecture, UX structure, bootstrap, debug/fix/review hubs, analyst, brainstorm-hub, scout-hub, team, execution-loop, testing-patterns, PM, architect, scrum-master, and runtime-doctor.
 - Done: profiled support evidence-contract coverage now includes at least two realistic fixtures per profiled support skill.
 - Done: `relay-kit doctor` and CI run `scripts/eval_workflows.py . --strict`.
-- Verification: `python scripts/eval_workflows.py . --strict --json` reports 37/37 scenarios; `python -m pytest tests/test_workflow_eval.py -q` passes in CI-compatible temp environments.
+- Verification: `python scripts/eval_workflows.py . --strict --json` reports 43/43 scenarios and no missing roles; `python -m pytest tests/test_workflow_eval.py -q` passes in CI-compatible temp environments.
 
 Problem:
 - Semantic gauntlet proved static contract drift, but commercial quality needs a reportable scenario pass-rate signal.
@@ -676,7 +677,7 @@ Acceptance criteria:
 | Workflow eval layer coverage | Done | P2 | Eval reports layer/role coverage, Pulse shows layer coverage, and signal export emits `relay.workflow.expected_layer_count`. |
 | Pulse gate summary | Done | P2 | Pulse JSON/HTML shows workflow eval, readiness, publication, support request, and evidence gate status; signal export emits `relay.gates.*` counts. |
 | Pulse gate drilldowns | Done | P2 | Degraded Pulse gates now expose concrete scenario, finding, diagnostic, and evidence-event rows; signal export emits `relay.gates.drilldown_items`. |
-| Workflow eval scenario expansion | Done | P2 | Default eval suite now covers 37 production/team scenarios, including bootstrap, debug/fix/review hubs, PM, architect, scrum-master, runtime-doctor, and profiled support evidence routing. |
+| Workflow eval scenario expansion | Done | P2 | Default eval suite now covers 43 production/team scenarios, including all registry roles and profiled support evidence routing. |
 | Workflow focus dashboard | Done | P2 | Eval reports weak routes and coverage gaps; Pulse renders Workflow focus; signal export emits `relay.workflow.weak_route_count` and `relay.workflow.coverage_gap_count`. |
 | Support fixture depth review | Done | P2 | Workflow eval strict-fails shallow profiled support fixture suites; Pulse and signal export surface `relay.workflow.support_fixture_depth_gap_count`. |
 | Pytest temp hardening | Done | P2 | `tests/conftest.py`, `relay_kit_v3/temp_paths.py`, readiness/support/validate helpers, and pytest config avoid Windows temp-root/cache permission failures. |
@@ -766,7 +767,7 @@ Expected gain:
 - Done workflow eval coverage slice: dashboard inputs now include expected/predicted layer and role coverage from registry metadata.
 - Done Pulse gate summary slice: dashboard inputs now include per-gate pass, attention, hold, and not-run counts plus next actions.
 - Done Pulse gate drilldown slice: dashboard inputs now include concrete degraded gate rows for failed scenarios, readiness gates, publication findings, support diagnostics, and failed evidence events.
-- Done workflow eval scenario expansion slice: default scenario fixtures now cover 37 production/team routes, including bootstrap, debug/fix/review hubs, PM, architect, scrum-master, runtime-doctor, and profiled support evidence routes.
+- Done workflow eval scenario expansion slice: default scenario fixtures now cover 43 production/team routes, including bootstrap, debug/fix/review hubs, analyst, brainstorm-hub, scout-hub, team, execution-loop, testing-patterns, PM, architect, scrum-master, runtime-doctor, and profiled support evidence routes.
 - Done publication trail status slice: local publish progress is now inspectable with `relay-kit publish status --strict --json` before or after package-index upload.
 - Done workflow focus dashboard slice: Pulse now shows low-margin route candidates and coverage gaps from workflow eval, and signal export exposes those counts.
 - Done support fixture depth review slice: workflow eval, Pulse, and signal export now surface shallow or duplicate profiled support fixture coverage.
@@ -808,7 +809,7 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - Pulse and signal export surface per-gate pass, attention, hold, and not-run counts so dashboard review can target the exact degraded gate.
 - Pulse and signal export surface gate drilldown item counts and rows so a reviewer can inspect the first concrete failure without parsing raw reports.
 - Pulse and signal export surface weak route count, eval coverage gap count, support evidence gap count, and support fixture depth gap count so dashboard review can catch route fragility before a scenario fails.
-- Workflow eval default suite covers 37 production/team scenarios across orchestration, hubs, utility providers, specialists, runtime diagnostics, and profiled support evidence routes.
+- Workflow eval default suite covers 43 production/team scenarios across orchestration, hubs, utility providers, specialists, runtime diagnostics, all registry roles, and profiled support evidence routes.
 
 Review-hub verdict for this backlog:
 - P0/P1/P2/P3 audit backlog items are implemented as first production-ready slices.

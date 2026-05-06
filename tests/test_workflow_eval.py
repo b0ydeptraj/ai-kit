@@ -20,7 +20,7 @@ from scripts.eval_workflows import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_DEFAULT_SCENARIOS = 37
+EXPECTED_DEFAULT_SCENARIOS = 43
 EXPECTED_PROFILED_SUPPORT_SCENARIOS = len(PROFILED_SUPPORT_EVIDENCE_TERMS) * 2
 
 
@@ -88,6 +88,7 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
         for skill in PROFILED_SUPPORT_EVIDENCE_TERMS
     )
     assert payload["quality"]["coverage_gaps"]["missing_layers"] == []
+    assert payload["quality"]["coverage_gaps"]["missing_roles"] == []
     assert payload["quality"]["coverage_gaps"]["covered_skill_count"] == len(payload["quality"]["unique_expected_skills"])
     assert payload["results"][0]["top_routes"][0]["skill"] == payload["results"][0]["expected_skill"]
     assert payload["results"][0]["expected_layer"] == "layer-1-orchestrators"
@@ -127,6 +128,12 @@ def test_workflow_eval_default_suite_covers_production_team_skills() -> None:
         "architect",
         "scrum-master",
         "runtime-doctor",
+        "analyst",
+        "brainstorm-hub",
+        "execution-loop",
+        "scout-hub",
+        "team",
+        "testing-patterns",
     }:
         assert skill in expected_skills
 
