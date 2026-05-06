@@ -220,5 +220,41 @@
     "prompt": "Use runtime-doctor when runtime integrity may have drifted. Run deterministic diagnostics for adapter parity, generated artifacts, live state-mode checks, missing skills, extra skills, and placeholder state markers.",
     "expected_skill": "runtime-doctor",
     "expected_terms": ["adapter parity", "runtime diagnostics", "state-mode live"]
+  },
+  {
+    "id": "analyst-product-discovery-brief",
+    "prompt": "Use analyst before PRD or architecture. Clarify product intent, assumptions, target users, open questions, constraints, and produce a product brief for an unclear opportunity.",
+    "expected_skill": "analyst",
+    "expected_terms": ["product intent", "assumptions", "product brief"]
+  },
+  {
+    "id": "brainstorm-hub-rough-opportunity",
+    "prompt": "Use brainstorm-hub because the request is still a rough idea and opportunity. Guide early ideation, explore directions, and frame the problem before formal planning.",
+    "expected_skill": "brainstorm-hub",
+    "expected_terms": ["idea", "opportunity", "problem framing"]
+  },
+  {
+    "id": "execution-loop-iterative-fix-proof",
+    "prompt": "Use execution-loop while building a code fix iteratively. Run a self-correcting development loop, collect test evidence, and do not claim completion until verification passes.",
+    "expected_skill": "execution-loop",
+    "expected_terms": ["iteratively", "evidence", "completion"]
+  },
+  {
+    "id": "scout-hub-unfamiliar-repo-area",
+    "prompt": "Use scout-hub when the repo area is unfamiliar or stale. Reconnoiter code entrypoints, likely drift, dependencies, and living references before planning or debugging continues.",
+    "expected_skill": "scout-hub",
+    "expected_terms": ["unfamiliar", "stale", "living references"]
+  },
+  {
+    "id": "team-parallel-lanes-coordination",
+    "prompt": "Use team when work must proceed in parallel across multiple lanes. Coordinate owners, lane locks, handoffs, and avoid agents stepping on each other.",
+    "expected_skill": "team",
+    "expected_terms": ["parallel", "lanes", "coordinate"]
+  },
+  {
+    "id": "testing-patterns-fixture-strategy",
+    "prompt": "Use testing-patterns when adding tests or fixtures. Capture test strategy, mocks, dependency boundaries, regression coverage, and what evidence is enough for release confidence.",
+    "expected_skill": "testing-patterns",
+    "expected_terms": ["tests", "fixtures", "evidence"]
   }
 ]
