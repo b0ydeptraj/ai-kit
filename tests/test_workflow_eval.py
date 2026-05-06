@@ -7,6 +7,7 @@ from collections import Counter
 from pathlib import Path
 
 import relay_kit_public_cli
+from relay_kit_v3.registry.skills import ALL_V3_SKILLS
 from scripts.eval_workflows import (
     PROFILED_SUPPORT_EVIDENCE_TERMS,
     SUPPORT_FIXTURE_MIN_EXPECTED_TERMS,
@@ -20,7 +21,7 @@ from scripts.eval_workflows import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_DEFAULT_SCENARIOS = 43
+EXPECTED_DEFAULT_SCENARIOS = 55
 EXPECTED_PROFILED_SUPPORT_SCENARIOS = len(PROFILED_SUPPORT_EVIDENCE_TERMS) * 2
 
 
@@ -89,6 +90,8 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
     )
     assert payload["quality"]["coverage_gaps"]["missing_layers"] == []
     assert payload["quality"]["coverage_gaps"]["missing_roles"] == []
+    assert payload["quality"]["coverage_gaps"]["missing_skills"] == []
+    assert payload["quality"]["coverage_gaps"]["covered_skill_count"] == len(ALL_V3_SKILLS)
     assert payload["quality"]["coverage_gaps"]["covered_skill_count"] == len(payload["quality"]["unique_expected_skills"])
     assert payload["results"][0]["top_routes"][0]["skill"] == payload["results"][0]["expected_skill"]
     assert payload["results"][0]["expected_layer"] == "layer-1-orchestrators"
@@ -134,6 +137,18 @@ def test_workflow_eval_default_suite_covers_production_team_skills() -> None:
         "scout-hub",
         "team",
         "testing-patterns",
+        "doc-pointers",
+        "handoff-context",
+        "memory-search",
+        "mermaid-diagrams",
+        "problem-solving",
+        "repo-map",
+        "research",
+        "root-cause-debugging",
+        "sequential-thinking",
+        "skill-evolution",
+        "skill-gauntlet",
+        "test-first-development",
     }:
         assert skill in expected_skills
 

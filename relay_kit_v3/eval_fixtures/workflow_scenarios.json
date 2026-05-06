@@ -256,5 +256,77 @@
     "prompt": "Use testing-patterns when adding tests or fixtures. Capture test strategy, mocks, dependency boundaries, regression coverage, and what evidence is enough for release confidence.",
     "expected_skill": "testing-patterns",
     "expected_terms": ["tests", "fixtures", "evidence"]
+  },
+  {
+    "id": "doc-pointers-exact-doc-fragments",
+    "prompt": "Use doc-pointers because the hub needs exact docs fragments, file paths, and source references before deciding the next implementation move.",
+    "expected_skill": "doc-pointers",
+    "expected_terms": ["docs fragments", "file paths", "source references"]
+  },
+  {
+    "id": "handoff-context-focused-pack",
+    "prompt": "Use handoff-context because the next skill needs a tighter relevant context handoff, focused context pack, and include/exclude list before it can act safely.",
+    "expected_skill": "handoff-context",
+    "expected_terms": ["context handoff", "focused context pack", "include/exclude list"]
+  },
+  {
+    "id": "memory-search-past-decisions",
+    "prompt": "Use memory-search because the hub needs past decisions, handoff breadcrumbs, and prior debug evidence from .relay-kit artifacts before planning continues.",
+    "expected_skill": "memory-search",
+    "expected_terms": ["past decisions", "handoff breadcrumbs", "debug evidence"]
+  },
+  {
+    "id": "mermaid-diagrams-architecture-flow",
+    "prompt": "Use mermaid-diagrams because the architecture sequence needs a quick Mermaid diagram, flow, and sequencing representation inside the artifact.",
+    "expected_skill": "mermaid-diagrams",
+    "expected_terms": ["mermaid", "flow", "sequencing"]
+  },
+  {
+    "id": "problem-solving-options-tradeoffs",
+    "prompt": "Use problem-solving because the hub needs hypotheses, trade-offs, and resolution paths grounded in current evidence before choosing a fix direction.",
+    "expected_skill": "problem-solving",
+    "expected_terms": ["hypotheses", "trade-offs", "resolution paths"]
+  },
+  {
+    "id": "repo-map-entrypoint-overview",
+    "prompt": "Use repo-map because the hub needs a quick dependency map, file tree slice, and entrypoint overview before touching this unfamiliar module.",
+    "expected_skill": "repo-map",
+    "expected_terms": ["dependency map", "file tree slice", "entrypoint overview"]
+  },
+  {
+    "id": "research-fresh-evidence",
+    "prompt": "Use research because the hub needs fresh evidence for a technical decision while retaining ownership of the lane and marking assumptions.",
+    "expected_skill": "research",
+    "expected_terms": ["fresh evidence", "technical", "assumptions"]
+  },
+  {
+    "id": "root-cause-debugging-disciplined-investigation",
+    "prompt": "Use root-cause-debugging because the hub needs disciplined investigation, disproven hypotheses, and root-cause notes before proposing fixes.",
+    "expected_skill": "root-cause-debugging",
+    "expected_terms": ["root-cause notes", "disproven hypotheses", "investigation"]
+  },
+  {
+    "id": "sequential-thinking-stepwise-checkpoints",
+    "prompt": "Use sequential-thinking because the hub needs structured thought, stepwise reasoning, explicit steps, and checkpoints without changing ownership.",
+    "expected_skill": "sequential-thinking",
+    "expected_terms": ["structured thought", "stepwise reasoning", "checkpoints"]
+  },
+  {
+    "id": "skill-evolution-skill-behavior-audit",
+    "prompt": "Use skill-evolution when upgrading a Relay-kit SKILL.md. Audit trigger descriptions, allowed tools, handoff contract, and scenario fixtures before changing behavior.",
+    "expected_skill": "skill-evolution",
+    "expected_terms": ["trigger descriptions", "allowed tools", "scenario fixtures"]
+  },
+  {
+    "id": "skill-gauntlet-routing-regression-gate",
+    "prompt": "Use skill-gauntlet when runtime skill behavior may have drifted and a regression gate must validate routing and completion claims before trusting the runtime.",
+    "expected_skill": "skill-gauntlet",
+    "expected_terms": ["regression gate", "routing", "completion claims"]
+  },
+  {
+    "id": "test-first-development-red-green-loop",
+    "prompt": "Use test-first-development because implementation should follow a red-green-refactor loop: write the failing test first, make it green, then clean up one behavior.",
+    "expected_skill": "test-first-development",
+    "expected_terms": ["red-green-refactor", "failing test", "one behavior"]
   }
 ]

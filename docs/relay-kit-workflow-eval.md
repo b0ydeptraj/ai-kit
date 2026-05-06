@@ -6,7 +6,7 @@ It is intentionally separate from `skill-gauntlet`:
 
 - `skill-gauntlet --semantic` protects the runtime skill files from drift.
 - `workflow eval` reports scenario pass rate, predicted skill, top routes, layer/role coverage, and missing evidence terms.
-- The bundled default suite covers 43 scenarios across routing, implementation, QA, release, policy, architecture, UX, dependency, API, data, media, browser evidence, multimodal evidence, bootstrap, debug/fix/review hubs, analyst, brainstorm-hub, scout-hub, team, execution-loop, testing-patterns, PM, scrum, and runtime diagnostics workflows.
+- The bundled default suite covers 55 scenarios across routing, implementation, QA, release, policy, architecture, UX, dependency, API, data, media, browser evidence, multimodal evidence, bootstrap, debug/fix/review hubs, analyst, brainstorm-hub, scout-hub, team, execution-loop, testing-patterns, PM, scrum, runtime diagnostics, and the remaining utility workflows such as doc-pointers, repo-map, memory-search, handoff-context, research, problem-solving, root-cause-debugging, sequential-thinking, mermaid-diagrams, skill-evolution, skill-gauntlet, and test-first-development.
 - The quality block also reviews profiled support-skill routing noise, evidence-contract coverage, and report-level fixture depth across API, data, dependency, media, browser, and multimodal evidence utilities. The default suite includes at least two evidence-contract fixtures for each profiled support skill.
 
 ## Commands
