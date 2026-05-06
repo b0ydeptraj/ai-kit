@@ -33,7 +33,7 @@ Default output:
 Pulse combines:
 
 - workflow eval status, pass rate, route margin, route confidence, evidence coverage, layer coverage, role coverage, and skill distribution
-- workflow focus signals for weak route candidates and eval coverage gaps
+- workflow focus signals for weak route candidates, eval coverage gaps, support evidence gaps, and support fixture-depth gaps
 - readiness status and verdict when `--include-readiness` or `--readiness-file` is used
 - publication plan status, channel, version, and finding count when `--include-publication` or `--publication-file` is used
 - support request status, severity, diagnostic count, and finding count when `--include-support-request` or `--support-request-file` is used
@@ -73,7 +73,10 @@ The JSON report includes `workflow_focus`:
 - `weak_routes`: scenario id, expected skill, predicted skill, route margin, confidence, and top routes
 - `coverage_gap_count`: count of missing eval layers and roles
 - `coverage_gaps`: missing layers, roles, skills, and covered-skill ratio from the registry
-- `next_actions`: concrete dashboard follow-ups for strengthening weak routes or adding missing scenario coverage
+- `support_evidence_gap_count`: count of profiled support-skill evidence-contract term or prompt gaps
+- `support_fixture_depth_gap_count`: count of report-level profiled support fixture depth gaps
+- `support_fixture_depth`: first fixture-depth rows, including duplicate prompt pairs and shallow fixture gaps
+- `next_actions`: concrete dashboard follow-ups for strengthening weak routes, support evidence contracts, fixture depth, or missing scenario coverage
 
 The HTML report renders Workflow focus as a table before Gate summary so a
 reviewer can spot route fragility even when the full workflow eval suite passes.
@@ -118,5 +121,6 @@ relay-kit signal export /path/to/project
 Signal export includes `relay.gates.pass`, `relay.gates.attention`,
 `relay.gates.hold`, `relay.gates.not_run`, `relay.gates.drilldown_items`,
 `relay.workflow.weak_route_count`, `relay.workflow.coverage_gap_count`,
-`relay.publication.ready`, `relay.support_request.ready`, and
+`relay.workflow.support_evidence_gap_count`,
+`relay.workflow.support_fixture_depth_gap_count`, `relay.publication.ready`, `relay.support_request.ready`, and
 `relay.commercial_dossier.ready` when a Pulse report contains those surfaces.

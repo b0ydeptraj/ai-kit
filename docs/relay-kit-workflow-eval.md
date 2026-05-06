@@ -7,7 +7,7 @@ It is intentionally separate from `skill-gauntlet`:
 - `skill-gauntlet --semantic` protects the runtime skill files from drift.
 - `workflow eval` reports scenario pass rate, predicted skill, top routes, layer/role coverage, and missing evidence terms.
 - The bundled default suite covers 37 scenarios across routing, implementation, QA, release, policy, architecture, UX, dependency, API, data, media, browser evidence, multimodal evidence, bootstrap, debug/fix/review hubs, PM, scrum, and runtime diagnostics workflows.
-- The quality block also reviews profiled support-skill routing noise and evidence-contract coverage across API, data, dependency, media, browser, and multimodal evidence utilities. The default suite includes at least two evidence-contract fixtures for each profiled support skill.
+- The quality block also reviews profiled support-skill routing noise, evidence-contract coverage, and report-level fixture depth across API, data, dependency, media, browser, and multimodal evidence utilities. The default suite includes at least two evidence-contract fixtures for each profiled support skill.
 
 ## Commands
 
@@ -58,6 +58,7 @@ The `quality` block includes:
 - `predicted_role_counts`
 - `support_route_review`
 - `support_evidence_contract_review`
+- `support_fixture_depth_review`
 
 The `support_route_review` block includes:
 
@@ -84,6 +85,24 @@ The `support_evidence_contract_review` block includes:
 
 `term_gaps` reports profiled support scenarios whose `expected_terms` omit required evidence-contract terms. `prompt_gaps` reports scenarios whose prompt shape does not mention those required terms, even if the expected route still passes.
 
+The `support_fixture_depth_review` block includes:
+
+- `profiled_support_skills`
+- `min_scenarios_per_skill`
+- `min_prompt_words`
+- `min_expected_terms`
+- `max_prompt_similarity`
+- `profiled_support_scenario_count`
+- `missing_profiled_support_skills`
+- `undercovered_profiled_support_skills`
+- `skills`
+- `duplicate_prompt_pair_count`
+- `duplicate_prompt_pairs`
+- `depth_gap_count`
+- `depth_gaps`
+
+`depth_gaps` reports report-level fixture weaknesses: too few scenarios for a profiled support skill, shallow prompts, too few expected terms, or prompt pairs that are too similar to prove meaningful coverage.
+
 Default thresholds are:
 
 - `min_pass_rate=1.0`
@@ -94,7 +113,7 @@ Use `--min-scenarios <count>` when a release lane must prove a minimum scenario 
 Use `--baseline-file <previous-report.json>` to fail on pass-rate, scenario-count, or average-route-margin regression.
 
 `--strict` returns exit code `2` when any scenario fails or the fixture file is missing/empty.
-It also returns exit code `2` when quality thresholds or baseline regression checks fail.
+It also returns exit code `2` when quality thresholds, support evidence-contract checks, support fixture-depth checks, or baseline regression checks fail.
 
 ## Fixture Location
 

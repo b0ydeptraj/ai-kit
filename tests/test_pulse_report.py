@@ -178,6 +178,30 @@ def test_pulse_workflow_focus_surfaces_support_evidence_contract_gaps(tmp_path: 
     )
 
 
+def test_pulse_workflow_focus_surfaces_support_fixture_depth_gaps(tmp_path: Path) -> None:
+    eval_report = sample_eval_report()
+    quality = eval_report["quality"]  # type: ignore[index]
+    quality["support_fixture_depth_review"] = {
+        "depth_gap_count": 2,
+        "depth_gaps": [
+            {"check": "support-fixture-skill-count", "expected_skill": "api-integration"},
+            {"check": "support-fixture-prompt-depth", "id": "thin-browser"},
+        ],
+    }
+
+    report = pulse.build_pulse_report(
+        tmp_path,
+        workflow_eval_builder=lambda root: eval_report,
+    )
+
+    assert report["workflow_focus"]["support_fixture_depth_gap_count"] == 2
+    assert report["workflow_focus"]["support_fixture_depth"]["depth_gap_count"] == 2
+    assert any(
+        action["kind"] == "support-fixture-depth"
+        for action in report["workflow_focus"]["next_actions"]
+    )
+
+
 def test_pulse_report_includes_publication_plan_when_requested(tmp_path: Path) -> None:
     report = pulse.build_pulse_report(
         tmp_path,

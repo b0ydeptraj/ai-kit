@@ -9,8 +9,12 @@ from pathlib import Path
 import relay_kit_public_cli
 from scripts.eval_workflows import (
     PROFILED_SUPPORT_EVIDENCE_TERMS,
+    SUPPORT_FIXTURE_MIN_EXPECTED_TERMS,
+    SUPPORT_FIXTURE_MIN_PROMPT_WORDS,
+    SUPPORT_FIXTURE_MIN_SCENARIOS_PER_SKILL,
     SUPPORT_ROUTE_MARGIN_THRESHOLD,
     support_evidence_contract_review,
+    support_fixture_depth_review,
     support_route_review,
 )
 
@@ -68,6 +72,21 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
     )
     assert support_contract["term_gap_count"] == 0
     assert support_contract["prompt_gap_count"] == 0
+    support_depth = payload["quality"]["support_fixture_depth_review"]
+    assert support_depth["min_scenarios_per_skill"] == SUPPORT_FIXTURE_MIN_SCENARIOS_PER_SKILL
+    assert support_depth["min_prompt_words"] == SUPPORT_FIXTURE_MIN_PROMPT_WORDS
+    assert support_depth["min_expected_terms"] == SUPPORT_FIXTURE_MIN_EXPECTED_TERMS
+    assert support_depth["profiled_support_scenario_count"] == EXPECTED_PROFILED_SUPPORT_SCENARIOS
+    assert support_depth["depth_gap_count"] == 0
+    assert support_depth["duplicate_prompt_pair_count"] == 0
+    assert all(
+        support_depth["skills"][skill]["scenario_count"] >= SUPPORT_FIXTURE_MIN_SCENARIOS_PER_SKILL
+        for skill in PROFILED_SUPPORT_EVIDENCE_TERMS
+    )
+    assert all(
+        support_depth["skills"][skill]["min_expected_terms_count"] >= SUPPORT_FIXTURE_MIN_EXPECTED_TERMS
+        for skill in PROFILED_SUPPORT_EVIDENCE_TERMS
+    )
     assert payload["quality"]["coverage_gaps"]["missing_layers"] == []
     assert payload["quality"]["coverage_gaps"]["covered_skill_count"] == len(payload["quality"]["unique_expected_skills"])
     assert payload["results"][0]["top_routes"][0]["skill"] == payload["results"][0]["expected_skill"]
@@ -179,6 +198,49 @@ def test_support_evidence_contract_review_detects_thin_profiled_support_terms() 
     assert review["prompt_gaps"][0]["missing_terms"] == ["auth", "retries"]
 
 
+def test_support_fixture_depth_review_detects_report_level_fixture_gaps() -> None:
+    duplicated_prompt = (
+        "Use api-integration for payment webhook clients. Document auth, retries, "
+        "timeouts, idempotency, request and response patterns, and error mapping."
+    )
+    review = support_fixture_depth_review(
+        [
+            {
+                "id": "api-webhook-one",
+                "expected_skill": "api-integration",
+                "prompt": duplicated_prompt,
+                "expected_terms": ["clients", "auth", "retries"],
+            },
+            {
+                "id": "api-webhook-copy",
+                "expected_skill": "api-integration",
+                "prompt": duplicated_prompt,
+                "expected_terms": ["clients", "auth", "retries"],
+            },
+            {
+                "id": "thin-data",
+                "expected_skill": "data-persistence",
+                "prompt": "Use data-persistence for schemas.",
+                "expected_terms": ["schemas"],
+            },
+        ]
+    )
+
+    assert review["profiled_support_scenario_count"] == 3
+    assert review["missing_profiled_support_skills"] == [
+        "browser-inspector",
+        "dependency-management",
+        "media-tooling",
+        "multimodal-evidence",
+    ]
+    assert "data-persistence" in review["undercovered_profiled_support_skills"]
+    assert review["duplicate_prompt_pair_count"] == 1
+    assert review["depth_gap_count"] >= 3
+    assert any(gap["check"] == "support-fixture-skill-count" for gap in review["depth_gaps"])
+    assert any(gap["check"] == "support-fixture-prompt-depth" for gap in review["depth_gaps"])
+    assert any(gap["check"] == "support-fixture-expected-terms-depth" for gap in review["depth_gaps"])
+
+
 def test_workflow_eval_strict_fails_thin_profiled_support_contract(tmp_path: Path) -> None:
     fixture = tmp_path / "scenarios.json"
     fixture.write_text(
@@ -210,6 +272,39 @@ def test_workflow_eval_strict_fails_thin_profiled_support_contract(tmp_path: Pat
     review = payload["quality"]["support_evidence_contract_review"]
     assert review["term_gap_count"] == 1
     assert review["prompt_gap_count"] == 1
+
+
+def test_workflow_eval_strict_fails_shallow_support_fixture_depth(tmp_path: Path) -> None:
+    fixture = tmp_path / "scenarios.json"
+    fixture.write_text(
+        """
+        [
+          {
+            "id": "shallow-api-fixture",
+            "prompt": "Use api-integration for network clients, auth, and retries.",
+            "expected_skill": "api-integration",
+            "expected_terms": ["clients", "auth", "retries"]
+          }
+        ]
+        """,
+        encoding="utf-8",
+    )
+
+    result = run_command(
+        "scripts/eval_workflows.py",
+        ".",
+        "--scenario-fixtures",
+        str(fixture),
+        "--strict",
+        "--json",
+    )
+
+    assert result.returncode == 2
+    payload = json.loads(result.stdout)
+    assert any(finding["check"] == "support-fixture-depth" for finding in payload["findings"])
+    review = payload["quality"]["support_fixture_depth_review"]
+    assert review["depth_gap_count"] >= 1
+    assert "browser-inspector" in review["missing_profiled_support_skills"]
 
 
 def test_workflow_eval_strict_fails_bad_route_fixture(tmp_path: Path) -> None:

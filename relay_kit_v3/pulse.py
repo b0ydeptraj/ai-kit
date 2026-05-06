@@ -170,6 +170,7 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
         ("Min route margin", str(quality.get("min_route_margin", "-"))),
         ("Weak routes", str(workflow_focus.get("weak_route_count", 0))),
         ("Coverage gaps", str(workflow_focus.get("coverage_gap_count", 0))),
+        ("Fixture depth gaps", str(workflow_focus.get("support_fixture_depth_gap_count", 0))),
         ("Layer coverage", str(len(_mapping(quality.get("expected_layer_counts"))))),
         ("Readiness", str(readiness.get("verdict", "not-run"))),
         ("Publication", str(publication.get("status", "not-run"))),
@@ -484,6 +485,7 @@ def build_workflow_focus(workflow_eval: Mapping[str, Any]) -> dict[str, Any]:
     ]
     coverage_gaps = _mapping(quality.get("coverage_gaps"))
     support_evidence_contract = _mapping(quality.get("support_evidence_contract_review"))
+    support_fixture_depth = _mapping(quality.get("support_fixture_depth_review"))
     missing_layers = _list(coverage_gaps.get("missing_layers"))
     missing_roles = _list(coverage_gaps.get("missing_roles"))
     missing_skills = _list(coverage_gaps.get("missing_skills"))
@@ -491,6 +493,7 @@ def build_workflow_focus(workflow_eval: Mapping[str, Any]) -> dict[str, Any]:
     term_gap_count = int(support_evidence_contract.get("term_gap_count", 0) or 0)
     prompt_gap_count = int(support_evidence_contract.get("prompt_gap_count", 0) or 0)
     support_evidence_gap_count = term_gap_count + prompt_gap_count
+    support_fixture_depth_gap_count = int(support_fixture_depth.get("depth_gap_count", 0) or 0)
     next_actions: list[dict[str, str]] = []
     if weak_routes:
         next_actions.append(
@@ -520,10 +523,18 @@ def build_workflow_focus(workflow_eval: Mapping[str, Any]) -> dict[str, Any]:
                 "action": "Strengthen profiled support-skill scenario prompts and expected_terms so evidence contracts stay explicit.",
             }
         )
+    if support_fixture_depth_gap_count:
+        next_actions.append(
+            {
+                "kind": "support-fixture-depth",
+                "action": "Broaden profiled support-skill fixtures so each report has enough distinct, evidence-rich cases.",
+            }
+        )
     return {
         "weak_route_count": len(weak_routes),
         "coverage_gap_count": coverage_gap_count,
         "support_evidence_gap_count": support_evidence_gap_count,
+        "support_fixture_depth_gap_count": support_fixture_depth_gap_count,
         "weak_routes": weak_routes[:DRILLDOWN_LIMIT],
         "coverage_gaps": {
             "missing_layers": missing_layers,
@@ -538,6 +549,12 @@ def build_workflow_focus(workflow_eval: Mapping[str, Any]) -> dict[str, Any]:
             "prompt_gap_count": prompt_gap_count,
             "term_gaps": _list(support_evidence_contract.get("term_gaps"))[:DRILLDOWN_LIMIT],
             "prompt_gaps": _list(support_evidence_contract.get("prompt_gaps"))[:DRILLDOWN_LIMIT],
+        },
+        "support_fixture_depth": {
+            "depth_gap_count": support_fixture_depth_gap_count,
+            "depth_gaps": _list(support_fixture_depth.get("depth_gaps"))[:DRILLDOWN_LIMIT],
+            "duplicate_prompt_pair_count": int(support_fixture_depth.get("duplicate_prompt_pair_count", 0) or 0),
+            "duplicate_prompt_pairs": _list(support_fixture_depth.get("duplicate_prompt_pairs"))[:DRILLDOWN_LIMIT],
         },
         "next_actions": next_actions,
     }
@@ -1195,6 +1212,22 @@ def _workflow_focus_rows(workflow_focus: Mapping[str, Any]) -> str:
             "<td>Roles</td>"
             f"<td>{escape(str(len(missing_roles)))}</td>"
             f"<td>{escape(', '.join(missing_roles[:6]))}</td>"
+            "</tr>"
+        )
+    support_fixture_depth = _mapping(workflow_focus.get("support_fixture_depth"))
+    depth_gaps = _list(support_fixture_depth.get("depth_gaps"))
+    for gap in depth_gaps[:DRILLDOWN_LIMIT]:
+        if not isinstance(gap, Mapping):
+            continue
+        item = str(gap.get("id") or gap.get("expected_skill") or gap.get("check", "support-fixture-depth"))
+        signal = str(gap.get("check", "support-fixture-depth"))
+        action = str(gap.get("detail", "Broaden profiled support fixture coverage."))
+        rows.append(
+            "<tr>"
+            "<td>Fixture depth</td>"
+            f"<td>{escape(item)}</td>"
+            f"<td>{escape(signal)}</td>"
+            f"<td>{escape(action)}</td>"
             "</tr>"
         )
     for action in _list(workflow_focus.get("next_actions")):

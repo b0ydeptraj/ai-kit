@@ -56,6 +56,8 @@ Metric signals include:
 - `relay.workflow.min_route_margin`
 - `relay.workflow.weak_route_count`
 - `relay.workflow.coverage_gap_count`
+- `relay.workflow.support_evidence_gap_count`
+- `relay.workflow.support_fixture_depth_gap_count`
 - `relay.evidence.total_events`
 - `relay.evidence.failures_total`
 - `relay.evidence.failures_recent`

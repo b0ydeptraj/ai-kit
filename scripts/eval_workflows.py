@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any, Mapping
@@ -30,6 +31,10 @@ DEFAULT_MIN_EVIDENCE_COVERAGE = 1.0
 WEAK_ROUTE_MARGIN_THRESHOLD = 3
 SUPPORT_ROUTE_MARGIN_THRESHOLD = 3
 WEAK_ROUTE_LIMIT = 8
+SUPPORT_FIXTURE_MIN_SCENARIOS_PER_SKILL = 2
+SUPPORT_FIXTURE_MIN_PROMPT_WORDS = 12
+SUPPORT_FIXTURE_MIN_EXPECTED_TERMS = 3
+SUPPORT_FIXTURE_MAX_PROMPT_SIMILARITY = 0.85
 PROFILED_SUPPORT_SKILLS = {
     "api-integration",
     "browser-inspector",
@@ -274,6 +279,7 @@ def quality_metrics(results: list[dict[str, object]]) -> dict[str, object]:
         "weak_routes": weak_routes(results),
         "support_route_review": support_route_review(results),
         "support_evidence_contract_review": support_evidence_contract_review(results),
+        "support_fixture_depth_review": support_fixture_depth_review(results),
         "coverage_gaps": coverage_gaps(
             expected_skills=expected_skills,
             expected_layers=expected_layers,
@@ -449,6 +455,121 @@ def support_evidence_contract_review(results: list[dict[str, object]]) -> dict[s
     }
 
 
+def support_fixture_depth_review(results: list[dict[str, object]]) -> dict[str, object]:
+    profiled = sorted(PROFILED_SUPPORT_EVIDENCE_TERMS)
+    depth_gaps: list[dict[str, object]] = []
+    duplicate_prompt_pairs: list[dict[str, object]] = []
+    rows_by_skill: dict[str, list[dict[str, object]]] = {skill: [] for skill in profiled}
+
+    for result in results:
+        expected_skill = str(result.get("expected_skill", ""))
+        if expected_skill in rows_by_skill:
+            rows_by_skill[expected_skill].append(result)
+
+    skills: dict[str, dict[str, object]] = {}
+    for skill in profiled:
+        rows = rows_by_skill[skill]
+        scenario_ids = [str(row.get("id", "")) for row in rows]
+        prompt_word_counts = [_prompt_word_count(str(row.get("prompt", ""))) for row in rows]
+        expected_term_counts = [
+            len([term for term in _list_value(row.get("expected_terms")) if str(term).strip()])
+            for row in rows
+        ]
+        unique_prompt_count = len({_normalize_prompt(str(row.get("prompt", ""))) for row in rows})
+        duplicate_pairs = _similar_prompt_pairs(skill, rows)
+        duplicate_prompt_pairs.extend(duplicate_pairs)
+        if duplicate_pairs:
+            for pair in duplicate_pairs:
+                depth_gaps.append(
+                    {
+                        "check": "support-fixture-prompt-diversity",
+                        "expected_skill": skill,
+                        "ids": pair["ids"],
+                        "detail": (
+                            "profiled support scenarios are too similar: "
+                            f"{', '.join(str(item) for item in pair['ids'])}"
+                        ),
+                    }
+                )
+
+        if len(rows) < SUPPORT_FIXTURE_MIN_SCENARIOS_PER_SKILL:
+            depth_gaps.append(
+                {
+                    "check": "support-fixture-skill-count",
+                    "expected_skill": skill,
+                    "scenario_count": len(rows),
+                    "detail": (
+                        f"{skill} has {len(rows)} support scenarios; "
+                        f"requires at least {SUPPORT_FIXTURE_MIN_SCENARIOS_PER_SKILL}"
+                    ),
+                }
+            )
+
+        for row, prompt_word_count, expected_term_count in zip(rows, prompt_word_counts, expected_term_counts):
+            scenario_id = str(row.get("id", ""))
+            if prompt_word_count < SUPPORT_FIXTURE_MIN_PROMPT_WORDS:
+                depth_gaps.append(
+                    {
+                        "check": "support-fixture-prompt-depth",
+                        "id": scenario_id,
+                        "expected_skill": skill,
+                        "prompt_word_count": prompt_word_count,
+                        "detail": (
+                            f"{scenario_id} prompt has {prompt_word_count} words; "
+                            f"requires at least {SUPPORT_FIXTURE_MIN_PROMPT_WORDS}"
+                        ),
+                    }
+                )
+            if expected_term_count < SUPPORT_FIXTURE_MIN_EXPECTED_TERMS:
+                depth_gaps.append(
+                    {
+                        "check": "support-fixture-expected-terms-depth",
+                        "id": scenario_id,
+                        "expected_skill": skill,
+                        "expected_term_count": expected_term_count,
+                        "detail": (
+                            f"{scenario_id} has {expected_term_count} expected terms; "
+                            f"requires at least {SUPPORT_FIXTURE_MIN_EXPECTED_TERMS}"
+                        ),
+                    }
+                )
+
+        skills[skill] = {
+            "scenario_count": len(rows),
+            "scenario_ids": scenario_ids,
+            "unique_prompt_count": unique_prompt_count,
+            "min_prompt_word_count": min(prompt_word_counts) if prompt_word_counts else 0,
+            "min_expected_terms_count": min(expected_term_counts) if expected_term_counts else 0,
+            "max_prompt_similarity": _max_prompt_similarity(rows),
+        }
+
+    missing = [
+        skill
+        for skill, row in skills.items()
+        if int(row.get("scenario_count", 0)) == 0
+    ]
+    undercovered = [
+        skill
+        for skill, row in skills.items()
+        if int(row.get("scenario_count", 0)) < SUPPORT_FIXTURE_MIN_SCENARIOS_PER_SKILL
+    ]
+    return {
+        "profiled_support_skills": profiled,
+        "min_scenarios_per_skill": SUPPORT_FIXTURE_MIN_SCENARIOS_PER_SKILL,
+        "min_prompt_words": SUPPORT_FIXTURE_MIN_PROMPT_WORDS,
+        "min_expected_terms": SUPPORT_FIXTURE_MIN_EXPECTED_TERMS,
+        "max_prompt_similarity": SUPPORT_FIXTURE_MAX_PROMPT_SIMILARITY,
+        "profiled_support_scenario_count": sum(len(rows) for rows in rows_by_skill.values()),
+        "missing_profiled_support_skills": missing,
+        "undercovered_profiled_support_skills": undercovered,
+        "skills": skills,
+        "duplicate_prompt_pair_count": len(duplicate_prompt_pairs),
+        "duplicate_prompt_pairs": duplicate_prompt_pairs[:WEAK_ROUTE_LIMIT],
+        "depth_gap_count": len(depth_gaps),
+        "depth_gaps": depth_gaps[:WEAK_ROUTE_LIMIT],
+    }
+
+
 def weak_routes(results: list[dict[str, object]]) -> list[dict[str, object]]:
     candidates = [
         result
@@ -578,6 +699,16 @@ def threshold_findings(
                     ),
                 }
             )
+    support_depth_review = quality.get("support_fixture_depth_review", {})
+    if isinstance(support_depth_review, Mapping):
+        depth_gap_count = _int_value(support_depth_review.get("depth_gap_count"))
+        if depth_gap_count:
+            findings.append(
+                {
+                    "check": "support-fixture-depth",
+                    "detail": f"profiled support fixture suite has {depth_gap_count} depth gaps",
+                }
+            )
     return findings
 
 
@@ -693,6 +824,53 @@ def _list_value(value: Any) -> list[Any]:
     return value if isinstance(value, list) else []
 
 
+def _prompt_tokens(value: str) -> set[str]:
+    return set(re.findall(r"[a-z0-9]+", value.lower()))
+
+
+def _prompt_word_count(value: str) -> int:
+    return len(re.findall(r"[a-z0-9]+", value.lower()))
+
+
+def _normalize_prompt(value: str) -> str:
+    return " ".join(sorted(_prompt_tokens(value)))
+
+
+def _prompt_similarity(left: str, right: str) -> float:
+    left_tokens = _prompt_tokens(left)
+    right_tokens = _prompt_tokens(right)
+    if not left_tokens and not right_tokens:
+        return 0.0
+    return round(len(left_tokens & right_tokens) / len(left_tokens | right_tokens), 4)
+
+
+def _similar_prompt_pairs(skill: str, rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    pairs: list[dict[str, object]] = []
+    for left_index, left in enumerate(rows):
+        for right in rows[left_index + 1:]:
+            similarity = _prompt_similarity(str(left.get("prompt", "")), str(right.get("prompt", "")))
+            if similarity >= SUPPORT_FIXTURE_MAX_PROMPT_SIMILARITY:
+                pairs.append(
+                    {
+                        "expected_skill": skill,
+                        "ids": [str(left.get("id", "")), str(right.get("id", ""))],
+                        "similarity": similarity,
+                    }
+                )
+    return pairs
+
+
+def _max_prompt_similarity(rows: list[dict[str, object]]) -> float:
+    max_similarity = 0.0
+    for left_index, left in enumerate(rows):
+        for right in rows[left_index + 1:]:
+            max_similarity = max(
+                max_similarity,
+                _prompt_similarity(str(left.get("prompt", "")), str(right.get("prompt", ""))),
+            )
+    return round(max_similarity, 4)
+
+
 def render_text(report: Mapping[str, object]) -> str:
     lines = [
         "Relay-kit workflow eval",
@@ -717,6 +895,9 @@ def render_text(report: Mapping[str, object]) -> str:
         gaps = quality.get("coverage_gaps", {})
         if isinstance(gaps, Mapping):
             lines.append(f"- missing eval layers: {len(gaps.get('missing_layers', []))}")
+        support_depth = quality.get("support_fixture_depth_review", {})
+        if isinstance(support_depth, Mapping):
+            lines.append(f"- support fixture depth gaps: {support_depth.get('depth_gap_count', 0)}")
     baseline = report.get("baseline")
     if isinstance(baseline, Mapping):
         lines.append(f"- baseline: {'loaded' if baseline.get('loaded') else 'not loaded'}")

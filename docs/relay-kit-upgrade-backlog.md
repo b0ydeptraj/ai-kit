@@ -676,8 +676,9 @@ Acceptance criteria:
 | Workflow eval layer coverage | Done | P2 | Eval reports layer/role coverage, Pulse shows layer coverage, and signal export emits `relay.workflow.expected_layer_count`. |
 | Pulse gate summary | Done | P2 | Pulse JSON/HTML shows workflow eval, readiness, publication, support request, and evidence gate status; signal export emits `relay.gates.*` counts. |
 | Pulse gate drilldowns | Done | P2 | Degraded Pulse gates now expose concrete scenario, finding, diagnostic, and evidence-event rows; signal export emits `relay.gates.drilldown_items`. |
-| Workflow eval scenario expansion | Done | P2 | Default eval suite now covers 28 production/team scenarios, including bootstrap, debug/fix/review hubs, PM, architect, scrum-master, and runtime-doctor routing. |
+| Workflow eval scenario expansion | Done | P2 | Default eval suite now covers 37 production/team scenarios, including bootstrap, debug/fix/review hubs, PM, architect, scrum-master, runtime-doctor, and profiled support evidence routing. |
 | Workflow focus dashboard | Done | P2 | Eval reports weak routes and coverage gaps; Pulse renders Workflow focus; signal export emits `relay.workflow.weak_route_count` and `relay.workflow.coverage_gap_count`. |
+| Support fixture depth review | Done | P2 | Workflow eval strict-fails shallow profiled support fixture suites; Pulse and signal export surface `relay.workflow.support_fixture_depth_gap_count`. |
 | Pytest temp hardening | Done | P2 | `tests/conftest.py`, `relay_kit_v3/temp_paths.py`, readiness/support/validate helpers, and pytest config avoid Windows temp-root/cache permission failures. |
 | Commercial proof dossier | Done | P2 | `relay-kit commercial dossier` writes `.relay-kit/commercial/commercial-dossier.json` and strict-fails unless local readiness, publication status, support triage/soak, and external CI/release/package/SLA/support ownership proof are present. |
 | Commercial dossier Pulse/signal | Done | P3 | `relay-kit pulse build` accepts commercial dossier artifacts and `relay-kit signal export` emits `relay.commercial_dossier.ready` for support/release dashboards. |
@@ -765,9 +766,10 @@ Expected gain:
 - Done workflow eval coverage slice: dashboard inputs now include expected/predicted layer and role coverage from registry metadata.
 - Done Pulse gate summary slice: dashboard inputs now include per-gate pass, attention, hold, and not-run counts plus next actions.
 - Done Pulse gate drilldown slice: dashboard inputs now include concrete degraded gate rows for failed scenarios, readiness gates, publication findings, support diagnostics, and failed evidence events.
-- Done workflow eval scenario expansion slice: default scenario fixtures now cover 28 production/team routes, including bootstrap, debug/fix/review hubs, PM, architect, scrum-master, and runtime-doctor.
+- Done workflow eval scenario expansion slice: default scenario fixtures now cover 37 production/team routes, including bootstrap, debug/fix/review hubs, PM, architect, scrum-master, runtime-doctor, and profiled support evidence routes.
 - Done publication trail status slice: local publish progress is now inspectable with `relay-kit publish status --strict --json` before or after package-index upload.
 - Done workflow focus dashboard slice: Pulse now shows low-margin route candidates and coverage gaps from workflow eval, and signal export exposes those counts.
+- Done support fixture depth review slice: workflow eval, Pulse, and signal export now surface shallow or duplicate profiled support fixture coverage.
 - Done commercial dossier slice: `relay-kit commercial dossier` strict-binds local runtime, publication, support, and external commercial proof into one JSON artifact.
 - Done commercial dossier Pulse/signal slice: dashboard and telemetry outputs now surface commercial dossier status, findings, and readiness metric.
 - Done external internal-channel proof slice: GitHub release assets, public support intake, public SLA URL, owner statement, publication status, support triage/soak, and commercial dossier strict all pass.
@@ -805,8 +807,8 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - Pulse and signal export surface commercial dossier readiness so support/release review can see whether the final commercial proof binder is ready.
 - Pulse and signal export surface per-gate pass, attention, hold, and not-run counts so dashboard review can target the exact degraded gate.
 - Pulse and signal export surface gate drilldown item counts and rows so a reviewer can inspect the first concrete failure without parsing raw reports.
-- Pulse and signal export surface weak route count and eval coverage gap count so dashboard review can catch route fragility before a scenario fails.
-- Workflow eval default suite covers 28 production/team scenarios across orchestration, hubs, utility providers, specialists, and runtime diagnostics.
+- Pulse and signal export surface weak route count, eval coverage gap count, support evidence gap count, and support fixture depth gap count so dashboard review can catch route fragility before a scenario fails.
+- Workflow eval default suite covers 37 production/team scenarios across orchestration, hubs, utility providers, specialists, runtime diagnostics, and profiled support evidence routes.
 
 Review-hub verdict for this backlog:
 - P0/P1/P2/P3 audit backlog items are implemented as first production-ready slices.
