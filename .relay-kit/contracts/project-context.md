@@ -2,7 +2,7 @@
 
 > Path: `.relay-kit/contracts/project-context.md`
 > Purpose: Current source-of-truth context for Relay-kit work after the `v3.3.0` release and `3.4.0.dev0` next-dev bump.
-> Last refreshed: 2026-05-05
+> Last refreshed: 2026-05-06
 
 ## Existing architecture
 
@@ -12,7 +12,7 @@
 - Runtime skills are generated from registry data under `relay_kit_v3/registry/` and validated by `scripts/validate_runtime.py`, `scripts/runtime_doctor.py`, `scripts/migration_guard.py`, `scripts/skill_gauntlet.py`, `scripts/policy_guard.py`, and `scripts/eval_workflows.py`.
 - The discipline utility bundle includes `skill-evolution`, a Relay-kit-owned skill for creating, upgrading, reviewing, and pruning skills with path-scoped activation, fork context, allowed-tool stance, and semantic route proof.
 - Semantic skill gauntlet now enforces `allowed-tools` frontmatter for configured profiled risk-sensitive skills and fails drift against registry tool profiles. Current profiled support skills include API, data, dependency, media, browser, and multimodal evidence utilities.
-- Workflow eval now reports `quality.support_route_review` for profiled support-skill coverage, weak support routes, and nearby support-skill collisions within the support margin threshold. It also reports `quality.support_evidence_contract_review` for profiled support-skill prompt and expected-term gaps.
+- Workflow eval now reports `quality.support_route_review` for profiled support-skill coverage, weak support routes, and nearby support-skill collisions within the support margin threshold. It also reports `quality.support_evidence_contract_review` for profiled support-skill prompt and expected-term gaps, plus `quality.support_fixture_depth_review` for report-level support fixture depth gaps.
 - Current released tag: `v3.3.0` at commit `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
 - Current mainline package version: `3.4.0.dev0`, set in `pyproject.toml` and `.relay-kit/version.json`.
 
@@ -92,20 +92,22 @@
 - PR #56 merged support route-noise review: https://github.com/b0ydeptraj/Relay-kit/pull/56, merge commit `350b5d57355183cf9b21f0b8c23a70f8fa1be7bf`.
 - PR #58 merged support evidence-contract checks: https://github.com/b0ydeptraj/Relay-kit/pull/58, merge commit `b7a1c87e562a6de3794c82261c1de255f237882e`.
 - PR #60 merged support evidence real-world fixture expansion: https://github.com/b0ydeptraj/Relay-kit/pull/60, merge commit `2fb6518271f56ffe16c3be0dde966432c61c74bc`.
+- PR #62 merged support fixture depth review: https://github.com/b0ydeptraj/Relay-kit/pull/62, merge commit `a01f92aecaea48188a74fabc4ed9114b91ebe956`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25384576909, conclusion `success`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25420592300, conclusion `success`.
 
 ## Known sharp edges
 
 - `v3.3.0` remains the published release tag, while `main` is now `3.4.0.dev0`. Do not publish or package from `main` as `3.3.0`.
 - `.relay-kit/manifest/bundles.json` and `.relay-kit/manifest/trust.json` are ignored generated artifacts. Regenerate and verify them locally when version, skill hashes, or trust metadata changes.
 - Package smoke on Windows may emit a harmless virtualenv path casing or 8.3-name warning after successful JSON output.
-- Pulse now includes `gate_summary`, per-gate `drilldown` rows, `workflow_focus`, and optional `commercial_dossier`; signal export emits `relay.gates.*`, `relay.workflow.weak_route_count`, `relay.workflow.coverage_gap_count`, `relay.workflow.support_evidence_gap_count`, and `relay.commercial_dossier.ready`; future dashboard/eval work should preserve those schema keys.
+- Pulse now includes `gate_summary`, per-gate `drilldown` rows, `workflow_focus`, and optional `commercial_dossier`; signal export emits `relay.gates.*`, `relay.workflow.weak_route_count`, `relay.workflow.coverage_gap_count`, `relay.workflow.support_evidence_gap_count`, `relay.workflow.support_fixture_depth_gap_count`, and `relay.commercial_dossier.ready`; future dashboard/eval work should preserve those schema keys.
 - Workflow eval default fixtures now cover 37 production/team scenarios and signal export should report `relay.workflow.scenario_count=37` after a fresh Pulse build.
 - Workflow eval also reports weak route candidates and registry coverage gaps under `quality.weak_routes` and `quality.coverage_gaps`.
 - Workflow eval support route review currently covers 12 profiled support routes across 6/6 profiled support skills and reports 0 weak profiled support routes and 0 nearby support route collisions after PR #60.
 - Workflow eval support evidence-contract review currently covers 12 profiled support scenarios across 6/6 profiled support skills and reports 0 term gaps and 0 prompt gaps after PR #60.
+- Workflow eval support fixture-depth review currently covers 12 profiled support scenarios across 6/6 profiled support skills and reports 0 depth gaps and 0 duplicate prompt pairs after PR #62.
 - Support operations now include `relay-kit support soak`, which validates P0/P1/P2 paid-support handoff fixtures and fails degraded support bundle diagnostics.
 - Commercial proof now includes `relay-kit commercial dossier`, which writes `.relay-kit/commercial/commercial-dossier.json` and strict-fails unless local readiness, publication status, support triage/soak, and external CI/release/package/SLA/support owner proof are present.
 - Commercial dossier proof is visible in Pulse JSON/HTML and signal export when included from the generated dossier file.

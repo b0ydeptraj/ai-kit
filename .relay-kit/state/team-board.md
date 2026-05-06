@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-Keep Relay-kit skill-system state current after support evidence fixture expansion landed and ready for the next single-lane implementation slice.
+Keep Relay-kit skill-system state current after support fixture depth review landed and ready for the next single-lane implementation slice.
 
 ## Active orchestrator
 - workflow-router
@@ -9,7 +9,7 @@ Keep Relay-kit skill-system state current after support evidence fixture expansi
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PR #60 added real-world support evidence fixtures and main CI passed. |
+| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PR #62 added support fixture depth review and main CI passed. |
 | lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
@@ -24,7 +24,7 @@ Keep Relay-kit skill-system state current after support evidence fixture expansi
 Primary lane only. Parallel lanes are parked until explicitly routed.
 
 ## Merge prerequisites
-Runtime doctor live mode passed, focused pytest passed, enterprise doctor passed, readiness enterprise passed, and main CI for PR #60 passed. Remote CI must pass after merge.
+Runtime doctor live mode passed, focused pytest passed, enterprise doctor passed, readiness enterprise passed, and main CI for PR #62 passed. Remote CI must pass after merge.
 
 ## Conflict risks
 Low. This slice edits state/context artifacts only.
@@ -57,3 +57,4 @@ Low. This slice edits state/context artifacts only.
 - 2026-05-04: Refresh state artifacts after PR #56 added support route-noise review, main CI `25312872220` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-05: Refresh state artifacts after PR #58 added support evidence-contract checks, main CI `25369174857` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-05: Refresh state artifacts after PR #60 expanded support evidence fixtures to 37 workflow scenarios, main CI `25384576909` passed, and local readiness returned `commercial-ready-candidate`.
+- 2026-05-06: Refresh state artifacts after PR #62 added support fixture depth review, main CI `25420592300` passed, and local readiness returned `commercial-ready-candidate`.
