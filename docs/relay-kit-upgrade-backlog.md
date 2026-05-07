@@ -74,12 +74,11 @@ Source audit status:
 - Fixed in support evidence-contract check pass: `relay-kit eval run` now strict-fails profiled support scenarios whose prompt or expected terms omit required evidence-contract terms, and Pulse/signal export surface the support evidence gap count.
 - Fixed in workflow eval role coverage pass: bundled workflow scenarios increased from 37 to 43, covering all registry roles and adding analyst, brainstorm-hub, scout-hub, team, execution-loop, and testing-patterns routes.
 - Fixed in workflow eval utility coverage pass: bundled workflow scenarios increased from 43 to 55, covering all 47 current registry skills and adding doc-pointers, handoff-context, memory-search, mermaid-diagrams, problem-solving, repo-map, research, root-cause-debugging, sequential-thinking, skill-evolution, skill-gauntlet, and test-first-development routes.
-- Fixed in Windsurf adapter pass: `relay-kit init <project> --windsurf` now writes enterprise workspace rules under `.windsurf/rules/*.md`, and `--all` includes Windsurf alongside Codex, Claude, and Antigravity surfaces.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
 - Current readiness: published `v3.3.0` with local commercial-ready candidate evidence; `main` has moved to `3.4.0.dev0` for post-release development.
-- Commercial readiness: internal/GitHub release channel is verified by `relay-kit readiness check`, `relay-kit release verify`, `relay-kit support request`, `relay-kit support triage`, `relay-kit support soak`, `relay-kit publish trail`, `relay-kit publish plan`, `relay-kit publish evidence`, `relay-kit publish status`, and `relay-kit commercial dossier --channel internal --strict`. The package happy path is now `pip install relay-kit` after PyPI publication, then `relay-kit . --codex` or `relay-kit . --windsurf` for the full bundle. PyPI publication remains pending on PyPI credentials.
+- Commercial readiness: internal/GitHub release channel is verified by `relay-kit readiness check`, `relay-kit release verify`, `relay-kit support request`, `relay-kit support triage`, `relay-kit support soak`, `relay-kit publish trail`, `relay-kit publish plan`, `relay-kit publish evidence`, `relay-kit publish status`, and `relay-kit commercial dossier --channel internal --strict`. The package happy path is now `pip install relay-kit` after PyPI publication, then `relay-kit . --codex` for the full bundle. PyPI publication remains pending on PyPI credentials.
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
 
@@ -187,7 +186,7 @@ Problem:
 - Current `skill_gauntlet` mostly checks structure, so it can pass while routing and handoff behavior drift.
 
 Evidence:
-- Local output: `Checked 141 runtime skill/rule files. Findings: 0`.
+- Local output: `Checked 135 SKILL.md files. Findings: 0`.
 - Existing checks focus on headers/placeholders and registry membership.
 - Optional aliases and scenario routing are not behavior-tested.
 - GitOpen comparison: Superpowers has transcript/behavior skill tests and explicit trigger suites; Relay-kit does not have equivalent scenario proof.
@@ -682,7 +681,6 @@ Acceptance criteria:
 | Workflow eval scenario expansion | Done | P2 | Default eval suite now covers 55 production/team scenarios, including all registry roles, all 47 current registry skills, and profiled support evidence routing. |
 | Workflow focus dashboard | Done | P2 | Eval reports weak routes and coverage gaps; Pulse renders Workflow focus; signal export emits `relay.workflow.weak_route_count` and `relay.workflow.coverage_gap_count`. |
 | Support fixture depth review | Done | P2 | Workflow eval strict-fails shallow profiled support fixture suites; Pulse and signal export surface `relay.workflow.support_fixture_depth_gap_count`. |
-| Windsurf adapter | Done | P2 | Public CLI and core generator support `--windsurf`, writing one Relay-kit rule file per skill into `.windsurf/rules`. |
 | Pytest temp hardening | Done | P2 | `tests/conftest.py`, `relay_kit_v3/temp_paths.py`, readiness/support/validate helpers, and pytest config avoid Windows temp-root/cache permission failures. |
 | Commercial proof dossier | Done | P2 | `relay-kit commercial dossier` writes `.relay-kit/commercial/commercial-dossier.json` and strict-fails unless local readiness, publication status, support triage/soak, and external CI/release/package/SLA/support ownership proof are present. |
 | Commercial dossier Pulse/signal | Done | P3 | `relay-kit pulse build` accepts commercial dossier artifacts and `relay-kit signal export` emits `relay.commercial_dossier.ready` for support/release dashboards. |
@@ -771,7 +769,6 @@ Expected gain:
 - Done Pulse gate summary slice: dashboard inputs now include per-gate pass, attention, hold, and not-run counts plus next actions.
 - Done Pulse gate drilldown slice: dashboard inputs now include concrete degraded gate rows for failed scenarios, readiness gates, publication findings, support diagnostics, and failed evidence events.
 - Done workflow eval scenario expansion slice: default scenario fixtures now cover 55 production/team routes, including bootstrap, debug/fix/review hubs, analyst, brainstorm-hub, scout-hub, team, execution-loop, testing-patterns, PM, architect, scrum-master, runtime-doctor, profiled support evidence routes, and all remaining utility-provider routes.
-- Done Windsurf adapter slice: package users can run `relay-kit init <project> --windsurf` once per Windsurf workspace to generate `.windsurf/rules/*.md` plus the normal `.relay-kit` contracts/docs.
 - Done publication trail status slice: local publish progress is now inspectable with `relay-kit publish status --strict --json` before or after package-index upload.
 - Done workflow focus dashboard slice: Pulse now shows low-margin route candidates and coverage gaps from workflow eval, and signal export exposes those counts.
 - Done support fixture depth review slice: workflow eval, Pulse, and signal export now surface shallow or duplicate profiled support fixture coverage.

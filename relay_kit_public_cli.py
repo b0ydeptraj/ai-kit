@@ -2,8 +2,8 @@
 """Public Relay-kit installer CLI.
 
 This wrapper exposes a friendlier command surface:
-  relay-kit init <project_path> --codex|--claude|--antigravity|--windsurf
-  relay-kit <project_path> --codex|--claude|--antigravity|--windsurf
+  relay-kit init <project_path> --codex|--claude|--antigravity
+  relay-kit <project_path> --codex|--claude|--antigravity
   relay-kit doctor <project_path>
   relay-kit eval run <project_path>
   relay-kit upgrade check <project_path>
@@ -93,11 +93,6 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
         "--antigravity",
         action="store_true",
         help="Install Antigravity runtime skills (mapped to .agent)",
-    )
-    adapter.add_argument(
-        "--windsurf",
-        action="store_true",
-        help="Install Windsurf workspace rules (mapped to .windsurf/rules)",
     )
     adapter.add_argument("--all", action="store_true", help="Install all active runtime adapters")
     adapter.add_argument("--generic", action="store_true", help="Generate generic prompts output")
@@ -318,7 +313,7 @@ def _parse_upgrade_args(argv: list[str]) -> argparse.Namespace:
     mark.add_argument(
         "--adapter",
         action="append",
-        choices=["codex", "claude", "antigravity", "windsurf", "generic", "all"],
+        choices=["codex", "claude", "antigravity", "generic", "all"],
         help="Installed adapter. Repeat for multiple adapters.",
     )
     mark.add_argument("--manifest-file", default=None, help="Optional bundle manifest path")
@@ -366,7 +361,7 @@ def _parse_support_args(argv: list[str]) -> argparse.Namespace:
     request.add_argument("--os", dest="operating_system", default=None, help="Operating system")
     request.add_argument("--shell", default=None, help="Shell used for failing commands")
     request.add_argument("--bundle", dest="installed_bundle", default=None, help="Installed Relay-kit bundle")
-    request.add_argument("--adapter", dest="adapter_target", default=None, help="Adapter target such as codex, claude, or windsurf")
+    request.add_argument("--adapter", dest="adapter_target", default=None, help="Adapter target such as codex or claude")
     request.add_argument("--policy-pack", default=None, help="Policy pack used for diagnostics")
     request.add_argument("--expected", dest="expected_behavior", default=None, help="Expected behavior")
     request.add_argument("--actual", dest="actual_behavior", default=None, help="Actual behavior")
@@ -609,8 +604,6 @@ def _resolve_ai(args: argparse.Namespace) -> str:
         return "claude"
     if args.antigravity:
         return "antigravity"
-    if args.windsurf:
-        return "windsurf"
     if args.all:
         return "all"
     if args.generic:

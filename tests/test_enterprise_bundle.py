@@ -93,27 +93,6 @@ def test_public_cli_generates_enterprise_bundle(tmp_path: Path) -> None:
     assert (tmp_path / ".relay-kit" / "references" / "security-patterns.md").exists()
 
 
-def test_public_cli_generates_windsurf_rules(tmp_path: Path) -> None:
-    result = subprocess.run(
-        [
-            sys.executable,
-            "relay_kit_public_cli.py",
-            "init",
-            str(tmp_path),
-            "--windsurf",
-        ],
-        cwd=ROOT,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-
-    assert result.returncode == 0, result.stdout + result.stderr
-    assert (tmp_path / ".windsurf" / "rules" / "test-first-development.md").exists()
-    assert (tmp_path / ".windsurf" / "rules" / "skill-evolution.md").exists()
-    assert (tmp_path / ".relay-kit" / "docs" / "enterprise-bundle.md").exists()
-
-
 def test_list_skills_shows_enterprise_bundle() -> None:
     result = subprocess.run(
         [sys.executable, "relay_kit_public_cli.py", "--list-skills"],
