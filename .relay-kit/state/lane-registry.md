@@ -8,7 +8,7 @@
 ## Active lanes
 | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | Merge prerequisite | Status |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | workflow-router | none | `.relay-kit/contracts/project-context.md` | none | CI after state refresh PR | ready-for-merge |
+| primary | bootstrap | workflow-router | none | `.relay-kit/contracts/project-context.md` | none | CI after merge | ready-for-merge |
 | lane-2 | unassigned | none | none | none | none | none | parked |
 | lane-3 | unassigned | none | none | none | none | none | parked |
 
@@ -29,7 +29,6 @@
 | primary | `scripts/eval_workflows.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, workflow eval/Pulse/signal docs/tests | support fixture depth review | PR #62 merged and CI passed |
 | primary | `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, workflow eval docs/tests, skill gauntlet semantic tests | workflow role coverage fixtures | PR #64 merged and CI passed |
 | primary | `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, workflow eval docs/tests, skill gauntlet semantic tests | workflow utility skill coverage fixtures | PR #66 merged and CI passed |
-| primary | `relay_kit_v3/adapters.py`, `relay_kit_v3/generator.py`, public CLI, runtime doctor, validate runtime, skill gauntlet, manifest/docs/tests | Windsurf workspace-rule adapter | PR #68 merged and PR CI passed |
 | primary | `pyproject.toml`, `.relay-kit/version.json` | next-dev version bump | PR #3 merged and CI passed |
 | primary | `scripts/eval_workflows.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, Pulse/signal docs/tests | workflow focus dashboard | PR #37 merged and CI passed |
 | primary | `relay_kit_v3/support_triage.py`, `relay_kit_v3/readiness.py`, `relay_kit_public_cli.py`, support docs/tests | support operations soak | PR #35 merged and CI passed |

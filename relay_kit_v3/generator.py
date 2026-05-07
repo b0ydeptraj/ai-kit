@@ -4,7 +4,7 @@ import importlib.util
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from .adapters import WINDSURF_RULES_DIR, ensure_dirs, targets_for
+from .adapters import ensure_dirs, targets_for
 from .registry import (
     ALL_V3_SKILLS,
     BASELINE_NEXT_DISCIPLINE_SKILLS,
@@ -130,10 +130,7 @@ def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
             spec = spec_for(name)
             if spec is None:
                 continue
-            if rel_target.as_posix() == WINDSURF_RULES_DIR:
-                output = project_path / rel_target / f"{name}.md"
-            else:
-                output = project_path / rel_target / name / "SKILL.md"
+            output = project_path / rel_target / name / "SKILL.md"
             write_text(output, render_skill(spec))
             written.append(output)
     return written
@@ -201,7 +198,6 @@ Recommended runtime layout:
 - `.relay-kit/references/` -> living support references for architecture, APIs, persistence, testing, security, observability, and performance
 - `.relay-kit/docs/` -> topology docs, migration notes, gating rules, and orchestration rules
 - `.claude/skills/`, `.agent/skills/`, `.codex/skills/` -> adapter-specific runtime skill folders
-- `.windsurf/rules/` -> Windsurf workspace rules
 - `.relay-kit-prompts/` -> preferred generic prompt output path
 - `relay_kit_legacy.py` -> canonical legacy generator for analysis/template kits
 - `relay_kit.py` -> current Relay-kit v3 entrypoint that adds orchestration, routing, hubs, utility providers, contracts, and gating

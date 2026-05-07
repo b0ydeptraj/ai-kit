@@ -15,11 +15,10 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from relay_kit_v3.adapters import WINDSURF_RULES_DIR
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
 
 
-RUNTIME_ROOTS = [".claude/skills", ".agent/skills", ".codex/skills", WINDSURF_RULES_DIR]
+RUNTIME_ROOTS = [".claude/skills", ".agent/skills", ".codex/skills"]
 REQUIRED_HEADERS = [
     "# Mission",
     "## Role",
@@ -135,7 +134,7 @@ def check_skill_file(path: Path, base: Path) -> List[Finding]:
         findings.append(Finding(rel_path, "frontmatter-name", "Missing name in frontmatter"))
     if not description:
         findings.append(Finding(rel_path, "frontmatter-description", "Missing description in frontmatter"))
-    expected_name = skill_name_for_path(path, base)
+    expected_name = path.parent.name
     if name != expected_name:
         findings.append(
             Finding(
@@ -161,16 +160,6 @@ def check_skill_file(path: Path, base: Path) -> List[Finding]:
         findings.append(Finding(rel_path, "placeholder", "Contains unresolved placeholder text"))
 
     return findings
-
-
-def skill_name_for_path(path: Path, base: Path) -> str:
-    try:
-        rel_path = path.relative_to(base).as_posix()
-    except ValueError:
-        rel_path = path.as_posix()
-    if rel_path.startswith(f"{WINDSURF_RULES_DIR}/") and path.suffix == ".md":
-        return path.stem
-    return path.parent.name
 
 
 def parse_frontmatter(content: str) -> Dict[str, str] | None:
@@ -322,7 +311,7 @@ def collect_tool_profile_findings(
     for path in skill_files:
         if not path.exists():
             continue
-        skill_name = skill_name_for_path(path, base)
+        skill_name = path.parent.name
         spec = registry.get(skill_name)
         if spec is None:
             continue
@@ -401,7 +390,7 @@ def collect_semantic_findings(base: Path, skill_files: Sequence[Path]) -> List[F
     for path in skill_files:
         if not path.exists():
             continue
-        skill_name = skill_name_for_path(path, base)
+        skill_name = path.parent.name
         spec = ALL_V3_SKILLS.get(skill_name)
         if spec is None:
             continue
@@ -434,10 +423,7 @@ def collect_optional_alias_findings(base: Path) -> List[Finding]:
     findings: List[Finding] = []
     for root in RUNTIME_ROOTS:
         for alias_name, required_terms in OPTIONAL_ALIAS_CONTRACTS.items():
-            if root == WINDSURF_RULES_DIR:
-                path = base / root / f"{alias_name}.md"
-            else:
-                path = base / root / alias_name / "SKILL.md"
+            path = base / root / alias_name / "SKILL.md"
             if not path.exists():
                 continue
             rel_path = path.relative_to(base).as_posix()
@@ -626,14 +612,11 @@ def collect_skills(base: Path) -> List[Path]:
         if not skill_root.exists():
             continue
         for name in required_names:
-            if root == WINDSURF_RULES_DIR:
-                path = skill_root / f"{name}.md"
-            else:
-                path = skill_root / name / "SKILL.md"
+            path = skill_root / name / "SKILL.md"
             if path.exists():
                 paths.append(path)
             else:
-                missing_path = path
+                missing_path = skill_root / name / "SKILL.md"
                 paths.append(missing_path)
     return paths
 
@@ -657,7 +640,7 @@ def report_payload(findings: List[Finding], checked_files: int, semantic: bool, 
 
 def render_text(findings: List[Finding], checked_files: int, semantic: bool, scenario_count: int) -> str:
     lines = [
-        f"Checked {checked_files} runtime skill/rule files.",
+        f"Checked {checked_files} SKILL.md files.",
         f"Semantic checks: {'on' if semantic else 'off'}",
         f"Scenario fixtures: {scenario_count}",
         f"Findings: {len(findings)}",

@@ -7,7 +7,6 @@ Recommended runtime layout:
 - `.relay-kit/references/` -> living support references for architecture, APIs, persistence, testing, security, observability, and performance
 - `.relay-kit/docs/` -> topology docs, migration notes, gating rules, and orchestration rules
 - `.claude/skills/`, `.agent/skills/`, `.codex/skills/` -> adapter-specific runtime skill folders
-- `.windsurf/rules/` -> Windsurf workspace rules
 - `.relay-kit-prompts/` -> preferred generic prompt output path
 - `relay_kit_legacy.py` -> canonical legacy generator for analysis/template kits
 - `relay_kit.py` -> current Relay-kit v3 entrypoint that adds orchestration, routing, hubs, utility providers, contracts, and gating

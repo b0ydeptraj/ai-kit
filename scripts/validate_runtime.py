@@ -14,7 +14,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from relay_kit_v3.adapters import ADAPTER_TARGETS, WINDSURF_RULES_DIR
+from relay_kit_v3.adapters import ADAPTER_TARGETS
 from relay_kit_v3.generator import BUNDLES
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
 from relay_kit_v3.temp_paths import stable_temp_dir
@@ -25,8 +25,7 @@ from relay_kit_compat import (
     GENERIC_CANONICAL_DIR,
 )
 
-CHECKED_IN_TARGETS = [".claude/skills", ".agent/skills", ".codex/skills"]
-ALL_TARGETS = [".claude/skills", ".agent/skills", ".codex/skills", WINDSURF_RULES_DIR]
+ALL_TARGETS = [".claude/skills", ".agent/skills", ".codex/skills"]
 EXPECTED_RUNTIME_SKILLS = set(ALL_V3_SKILLS.keys())
 ROUND4_DISCIPLINE_SKILLS = {
     "root-cause-debugging",
@@ -86,8 +85,6 @@ def skill_dirs(base: Path, relative_dir: str) -> set[str]:
     target = base / Path(relative_dir)
     if not target.exists():
         fail(f"Missing runtime folder: {target}")
-    if relative_dir == WINDSURF_RULES_DIR:
-        return {entry.stem for entry in target.iterdir() if entry.is_file() and entry.suffix == ".md"}
     return {entry.name for entry in target.iterdir() if entry.is_dir()}
 
 
@@ -208,7 +205,7 @@ def prompt_files(base: Path, relative_dir: str) -> dict[str, str]:
 
 def validate_checked_in_runtime() -> None:
     adapter_sets = {
-        target: skill_dirs(REPO_ROOT, target) & EXPECTED_RUNTIME_SKILLS for target in CHECKED_IN_TARGETS
+        target: skill_dirs(REPO_ROOT, target) & EXPECTED_RUNTIME_SKILLS for target in ALL_TARGETS
     }
     reference_target, reference_set = next(iter(adapter_sets.items()))
     for target, current_set in adapter_sets.items():
@@ -224,8 +221,6 @@ def validate_adapter_targets() -> None:
         fail(f"ADAPTER_TARGETS['all'] drifted: {ADAPTER_TARGETS['all']}")
     if ADAPTER_TARGETS["antigravity"] != [".agent/skills"]:
         fail(f"ADAPTER_TARGETS['antigravity'] drifted: {ADAPTER_TARGETS['antigravity']}")
-    if ADAPTER_TARGETS["windsurf"] != [WINDSURF_RULES_DIR]:
-        fail(f"ADAPTER_TARGETS['windsurf'] drifted: {ADAPTER_TARGETS['windsurf']}")
     if ADAPTER_TARGETS["generic"] != [GENERIC_CANONICAL_DIR]:
         fail(f"ADAPTER_TARGETS['generic'] drifted: {ADAPTER_TARGETS['generic']}")
 
@@ -246,7 +241,6 @@ def validate_checked_in_docs() -> None:
             ".claude/skills",
             ".agent/skills",
             ".codex/skills",
-            WINDSURF_RULES_DIR,
             "baseline",
             "baseline-next",
             "relay_kit.py",
@@ -260,7 +254,6 @@ def validate_checked_in_docs() -> None:
             ".claude/skills",
             ".agent/skills",
             ".codex/skills",
-            WINDSURF_RULES_DIR,
             "discipline-utilities",
             "baseline",
             "baseline-next",
@@ -387,7 +380,6 @@ def validate_public_wrapper_surface() -> None:
         ("codex", ".codex/skills"),
         ("claude", ".claude/skills"),
         ("antigravity", ".agent/skills"),
-        ("windsurf", WINDSURF_RULES_DIR),
     ):
         temp_dir = stable_temp_dir(REPO_ROOT, f"public-{adapter}")
         try:
