@@ -21,11 +21,11 @@ conventions:
     lane_registry: .relay-kit/state/lane-registry.md
     handoff_log: .relay-kit/state/handoff-log.md
   execution_rules:
-    - Treat `.claude/skills`, `.agent/skills`, and `.codex/skills` as the active runtime surfaces.
+    - Treat `.claude/skills`, `.agent/skills`, `.codex/skills`, and `.windsurf/rules` as the active runtime surfaces.
     - Treat preserved legacy command and workflow assets as migration-only support, not active v3 runtime primitives.
     - Utility providers are stateless and should not own project strategy or lane state.
     - Route through layer-1 orchestrators and layer-2 hubs before invoking specialists directly.
-    - For v3 bundles, `--ai all` targets `.claude/skills`, `.agent/skills`, and `.codex/skills`; legacy kits keep their own compatibility behavior.
+    - For v3 bundles, `--ai all` targets `.claude/skills`, `.agent/skills`, `.codex/skills`, and `.windsurf/rules`; legacy kits keep their own compatibility behavior.
 
 layers:
   layer_1_orchestrators:
@@ -110,6 +110,10 @@ adapter_runtime:
     skill_root: .codex/skills
     model: runtime-skills-only
     note: keep Codex as a skill surface, not a legacy command or workflow surface
+  windsurf:
+    skill_root: .windsurf/rules
+    model: workspace-rules
+    note: emits one markdown rule per Relay-kit skill for Windsurf Cascade workspace rules
 
 legacy_compatibility:
   generator: relay_kit_legacy.py

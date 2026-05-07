@@ -25,7 +25,7 @@ relay-kit init "C:\\path\\to\\my-app" --codex
 relay-kit doctor "C:\\path\\to\\my-app"
 ```
 
-Use one adapter flag per run. Replace `--codex` with `--claude` or `--antigravity` when that is the target agent.
+Use one adapter flag per run. Replace `--codex` with `--claude`, `--antigravity`, or `--windsurf` when that is the target agent.
 The default install is the full enterprise governance bundle. Use `--baseline` only when you want the smaller first-install surface.
 
 For a local repo checkout:
@@ -34,6 +34,12 @@ For a local repo checkout:
 pipx install .
 relay-kit init /path/to/project --codex
 relay-kit doctor /path/to/project
+```
+
+For Windsurf, install once per workspace so Cascade can read the generated workspace rules:
+
+```bash
+relay-kit init /path/to/project --windsurf
 ```
 
 ## Why use Relay-kit
@@ -51,7 +57,7 @@ It is for:
 
 - solo builders using coding agents seriously
 - product and engineering teams that want repeatable output
-- people using Claude, Codex, or Antigravity-style agent workflows who need more than prompt packs
+- people using Claude, Codex, Windsurf, or Antigravity-style agent workflows who need more than prompt packs
 
 Relay-kit gives them a clear operating flow for:
 
@@ -65,7 +71,7 @@ It makes agents behave less like improvising interns and more like engineers wor
 ## What you get
 
 - a small public skill surface that is easy to remember
-- reusable runtime skills for `.claude`, `.agent`, and `.codex`
+- reusable runtime skills for `.claude`, `.agent`, `.codex`, and Windsurf workspace rules
 - shared workflow artifacts in `.relay-kit/`
 - a read-only `memory-search` utility for retrieving prior decisions and handoffs
 - a `release-readiness` utility for pre/post deploy smoke gates and rollback signals
@@ -308,6 +314,7 @@ Generated output includes:
 - `.codex/skills/`
 - `.claude/skills/`
 - `.agent/skills/`
+- `.windsurf/rules/`
 - `.relay-kit/contracts/`
 - `.relay-kit/state/`
 - `.relay-kit/references/`

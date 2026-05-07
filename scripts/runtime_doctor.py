@@ -12,6 +12,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
+from relay_kit_v3.adapters import WINDSURF_RULES_DIR
 
 
 REQUIRED_DOCS = [
@@ -34,6 +35,7 @@ ADAPTERS = [
     ".claude/skills",
     ".agent/skills",
     ".codex/skills",
+    WINDSURF_RULES_DIR,
 ]
 
 # Optional legacy/native skills that can coexist with canonical v3 runtime skills.
@@ -69,6 +71,8 @@ def skill_set(root: Path, relative: str) -> set[str]:
     directory = root / relative
     if not directory.exists():
         return set()
+    if relative == WINDSURF_RULES_DIR:
+        return {entry.stem for entry in directory.iterdir() if entry.is_file() and entry.suffix == ".md"}
     return {entry.name for entry in directory.iterdir() if entry.is_dir()}
 
 
@@ -80,8 +84,12 @@ def check_exists(root: Path, findings: list[str]) -> None:
 
 def check_adapter_parity(root: Path, findings: list[str]) -> None:
     expected = set(ALL_V3_SKILLS.keys())
-    sets = {adapter: skill_set(root, adapter) for adapter in ADAPTERS}
-    reference = sets[ADAPTERS[0]] - ALLOWED_OPTIONAL_SKILLS
+    sets = {adapter: skill_set(root, adapter) for adapter in ADAPTERS if (root / adapter).exists()}
+    if not sets:
+        findings.append("No runtime adapter surfaces found")
+        return
+    reference_adapter = next(iter(sets))
+    reference = sets[reference_adapter] - ALLOWED_OPTIONAL_SKILLS
 
     for adapter, current in sets.items():
         missing = sorted(expected - current)

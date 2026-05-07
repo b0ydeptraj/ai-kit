@@ -6,11 +6,14 @@ from typing import Dict, Iterable, List
 from relay_kit_compat import GENERIC_CANONICAL_DIR
 
 
+WINDSURF_RULES_DIR = ".windsurf/rules"
+
 ADAPTER_TARGETS: Dict[str, List[str]] = {
     "claude": [".claude/skills"],
     "antigravity": [".agent/skills"],
     "codex": [".codex/skills"],
-    "all": [".claude/skills", ".agent/skills", ".codex/skills"],
+    "windsurf": [WINDSURF_RULES_DIR],
+    "all": [".claude/skills", ".agent/skills", ".codex/skills", WINDSURF_RULES_DIR],
     "generic": [GENERIC_CANONICAL_DIR],
 }
 
