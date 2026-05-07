@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-Keep Relay-kit runtime state current after Windsurf workspace-rule adapter support landed and ready for the next single-lane implementation slice.
+Keep Relay-kit skill-system state current after workflow eval utility skill coverage landed and ready for the next single-lane implementation slice.
 
 ## Active orchestrator
 - workflow-router
@@ -9,7 +9,7 @@ Keep Relay-kit runtime state current after Windsurf workspace-rule adapter suppo
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PR #68 added Windsurf workspace-rule adapter support and PR CI passed. |
+| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PR #66 added full workflow eval utility skill coverage and main CI passed. |
 | lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
@@ -24,7 +24,7 @@ Keep Relay-kit runtime state current after Windsurf workspace-rule adapter suppo
 Primary lane only. Parallel lanes are parked until explicitly routed.
 
 ## Merge prerequisites
-Runtime doctor live mode passed, full pytest passed, enterprise doctor passed, readiness enterprise passed, and PR CI for PR #68 passed. Remote CI must pass after this state refresh PR.
+Runtime doctor live mode passed, focused pytest passed, enterprise doctor passed, readiness enterprise passed, and main CI for PR #66 passed. Remote CI must pass after merge.
 
 ## Conflict risks
 Low. This slice edits state/context artifacts only.
@@ -60,4 +60,3 @@ Low. This slice edits state/context artifacts only.
 - 2026-05-06: Refresh state artifacts after PR #62 added support fixture depth review, main CI `25420592300` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-06: Refresh state artifacts after PR #64 expanded workflow eval to 43 scenarios with all registry roles covered, main CI `25421305874` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-06: Refresh state artifacts after PR #66 expanded workflow eval to 55 scenarios with all 47 current registry skills covered, main CI `25421911099` passed, and local readiness returned `commercial-ready-candidate`.
-- 2026-05-07: Refresh state artifacts after PR #68 added Windsurf workspace-rule adapter support, PR CI `25475921875` passed, and local readiness returned `commercial-ready-candidate`.

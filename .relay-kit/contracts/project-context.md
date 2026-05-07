@@ -2,14 +2,14 @@
 
 > Path: `.relay-kit/contracts/project-context.md`
 > Purpose: Current source-of-truth context for Relay-kit work after the `v3.3.0` release and `3.4.0.dev0` next-dev bump.
-> Last refreshed: 2026-05-07
+> Last refreshed: 2026-05-06
 
 ## Existing architecture
 
 - Relay-kit is a Python packaging/runtime-generation repo. Public package metadata lives in `pyproject.toml`; the installed console script is `relay-kit = "relay_kit_public_cli:main"`.
 - Active runtime package code lives under `relay_kit_v3/`. The historical v3 shim package remains only for compatibility and is not the active namespace.
-- Public CLI orchestration lives in `relay_kit_public_cli.py`; default runtime generation is the full enterprise bundle, while `--baseline` explicitly opts into the smaller install. Adapter flags now include `--codex`, `--claude`, `--agent`, `--antigravity`, `--windsurf`, and `--all`. Legacy generation compatibility remains in `relay_kit.py`, `relay_kit_legacy.py`, and `relay_kit_compat.py`.
-- Runtime skills are generated from registry data under `relay_kit_v3/registry/` and validated by `scripts/validate_runtime.py`, `scripts/runtime_doctor.py`, `scripts/migration_guard.py`, `scripts/skill_gauntlet.py`, `scripts/policy_guard.py`, and `scripts/eval_workflows.py`. Checked-in adapter skill directories remain `.codex/skills`, `.claude/skills`, and `.agent/skills`; Windsurf is generated on demand as direct workspace markdown rules under `.windsurf/rules/*.md`.
+- Public CLI orchestration lives in `relay_kit_public_cli.py`; default runtime generation is the full enterprise bundle, while `--baseline` explicitly opts into the smaller install. Legacy generation compatibility remains in `relay_kit.py`, `relay_kit_legacy.py`, and `relay_kit_compat.py`.
+- Runtime skills are generated from registry data under `relay_kit_v3/registry/` and validated by `scripts/validate_runtime.py`, `scripts/runtime_doctor.py`, `scripts/migration_guard.py`, `scripts/skill_gauntlet.py`, `scripts/policy_guard.py`, and `scripts/eval_workflows.py`.
 - The discipline utility bundle includes `skill-evolution`, a Relay-kit-owned skill for creating, upgrading, reviewing, and pruning skills with path-scoped activation, fork context, allowed-tool stance, and semantic route proof.
 - Semantic skill gauntlet now enforces `allowed-tools` frontmatter for configured profiled risk-sensitive skills and fails drift against registry tool profiles. Current profiled support skills include API, data, dependency, media, browser, and multimodal evidence utilities.
 - Workflow eval now reports `quality.support_route_review` for profiled support-skill coverage, weak support routes, and nearby support-skill collisions within the support margin threshold. It also reports `quality.support_evidence_contract_review` for profiled support-skill prompt and expected-term gaps, plus `quality.support_fixture_depth_review` for report-level support fixture depth gaps.
@@ -97,9 +97,7 @@
 - PR #66 merged workflow utility skill coverage fixtures: https://github.com/b0ydeptraj/Relay-kit/pull/66, merge commit `a13b2e248725806852c0ceb36e2f91c0bc71851b`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
-- PR #68 merged Windsurf workspace-rule adapter support: https://github.com/b0ydeptraj/Relay-kit/pull/68, merge commit `7c707f8ec8d78fa493b64ecd8ac799201da6b80e`.
-- Latest confirmed main CI before the Windsurf adapter: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25422095532, conclusion `success`.
-- Latest confirmed PR CI for the Windsurf adapter: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25475921875, conclusion `success`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25421911099, conclusion `success`.
 
 ## Known sharp edges
 
@@ -116,8 +114,7 @@
 - Commercial proof now includes `relay-kit commercial dossier`, which writes `.relay-kit/commercial/commercial-dossier.json` and strict-fails unless local readiness, publication status, support triage/soak, and external CI/release/package/SLA/support owner proof are present.
 - Commercial dossier proof is visible in Pulse JSON/HTML and signal export when included from the generated dossier file.
 - Internal-channel commercial dossier is verified ready with GitHub release asset package URL, public support SLA, public issue intake, and owner `b0ydeptraj`.
-- Default package onboarding is now full by default: install the package, then run `relay-kit . --codex` for Codex or `relay-kit . --windsurf` for Windsurf workspace rules; use `--baseline` only for the smaller bundle.
-- Windsurf support is workspace-local, not a binary install hook. The one-time install command writes `.windsurf/rules/*.md` plus `.relay-kit/*` into the target project; the user's global Windsurf memory remains only a lightweight Relay rule.
+- Default package onboarding is now full by default: install the package, then run `relay-kit . --codex`; use `relay-kit . --codex --baseline` only for the smaller bundle.
 - Skill changes should use `skill-evolution` and include trigger/frontmatter/allowed-tool review plus semantic gauntlet or route proof before claiming behavior changed. Profiled risk-sensitive skills must keep registry `allowed_tools` and generated `allowed-tools` frontmatter in sync.
 - PyPI remains unpublished because no PyPI token is configured in this environment. Do not claim PyPI publication until `pip index versions relay-kit` finds the package or a PyPI project URL exists.
 - `.relay-kit/contracts/project-context.md`, `.relay-kit/state/workflow-state.md`, `.relay-kit/state/team-board.md`, `.relay-kit/state/lane-registry.md`, and `.relay-kit/state/handoff-log.md` should stay synchronized after release or branch merges.
@@ -125,7 +122,6 @@
 ## Files or modules to mirror
 
 - CLI patterns: `relay_kit_public_cli.py`
-- Adapter and generation patterns: `relay_kit_v3/adapters.py`, `relay_kit_v3/generator.py`
 - Version and upgrade logic: `relay_kit_v3/upgrade.py`, `.relay-kit/version.json`, `pyproject.toml`
 - Release readiness logic: `relay_kit_v3/release_lane.py`, `relay_kit_v3/readiness.py`, `scripts/release_readiness.py`
 - Publication planning and evidence logic: `relay_kit_v3/publication.py`, `relay_kit_v3/commercial_dossier.py`

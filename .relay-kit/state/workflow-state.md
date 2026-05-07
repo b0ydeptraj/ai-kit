@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh live workflow state after PR #68 so source-of-truth artifacts reflect first-class Windsurf workspace-rule support.
+Refresh live workflow state after PR #66 so source-of-truth artifacts reflect full workflow eval utility skill coverage.
 
 ## Active lane
 - Lane id: primary
@@ -11,7 +11,7 @@ Refresh live workflow state after PR #68 so source-of-truth artifacts reflect fi
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
 - Layer-2 workflow hub: bootstrap
-- Active specialist: bootstrap
+- Active specialist: context-continuity
 
 ## Active utility providers
 - Primary utility provider: memory-search
@@ -19,11 +19,11 @@ Refresh live workflow state after PR #68 so source-of-truth artifacts reflect fi
 
 ## Active standalone/domain skill
 - Skill: bootstrap
-- Why selected: this is a bounded state/context hygiene update after the Windsurf adapter merged and PR CI passed.
+- Why selected: this is a bounded state/context hygiene update after workflow eval utility coverage merged and main CI passed.
 
 ## Complexity level
 - Level: L1
-- Reasoning: runtime code is already merged and PR CI passed; this pass only updates live state/context.
+- Reasoning: runtime code is already merged and main CI passed; this pass only updates live state/context.
 
 ## Chosen track
 - Track: quick-flow
@@ -61,8 +61,7 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Published release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
 - Published tag commit: `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
 - Current mainline package version: `3.4.0.dev0`.
-- Latest confirmed main CI before the Windsurf adapter: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25422095532, conclusion `success`.
-- Latest confirmed PR CI: PR #68 validate-runtime https://github.com/b0ydeptraj/Relay-kit/actions/runs/25475921875, conclusion `success`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25421911099, conclusion `success`.
 - PR #1 merged release readiness and package smoke gates: https://github.com/b0ydeptraj/Relay-kit/pull/1.
 - PR #2 merged Relay OTLP signal export: https://github.com/b0ydeptraj/Relay-kit/pull/2.
 - PR #3 merged next-dev version hygiene: https://github.com/b0ydeptraj/Relay-kit/pull/3.
@@ -125,8 +124,7 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - PR #62 merged support fixture depth review: https://github.com/b0ydeptraj/Relay-kit/pull/62.
 - PR #64 merged workflow role coverage fixtures: https://github.com/b0ydeptraj/Relay-kit/pull/64.
 - PR #66 merged workflow utility skill coverage fixtures: https://github.com/b0ydeptraj/Relay-kit/pull/66.
-- PR #68 merged Windsurf workspace-rule adapter support: https://github.com/b0ydeptraj/Relay-kit/pull/68.
-- Current main baseline: `7c707f8ec8d78fa493b64ecd8ac799201da6b80e`.
+- Current main baseline: `a13b2e248725806852c0ceb36e2f91c0bc71851b`.
 - Workflow focus branch verification: `python -m pytest tests/test_workflow_eval.py tests/test_pulse_report.py tests/test_signal_export.py -q`, `python scripts\eval_workflows.py . --strict --json`, `python relay_kit_public_cli.py pulse build . --include-readiness --include-publication --include-support-request --no-history`, `python relay_kit_public_cli.py signal export . --otlp --json`, `python -m pytest tests -q` with 160 passed, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, `python scripts\runtime_doctor.py . --strict --state-mode live`, and `python relay_kit_public_cli.py readiness check . --profile enterprise` passed locally.
 - Support operations soak branch verification: `python -m pytest tests/test_support_triage.py -q`, `python -m pytest tests/test_support_request.py tests/test_support_bundle.py tests/test_support_triage.py -q`, `python -m pytest tests/test_readiness_check.py tests/test_support_triage.py tests/test_support_bundle.py -q`, `python relay_kit_public_cli.py support bundle . --policy-pack enterprise`, `python relay_kit_public_cli.py support request . --severity P1 ... --strict`, `python relay_kit_public_cli.py support triage . --strict`, `python relay_kit_public_cli.py support soak . --strict`, `python -m pytest tests -q` with 160 passed, `python relay_kit_public_cli.py readiness check . --profile enterprise`, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, and `python scripts\runtime_doctor.py . --strict --state-mode live` passed locally.
 - Commercial dossier branch verification: `python -m pytest tests/test_commercial_dossier.py tests/test_readiness_check.py tests/test_release_lane.py tests/test_publication_plan.py tests/test_support_bundle.py -q`, `python -m pytest tests -q` with 165 passed, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, `python relay_kit_public_cli.py release verify . --json`, `python relay_kit_public_cli.py readiness check . --profile enterprise --json`, `python scripts/package_smoke.py .`, and `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --skip-readiness-tests --strict --json` returned `hold` for missing final publication-status proof as intended.
@@ -145,8 +143,6 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Support fixture depth review verification: PR #62 added `quality.support_fixture_depth_review` and `relay.workflow.support_fixture_depth_gap_count`; local `python -m pytest tests -q` passed with 183 tests, workflow eval reported 37/37 scenarios with 12 support depth scenarios, 0 depth gaps, 0 duplicate pairs, readiness enterprise returned `commercial-ready-candidate`, PR CI passed, and main CI `25420592300` passed.
 - Workflow role coverage verification: PR #64 expanded workflow eval to 43/43 scenarios, covers all current registry roles, leaves 12 utility skills uncovered for future slices, local `python -m pytest tests -q` passed with 183 tests, readiness enterprise returned `commercial-ready-candidate`, PR CI passed, and main CI `25421305874` passed.
 - Workflow utility coverage verification: PR #66 expanded workflow eval to 55/55 scenarios, covers all 47 current registry skills, leaves no current registry skills uncovered, local `python -m pytest tests -q` passed with 183 tests, readiness enterprise returned `commercial-ready-candidate`, PR CI passed, and main CI `25421911099` passed.
-- Windsurf adapter verification: PR #68 added `--windsurf`, `.windsurf/rules/*.md` generation, validator/doctor/semantic-gauntlet support, and tests. Local proof passed with `python -m pytest tests -q` reporting 185 tests, runtime validation pass, live runtime doctor findings 0, semantic gauntlet 141 runtime skill/rule files with 55 fixtures and findings 0, enterprise doctor pass, readiness `commercial-ready-candidate`, and PR CI `25475921875` pass.
-- Installed workspace proof: `python relay_kit_public_cli.py init "C:\Users\b0ydeptrai\OneDrive\Documents\anti-browser" --windsurf` generated 88 files including 47 `.windsurf/rules/*.md` files, and `python relay_kit_public_cli.py doctor "C:\Users\b0ydeptrai\OneDrive\Documents\anti-browser" --skip-tests --policy-pack baseline` passed.
 
 ## Recommended next lane
 Next useful feature lane: route-quality tightening for the two intentionally low-margin workflow eval scenarios, or PyPI publication only after PyPI credentials are available.
