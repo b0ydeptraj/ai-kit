@@ -8,7 +8,7 @@
 ## Active lanes
 | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | Merge prerequisite | Status |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | workflow-router | none | `.relay-kit/contracts/project-context.md`, `.relay-kit/state/*.md` | state refresh after PR #79 | CI after state refresh PR | ready-for-merge |
+| primary | developer | workflow-router | test-hub | `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, `relay_kit_public_cli.py`, Pulse/signal docs/tests | package-index Pulse/signal visibility | full local gates and PR CI | active |
 | lane-2 | unassigned | none | none | none | none | none | parked |
 | lane-3 | unassigned | none | none | none | none | none | parked |
 

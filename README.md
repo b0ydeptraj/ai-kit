@@ -166,13 +166,14 @@ Build a local Pulse quality report:
 ```bash
 relay-kit pulse build /path/to/project
 relay-kit pulse build /path/to/project --include-readiness --json
+relay-kit pulse build /path/to/project --include-package-index --json
 relay-kit pulse build /path/to/project --support-request-file .relay-kit/support/support-request.json
 relay-kit pulse build /path/to/project --history-limit 50
 ```
 
 Pulse includes a gate summary for workflow eval, readiness, publication,
-support request, and evidence ledger status so dashboard review can see which
-gate is pass, attention, hold, or not-run. The report also includes gate
+package-index, support request, and evidence ledger status so dashboard review
+can see which gate is pass, attention, hold, or not-run. The report also includes gate
 details for degraded scenarios, findings, diagnostics, and failed evidence
 events.
 

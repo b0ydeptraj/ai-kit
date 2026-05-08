@@ -90,6 +90,23 @@ def sample_publication_plan(*, status: str = "ready") -> dict[str, object]:
     }
 
 
+def sample_package_index(*, status: str = "published") -> dict[str, object]:
+    findings = [] if status == "published" else [{"gate": "package-index-version", "status": "hold", "summary": "target version is not latest"}]
+    return {
+        "schema_version": "relay-kit.package-index-check.v1",
+        "status": status,
+        "channel": "pypi",
+        "target_version": "3.4.1",
+        "latest_version": "3.4.1" if status == "published" else "3.4.2",
+        "target_file_count": 2 if status == "published" else 0,
+        "findings": findings,
+        "checks": [
+            {"id": "package-index-reachable", "status": "pass"},
+            {"id": "package-index-version", "status": "pass" if status == "published" else "hold", "summary": "target version is not latest"},
+        ],
+    }
+
+
 def sample_support_request(*, status: str = "ready") -> dict[str, object]:
     findings = [] if status == "ready" else [{"gate": "diagnostics", "status": "hold", "summary": "missing diagnostics"}]
     return {
@@ -215,6 +232,21 @@ def test_pulse_report_includes_publication_plan_when_requested(tmp_path: Path) -
     assert report["status"] == "pass"
 
 
+def test_pulse_report_includes_package_index_when_requested(tmp_path: Path) -> None:
+    report = pulse.build_pulse_report(
+        tmp_path,
+        workflow_eval_builder=lambda root: sample_eval_report(),
+        package_index_builder=lambda root: sample_package_index(status="published"),
+        include_package_index=True,
+    )
+
+    assert report["package_index"]["schema_version"] == "relay-kit.package-index-check.v1"
+    assert report["package_index"]["status"] == "published"
+    gate = next(item for item in report["gate_summary"]["gates"] if item["id"] == "package-index")
+    assert gate["status"] == "pass"
+    assert report["status"] == "pass"
+
+
 def test_pulse_report_includes_support_request_when_requested(tmp_path: Path) -> None:
     report = pulse.build_pulse_report(
         tmp_path,
@@ -239,7 +271,7 @@ def test_pulse_report_includes_commercial_dossier_when_requested(tmp_path: Path)
 
     assert report["commercial_dossier"]["schema_version"] == "relay-kit.commercial-dossier.v1"
     assert report["commercial_dossier"]["status"] == "ready"
-    assert report["gate_summary"]["gates"][4]["id"] == "commercial-dossier"
+    assert report["gate_summary"]["gates"][5]["id"] == "commercial-dossier"
     assert report["status"] == "pass"
 
 
@@ -265,6 +297,21 @@ def test_pulse_report_marks_publication_hold_as_attention(tmp_path: Path) -> Non
 
     assert report["status"] == "attention"
     assert report["publication"]["findings"][0]["gate"] == "distribution-artifacts"
+
+
+def test_pulse_report_marks_package_index_hold_as_attention(tmp_path: Path) -> None:
+    report = pulse.build_pulse_report(
+        tmp_path,
+        workflow_eval_builder=lambda root: sample_eval_report(),
+        package_index_builder=lambda root: sample_package_index(status="hold"),
+        include_package_index=True,
+    )
+
+    assert report["status"] == "attention"
+    assert report["package_index"]["findings"][0]["gate"] == "package-index-version"
+    gate = next(item for item in report["gate_summary"]["gates"] if item["id"] == "package-index")
+    assert gate["status"] == "attention"
+    assert gate["drilldown"][0]["id"] == "package-index-version"
 
 
 def test_pulse_report_marks_commercial_dossier_hold_as_attention(tmp_path: Path) -> None:
@@ -301,6 +348,7 @@ def test_pulse_report_writes_json_and_html(tmp_path: Path) -> None:
     assert "Workflow focus" in html
     assert "developer-implementation-ready" in html
     assert "Publication readiness" in html
+    assert "Package index" in html
     assert "Support request" in html
     assert "Commercial dossier" in html
     assert "Trend" in html
@@ -371,10 +419,11 @@ def test_pulse_report_includes_gate_summary_and_next_actions(tmp_path: Path) -> 
     gate_statuses = {gate["id"]: gate["status"] for gate in summary["gates"]}
     next_action_gates = {action["gate"] for action in summary["next_actions"]}
 
-    assert summary["status_counts"] == {"pass": 1, "attention": 4, "hold": 0, "not-run": 1}
+    assert summary["status_counts"] == {"pass": 1, "attention": 4, "hold": 0, "not-run": 2}
     assert gate_statuses["workflow-eval"] == "pass"
     assert gate_statuses["readiness"] == "attention"
     assert gate_statuses["publication"] == "attention"
+    assert gate_statuses["package-index"] == "not-run"
     assert gate_statuses["support-request"] == "attention"
     assert gate_statuses["commercial-dossier"] == "not-run"
     assert gate_statuses["evidence"] == "attention"
@@ -471,6 +520,27 @@ def test_public_cli_pulse_build_accepts_publication_file(tmp_path: Path, capsys)
 
     assert exit_code == 0
     assert payload["report"]["publication"]["status"] == "ready"
+
+
+def test_public_cli_pulse_build_accepts_package_index_file(tmp_path: Path, capsys) -> None:
+    package_index_file = tmp_path / "package-index.json"
+    package_index_file.write_text(json.dumps(sample_package_index(status="published")), encoding="utf-8")
+
+    exit_code = relay_kit_public_cli.main(
+        [
+            "pulse",
+            "build",
+            str(tmp_path),
+            "--package-index-file",
+            str(package_index_file),
+            "--json",
+            "--no-history",
+        ]
+    )
+    payload = json.loads(capsys.readouterr().out)
+
+    assert exit_code == 0
+    assert payload["report"]["package_index"]["status"] == "published"
 
 
 def test_public_cli_pulse_build_accepts_support_request_file(tmp_path: Path, capsys) -> None:

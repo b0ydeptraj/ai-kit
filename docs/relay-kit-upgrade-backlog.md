@@ -51,6 +51,7 @@ Source audit status:
 - Fixed in publication execution evidence pass: `relay-kit publish evidence` now writes `.relay-kit/release/publication-evidence.json` with wheel/sdist SHA-256 hashes, twine-check output proof, upload/package-index confirmation proof, and external CI/release/package URLs.
 - Fixed in publication trail hardening pass: `relay-kit publish trail` now writes JSON/Markdown runbooks with deterministic capture paths and copyable commands for readiness, release verify, build, twine-check capture, plan, upload-log capture, and evidence generation.
 - Fixed in package-index maintenance pass: `relay-kit publish index-check` now queries PyPI/TestPyPI metadata and strict-fails if the target version is missing, has no files, or is not latest.
+- Fixed in package-index Pulse/signal pass: Pulse can include package-index check artifacts and signal export emits `relay.package_index.published`.
 - Fixed in next-dev version hygiene pass: `main` now uses PEP 440 package version `3.4.0.dev0` after the published `v3.3.0` tag, with runtime version marker and trusted manifest regenerated for the next-dev channel.
 - Fixed in support request Pulse pass: `relay-kit pulse build` can include support-request readiness in JSON/HTML, and signal export emits `relay.support_request.ready`.
 - Fixed in support bundle request summary pass: support bundles include a redacted support-request summary when `.relay-kit/support/support-request.json` exists.
@@ -676,6 +677,7 @@ Acceptance criteria:
 | Publication execution evidence | Done | P2 | `relay-kit publish evidence` records dist artifact hashes, twine-check output, upload confirmation, and package-index URLs into a machine-readable evidence file. |
 | Publication trail status | Done | P2 | `relay-kit publish status` reads the trail and evidence files to show complete, pending, failed, and not-observable publication steps without uploading artifacts. |
 | Package-index maintenance | Done | P2 | `relay-kit publish index-check` reads package-index metadata and proves the target version is present, latest, and has release files. |
+| Package-index Pulse/signal | Done | P2 | Pulse can include package-index check artifacts and `relay-kit signal export` emits `relay.package_index.published` for post-release monitoring. |
 | Support operations dashboard signal | Done | P2 | Pulse shows support-request readiness and `relay-kit signal export` emits `relay.support_request.ready`. |
 | Support bundle request summary | Done | P2 | `relay-kit support bundle` includes a redacted `diagnostics.support_request` summary when the intake artifact exists. |
 | Support operations soak | Done | P2 | `relay-kit support soak`, support triage, and readiness run P0/P1/P2 paid-support handoff and degraded bundle diagnostic checks. |
@@ -810,6 +812,7 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - `relay-kit publish status --strict` reaches `complete` only after the trail file, dist artifacts, twine-check log, upload log, publication plan, and publication evidence are locally inspectable.
 - `relay-kit publish index-check --channel pypi --strict` reaches `published` only after PyPI/TestPyPI metadata confirms the target version exists, is latest, and has release files.
 - `relay-kit commercial dossier --strict` reaches `ready` only after local readiness, publication status, support triage/soak, and external CI/release/package/SLA/support ownership evidence are present.
+- Pulse and signal export surface package-index published/latest status so post-release monitoring can catch PyPI/TestPyPI metadata drift.
 - Pulse and signal export surface support-request readiness so support operations can see whether the intake artifact is actionable.
 - Pulse and signal export surface commercial dossier readiness so support/release review can see whether the final commercial proof binder is ready.
 - Pulse and signal export surface per-gate pass, attention, hold, and not-run counts so dashboard review can target the exact degraded gate.

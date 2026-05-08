@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh live workflow state after package-index maintenance merged and main CI passed.
+Surface live package-index publication proof in Pulse reports and exported signals so release visibility shows PyPI state without rerunning every publication command manually.
 
 ## Active lane
 - Lane id: primary
@@ -10,24 +10,24 @@ Refresh live workflow state after package-index maintenance merged and main CI p
 
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: bootstrap
-- Active specialist: bootstrap
+- Layer-2 workflow hub: fix-hub
+- Active specialist: developer
 
 ## Active utility providers
-- Primary utility provider: memory-search
-- Additional utilities in play: evidence-before-completion
+- Primary utility provider: evidence-before-completion
+- Additional utilities in play: runtime-doctor, skill-gauntlet
 
 ## Active standalone/domain skill
-- Skill: bootstrap
-- Why selected: this is a bounded post-merge state/context refresh after package-index maintenance landed.
+- Skill: developer
+- Why selected: this is a bounded code/docs/test slice after package-index maintenance landed.
 
 ## Complexity level
-- Level: L1
-- Reasoning: implementation is complete; this pass only removes state drift.
+- Level: L2
+- Reasoning: changes touch Pulse aggregation, signal export, CLI flags, docs, and regression tests, but stay within one release-observability surface.
 
 ## Chosen track
 - Track: quick-flow
-- Why this track fits: the slice updates live state/context after a completed merge.
+- Why this track fits: the slice is bounded and evidence can be proven with focused tests plus runtime gates.
 
 ## Completed artifacts
 - [ ] product-brief
@@ -49,7 +49,7 @@ Refresh live workflow state after package-index maintenance merged and main CI p
 | none | none | none | none |
 
 ## Next skill
-review-hub
+test-hub
 
 ## Known blockers
 No active blockers. PyPI publication proof and package-index maintenance are complete for `relay-kit==3.4.1`.
@@ -58,6 +58,15 @@ No active blockers. PyPI publication proof and package-index maintenance are com
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
+- Active branch: `codex/package-index-pulse-signals`.
+- Current branch objective: include package-index check artifacts in Pulse gate summary, HTML output, and signal export.
+- Code artifacts in scope: `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, `relay_kit_public_cli.py`.
+- Test/docs artifacts in scope: `tests/test_pulse_report.py`, `tests/test_signal_export.py`, Pulse/signal docs, README, upgrade backlog.
+- Current branch evidence so far: `python relay_kit_public_cli.py publish index-check . --channel pypi --target-version 3.4.1 --package-url https://pypi.org/project/relay-kit/3.4.1/ --strict --json` returned `status: published`, HTTP `200`, latest version `3.4.1`, target file count `2`.
+- Current branch evidence so far: `python relay_kit_public_cli.py pulse build . --include-package-index --json --no-history` returned Pulse `status: pass`, package-index `status: published`, and package-index gate `pass`.
+- Current branch evidence so far: `python relay_kit_public_cli.py signal export . --otlp --json` emitted `relay.package_index.published=1` with target/latest version `3.4.1`.
+- Current branch focused tests: `python -m pytest tests\test_pulse_report.py tests\test_signal_export.py -q` passed with 26 tests.
+- Required next proof: full pytest, validate runtime, runtime doctor live, enterprise doctor, readiness enterprise, and `git diff --check`.
 - Published GitHub release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.1.
 - Published PyPI package: https://pypi.org/project/relay-kit/3.4.1/.
 - Published tag commit: `30b34bb0361723dc65a1001f9c72ba216624c881`.
@@ -162,4 +171,4 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Readiness route-quality gate verification: PR #73 added readiness parsing for workflow-eval route quality; local `python -m pytest tests -q` passed with 184 tests, workflow eval reported 55/55 scenarios with `weak_route_count=0` and `min_route_margin=5`, enterprise readiness returned `commercial-ready-candidate` with workflow details, PR CI `25537068673` passed, and main CI `25537111543` passed.
 
 ## Recommended next lane
-Next useful feature lane: post-release monitoring, dashboard/eval reporting polish, or customer support operations. PyPI publication and package-index metadata proof are complete for `3.4.1`.
+Finish package-index Pulse/signal visibility through test-hub and PR CI. After merge, run the standard post-merge state refresh before starting broader dashboard/eval polish.

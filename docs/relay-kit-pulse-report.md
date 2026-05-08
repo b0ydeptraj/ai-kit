@@ -12,6 +12,8 @@ relay-kit pulse build /path/to/project --include-readiness
 relay-kit pulse build /path/to/project --workflow-eval-file workflow-eval.json --readiness-file readiness.json
 relay-kit pulse build /path/to/project --include-publication
 relay-kit pulse build /path/to/project --publication-file publication-plan.json
+relay-kit pulse build /path/to/project --include-package-index
+relay-kit pulse build /path/to/project --package-index-file .relay-kit/release/package-index-check.json
 relay-kit pulse build /path/to/project --include-support-request
 relay-kit pulse build /path/to/project --support-request-file .relay-kit/support/support-request.json
 relay-kit pulse build /path/to/project --include-commercial-dossier
@@ -36,16 +38,17 @@ Pulse combines:
 - workflow focus signals for weak route candidates, eval coverage gaps, support evidence gaps, and support fixture-depth gaps
 - readiness status and verdict when `--include-readiness` or `--readiness-file` is used
 - publication plan status, channel, version, and finding count when `--include-publication` or `--publication-file` is used
+- package-index status, target version, latest version, release file count, and finding count when `--include-package-index` or `--package-index-file` is used
 - support request status, severity, diagnostic count, and finding count when `--include-support-request` or `--support-request-file` is used
 - commercial dossier status, channel, external proof field count, and finding count when `--include-commercial-dossier` or `--commercial-dossier-file` is used
-- gate summary status for workflow eval, readiness, publication, support request, commercial dossier, and evidence ledger
+- gate summary status for workflow eval, readiness, publication, package index, support request, commercial dossier, and evidence ledger
 - evidence ledger event counts, gate counts, and recent events
 - Pulse history snapshots from previous report builds
 
 ## Status
 
 - `pass`: workflow eval passed, readiness passed when included, and no recent failed evidence events are present
-- `attention`: core quality gates passed, but recent evidence contains failed events, included readiness is only `limited-beta`, included publication plan is not `ready`, included support request is not `ready`, or included commercial dossier is not `ready`
+- `attention`: core quality gates passed, but recent evidence contains failed events, included readiness is only `limited-beta`, included publication plan is not `ready`, included package-index check is not `published`, included support request is not `ready`, or included commercial dossier is not `ready`
 - `hold`: workflow eval or readiness is failing
 
 `pulse_score` is a local summary score built from pass rate, evidence coverage, readiness status, and recent evidence failures. Treat it as a triage signal, not a release attestation.
@@ -55,7 +58,7 @@ Pulse combines:
 The JSON report includes `gate_summary`:
 
 - `status_counts`: count of gates in `pass`, `attention`, `hold`, and `not-run`
-- `gates`: per-gate status and short summary for workflow eval, readiness, publication, support request, commercial dossier, and evidence
+- `gates`: per-gate status and short summary for workflow eval, readiness, publication, package index, support request, commercial dossier, and evidence
 - `gates[].drilldown`: degraded scenarios, gates, findings, diagnostics, or recent failed evidence events for that gate
 - `drilldown_item_count`: total number of drilldown rows across the gate summary
 - `next_actions`: concrete follow-up items for `attention` or `hold` gates
@@ -105,9 +108,10 @@ Run Pulse after eval/readiness evidence exists:
 relay-kit eval run /path/to/project --strict --json --output-file workflow-eval.json
 relay-kit readiness check /path/to/project --profile enterprise --json > readiness.json
 relay-kit publish plan /path/to/project --channel pypi --json > publication-plan.json
+relay-kit publish index-check /path/to/project --channel pypi --target-version X.Y.Z --package-url https://pypi.org/project/relay-kit/X.Y.Z/ --strict --json > package-index.json
 relay-kit support request /path/to/project --severity P1 --policy-pack enterprise --json > support-request.json
 relay-kit commercial dossier /path/to/project --channel pypi --strict --json > commercial-dossier.json
-relay-kit pulse build /path/to/project --workflow-eval-file workflow-eval.json --readiness-file readiness.json --publication-file publication-plan.json --support-request-file support-request.json --commercial-dossier-file commercial-dossier.json
+relay-kit pulse build /path/to/project --workflow-eval-file workflow-eval.json --readiness-file readiness.json --publication-file publication-plan.json --package-index-file package-index.json --support-request-file support-request.json --commercial-dossier-file commercial-dossier.json
 ```
 
 Use the HTML file for human review and the JSON file for support bundles or future dashboards.
@@ -122,5 +126,5 @@ Signal export includes `relay.gates.pass`, `relay.gates.attention`,
 `relay.gates.hold`, `relay.gates.not_run`, `relay.gates.drilldown_items`,
 `relay.workflow.weak_route_count`, `relay.workflow.coverage_gap_count`,
 `relay.workflow.support_evidence_gap_count`,
-`relay.workflow.support_fixture_depth_gap_count`, `relay.publication.ready`, `relay.support_request.ready`, and
+`relay.workflow.support_fixture_depth_gap_count`, `relay.publication.ready`, `relay.package_index.published`, `relay.support_request.ready`, and
 `relay.commercial_dossier.ready` when a Pulse report contains those surfaces.

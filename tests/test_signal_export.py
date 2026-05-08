@@ -57,6 +57,14 @@ def write_pulse_report(root: Path) -> Path:
                     "version": "3.3.0",
                     "findings": [],
                 },
+                "package_index": {
+                    "status": "published",
+                    "channel": "pypi",
+                    "target_version": "3.4.1",
+                    "latest_version": "3.4.1",
+                    "target_file_count": 2,
+                    "findings": [],
+                },
                 "support_request": {
                     "status": "ready",
                     "severity": "P1",
@@ -125,6 +133,7 @@ def test_signal_export_builds_metrics_and_events(tmp_path: Path) -> None:
     assert "relay.gates.not_run" in metric_names
     assert "relay.gates.drilldown_items" in metric_names
     assert "relay.publication.ready" in metric_names
+    assert "relay.package_index.published" in metric_names
     assert "relay.support_request.ready" in metric_names
     assert "relay.commercial_dossier.ready" in metric_names
     assert "relay.evidence.event" in event_names

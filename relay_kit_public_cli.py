@@ -585,10 +585,12 @@ def _parse_pulse_args(argv: list[str]) -> argparse.Namespace:
     build.add_argument("--profile", choices=["team", "enterprise"], default="enterprise")
     build.add_argument("--include-readiness", action="store_true", help="Run readiness check with --skip-tests")
     build.add_argument("--include-publication", action="store_true", help="Run no-upload publication plan and include it")
+    build.add_argument("--include-package-index", action="store_true", help="Read default package-index check artifact and include it")
     build.add_argument("--include-support-request", action="store_true", help="Read default support request intake artifact and include it")
     build.add_argument("--include-commercial-dossier", action="store_true", help="Read default commercial dossier artifact and include it")
     build.add_argument("--readiness-file", default=None, help="Existing readiness JSON report to include")
     build.add_argument("--publication-file", default=None, help="Existing publication plan JSON report to include")
+    build.add_argument("--package-index-file", default=None, help="Existing package-index check JSON report to include")
     build.add_argument("--support-request-file", default=None, help="Existing support request JSON report to include")
     build.add_argument("--commercial-dossier-file", default=None, help="Existing commercial dossier JSON report to include")
     build.add_argument("--workflow-eval-file", default=None, help="Existing workflow eval JSON report to include")
@@ -1280,11 +1282,13 @@ def run_pulse(args: argparse.Namespace) -> int:
         evidence_limit=args.evidence_limit,
         include_readiness=args.include_readiness,
         include_publication=args.include_publication,
+        include_package_index=args.include_package_index,
         include_support_request=args.include_support_request,
         include_commercial_dossier=args.include_commercial_dossier,
         workflow_eval_file=args.workflow_eval_file,
         readiness_file=args.readiness_file,
         publication_file=args.publication_file,
+        package_index_file=args.package_index_file,
         support_request_file=args.support_request_file,
         commercial_dossier_file=args.commercial_dossier_file,
         output_dir=args.output_dir,
