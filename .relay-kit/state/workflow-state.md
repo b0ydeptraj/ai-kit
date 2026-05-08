@@ -52,7 +52,7 @@ Refresh live workflow state after PR #73 so source-of-truth artifacts reflect re
 workflow-router
 
 ## Known blockers
-PyPI publication remains unavailable until PyPI credentials exist. GitHub release assets, public SLA/support intake, owner commitments, and default enterprise install proof now satisfy the internal-channel commercial dossier.
+PyPI publication is the active remaining lane. Token-backed upload evidence is still required before claiming PyPI publication.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
@@ -60,7 +60,7 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 ## Current source of truth
 - Published release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
 - Published tag commit: `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
-- Current mainline package version: `3.4.0.dev0`.
+- Current release-prep package version: `3.4.0`.
 - Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25537111543, conclusion `success`.
 - PR #1 merged release readiness and package smoke gates: https://github.com/b0ydeptraj/Relay-kit/pull/1.
 - PR #2 merged Relay OTLP signal export: https://github.com/b0ydeptraj/Relay-kit/pull/2.

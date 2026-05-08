@@ -337,7 +337,7 @@ def _soak_scenario(severity: str) -> dict[str, str]:
     }
     selected = scenarios[severity]
     return {
-        "package_version": "3.4.0.dev0",
+        "package_version": "3.4.0",
         "operating_system": "Windows",
         "shell": "PowerShell",
         "installed_bundle": "enterprise",

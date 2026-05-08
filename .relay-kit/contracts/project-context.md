@@ -1,7 +1,7 @@
 # project-context
 
 > Path: `.relay-kit/contracts/project-context.md`
-> Purpose: Current source-of-truth context for Relay-kit work after the `v3.3.0` release and `3.4.0.dev0` next-dev bump.
+> Purpose: Current source-of-truth context for Relay-kit work during the `3.4.0` PyPI release-prep lane.
 > Last refreshed: 2026-05-08
 
 ## Existing architecture
@@ -14,7 +14,7 @@
 - Semantic skill gauntlet now enforces `allowed-tools` frontmatter for configured profiled risk-sensitive skills and fails drift against registry tool profiles. Current profiled support skills include API, data, dependency, media, browser, and multimodal evidence utilities.
 - Workflow eval now reports `quality.support_route_review` for profiled support-skill coverage, weak support routes, and nearby support-skill collisions within the support margin threshold. It also reports `quality.support_evidence_contract_review` for profiled support-skill prompt and expected-term gaps, plus `quality.support_fixture_depth_review` for report-level support fixture depth gaps. The default 55-scenario suite currently reports `weak_route_count=0` and `min_route_margin=5`, and enterprise readiness fails if weak routes appear or `min_route_margin` drops below `4`.
 - Current released tag: `v3.3.0` at commit `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
-- Current mainline package version: `3.4.0.dev0`, set in `pyproject.toml` and `.relay-kit/version.json`.
+- Current release-prep package version: `3.4.0`, set in `pyproject.toml` and `.relay-kit/version.json`.
 
 ## Coding conventions
 
@@ -103,7 +103,7 @@
 
 ## Known sharp edges
 
-- `v3.3.0` remains the published release tag, while `main` is now `3.4.0.dev0`. Do not publish or package from `main` as `3.3.0`.
+- `v3.3.0` remains the last published release tag until `v3.4.0` is created and PyPI upload evidence exists. Do not publish or package this branch as `3.3.0`.
 - `.relay-kit/manifest/bundles.json` and `.relay-kit/manifest/trust.json` are ignored generated artifacts. Regenerate and verify them locally when version, skill hashes, or trust metadata changes.
 - Package smoke on Windows may emit a harmless virtualenv path casing or 8.3-name warning after successful JSON output.
 - Pulse now includes `gate_summary`, per-gate `drilldown` rows, `workflow_focus`, and optional `commercial_dossier`; signal export emits `relay.gates.*`, `relay.workflow.weak_route_count`, `relay.workflow.coverage_gap_count`, `relay.workflow.support_evidence_gap_count`, `relay.workflow.support_fixture_depth_gap_count`, and `relay.commercial_dossier.ready`; future dashboard/eval work should preserve those schema keys.
