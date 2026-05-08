@@ -37,6 +37,7 @@
 
 - Relay-kit is positioned as an agent workflow governance kit, not a CrewAI/n8n-style full agent runtime.
 - Commercial readiness is gated by `relay-kit readiness check . --profile enterprise --json`, `relay-kit release verify . --json`, `relay-kit support request . --json`, `relay-kit support triage . --json`, `relay-kit support soak . --json`, `relay-kit publish trail . --channel pypi --json`, `relay-kit publish plan . --channel pypi --json`, `relay-kit publish evidence . --channel pypi --json`, `relay-kit publish status . --json` when package upload evidence exists, `relay-kit publish index-check . --channel pypi --strict --json` for public package-index metadata proof, and `relay-kit commercial dossier . --strict --json` when external CI/release/package/SLA/support owner proof exists.
+- Pulse can include package-index checks through `relay-kit pulse build . --package-index-file <path>` or `--include-package-index`, and signal export emits `relay.package_index.published` for dashboard or OTLP consumers.
 - Pulse can include the commercial dossier through `relay-kit pulse build . --commercial-dossier-file <path>`, and signal export emits `relay.commercial_dossier.ready` for dashboard or OTLP consumers.
 - Enterprise trust metadata is deterministic, not cryptographic. `relay-kit manifest verify . --trusted` is required before enterprise readiness claims.
 - Release/publication evidence must distinguish local readiness from external package upload, marketplace publication, and legal SLA commitments.
@@ -101,6 +102,7 @@
 - PR #76 merged publication status proof hardening: https://github.com/b0ydeptraj/Relay-kit/pull/76, merge commit `ae758c52bef2cc6851b16d7bdb2d5021603bc0b7`.
 - PR #77 merged installed-package doctor smoke fix and `3.4.1` patch metadata: https://github.com/b0ydeptraj/Relay-kit/pull/77, merge commit `30b34bb0361723dc65a1001f9c72ba216624c881`.
 - PR #79 merged package-index maintenance and commercial dossier package-index gate: https://github.com/b0ydeptraj/Relay-kit/pull/79, merge commit `84df24cdfcfad44190abf64c110f1b0585486b85`.
+- PR #80 merged post-package-index state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/80, merge commit `b659973d812589abd092aeec8887ffb5665d4e29`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
 - GitHub release `v3.4.0` published: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.
@@ -112,7 +114,8 @@
 - Fresh PyPI venv smoke installed `relay-kit==3.4.1` from PyPI, imported `relay_kit_public_cli.py` from the venv `site-packages`, ran `relay-kit --help`, generated a Codex enterprise project with `relay-kit init <project> --codex`, and passed `relay-kit doctor <project>`.
 - Publication evidence is complete for `3.4.1`: `python relay_kit_public_cli.py publish status . --strict --json` returned `status: complete`.
 - Commercial dossier is ready for PyPI: `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --strict --json` returned `status: ready`.
-- Latest confirmed main CI after PR #79: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25564536474, conclusion `success`.
+- Current package-index Pulse/signal branch proof: focused Pulse/signal tests passed with 26 tests; live `publish index-check` returned `status: published`; Pulse build included package-index `pass`; signal export emitted `relay.package_index.published=1`.
+- Latest confirmed main CI after PR #80: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25564865821, conclusion `success`.
 
 ## Known sharp edges
 

@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-Keep Relay-kit source-of-truth state current after package-index maintenance and PyPI `3.4.1` publication proof.
+Make PyPI package-index publication status visible in Pulse reports and Relay signal exports.
 
 ## Active orchestrator
 - workflow-router
@@ -9,7 +9,7 @@ Keep Relay-kit source-of-truth state current after package-index maintenance and
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | State refreshed after PR #79 package-index maintenance merge and main CI success. |
+| primary | developer | fix-hub | package-index Pulse/signal visibility | Pulse/signal/reporting files | active | test-hub next | Focused tests pass; live PyPI index-check, Pulse build, and signal export proof passed. |
 | lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
@@ -24,10 +24,10 @@ Keep Relay-kit source-of-truth state current after package-index maintenance and
 Primary lane only. Parallel lanes are parked until explicitly routed.
 
 ## Merge prerequisites
-Runtime doctor live mode, enterprise doctor, readiness enterprise, and main CI after PR #79 passed. Remote CI must pass after this state refresh PR.
+Full local gates must pass: pytest, validate runtime, runtime doctor live, enterprise doctor, readiness enterprise, and `git diff --check`. Remote PR CI must pass before merge.
 
 ## Conflict risks
-Low. This slice edits state/context artifacts only.
+Low to medium. This slice edits Pulse/signal code, public CLI flags, tests, docs, and live state artifacts.
 
 ## Decision log
 - 2026-04-27: Refresh state artifacts instead of starting a new feature slice because project-context was empty and workflow-state still referenced completed branch work.
@@ -66,3 +66,4 @@ Low. This slice edits state/context artifacts only.
 - 2026-05-08: Start package-index maintenance on `codex/package-index-maintenance`; `relay-kit publish index-check` live PyPI proof returned `status: published` for `3.4.1`.
 - 2026-05-08: Package-index maintenance local gates passed: 191 pytest tests, runtime validation, runtime doctor live, enterprise doctor, readiness enterprise, live index-check, and commercial dossier strict.
 - 2026-05-08: Refresh state artifacts after PR #79 merged package-index maintenance; main CI `25564536474` passed.
+- 2026-05-08: Start package-index Pulse/signal visibility on `codex/package-index-pulse-signals`; focused tests pass and live Pulse/signal proof shows package-index `published`.

@@ -10,7 +10,7 @@ from typing import Any, Callable, Mapping
 
 from relay_kit_v3.commercial_dossier import DEFAULT_OUTPUT as DEFAULT_COMMERCIAL_DOSSIER_OUTPUT
 from relay_kit_v3.evidence_ledger import LedgerSummary, summarize_events, utc_timestamp
-from relay_kit_v3.publication import build_publication_plan
+from relay_kit_v3.publication import DEFAULT_INDEX_CHECK_OUTPUT, build_publication_plan
 from relay_kit_v3.readiness import build_readiness_report
 from relay_kit_v3.support_request import DEFAULT_OUTPUT as DEFAULT_SUPPORT_REQUEST_OUTPUT
 from scripts import eval_workflows
@@ -25,6 +25,7 @@ DRILLDOWN_LIMIT = 8
 WorkflowEvalBuilder = Callable[[Path], Mapping[str, Any]]
 ReadinessBuilder = Callable[[Path, str, bool], Mapping[str, Any]]
 PublicationBuilder = Callable[[Path], Mapping[str, Any]]
+PackageIndexBuilder = Callable[[Path], Mapping[str, Any]]
 SupportRequestBuilder = Callable[[Path], Mapping[str, Any]]
 CommercialDossierBuilder = Callable[[Path], Mapping[str, Any]]
 EvidenceSummarizer = Callable[[Path, int], LedgerSummary]
@@ -40,9 +41,11 @@ def build_pulse_report(
     workflow_eval_file: Path | str | None = None,
     readiness_file: Path | str | None = None,
     publication_file: Path | str | None = None,
+    package_index_file: Path | str | None = None,
     support_request_file: Path | str | None = None,
     commercial_dossier_file: Path | str | None = None,
     include_publication: bool = False,
+    include_package_index: bool = False,
     include_support_request: bool = False,
     include_commercial_dossier: bool = False,
     output_dir: Path | str | None = None,
@@ -50,6 +53,7 @@ def build_pulse_report(
     workflow_eval_builder: WorkflowEvalBuilder | None = None,
     readiness_builder: ReadinessBuilder | None = None,
     publication_builder: PublicationBuilder | None = None,
+    package_index_builder: PackageIndexBuilder | None = None,
     support_request_builder: SupportRequestBuilder | None = None,
     commercial_dossier_builder: CommercialDossierBuilder | None = None,
     evidence_summarizer: EvidenceSummarizer | None = None,
@@ -70,6 +74,12 @@ def build_pulse_report(
         publication_file=publication_file,
         publication_builder=publication_builder,
     )
+    package_index = _load_or_build_package_index(
+        root,
+        include_package_index=include_package_index,
+        package_index_file=package_index_file,
+        package_index_builder=package_index_builder,
+    )
     support_request = _load_or_build_support_request(
         root,
         include_support_request=include_support_request,
@@ -83,9 +93,9 @@ def build_pulse_report(
         commercial_dossier_builder=commercial_dossier_builder,
     )
     evidence = _evidence_payload(root, evidence_limit, evidence_summarizer)
-    status = pulse_status(eval_report, readiness_report, publication_report, support_request, commercial_dossier, evidence)
-    score = pulse_score(eval_report, readiness_report, publication_report, support_request, commercial_dossier, evidence)
-    gate_summary = build_gate_summary(eval_report, readiness_report, publication_report, support_request, commercial_dossier, evidence)
+    status = pulse_status(eval_report, readiness_report, publication_report, package_index, support_request, commercial_dossier, evidence)
+    score = pulse_score(eval_report, readiness_report, publication_report, package_index, support_request, commercial_dossier, evidence)
+    gate_summary = build_gate_summary(eval_report, readiness_report, publication_report, package_index, support_request, commercial_dossier, evidence)
     workflow_focus = build_workflow_focus(eval_report)
     trend = build_trend(
         root,
@@ -97,6 +107,7 @@ def build_pulse_report(
             workflow_eval=eval_report,
             readiness=readiness_report,
             publication=publication_report,
+            package_index=package_index,
             support_request=support_request,
             commercial_dossier=commercial_dossier,
             evidence=evidence,
@@ -113,6 +124,7 @@ def build_pulse_report(
         "workflow_eval": eval_report,
         "readiness": readiness_report,
         "publication": publication_report,
+        "package_index": package_index,
         "support_request": support_request,
         "commercial_dossier": commercial_dossier,
         "workflow_focus": workflow_focus,
@@ -151,6 +163,7 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
     quality = _mapping(workflow_eval.get("quality"))
     readiness = _mapping(report.get("readiness"))
     publication = _mapping(report.get("publication"))
+    package_index = _mapping(report.get("package_index"))
     support_request = _mapping(report.get("support_request"))
     commercial_dossier = _mapping(report.get("commercial_dossier"))
     gate_summary = _mapping(report.get("gate_summary"))
@@ -174,6 +187,7 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
         ("Layer coverage", str(len(_mapping(quality.get("expected_layer_counts"))))),
         ("Readiness", str(readiness.get("verdict", "not-run"))),
         ("Publication", str(publication.get("status", "not-run"))),
+        ("Package index", str(package_index.get("status", "not-run"))),
         ("Support request", str(support_request.get("status", "not-run"))),
         ("Commercial dossier", str(commercial_dossier.get("status", "not-run"))),
         ("Score delta", _signed(trend.get("pulse_score_delta"))),
@@ -193,6 +207,7 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
     gate_summary_rows = _gate_summary_rows(gate_summary)
     gate_drilldown_rows = _gate_drilldown_rows(gate_summary)
     publication_rows = _publication_rows(publication)
+    package_index_rows = _package_index_rows(package_index)
     support_request_rows = _support_request_rows(support_request)
     commercial_dossier_rows = _commercial_dossier_rows(commercial_dossier)
 
@@ -354,6 +369,13 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
       </table>
     </section>
     <section class="panel">
+      <h2>Package index</h2>
+      <table>
+        <tr><th>Signal</th><th>Value</th></tr>
+        {package_index_rows}
+      </table>
+    </section>
+    <section class="panel">
       <h2>Support request</h2>
       <table>
         <tr><th>Signal</th><th>Value</th></tr>
@@ -388,6 +410,7 @@ def pulse_status(
     workflow_eval: Mapping[str, Any],
     readiness: Mapping[str, Any] | None,
     publication: Mapping[str, Any] | None,
+    package_index: Mapping[str, Any] | None,
     support_request: Mapping[str, Any] | None,
     commercial_dossier: Mapping[str, Any] | None,
     evidence: Mapping[str, Any],
@@ -399,6 +422,8 @@ def pulse_status(
     if readiness is not None and readiness.get("verdict") not in {None, "commercial-ready-candidate"}:
         return "attention"
     if publication is not None and publication.get("status") != "ready":
+        return "attention"
+    if package_index is not None and package_index.get("status") != "published":
         return "attention"
     if support_request is not None and support_request.get("status") != "ready":
         return "attention"
@@ -414,6 +439,7 @@ def pulse_score(
     workflow_eval: Mapping[str, Any],
     readiness: Mapping[str, Any] | None,
     publication: Mapping[str, Any] | None,
+    package_index: Mapping[str, Any] | None,
     support_request: Mapping[str, Any] | None,
     commercial_dossier: Mapping[str, Any] | None,
     evidence: Mapping[str, Any],
@@ -435,6 +461,9 @@ def pulse_score(
         publication_score = 5
     else:
         publication_score = 0
+    package_index_penalty = 0
+    if package_index is not None and package_index.get("status") != "published":
+        package_index_penalty = 5
     support_penalty = 0
     if support_request is not None and support_request.get("status") != "ready":
         support_penalty = 5
@@ -443,7 +472,7 @@ def pulse_score(
         commercial_penalty = 5
     fail_count = int(_mapping(evidence.get("recent_status_counts")).get("fail", 0) or 0)
     evidence_score = max(0, 5 - (fail_count * 2))
-    score = round((pass_rate * 65) + (evidence_coverage * 10) + readiness_score + publication_score + evidence_score - support_penalty - commercial_penalty)
+    score = round((pass_rate * 65) + (evidence_coverage * 10) + readiness_score + publication_score + evidence_score - support_penalty - commercial_penalty - package_index_penalty)
     return max(0, min(100, int(score)))
 
 
@@ -451,6 +480,7 @@ def build_gate_summary(
     workflow_eval: Mapping[str, Any],
     readiness: Mapping[str, Any] | None,
     publication: Mapping[str, Any] | None,
+    package_index: Mapping[str, Any] | None,
     support_request: Mapping[str, Any] | None,
     commercial_dossier: Mapping[str, Any] | None,
     evidence: Mapping[str, Any],
@@ -459,6 +489,7 @@ def build_gate_summary(
         _workflow_eval_gate(workflow_eval),
         _readiness_gate(readiness),
         _publication_gate(publication),
+        _package_index_gate(package_index),
         _support_request_gate(support_request),
         _commercial_dossier_gate(commercial_dossier),
         _evidence_gate(evidence),
@@ -634,6 +665,34 @@ def _publication_gate(publication: Mapping[str, Any] | None) -> dict[str, Any]:
     }
 
 
+def _package_index_gate(package_index: Mapping[str, Any] | None) -> dict[str, Any]:
+    if package_index is None:
+        return {
+            "id": "package-index",
+            "label": "Package index",
+            "status": "not-run",
+            "summary": "Package-index metadata check was not included.",
+            "details": {},
+            "drilldown": [],
+        }
+    findings = package_index.get("findings", [])
+    status = "pass" if package_index.get("status") == "published" else "attention"
+    return {
+        "id": "package-index",
+        "label": "Package index",
+        "status": status,
+        "summary": str(package_index.get("status", "-")),
+        "details": {
+            "channel": package_index.get("channel"),
+            "target_version": package_index.get("target_version"),
+            "latest_version": package_index.get("latest_version"),
+            "target_file_count": package_index.get("target_file_count"),
+            "findings": len(findings) if isinstance(findings, list) else 0,
+        },
+        "drilldown": _package_index_drilldown(package_index),
+    }
+
+
 def _support_request_gate(support_request: Mapping[str, Any] | None) -> dict[str, Any]:
     if support_request is None:
         return {
@@ -707,6 +766,7 @@ def _gate_next_actions(gates: list[Mapping[str, Any]]) -> list[dict[str, str]]:
         "workflow-eval": "Fix failing workflow scenarios before trusting the Pulse score.",
         "readiness": "Run or fix readiness check until the enterprise verdict is commercial-ready-candidate.",
         "publication": "Resolve publication findings or generate a fresh publication status before release.",
+        "package-index": "Run relay-kit publish index-check and confirm the package index exposes the target version.",
         "support-request": "Complete support request diagnostics and clear support findings before paid handoff.",
         "commercial-dossier": "Complete commercial dossier proof before making a commercial-ready claim.",
         "evidence": "Inspect recent failing evidence events and rerun the affected gate.",
@@ -786,6 +846,26 @@ def _publication_drilldown(publication: Mapping[str, Any]) -> list[dict[str, str
         if status == "pass":
             continue
         check_id = str(check.get("id", check.get("gate", "publication")))
+        items.append(
+            {
+                "kind": "check",
+                "id": check_id,
+                "status": status,
+                "summary": str(check.get("summary", check_id)),
+            }
+        )
+    return _dedupe_drilldown(items)[:DRILLDOWN_LIMIT]
+
+
+def _package_index_drilldown(package_index: Mapping[str, Any]) -> list[dict[str, str]]:
+    items = _finding_drilldown_items(package_index.get("findings"), default_id="package-index")
+    for check in _list(package_index.get("checks")):
+        if not isinstance(check, Mapping):
+            continue
+        status = str(check.get("status", "unknown"))
+        if status == "pass":
+            continue
+        check_id = str(check.get("id", check.get("gate", "package-index")))
         items.append(
             {
                 "kind": "check",
@@ -958,6 +1038,7 @@ def pulse_history_snapshot(report: Mapping[str, Any]) -> dict[str, Any]:
     workflow_eval = _mapping(report.get("workflow_eval"))
     readiness = _mapping(report.get("readiness"))
     publication = _mapping(report.get("publication"))
+    package_index = _mapping(report.get("package_index"))
     support_request = _mapping(report.get("support_request"))
     commercial_dossier = _mapping(report.get("commercial_dossier"))
     evidence = _mapping(report.get("evidence"))
@@ -971,6 +1052,7 @@ def pulse_history_snapshot(report: Mapping[str, Any]) -> dict[str, Any]:
             workflow_eval=workflow_eval,
             readiness=readiness if readiness else None,
             publication=publication if publication else None,
+            package_index=package_index if package_index else None,
             support_request=support_request if support_request else None,
             commercial_dossier=commercial_dossier if commercial_dossier else None,
             evidence=evidence,
@@ -986,6 +1068,7 @@ def snapshot_from_values(
     workflow_eval: Mapping[str, Any],
     readiness: Mapping[str, Any] | None,
     publication: Mapping[str, Any] | None,
+    package_index: Mapping[str, Any] | None,
     support_request: Mapping[str, Any] | None,
     commercial_dossier: Mapping[str, Any] | None,
     evidence: Mapping[str, Any],
@@ -1006,6 +1089,10 @@ def snapshot_from_values(
         "readiness_verdict": readiness.get("verdict") if readiness else None,
         "publication_status": publication.get("status") if publication else None,
         "publication_findings": len(publication.get("findings", [])) if publication else None,
+        "package_index_status": package_index.get("status") if package_index else None,
+        "package_index_latest_version": package_index.get("latest_version") if package_index else None,
+        "package_index_target_version": package_index.get("target_version") if package_index else None,
+        "package_index_findings": len(package_index.get("findings", [])) if package_index else None,
         "support_request_status": support_request.get("status") if support_request else None,
         "support_request_severity": support_request.get("severity") if support_request else None,
         "support_request_findings": len(support_request.get("findings", [])) if support_request else None,
@@ -1062,6 +1149,21 @@ def _load_or_build_publication(
     if not include_publication:
         return None
     builder = publication_builder or (lambda project_root: build_publication_plan(project_root, channel="pypi"))
+    return builder(root)
+
+
+def _load_or_build_package_index(
+    root: Path,
+    *,
+    include_package_index: bool,
+    package_index_file: Path | str | None,
+    package_index_builder: PackageIndexBuilder | None,
+) -> Mapping[str, Any] | None:
+    if package_index_file is not None:
+        return _read_json(root, package_index_file)
+    if not include_package_index:
+        return None
+    builder = package_index_builder or (lambda project_root: _read_json(project_root, DEFAULT_INDEX_CHECK_OUTPUT))
     return builder(root)
 
 
@@ -1280,6 +1382,25 @@ def _publication_rows(publication: Mapping[str, Any]) -> str:
             ("Status", str(publication.get("status", "-"))),
             ("Channel", str(publication.get("channel", "-"))),
             ("Version", str(publication.get("version", "-"))),
+            ("Findings", str(len(findings) if isinstance(findings, list) else 0)),
+        ]
+    return "\n".join(
+        f"<tr><td>{escape(label)}</td><td>{escape(value)}</td></tr>"
+        for label, value in rows
+    )
+
+
+def _package_index_rows(package_index: Mapping[str, Any]) -> str:
+    if not package_index:
+        rows = [("Status", "not-run")]
+    else:
+        findings = package_index.get("findings", [])
+        rows = [
+            ("Status", str(package_index.get("status", "-"))),
+            ("Channel", str(package_index.get("channel", "-"))),
+            ("Target version", str(package_index.get("target_version", "-"))),
+            ("Latest version", str(package_index.get("latest_version", "-"))),
+            ("Release files", str(package_index.get("target_file_count", "-"))),
             ("Findings", str(len(findings) if isinstance(findings, list) else 0)),
         ]
     return "\n".join(
