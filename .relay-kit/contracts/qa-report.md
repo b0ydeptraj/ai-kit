@@ -50,7 +50,8 @@ Changed surfaces:
 - Runtime doctor: `python scripts\runtime_doctor.py . --strict --state-mode live` passed with findings 0.
 - Enterprise doctor: `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise` passed.
 - Enterprise readiness: `python relay_kit_public_cli.py readiness check . --profile enterprise --json` returned `commercial-ready-candidate` with 191 pytest tests.
-- Main before this slice: `73e47e0da230d6855219e02df4e6917267f298e6`, with main CI https://github.com/b0ydeptraj/Relay-kit/actions/runs/25549224195 passing.
+- PR #79 merged: https://github.com/b0ydeptraj/Relay-kit/pull/79.
+- Main after PR #79: `84df24cdfcfad44190abf64c110f1b0585486b85`, with main CI https://github.com/b0ydeptraj/Relay-kit/actions/runs/25564536474 passing.
 
 ## Go / no-go recommendation
-Go for package-index maintenance PR after focused tests, live package-index check, runtime doctor live mode, enterprise doctor, readiness, and diff checks pass.
+Go for post-package-index state-refresh PR after live runtime doctor, enterprise doctor, readiness, and CI pass.

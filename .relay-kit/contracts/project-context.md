@@ -100,6 +100,7 @@
 - PR #75 merged stable `3.4.0` PyPI release preparation: https://github.com/b0ydeptraj/Relay-kit/pull/75, merge commit `6bf8f15a9df5287c565c5f68a1877cf5b8f0dff3`.
 - PR #76 merged publication status proof hardening: https://github.com/b0ydeptraj/Relay-kit/pull/76, merge commit `ae758c52bef2cc6851b16d7bdb2d5021603bc0b7`.
 - PR #77 merged installed-package doctor smoke fix and `3.4.1` patch metadata: https://github.com/b0ydeptraj/Relay-kit/pull/77, merge commit `30b34bb0361723dc65a1001f9c72ba216624c881`.
+- PR #79 merged package-index maintenance and commercial dossier package-index gate: https://github.com/b0ydeptraj/Relay-kit/pull/79, merge commit `84df24cdfcfad44190abf64c110f1b0585486b85`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
 - GitHub release `v3.4.0` published: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.
@@ -111,7 +112,7 @@
 - Fresh PyPI venv smoke installed `relay-kit==3.4.1` from PyPI, imported `relay_kit_public_cli.py` from the venv `site-packages`, ran `relay-kit --help`, generated a Codex enterprise project with `relay-kit init <project> --codex`, and passed `relay-kit doctor <project>`.
 - Publication evidence is complete for `3.4.1`: `python relay_kit_public_cli.py publish status . --strict --json` returned `status: complete`.
 - Commercial dossier is ready for PyPI: `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --strict --json` returned `status: ready`.
-- Latest confirmed main CI before package-index maintenance branch: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25549224195, conclusion `success`.
+- Latest confirmed main CI after PR #79: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25564536474, conclusion `success`.
 
 ## Known sharp edges
 

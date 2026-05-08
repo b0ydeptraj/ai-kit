@@ -8,7 +8,7 @@
 ## Active lanes
 | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | Merge prerequisite | Status |
 |---|---|---|---|---|---|---|---|
-| primary | developer | workflow-router | review-hub | `relay_kit_v3/publication.py`, `relay_kit_v3/commercial_dossier.py`, `relay_kit_public_cli.py`, publication/commercial docs/tests/state | package-index maintenance | PR CI and merge CI | ready-for-pr |
+| primary | bootstrap | workflow-router | none | `.relay-kit/contracts/project-context.md`, `.relay-kit/state/*.md` | state refresh after PR #79 | CI after state refresh PR | ready-for-merge |
 | lane-2 | unassigned | none | none | none | none | none | parked |
 | lane-3 | unassigned | none | none | none | none | none | parked |
 

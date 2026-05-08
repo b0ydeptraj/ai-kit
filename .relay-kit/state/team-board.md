@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-Add package-index maintenance proof after PyPI `3.4.1` publication and keep source-of-truth state current.
+Keep Relay-kit source-of-truth state current after package-index maintenance and PyPI `3.4.1` publication proof.
 
 ## Active orchestrator
 - workflow-router
@@ -9,7 +9,7 @@ Add package-index maintenance proof after PyPI `3.4.1` publication and keep sour
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | developer | fix-hub | publication/commercial CLI/index-check docs/tests/state | none | ready for PR | review-hub next | `publish index-check` is implemented, commercial dossier includes the package-index gate, live PyPI check returns published, full pytest/readiness/doctor/commercial dossier gates passed. |
+| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | State refreshed after PR #79 package-index maintenance merge and main CI success. |
 | lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
@@ -24,7 +24,7 @@ Add package-index maintenance proof after PyPI `3.4.1` publication and keep sour
 Primary lane only. Parallel lanes are parked until explicitly routed.
 
 ## Merge prerequisites
-Focused tests, full pytest, live package-index check, runtime doctor live mode, enterprise doctor, readiness enterprise, commercial dossier strict, diff checks, PR CI, and merge CI.
+Runtime doctor live mode, enterprise doctor, readiness enterprise, and main CI after PR #79 passed. Remote CI must pass after this state refresh PR.
 
 ## Conflict risks
 Low. This slice edits state/context artifacts only.
@@ -65,3 +65,4 @@ Low. This slice edits state/context artifacts only.
 - 2026-05-08: Refresh state artifacts after PR #77/PR #78 published smoke-clean PyPI `relay-kit==3.4.1`; main CI `25549224195`, PyPI install smoke, publish status, and commercial dossier passed.
 - 2026-05-08: Start package-index maintenance on `codex/package-index-maintenance`; `relay-kit publish index-check` live PyPI proof returned `status: published` for `3.4.1`.
 - 2026-05-08: Package-index maintenance local gates passed: 191 pytest tests, runtime validation, runtime doctor live, enterprise doctor, readiness enterprise, live index-check, and commercial dossier strict.
+- 2026-05-08: Refresh state artifacts after PR #79 merged package-index maintenance; main CI `25564536474` passed.
