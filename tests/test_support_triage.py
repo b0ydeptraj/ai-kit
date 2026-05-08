@@ -41,7 +41,7 @@ def write_ready_support_artifacts(root: Path, *, include_bundle: bool = True) ->
         root,
         severity="P1",
         summary="Enterprise doctor fails after manifest trust metadata drift.",
-        package_version="3.4.0.dev0",
+        package_version="3.4.0",
         operating_system="Windows",
         shell="PowerShell",
         installed_bundle="enterprise",

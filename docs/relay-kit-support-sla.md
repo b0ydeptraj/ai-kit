@@ -84,7 +84,7 @@ Or generate the structured request artifact:
 relay-kit support request /path/to/project \
   --severity P1 \
   --summary "Enterprise doctor fails after manifest trust metadata drift." \
-  --package-version 3.4.0.dev0 \
+  --package-version 3.4.0 \
   --os Windows \
   --shell PowerShell \
   --bundle enterprise \
