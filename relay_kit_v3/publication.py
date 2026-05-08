@@ -343,6 +343,7 @@ def build_publication_trail_status(
         }
 
     package = read_package_metadata(root)
+    channel = str(trail.get("channel") or "")
     version = str(trail.get("version") or package.get("version") or "")
     name = str(trail.get("package_name") or package.get("name") or "")
     dist_dir = Path(str(trail.get("dist_dir") or root / "dist"))
@@ -355,6 +356,7 @@ def build_publication_trail_status(
             root=root,
             dist_dir=dist_dir,
             package_name=name,
+            channel=channel,
             version=version,
             evidence_paths=evidence_paths,
         )
@@ -392,7 +394,7 @@ def build_publication_trail_status(
         "status": status,
         "project_path": str(root),
         "trail_file": str(path),
-        "channel": trail.get("channel"),
+        "channel": channel,
         "package_name": name,
         "version": version,
         "summary": summary,
@@ -718,7 +720,7 @@ def text_evidence_file_check(
         return check(check_id, label, "hold", f"missing {label} file", details={"path": None})
     if not path.exists():
         return check(check_id, label, "hold", f"missing {label} file", details={"path": str(path)})
-    text = path.read_text(encoding="utf-8", errors="replace")
+    text = read_evidence_text(path)
     lowered = text.lower()
     failures = [token for token in failure_tokens if token in lowered]
     if not text.strip():
@@ -781,7 +783,13 @@ def publication_plan_file_check(path: Path) -> dict[str, Any]:
     return check("publication-plan", "publication plan", "pass", "publication plan is ready", details={"path": str(path)})
 
 
-def publication_evidence_file_check(path: Path) -> dict[str, Any]:
+def publication_evidence_file_check(
+    path: Path,
+    *,
+    expected_channel: str | None = None,
+    expected_name: str | None = None,
+    expected_version: str | None = None,
+) -> dict[str, Any]:
     if not path.exists():
         return check("publication-evidence", "publication evidence", "hold", "missing publication evidence file", details={"path": str(path)})
     payload = read_json_object(path)
@@ -803,6 +811,23 @@ def publication_evidence_file_check(path: Path) -> dict[str, Any]:
             f"publication evidence status is {payload.get('status')}",
             details={"path": str(path), "status": payload.get("status")},
         )
+    mismatches: list[dict[str, str | None]] = []
+    expected_values = {
+        "channel": expected_channel,
+        "package_name": expected_name,
+        "version": expected_version,
+    }
+    for field, expected in expected_values.items():
+        if expected and payload.get(field) != expected:
+            mismatches.append({"field": field, "expected": expected, "actual": str(payload.get(field))})
+    if mismatches:
+        return check(
+            "publication-evidence",
+            "publication evidence",
+            "hold",
+            "publication evidence does not match trail",
+            details={"path": str(path), "mismatches": mismatches},
+        )
     return check("publication-evidence", "publication evidence", "pass", "publication evidence is published", details={"path": str(path)})
 
 
@@ -812,6 +837,7 @@ def publication_trail_step_status(
     root: Path,
     dist_dir: Path,
     package_name: str,
+    channel: str,
     version: str,
     evidence_paths: Mapping[str, Any],
 ) -> dict[str, Any]:
@@ -834,7 +860,12 @@ def publication_trail_step_status(
         return step_status_from_check(step_id, label, check_result, pending_status="pending")
     if step_id == "publication-evidence":
         path = _path_from_evidence(root, evidence_paths, "publication_evidence_file")
-        check_result = publication_evidence_file_check(path)
+        check_result = publication_evidence_file_check(
+            path,
+            expected_channel=channel,
+            expected_name=package_name,
+            expected_version=version,
+        )
         return step_status_from_check(step_id, label, check_result, pending_status="pending")
     return {
         "id": step_id,
@@ -863,6 +894,23 @@ def step_status_from_check(
         "summary": check_result.get("summary", ""),
         "details": check_result.get("details", {}),
     }
+
+
+def read_evidence_text(path: Path) -> str:
+    raw = path.read_bytes()
+    if not raw:
+        return ""
+    if raw.startswith((b"\xff\xfe", b"\xfe\xff")):
+        return raw.decode("utf-16", errors="replace")
+    text = raw.decode("utf-8", errors="replace")
+    if "\x00" in text:
+        try:
+            utf16_text = raw.decode("utf-16")
+        except UnicodeError:
+            return text
+        if utf16_text.count("\x00") < text.count("\x00"):
+            return utf16_text
+    return text
 
 
 def count_step_statuses(steps: list[dict[str, Any]]) -> dict[str, int]:

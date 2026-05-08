@@ -328,7 +328,7 @@ def test_publication_trail_status_tracks_pending_and_complete_steps(tmp_path: Pa
     twine_path = Path(evidence_paths["twine_check_file"])
     upload_path = Path(evidence_paths["upload_log_file"])
     twine_path.parent.mkdir(parents=True, exist_ok=True)
-    twine_path.write_text("Checking dist/relay_kit-3.3.0.tar.gz: PASSED\n", encoding="utf-8")
+    twine_path.write_text("Checking dist/relay_kit-3.3.0.tar.gz: PASSED\n", encoding="utf-16")
     upload_path.write_text("Uploading relay-kit 3.3.0 to PyPI: uploaded\n", encoding="utf-8")
     evidence = publication.build_publication_evidence(
         tmp_path,
@@ -349,6 +349,49 @@ def test_publication_trail_status_tracks_pending_and_complete_steps(tmp_path: Pa
     assert complete["summary"]["pending"] == 0
     assert complete["summary"]["not_observable"] == 2
     assert complete["findings"] == []
+
+
+def test_publication_trail_status_rejects_stale_publication_evidence(tmp_path: Path) -> None:
+    write_publication_project(tmp_path)
+    trail = publication.build_publication_trail(
+        tmp_path,
+        channel="pypi",
+        ci_url="https://github.com/b0ydeptraj/Relay-kit/actions/runs/1",
+        release_url="https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0",
+        package_url="https://pypi.org/project/relay-kit/3.3.0/",
+    )
+    trail_path = publication.write_publication_trail(tmp_path, trail)
+    evidence_paths = trail["evidence_paths"]
+    plan = publication.build_publication_plan(
+        tmp_path,
+        channel="pypi",
+        ci_url="https://github.com/b0ydeptraj/Relay-kit/actions/runs/1",
+        release_url="https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0",
+        package_url="https://pypi.org/project/relay-kit/3.3.0/",
+    )
+    publication.write_publication_plan(tmp_path, plan, output_file=evidence_paths["publication_plan_file"])
+    twine_path = Path(evidence_paths["twine_check_file"])
+    upload_path = Path(evidence_paths["upload_log_file"])
+    twine_path.parent.mkdir(parents=True, exist_ok=True)
+    twine_path.write_text("Checking dist/relay_kit-3.3.0.tar.gz: PASSED\n", encoding="utf-8")
+    upload_path.write_text("Uploading relay-kit 3.3.0 to PyPI: uploaded\n", encoding="utf-8")
+    stale_evidence = publication.build_publication_evidence(
+        tmp_path,
+        channel="internal",
+        ci_url="https://github.com/b0ydeptraj/Relay-kit/actions/runs/1",
+        release_url="https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0",
+        package_url="https://github.com/b0ydeptraj/Relay-kit/releases/download/v3.3.0/relay_kit-3.3.0-py3-none-any.whl",
+        twine_check_file=twine_path,
+        upload_log_file=upload_path,
+        publication_plan_file=evidence_paths["publication_plan_file"],
+        allow_dev=True,
+    )
+    publication.write_publication_evidence(tmp_path, stale_evidence, output_file=evidence_paths["publication_evidence_file"])
+
+    report = publication.build_publication_trail_status(tmp_path, trail_file=trail_path)
+
+    assert report["status"] == "in-progress"
+    assert any(finding["gate"] == "publication-evidence" for finding in report["findings"])
 
 
 def test_public_cli_publish_status_json_and_strict(tmp_path: Path, capsys) -> None:
