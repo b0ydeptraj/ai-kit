@@ -74,6 +74,7 @@ Source audit status:
 - Fixed in support evidence-contract check pass: `relay-kit eval run` now strict-fails profiled support scenarios whose prompt or expected terms omit required evidence-contract terms, and Pulse/signal export surface the support evidence gap count.
 - Fixed in workflow eval role coverage pass: bundled workflow scenarios increased from 37 to 43, covering all registry roles and adding analyst, brainstorm-hub, scout-hub, team, execution-loop, and testing-patterns routes.
 - Fixed in workflow eval utility coverage pass: bundled workflow scenarios increased from 43 to 55, covering all 47 current registry skills and adding doc-pointers, handoff-context, memory-search, mermaid-diagrams, problem-solving, repo-map, research, root-cause-debugging, sequential-thinking, skill-evolution, skill-gauntlet, and test-first-development routes.
+- Fixed in workflow route-quality tightening pass: the default 55-scenario workflow eval suite now reports `weak_route_count=0` and `min_route_margin=5` by clarifying the developer and test-hub routing fixtures.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:

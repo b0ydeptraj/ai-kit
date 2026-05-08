@@ -8,6 +8,7 @@ It is intentionally separate from `skill-gauntlet`:
 - `workflow eval` reports scenario pass rate, predicted skill, top routes, layer/role coverage, and missing evidence terms.
 - The bundled default suite covers 55 scenarios across routing, implementation, QA, release, policy, architecture, UX, dependency, API, data, media, browser evidence, multimodal evidence, bootstrap, debug/fix/review hubs, analyst, brainstorm-hub, scout-hub, team, execution-loop, testing-patterns, PM, scrum, runtime diagnostics, and the remaining utility workflows such as doc-pointers, repo-map, memory-search, handoff-context, research, problem-solving, root-cause-debugging, sequential-thinking, mermaid-diagrams, skill-evolution, skill-gauntlet, and test-first-development.
 - The quality block also reviews profiled support-skill routing noise, evidence-contract coverage, and report-level fixture depth across API, data, dependency, media, browser, and multimodal evidence utilities. The default suite includes at least two evidence-contract fixtures for each profiled support skill.
+- The default suite currently has no weak route candidates: `weak_route_count=0` and `min_route_margin=5` after tightening the developer and test-hub routing fixtures.
 
 ## Commands
 
@@ -108,6 +109,8 @@ Default thresholds are:
 - `min_pass_rate=1.0`
 - `min_route_margin=1`
 - `min_evidence_coverage=1.0`
+
+The default threshold is intentionally lower than the current bundled-suite margin so teams can add local scenarios without immediately failing; release lanes can raise it with `--min-route-margin`.
 
 Use `--min-scenarios <count>` when a release lane must prove a minimum scenario suite size.
 Use `--baseline-file <previous-report.json>` to fail on pass-rate, scenario-count, or average-route-margin regression.

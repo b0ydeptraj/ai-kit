@@ -54,8 +54,8 @@ def test_workflow_eval_reports_pass_rate_and_top_routes() -> None:
     assert payload["quality"]["expected_role_counts"]["implementation"] >= 1
     assert "qa-governor" in payload["quality"]["expected_skill_counts"]
     assert payload["quality"]["weak_route_threshold"] == 3
-    assert payload["quality"]["weak_route_count"] >= 1
-    assert payload["quality"]["weak_routes"][0]["route_margin"] <= 3
+    assert payload["quality"]["weak_route_count"] == 0
+    assert payload["quality"]["weak_routes"] == []
     support_review = payload["quality"]["support_route_review"]
     assert support_review["support_route_margin_threshold"] == SUPPORT_ROUTE_MARGIN_THRESHOLD
     assert support_review["missing_profiled_support_skills"] == []
@@ -382,7 +382,7 @@ def test_workflow_eval_strict_fails_when_route_margin_is_below_threshold() -> No
         "scripts/eval_workflows.py",
         ".",
         "--min-route-margin",
-        "2",
+        "6",
         "--strict",
         "--json",
     )
@@ -390,7 +390,7 @@ def test_workflow_eval_strict_fails_when_route_margin_is_below_threshold() -> No
     assert result.returncode == 2
     payload = json.loads(result.stdout)
     assert payload["status"] == "fail"
-    assert payload["quality"]["min_route_margin"] == 1
+    assert payload["quality"]["min_route_margin"] == 5
     assert any(finding["check"] == "quality-threshold" for finding in payload["findings"])
 
 
