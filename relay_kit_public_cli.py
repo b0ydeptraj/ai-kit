@@ -656,39 +656,56 @@ def _build_relay_argv(args: argparse.Namespace) -> list[str]:
 
 
 def _doctor_commands(project_path: str, skip_tests: bool, policy_pack: str = DEFAULT_POLICY_PACK) -> list[tuple[str, list[str]]]:
-    commands = [
-        ("validate runtime", [sys.executable, str(REPO_ROOT / "scripts" / "validate_runtime.py")]),
-        (
-            "runtime doctor template",
-            [sys.executable, str(REPO_ROOT / "scripts" / "runtime_doctor.py"), project_path, "--strict"],
-        ),
-        (
-            "runtime doctor live",
-            [
-                sys.executable,
-                str(REPO_ROOT / "scripts" / "runtime_doctor.py"),
-                project_path,
-                "--strict",
-                "--state-mode",
-                "live",
-            ],
-        ),
-        (
-            "migration guard",
-            [sys.executable, str(REPO_ROOT / "scripts" / "migration_guard.py"), project_path, "--strict"],
-        ),
-        (
-            "policy guard",
-            [
-                sys.executable,
-                str(REPO_ROOT / "scripts" / "policy_guard.py"),
-                project_path,
-                "--strict",
-                "--pack",
-                policy_pack,
-            ],
-        ),
-    ]
+    project = Path(project_path)
+    adapter_args = _doctor_adapter_args(project)
+    commands = []
+
+    if _source_runtime_surfaces_available():
+        commands.append(
+            ("validate runtime", [sys.executable, str(REPO_ROOT / "scripts" / "validate_runtime.py")])
+        )
+
+    commands.extend(
+        [
+            (
+                "runtime doctor template",
+                [
+                    sys.executable,
+                    str(REPO_ROOT / "scripts" / "runtime_doctor.py"),
+                    project_path,
+                    "--strict",
+                    *adapter_args,
+                ],
+            ),
+            (
+                "runtime doctor live",
+                [
+                    sys.executable,
+                    str(REPO_ROOT / "scripts" / "runtime_doctor.py"),
+                    project_path,
+                    "--strict",
+                    *adapter_args,
+                    "--state-mode",
+                    "live",
+                ],
+            ),
+            (
+                "migration guard",
+                [sys.executable, str(REPO_ROOT / "scripts" / "migration_guard.py"), project_path, "--strict"],
+            ),
+            (
+                "policy guard",
+                [
+                    sys.executable,
+                    str(REPO_ROOT / "scripts" / "policy_guard.py"),
+                    project_path,
+                    "--strict",
+                    "--pack",
+                    policy_pack,
+                ],
+            ),
+        ]
+    )
 
     if policy_pack == "enterprise":
         commands.append(
@@ -732,6 +749,24 @@ def _doctor_commands(project_path: str, skip_tests: bool, policy_pack: str = DEF
         commands.append(("pytest", [sys.executable, "-m", "pytest", "tests", "-q"]))
 
     return commands
+
+
+def _source_runtime_surfaces_available() -> bool:
+    return all((REPO_ROOT / relative).exists() for relative in (".claude/skills", ".agent/skills", ".codex/skills"))
+
+
+def _doctor_adapter_args(project: Path) -> list[str]:
+    adapters = []
+    for adapter, relative in (
+        ("claude", ".claude/skills"),
+        ("agent", ".agent/skills"),
+        ("codex", ".codex/skills"),
+    ):
+        if (project / relative).exists():
+            adapters.append(adapter)
+    if not adapters or len(adapters) == 3:
+        return []
+    return ["--adapters", *adapters]
 
 
 def _print_doctor_output(label: str, result: subprocess.CompletedProcess[str], verbose: bool) -> None:

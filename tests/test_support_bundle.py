@@ -63,7 +63,7 @@ def test_support_bundle_summarizes_existing_support_request(tmp_path: Path) -> N
                 "severity": "P1",
                 "summary": "Token sk-test_abcdefghijklmnopqrstuvwxyz123456 should be redacted.",
                 "environment": {
-                    "package_version": "3.4.0",
+                    "package_version": "3.4.1",
                     "installed_bundle": "enterprise",
                     "adapter_target": "codex",
                     "policy_pack": "enterprise",

@@ -48,6 +48,16 @@ def test_runtime_doctor_template_mode_passes() -> None:
     assert "- findings: 0" in result.stdout
 
 
+def test_runtime_doctor_can_scope_to_single_adapter(tmp_path: Path) -> None:
+    result = run_command("relay_kit_public_cli.py", "init", str(tmp_path), "--codex")
+    assert_success(result)
+
+    result = run_command("scripts/runtime_doctor.py", str(tmp_path), "--strict", "--adapters", "codex")
+
+    assert_success(result)
+    assert "- findings: 0" in result.stdout
+
+
 def test_migration_guard_strict_passes() -> None:
     result = run_command("scripts/migration_guard.py", ".", "--strict")
 

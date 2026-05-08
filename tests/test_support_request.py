@@ -27,7 +27,7 @@ def support_request_kwargs(root: Path) -> dict[str, object]:
     return {
         "severity": "P1",
         "summary": "Enterprise doctor fails after manifest trust metadata drift.",
-        "package_version": "3.4.0",
+        "package_version": "3.4.1",
         "operating_system": "Windows",
         "shell": "PowerShell",
         "installed_bundle": "enterprise",
@@ -89,7 +89,7 @@ def test_public_cli_support_request_json_and_default_output(tmp_path: Path, caps
             "--summary",
             "Enterprise doctor fails after manifest trust metadata drift.",
             "--package-version",
-            "3.4.0",
+            "3.4.1",
             "--os",
             "Windows",
             "--shell",
