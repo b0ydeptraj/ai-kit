@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
-from relay_kit_v3.publication import build_publication_trail_status
+from relay_kit_v3.publication import build_package_index_check, build_publication_trail_status
 from relay_kit_v3.readiness import build_readiness_report
 from relay_kit_v3.support_triage import build_support_soak_report, build_support_triage
 
@@ -18,6 +18,7 @@ PLACEHOLDER_VALUES = {"", "tbd", "todo", "n/a", "none", "owner", "unknown"}
 
 ReadinessBuilder = Callable[[Path, str, bool], Mapping[str, Any]]
 PublicationStatusBuilder = Callable[[Path, str | None], Mapping[str, Any]]
+PackageIndexBuilder = Callable[[Path, str, str | None], Mapping[str, Any]]
 SupportTriageBuilder = Callable[[Path, str | None, str | None], Mapping[str, Any]]
 SupportSoakBuilder = Callable[[Path, str | None], Mapping[str, Any]]
 
@@ -40,6 +41,7 @@ def build_commercial_dossier(
     support_bundle_file: Path | str | None = None,
     readiness_builder: ReadinessBuilder | None = None,
     publication_status_builder: PublicationStatusBuilder | None = None,
+    package_index_builder: PackageIndexBuilder | None = None,
     support_triage_builder: SupportTriageBuilder | None = None,
     support_soak_builder: SupportSoakBuilder | None = None,
 ) -> dict[str, Any]:
@@ -59,6 +61,12 @@ def build_commercial_dossier(
         root,
         trail_file_text,
         publication_status_builder or _default_publication_status_builder,
+    )
+    package_index = _call_package_index_builder(
+        root,
+        selected_channel,
+        package_url,
+        package_index_builder or _default_package_index_builder,
     )
     support_triage = _call_support_triage_builder(
         root,
@@ -83,6 +91,7 @@ def build_commercial_dossier(
         owner_check("support-owner", "support owner", support_owner),
         readiness_check(readiness),
         publication_status_check(publication_status),
+        package_index_check(package_index, required=selected_channel in {"pypi", "testpypi"}),
         support_triage_check(support_triage),
         support_soak_check(support_soak),
     ]
@@ -114,6 +123,7 @@ def build_commercial_dossier(
         "local_reports": {
             "readiness": compact_report(readiness, keys=("schema_version", "status", "verdict", "profile")),
             "publication_status": compact_report(publication_status, keys=("schema_version", "status", "summary", "trail_file")),
+            "package_index": compact_report(package_index, keys=("schema_version", "status", "target_version", "latest_version", "index_url")),
             "support_triage": compact_report(support_triage, keys=("schema_version", "status", "severity", "request_file", "bundle_file")),
             "support_soak": compact_report(support_soak, keys=("schema_version", "status", "case_count", "bundle_file")),
         },
@@ -226,6 +236,33 @@ def publication_status_check(report: Mapping[str, Any]) -> dict[str, Any]:
     )
 
 
+def package_index_check(report: Mapping[str, Any], *, required: bool) -> dict[str, Any]:
+    status = str(report.get("status") or "")
+    if not required:
+        return check(
+            "package-index",
+            "package index metadata",
+            "pass",
+            "package index metadata check is optional for this channel",
+            details={"status": status, "required": required},
+        )
+    passed = status == "published"
+    summary = f"package index status={status or 'unknown'}"
+    return check(
+        "package-index",
+        "package index metadata",
+        "pass" if passed else "hold",
+        summary if not passed else "package index target version is published",
+        details={
+            "status": status,
+            "target_version": report.get("target_version"),
+            "latest_version": report.get("latest_version"),
+            "target_file_count": report.get("target_file_count"),
+            "findings_count": _findings_count(report),
+        },
+    )
+
+
 def support_triage_check(report: Mapping[str, Any]) -> dict[str, Any]:
     status = str(report.get("status") or "")
     passed = status == "ready"
@@ -291,6 +328,7 @@ def next_actions(checks: list[Mapping[str, Any]]) -> list[str]:
         "support-owner": "Record the support owner accountable for triage targets.",
         "readiness": "Run relay-kit readiness check with tests enabled until it returns commercial-ready-candidate.",
         "publication-status": "Complete relay-kit publish trail/status with local dist, twine, upload, and evidence files.",
+        "package-index": "Run relay-kit publish index-check until the package index confirms the target version is published and latest.",
         "support-triage": "Run relay-kit support request, support bundle, and support triage until triage is ready.",
         "support-soak": "Run relay-kit support soak with a healthy support bundle until P0/P1/P2 fixtures pass.",
     }
@@ -303,6 +341,12 @@ def _default_readiness_builder(root: Path, profile: str, skip_tests: bool) -> Ma
 
 def _default_publication_status_builder(root: Path, trail_file: str | None) -> Mapping[str, Any]:
     return build_publication_trail_status(root, trail_file=trail_file)
+
+
+def _default_package_index_builder(root: Path, channel: str, package_url: str | None) -> Mapping[str, Any]:
+    if channel not in {"pypi", "testpypi"}:
+        return {"schema_version": "relay-kit.package-index-check.v1", "status": "not-required", "findings": []}
+    return build_package_index_check(root, channel=channel, package_url=package_url)
 
 
 def _default_support_triage_builder(root: Path, request_file: str | None, bundle_file: str | None) -> Mapping[str, Any]:
@@ -325,6 +369,13 @@ def _call_publication_builder(root: Path, trail_file: str | None, builder: Publi
         return builder(root, trail_file)
     except Exception as exc:  # pragma: no cover - defensive gate payload
         return {"schema_version": "relay-kit.publication-trail-status.v1", "status": "error", "error": str(exc), "findings": [str(exc)]}
+
+
+def _call_package_index_builder(root: Path, channel: str, package_url: str | None, builder: PackageIndexBuilder) -> Mapping[str, Any]:
+    try:
+        return builder(root, channel, package_url)
+    except Exception as exc:  # pragma: no cover - defensive gate payload
+        return {"schema_version": "relay-kit.package-index-check.v1", "status": "error", "error": str(exc), "findings": [str(exc)]}
 
 
 def _call_support_triage_builder(

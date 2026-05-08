@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-Keep Relay-kit source-of-truth state current after PyPI `3.4.1` publication and ready for post-release maintenance.
+Add package-index maintenance proof after PyPI `3.4.1` publication and keep source-of-truth state current.
 
 ## Active orchestrator
 - workflow-router
@@ -9,7 +9,7 @@ Keep Relay-kit source-of-truth state current after PyPI `3.4.1` publication and 
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PyPI `3.4.1` publication, clean venv install smoke, publication status, commercial dossier, and main CI passed. |
+| primary | developer | fix-hub | publication/commercial CLI/index-check docs/tests/state | none | ready for PR | review-hub next | `publish index-check` is implemented, commercial dossier includes the package-index gate, live PyPI check returns published, full pytest/readiness/doctor/commercial dossier gates passed. |
 | lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
@@ -24,7 +24,7 @@ Keep Relay-kit source-of-truth state current after PyPI `3.4.1` publication and 
 Primary lane only. Parallel lanes are parked until explicitly routed.
 
 ## Merge prerequisites
-Runtime doctor live mode, enterprise doctor, readiness enterprise, PyPI install smoke, publication status, commercial dossier, and main CI for PR #77 passed. Remote CI must pass after this state refresh PR.
+Focused tests, full pytest, live package-index check, runtime doctor live mode, enterprise doctor, readiness enterprise, commercial dossier strict, diff checks, PR CI, and merge CI.
 
 ## Conflict risks
 Low. This slice edits state/context artifacts only.
@@ -62,4 +62,6 @@ Low. This slice edits state/context artifacts only.
 - 2026-05-06: Refresh state artifacts after PR #66 expanded workflow eval to 55 scenarios with all 47 current registry skills covered, main CI `25421911099` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-08: Refresh state artifacts after PR #71 tightened workflow route quality to `weak_route_count=0`, main CI `25536489943` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-08: Refresh state artifacts after PR #73 made enterprise readiness fail weak workflow routes or `min_route_margin < 4`, main CI `25537111543` passed, and local readiness returned `commercial-ready-candidate`.
-- 2026-05-08: Refresh state artifacts after PR #77 published smoke-clean PyPI `relay-kit==3.4.1`; main CI `25548643373`, PyPI install smoke, publish status, and commercial dossier passed.
+- 2026-05-08: Refresh state artifacts after PR #77/PR #78 published smoke-clean PyPI `relay-kit==3.4.1`; main CI `25549224195`, PyPI install smoke, publish status, and commercial dossier passed.
+- 2026-05-08: Start package-index maintenance on `codex/package-index-maintenance`; `relay-kit publish index-check` live PyPI proof returned `status: published` for `3.4.1`.
+- 2026-05-08: Package-index maintenance local gates passed: 191 pytest tests, runtime validation, runtime doctor live, enterprise doctor, readiness enterprise, live index-check, and commercial dossier strict.

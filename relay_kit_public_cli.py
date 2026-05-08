@@ -18,6 +18,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit publish evidence <project_path>
   relay-kit publish trail <project_path>
   relay-kit publish status <project_path>
+  relay-kit publish index-check <project_path>
   relay-kit commercial dossier <project_path>
   relay-kit pulse build <project_path>
   relay-kit signal export <project_path>
@@ -47,14 +48,17 @@ from relay_kit_v3.commercial_dossier import (
     write_commercial_dossier,
 )
 from relay_kit_v3.publication import (
+    build_package_index_check,
     build_publication_evidence,
     build_publication_plan,
     build_publication_trail,
     build_publication_trail_status,
+    render_package_index_check,
     render_publication_evidence,
     render_publication_plan,
     render_publication_trail,
     render_publication_trail_status,
+    write_package_index_check,
     write_publication_evidence,
     write_publication_plan,
     write_publication_trail,
@@ -499,6 +503,20 @@ def _parse_publish_args(argv: list[str]) -> argparse.Namespace:
     )
     trail.add_argument("--strict", action="store_true", help="Return non-zero unless the publication trail is ready")
     trail.add_argument("--json", action="store_true", help="Emit machine-readable publication trail")
+
+    index_check = subparsers.add_parser("index-check", help="Verify package-index metadata for the published version")
+    index_check.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    index_check.add_argument("--channel", choices=["pypi", "testpypi", "internal"], default="pypi")
+    index_check.add_argument("--target-version", default=None, help="Expected package-index version (default: project version)")
+    index_check.add_argument("--package-url", default=None, help="Package index evidence URL")
+    index_check.add_argument("--timeout", type=float, default=10.0, help="Package-index request timeout in seconds")
+    index_check.add_argument(
+        "--output-file",
+        default=None,
+        help="JSON report output path (default: <project>/.relay-kit/release/package-index-check.json)",
+    )
+    index_check.add_argument("--strict", action="store_true", help="Return non-zero unless package-index metadata is published")
+    index_check.add_argument("--json", action="store_true", help="Emit machine-readable package-index check")
 
     status = subparsers.add_parser("status", help="Inspect local publication trail and execution evidence")
     status.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
@@ -1174,6 +1192,32 @@ def run_publish(args: argparse.Namespace) -> int:
             print(f"Wrote {output_path}")
             print(f"Wrote {markdown_path}")
         if args.strict and report["status"] != "ready":
+            return 2
+        return 0
+    if args.action == "index-check":
+        report = build_package_index_check(
+            args.project_path,
+            channel=args.channel,
+            target_version=args.target_version,
+            package_url=args.package_url,
+            timeout_seconds=args.timeout,
+        )
+        output_path = write_package_index_check(args.project_path, report, output_file=args.output_file)
+        if args.json:
+            print(
+                json.dumps(
+                    {
+                        "output_file": str(output_path),
+                        "index_check": report,
+                    },
+                    ensure_ascii=True,
+                    indent=2,
+                )
+            )
+        else:
+            print(render_package_index_check(report))
+            print(f"Wrote {output_path}")
+        if args.strict and report["status"] != "published":
             return 2
         return 0
     if args.action == "status":
