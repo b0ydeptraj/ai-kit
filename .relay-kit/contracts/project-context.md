@@ -1,7 +1,7 @@
 # project-context
 
 > Path: `.relay-kit/contracts/project-context.md`
-> Purpose: Current source-of-truth context for Relay-kit work during the `3.4.0` PyPI release-prep lane.
+> Purpose: Current source-of-truth context for Relay-kit work after PyPI publication and `3.4.1` patch release proof.
 > Last refreshed: 2026-05-08
 
 ## Existing architecture
@@ -13,8 +13,8 @@
 - The discipline utility bundle includes `skill-evolution`, a Relay-kit-owned skill for creating, upgrading, reviewing, and pruning skills with path-scoped activation, fork context, allowed-tool stance, and semantic route proof.
 - Semantic skill gauntlet now enforces `allowed-tools` frontmatter for configured profiled risk-sensitive skills and fails drift against registry tool profiles. Current profiled support skills include API, data, dependency, media, browser, and multimodal evidence utilities.
 - Workflow eval now reports `quality.support_route_review` for profiled support-skill coverage, weak support routes, and nearby support-skill collisions within the support margin threshold. It also reports `quality.support_evidence_contract_review` for profiled support-skill prompt and expected-term gaps, plus `quality.support_fixture_depth_review` for report-level support fixture depth gaps. The default 55-scenario suite currently reports `weak_route_count=0` and `min_route_margin=5`, and enterprise readiness fails if weak routes appear or `min_route_margin` drops below `4`.
-- Current released tag: `v3.3.0` at commit `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
-- Current release-prep package version: `3.4.0`, set in `pyproject.toml` and `.relay-kit/version.json`.
+- Current released tag: `v3.4.1` at commit `30b34bb0361723dc65a1001f9c72ba216624c881`.
+- Current package version: `3.4.1`, set in `pyproject.toml` and `.relay-kit/version.json`.
 
 ## Coding conventions
 
@@ -22,7 +22,7 @@
 - Use `apply_patch` for source/docs edits.
 - Keep checked-in source/docs ASCII unless an existing file requires otherwise.
 - Preserve generated/local artifacts under ignored paths such as `.tmp/`, `.relay-kit/signals/`, `.relay-kit/support/`, `.relay-kit/pulse/`, and `.relay-kit/manifest/`.
-- For Python package versions, use PEP 440 syntax. The post-release development line uses `3.4.0.dev0`, not `3.4.0-dev0`.
+- For Python package versions, use PEP 440 syntax. Future post-release development lines should use `.dev0` syntax, not hyphenated dev versions.
 
 ## Dependency and toolchain rules
 
@@ -97,13 +97,24 @@
 - PR #66 merged workflow utility skill coverage fixtures: https://github.com/b0ydeptraj/Relay-kit/pull/66, merge commit `a13b2e248725806852c0ceb36e2f91c0bc71851b`.
 - PR #71 merged workflow route-quality tightening: https://github.com/b0ydeptraj/Relay-kit/pull/71, merge commit `d089beb44f7518c191357225d72ba5729a3618ff`.
 - PR #73 merged readiness route-quality gating: https://github.com/b0ydeptraj/Relay-kit/pull/73, merge commit `b59ee9a533af6dfcc0362d243b733adfccf452ca`.
+- PR #75 merged stable `3.4.0` PyPI release preparation: https://github.com/b0ydeptraj/Relay-kit/pull/75, merge commit `6bf8f15a9df5287c565c5f68a1877cf5b8f0dff3`.
+- PR #76 merged publication status proof hardening: https://github.com/b0ydeptraj/Relay-kit/pull/76, merge commit `ae758c52bef2cc6851b16d7bdb2d5021603bc0b7`.
+- PR #77 merged installed-package doctor smoke fix and `3.4.1` patch metadata: https://github.com/b0ydeptraj/Relay-kit/pull/77, merge commit `30b34bb0361723dc65a1001f9c72ba216624c881`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25537111543, conclusion `success`.
+- GitHub release `v3.4.0` published: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.
+- PyPI release `3.4.0` published: https://pypi.org/project/relay-kit/3.4.0/.
+- GitHub release `v3.4.1` published: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.1.
+- PyPI release `3.4.1` published and latest: https://pypi.org/project/relay-kit/3.4.1/.
+- `python -m pip --no-cache-dir index versions relay-kit` reported `relay-kit (3.4.1)` with available versions `3.4.1, 3.4.0`.
+- Fresh PyPI venv smoke installed `relay-kit==3.4.1` from PyPI, imported `relay_kit_public_cli.py` from the venv `site-packages`, ran `relay-kit --help`, generated a Codex enterprise project with `relay-kit init <project> --codex`, and passed `relay-kit doctor <project>`.
+- Publication evidence is complete for `3.4.1`: `python relay_kit_public_cli.py publish status . --strict --json` returned `status: complete`.
+- Commercial dossier is ready for PyPI: `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --strict --json` returned `status: ready`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25548643373, conclusion `success`.
 
 ## Known sharp edges
 
-- `v3.3.0` remains the last published release tag until `v3.4.0` is created and PyPI upload evidence exists. Do not publish or package this branch as `3.3.0`.
+- `v3.4.1` is the current published release tag and PyPI latest. Do not claim `3.4.0` as the smoke-clean public package; it was superseded by `3.4.1`.
 - `.relay-kit/manifest/bundles.json` and `.relay-kit/manifest/trust.json` are ignored generated artifacts. Regenerate and verify them locally when version, skill hashes, or trust metadata changes.
 - Package smoke on Windows may emit a harmless virtualenv path casing or 8.3-name warning after successful JSON output.
 - Pulse now includes `gate_summary`, per-gate `drilldown` rows, `workflow_focus`, and optional `commercial_dossier`; signal export emits `relay.gates.*`, `relay.workflow.weak_route_count`, `relay.workflow.coverage_gap_count`, `relay.workflow.support_evidence_gap_count`, `relay.workflow.support_fixture_depth_gap_count`, and `relay.commercial_dossier.ready`; future dashboard/eval work should preserve those schema keys.
@@ -119,7 +130,7 @@
 - Internal-channel commercial dossier is verified ready with GitHub release asset package URL, public support SLA, public issue intake, and owner `b0ydeptraj`.
 - Default package onboarding is now full by default: install the package, then run `relay-kit . --codex`; use `relay-kit . --codex --baseline` only for the smaller bundle.
 - Skill changes should use `skill-evolution` and include trigger/frontmatter/allowed-tool review plus semantic gauntlet or route proof before claiming behavior changed. Profiled risk-sensitive skills must keep registry `allowed_tools` and generated `allowed-tools` frontmatter in sync.
-- PyPI remains unpublished because no PyPI token is configured in this environment. Do not claim PyPI publication until `pip index versions relay-kit` finds the package or a PyPI project URL exists.
+- PyPI publication is verified. Future package claims should cite `https://pypi.org/project/relay-kit/3.4.1/`, the publish status artifact, and the fresh venv install smoke.
 - `.relay-kit/contracts/project-context.md`, `.relay-kit/state/workflow-state.md`, `.relay-kit/state/team-board.md`, `.relay-kit/state/lane-registry.md`, and `.relay-kit/state/handoff-log.md` should stay synchronized after release or branch merges.
 
 ## Files or modules to mirror

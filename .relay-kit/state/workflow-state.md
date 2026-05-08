@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh live workflow state after PR #73 so source-of-truth artifacts reflect readiness route-quality gating.
+Refresh live workflow state after PyPI `3.4.1` publication so source-of-truth artifacts reflect package-index proof.
 
 ## Active lane
 - Lane id: primary
@@ -19,11 +19,11 @@ Refresh live workflow state after PR #73 so source-of-truth artifacts reflect re
 
 ## Active standalone/domain skill
 - Skill: bootstrap
-- Why selected: this is a bounded state/context hygiene update after readiness route-quality gating merged and main CI passed.
+- Why selected: this is a bounded state/context hygiene update after PyPI publication, patch release, and clean install smoke passed.
 
 ## Complexity level
 - Level: L1
-- Reasoning: runtime code is already merged and main CI passed; this pass only updates live state/context.
+- Reasoning: publication work is complete and verified; this pass only updates live state/context.
 
 ## Chosen track
 - Track: quick-flow
@@ -52,16 +52,21 @@ Refresh live workflow state after PR #73 so source-of-truth artifacts reflect re
 workflow-router
 
 ## Known blockers
-PyPI publication is the active remaining lane. Token-backed upload evidence is still required before claiming PyPI publication.
+No active blockers. PyPI publication proof is complete for `relay-kit==3.4.1`.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Published release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0.
-- Published tag commit: `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
-- Current release-prep package version: `3.4.0`.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25537111543, conclusion `success`.
+- Published GitHub release: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.1.
+- Published PyPI package: https://pypi.org/project/relay-kit/3.4.1/.
+- Published tag commit: `30b34bb0361723dc65a1001f9c72ba216624c881`.
+- Current package version: `3.4.1`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25548643373, conclusion `success`.
+- PyPI index proof: `python -m pip --no-cache-dir index versions relay-kit` reported `relay-kit (3.4.1)` with available versions `3.4.1, 3.4.0`.
+- PyPI install proof: fresh venv installed `relay-kit==3.4.1`, imported `relay_kit_public_cli.py` from venv `site-packages`, ran `relay-kit --help`, generated a Codex enterprise project, and passed `relay-kit doctor <project>`.
+- Publication proof: `python relay_kit_public_cli.py publish status . --strict --json` returned `status: complete`.
+- Commercial proof: `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --strict --json` returned `status: ready`.
 - PR #1 merged release readiness and package smoke gates: https://github.com/b0ydeptraj/Relay-kit/pull/1.
 - PR #2 merged Relay OTLP signal export: https://github.com/b0ydeptraj/Relay-kit/pull/2.
 - PR #3 merged next-dev version hygiene: https://github.com/b0ydeptraj/Relay-kit/pull/3.
@@ -126,7 +131,10 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - PR #66 merged workflow utility skill coverage fixtures: https://github.com/b0ydeptraj/Relay-kit/pull/66.
 - PR #71 merged workflow route-quality tightening: https://github.com/b0ydeptraj/Relay-kit/pull/71.
 - PR #73 merged readiness route-quality gating: https://github.com/b0ydeptraj/Relay-kit/pull/73.
-- Current main baseline: `b59ee9a533af6dfcc0362d243b733adfccf452ca`.
+- PR #75 merged stable `3.4.0` PyPI release preparation: https://github.com/b0ydeptraj/Relay-kit/pull/75.
+- PR #76 merged publication status proof hardening: https://github.com/b0ydeptraj/Relay-kit/pull/76.
+- PR #77 merged installed-package doctor smoke fix and `3.4.1` patch metadata: https://github.com/b0ydeptraj/Relay-kit/pull/77.
+- Current main baseline: `30b34bb0361723dc65a1001f9c72ba216624c881`.
 - Workflow focus branch verification: `python -m pytest tests/test_workflow_eval.py tests/test_pulse_report.py tests/test_signal_export.py -q`, `python scripts\eval_workflows.py . --strict --json`, `python relay_kit_public_cli.py pulse build . --include-readiness --include-publication --include-support-request --no-history`, `python relay_kit_public_cli.py signal export . --otlp --json`, `python -m pytest tests -q` with 160 passed, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, `python scripts\runtime_doctor.py . --strict --state-mode live`, and `python relay_kit_public_cli.py readiness check . --profile enterprise` passed locally.
 - Support operations soak branch verification: `python -m pytest tests/test_support_triage.py -q`, `python -m pytest tests/test_support_request.py tests/test_support_bundle.py tests/test_support_triage.py -q`, `python -m pytest tests/test_readiness_check.py tests/test_support_triage.py tests/test_support_bundle.py -q`, `python relay_kit_public_cli.py support bundle . --policy-pack enterprise`, `python relay_kit_public_cli.py support request . --severity P1 ... --strict`, `python relay_kit_public_cli.py support triage . --strict`, `python relay_kit_public_cli.py support soak . --strict`, `python -m pytest tests -q` with 160 passed, `python relay_kit_public_cli.py readiness check . --profile enterprise`, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, and `python scripts\runtime_doctor.py . --strict --state-mode live` passed locally.
 - Commercial dossier branch verification: `python -m pytest tests/test_commercial_dossier.py tests/test_readiness_check.py tests/test_release_lane.py tests/test_publication_plan.py tests/test_support_bundle.py -q`, `python -m pytest tests -q` with 165 passed, `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise`, `python relay_kit_public_cli.py release verify . --json`, `python relay_kit_public_cli.py readiness check . --profile enterprise --json`, `python scripts/package_smoke.py .`, and `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --skip-readiness-tests --strict --json` returned `hold` for missing final publication-status proof as intended.
@@ -149,4 +157,4 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Readiness route-quality gate verification: PR #73 added readiness parsing for workflow-eval route quality; local `python -m pytest tests -q` passed with 184 tests, workflow eval reported 55/55 scenarios with `weak_route_count=0` and `min_route_margin=5`, enterprise readiness returned `commercial-ready-candidate` with workflow details, PR CI `25537068673` passed, and main CI `25537111543` passed.
 
 ## Recommended next lane
-Next useful feature lane: PyPI publication only after PyPI credentials are available, or continue non-publication polish on dashboard/eval reporting without changing the package-index claim.
+Next useful feature lane: post-release monitoring, package-index maintenance, or dashboard/eval reporting polish. PyPI publication proof is complete for `3.4.1`.

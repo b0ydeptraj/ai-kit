@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-Keep Relay-kit readiness/eval state current after route-quality gating landed and ready for the next single-lane implementation slice.
+Keep Relay-kit source-of-truth state current after PyPI `3.4.1` publication and ready for post-release maintenance.
 
 ## Active orchestrator
 - workflow-router
@@ -9,7 +9,7 @@ Keep Relay-kit readiness/eval state current after route-quality gating landed an
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PR #73 made readiness fail weak workflow routes and main CI passed. |
+| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PyPI `3.4.1` publication, clean venv install smoke, publication status, commercial dossier, and main CI passed. |
 | lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
@@ -24,7 +24,7 @@ Keep Relay-kit readiness/eval state current after route-quality gating landed an
 Primary lane only. Parallel lanes are parked until explicitly routed.
 
 ## Merge prerequisites
-Runtime doctor live mode passed, focused pytest passed, enterprise doctor passed, readiness enterprise passed, and main CI for PR #73 passed. Remote CI must pass after this state refresh PR.
+Runtime doctor live mode, enterprise doctor, readiness enterprise, PyPI install smoke, publication status, commercial dossier, and main CI for PR #77 passed. Remote CI must pass after this state refresh PR.
 
 ## Conflict risks
 Low. This slice edits state/context artifacts only.
@@ -62,3 +62,4 @@ Low. This slice edits state/context artifacts only.
 - 2026-05-06: Refresh state artifacts after PR #66 expanded workflow eval to 55 scenarios with all 47 current registry skills covered, main CI `25421911099` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-08: Refresh state artifacts after PR #71 tightened workflow route quality to `weak_route_count=0`, main CI `25536489943` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-08: Refresh state artifacts after PR #73 made enterprise readiness fail weak workflow routes or `min_route_margin < 4`, main CI `25537111543` passed, and local readiness returned `commercial-ready-candidate`.
+- 2026-05-08: Refresh state artifacts after PR #77 published smoke-clean PyPI `relay-kit==3.4.1`; main CI `25548643373`, PyPI install smoke, publish status, and commercial dossier passed.
