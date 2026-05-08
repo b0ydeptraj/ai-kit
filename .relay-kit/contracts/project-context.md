@@ -2,7 +2,7 @@
 
 > Path: `.relay-kit/contracts/project-context.md`
 > Purpose: Current source-of-truth context for Relay-kit work after the `v3.3.0` release and `3.4.0.dev0` next-dev bump.
-> Last refreshed: 2026-05-06
+> Last refreshed: 2026-05-08
 
 ## Existing architecture
 
@@ -12,7 +12,7 @@
 - Runtime skills are generated from registry data under `relay_kit_v3/registry/` and validated by `scripts/validate_runtime.py`, `scripts/runtime_doctor.py`, `scripts/migration_guard.py`, `scripts/skill_gauntlet.py`, `scripts/policy_guard.py`, and `scripts/eval_workflows.py`.
 - The discipline utility bundle includes `skill-evolution`, a Relay-kit-owned skill for creating, upgrading, reviewing, and pruning skills with path-scoped activation, fork context, allowed-tool stance, and semantic route proof.
 - Semantic skill gauntlet now enforces `allowed-tools` frontmatter for configured profiled risk-sensitive skills and fails drift against registry tool profiles. Current profiled support skills include API, data, dependency, media, browser, and multimodal evidence utilities.
-- Workflow eval now reports `quality.support_route_review` for profiled support-skill coverage, weak support routes, and nearby support-skill collisions within the support margin threshold. It also reports `quality.support_evidence_contract_review` for profiled support-skill prompt and expected-term gaps, plus `quality.support_fixture_depth_review` for report-level support fixture depth gaps.
+- Workflow eval now reports `quality.support_route_review` for profiled support-skill coverage, weak support routes, and nearby support-skill collisions within the support margin threshold. It also reports `quality.support_evidence_contract_review` for profiled support-skill prompt and expected-term gaps, plus `quality.support_fixture_depth_review` for report-level support fixture depth gaps. The default 55-scenario suite currently reports `weak_route_count=0` and `min_route_margin=5`.
 - Current released tag: `v3.3.0` at commit `d46f9c934805010cbf64fca00c28c6bc9dc233a9`.
 - Current mainline package version: `3.4.0.dev0`, set in `pyproject.toml` and `.relay-kit/version.json`.
 
@@ -95,9 +95,10 @@
 - PR #62 merged support fixture depth review: https://github.com/b0ydeptraj/Relay-kit/pull/62, merge commit `a01f92aecaea48188a74fabc4ed9114b91ebe956`.
 - PR #64 merged workflow role coverage fixtures: https://github.com/b0ydeptraj/Relay-kit/pull/64, merge commit `cb8f79ab17d12fca31e09d74b5c154406ab41a4e`.
 - PR #66 merged workflow utility skill coverage fixtures: https://github.com/b0ydeptraj/Relay-kit/pull/66, merge commit `a13b2e248725806852c0ceb36e2f91c0bc71851b`.
+- PR #71 merged workflow route-quality tightening: https://github.com/b0ydeptraj/Relay-kit/pull/71, merge commit `d089beb44f7518c191357225d72ba5729a3618ff`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25421911099, conclusion `success`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25536489943, conclusion `success`.
 
 ## Known sharp edges
 
@@ -105,8 +106,8 @@
 - `.relay-kit/manifest/bundles.json` and `.relay-kit/manifest/trust.json` are ignored generated artifacts. Regenerate and verify them locally when version, skill hashes, or trust metadata changes.
 - Package smoke on Windows may emit a harmless virtualenv path casing or 8.3-name warning after successful JSON output.
 - Pulse now includes `gate_summary`, per-gate `drilldown` rows, `workflow_focus`, and optional `commercial_dossier`; signal export emits `relay.gates.*`, `relay.workflow.weak_route_count`, `relay.workflow.coverage_gap_count`, `relay.workflow.support_evidence_gap_count`, `relay.workflow.support_fixture_depth_gap_count`, and `relay.commercial_dossier.ready`; future dashboard/eval work should preserve those schema keys.
-- Workflow eval default fixtures now cover 55 production/team scenarios, cover all current registry roles and all 47 current registry skills, and signal export should report `relay.workflow.scenario_count=55` after a fresh Pulse build.
-- Workflow eval also reports weak route candidates and registry coverage gaps under `quality.weak_routes` and `quality.coverage_gaps`.
+- Workflow eval default fixtures now cover 55 production/team scenarios, cover all current registry roles and all 47 current registry skills, report `weak_route_count=0` with `min_route_margin=5`, and signal export should report `relay.workflow.scenario_count=55` after a fresh Pulse build.
+- Workflow eval also reports weak route candidates and registry coverage gaps under `quality.weak_routes` and `quality.coverage_gaps`; the current bundled suite has no weak route candidates.
 - Workflow eval support route review currently covers 12 profiled support routes across 6/6 profiled support skills and reports 0 weak profiled support routes and 0 nearby support route collisions after PR #60.
 - Workflow eval support evidence-contract review currently covers 12 profiled support scenarios across 6/6 profiled support skills and reports 0 term gaps and 0 prompt gaps after PR #60.
 - Workflow eval support fixture-depth review currently covers 12 profiled support scenarios across 6/6 profiled support skills and reports 0 depth gaps and 0 duplicate prompt pairs after PR #62.
