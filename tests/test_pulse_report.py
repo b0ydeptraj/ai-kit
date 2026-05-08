@@ -98,7 +98,7 @@ def sample_support_request(*, status: str = "ready") -> dict[str, object]:
         "severity": "P1",
         "summary": "Enterprise doctor fails after manifest trust metadata drift.",
         "environment": {
-            "package_version": "3.4.0",
+            "package_version": "3.4.1",
             "installed_bundle": "enterprise",
             "adapter_target": "codex",
             "policy_pack": "enterprise",

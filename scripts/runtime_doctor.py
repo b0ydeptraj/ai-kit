@@ -30,11 +30,11 @@ STATE_FILES = [
 
 CONTRACTS_DIR = ".relay-kit/contracts"
 
-ADAPTERS = [
-    ".claude/skills",
-    ".agent/skills",
-    ".codex/skills",
-]
+ADAPTERS = {
+    "claude": ".claude/skills",
+    "agent": ".agent/skills",
+    "codex": ".codex/skills",
+}
 
 # Optional legacy/native skills that can coexist with canonical v3 runtime skills.
 ALLOWED_OPTIONAL_SKILLS = {
@@ -61,6 +61,13 @@ def parse_args() -> argparse.Namespace:
         default="template",
         help="Use template mode for repository templates, live mode for active project state checks.",
     )
+    parser.add_argument(
+        "--adapters",
+        nargs="+",
+        choices=["all", *ADAPTERS],
+        default=["all"],
+        help="Adapter skill surfaces to inspect (default: all).",
+    )
     parser.add_argument("--strict", action="store_true", help="Return non-zero when findings exist.")
     return parser.parse_args()
 
@@ -78,26 +85,34 @@ def check_exists(root: Path, findings: list[str]) -> None:
             findings.append(f"Missing required artifact: {rel}")
 
 
-def check_adapter_parity(root: Path, findings: list[str]) -> None:
+def selected_adapters(adapter_names: list[str]) -> dict[str, str]:
+    if "all" in adapter_names:
+        return ADAPTERS
+    return {name: ADAPTERS[name] for name in adapter_names}
+
+
+def check_adapter_parity(root: Path, findings: list[str], adapters: dict[str, str]) -> None:
     expected = set(ALL_V3_SKILLS.keys())
-    sets = {adapter: skill_set(root, adapter) for adapter in ADAPTERS}
-    reference = sets[ADAPTERS[0]] - ALLOWED_OPTIONAL_SKILLS
+    sets = {adapter: skill_set(root, relative) for adapter, relative in adapters.items()}
+    reference_name = next(iter(adapters))
+    reference = sets[reference_name] - ALLOWED_OPTIONAL_SKILLS
 
     for adapter, current in sets.items():
+        relative = adapters[adapter]
         missing = sorted(expected - current)
         unexpected = sorted((current - expected) - ALLOWED_OPTIONAL_SKILLS)
         normalized = current - ALLOWED_OPTIONAL_SKILLS
 
         if missing:
-            findings.append(f"{adapter} missing skills: {', '.join(missing)}")
+            findings.append(f"{relative} missing skills: {', '.join(missing)}")
         if unexpected:
-            findings.append(f"{adapter} unexpected skills: {', '.join(unexpected)}")
+            findings.append(f"{relative} unexpected skills: {', '.join(unexpected)}")
 
         parity_missing = sorted(reference - normalized)
         parity_extra = sorted(normalized - reference)
         if parity_missing or parity_extra:
             findings.append(
-                f"Adapter parity drift in {adapter}: "
+                f"Adapter parity drift in {relative}: "
                 f"missing vs reference={parity_missing or '-'} extra vs reference={parity_extra or '-'}"
             )
 
@@ -130,10 +145,11 @@ def check_contract_placeholders(root: Path, findings: list[str], mode: str) -> N
 def main() -> int:
     args = parse_args()
     root = Path(args.project).resolve()
+    adapters = selected_adapters(args.adapters)
     findings: list[str] = []
 
     check_exists(root, findings)
-    check_adapter_parity(root, findings)
+    check_adapter_parity(root, findings, adapters)
     check_state_placeholders(root, findings, args.state_mode)
     check_contract_placeholders(root, findings, args.state_mode)
 

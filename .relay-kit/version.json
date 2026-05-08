@@ -3,7 +3,7 @@
   "generated_at": "2026-05-08T04:53:42Z",
   "package": {
     "name": "relay-kit",
-    "version": "3.4.0"
+    "version": "3.4.1"
   },
   "runtime": {
     "bundle": "enterprise",

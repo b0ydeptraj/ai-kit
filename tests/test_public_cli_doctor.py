@@ -42,6 +42,25 @@ def test_public_cli_doctor_runs_core_gates(monkeypatch, capsys) -> None:
     assert "--strict" in workflow_eval_call
 
 
+def test_public_cli_doctor_scopes_installed_package_to_project_adapters(monkeypatch, tmp_path: Path) -> None:
+    package_root = tmp_path / "site-packages"
+    package_root.mkdir()
+    project = tmp_path / "project"
+    (project / ".codex" / "skills").mkdir(parents=True)
+
+    monkeypatch.setattr(relay_kit_public_cli, "REPO_ROOT", package_root)
+
+    commands = relay_kit_public_cli._doctor_commands(str(project), skip_tests=True)
+
+    script_names = [Path(command[1]).name for _, command in commands]
+    assert "validate_runtime.py" not in script_names
+    runtime_calls = [command for _, command in commands if Path(command[1]).name == "runtime_doctor.py"]
+    assert runtime_calls
+    for call in runtime_calls:
+        assert "--adapters" in call
+        assert call[call.index("--adapters") + 1] == "codex"
+
+
 def test_public_cli_doctor_forwards_policy_pack(monkeypatch) -> None:
     calls: list[list[str]] = []
 
