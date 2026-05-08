@@ -19,13 +19,13 @@
   },
   {
     "id": "developer-implementation-ready",
-    "prompt": "The story is approved and planning is ready. Change code with controlled scope, test evidence, and update workflow-state.",
+    "prompt": "Use developer because the approved story is implementation-ready. Read the story, edit code in one controlled slice, run the execution loop, collect test evidence, and update workflow-state.",
     "expected_skill": "developer",
     "expected_terms": ["code", "test evidence", "workflow-state"]
   },
   {
     "id": "test-hub-risky-implementation",
-    "prompt": "Implementation exists after a risky refactor and confidence is low. Coordinate verification and collect regression evidence.",
+    "prompt": "Use test-hub after implementation exists and confidence is lower than the change impact. Build the evidence matrix, coordinate verification, collect regression evidence, and prepare qa-report inputs.",
     "expected_skill": "test-hub",
     "expected_terms": ["verification", "evidence", "regression"]
   },
