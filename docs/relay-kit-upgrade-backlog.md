@@ -79,15 +79,15 @@ Source audit status:
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
-- Current readiness: release-prep branch is moving the current package line from `3.4.0.dev0` to stable `3.4.0` for PyPI publication.
-- Commercial readiness: internal/GitHub release channel is verified by `relay-kit readiness check`, `relay-kit release verify`, `relay-kit support request`, `relay-kit support triage`, `relay-kit support soak`, `relay-kit publish trail`, `relay-kit publish plan`, `relay-kit publish evidence`, `relay-kit publish status`, and `relay-kit commercial dossier --channel internal --strict`. The package happy path is now `pip install relay-kit` after PyPI publication, then `relay-kit . --codex` for the full bundle. PyPI publication remains pending until token-backed upload evidence exists.
+- Current readiness: PyPI publication is complete for `relay-kit` latest `3.4.1`; `3.4.0` was the initial upload and `3.4.1` is the smoke-clean patch release after fixing installed-package doctor behavior.
+- Commercial readiness: PyPI/GitHub release channel is verified by `relay-kit readiness check`, `relay-kit release verify`, `relay-kit support request`, `relay-kit support triage`, `relay-kit support soak`, `relay-kit publish trail`, `relay-kit publish plan`, `relay-kit publish evidence`, `relay-kit publish status`, and `relay-kit commercial dossier --channel pypi --strict`. The package happy path is now `pip install relay-kit`, then `relay-kit . --codex` for the full bundle.
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
 
-Progress snapshot, updated 2026-05-06:
+Progress snapshot, updated 2026-05-08:
 - Repo-executable repair backlog: 100% for the original P0/P1/P2/P3 audit items, 7-day quick wins, and Skill and Rule Gap Matrix first production slices.
-- Commercial hardening roadmap: 100% for repo-owned proof tooling, visibility surfaces, and internal-channel external proof. PyPI publication is the only remaining package-index variant and requires PyPI credentials.
-- Overall tracked progress in this file: 100% for repo-owned backlog and GitHub/internal commercial proof. This percentage excludes star/community/popularity and external customer contracts.
+- Commercial hardening roadmap: 100% for repo-owned proof tooling, visibility surfaces, internal-channel external proof, and PyPI package-index proof.
+- Overall tracked progress in this file: 100% for repo-owned backlog and package-index publication proof. This percentage excludes star/community/popularity and external customer contracts.
 
 ## Priority Backlog
 
