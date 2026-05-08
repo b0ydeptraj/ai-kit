@@ -36,7 +36,7 @@
 ## Domain and compliance constraints
 
 - Relay-kit is positioned as an agent workflow governance kit, not a CrewAI/n8n-style full agent runtime.
-- Commercial readiness is gated by `relay-kit readiness check . --profile enterprise --json`, `relay-kit release verify . --json`, `relay-kit support request . --json`, `relay-kit support triage . --json`, `relay-kit support soak . --json`, `relay-kit publish trail . --channel pypi --json`, `relay-kit publish plan . --channel pypi --json`, `relay-kit publish evidence . --channel pypi --json`, `relay-kit publish status . --json` when package upload evidence exists, and `relay-kit commercial dossier . --strict --json` when external CI/release/package/SLA/support owner proof exists.
+- Commercial readiness is gated by `relay-kit readiness check . --profile enterprise --json`, `relay-kit release verify . --json`, `relay-kit support request . --json`, `relay-kit support triage . --json`, `relay-kit support soak . --json`, `relay-kit publish trail . --channel pypi --json`, `relay-kit publish plan . --channel pypi --json`, `relay-kit publish evidence . --channel pypi --json`, `relay-kit publish status . --json` when package upload evidence exists, `relay-kit publish index-check . --channel pypi --strict --json` for public package-index metadata proof, and `relay-kit commercial dossier . --strict --json` when external CI/release/package/SLA/support owner proof exists.
 - Pulse can include the commercial dossier through `relay-kit pulse build . --commercial-dossier-file <path>`, and signal export emits `relay.commercial_dossier.ready` for dashboard or OTLP consumers.
 - Enterprise trust metadata is deterministic, not cryptographic. `relay-kit manifest verify . --trusted` is required before enterprise readiness claims.
 - Release/publication evidence must distinguish local readiness from external package upload, marketplace publication, and legal SLA commitments.
@@ -107,10 +107,11 @@
 - GitHub release `v3.4.1` published: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.1.
 - PyPI release `3.4.1` published and latest: https://pypi.org/project/relay-kit/3.4.1/.
 - `python -m pip --no-cache-dir index versions relay-kit` reported `relay-kit (3.4.1)` with available versions `3.4.1, 3.4.0`.
+- `python relay_kit_public_cli.py publish index-check . --channel pypi --target-version 3.4.1 --package-url https://pypi.org/project/relay-kit/3.4.1/ --strict --json` returned `status: published`, HTTP `200`, latest version `3.4.1`, release versions `3.4.0, 3.4.1`, and target file count `2`.
 - Fresh PyPI venv smoke installed `relay-kit==3.4.1` from PyPI, imported `relay_kit_public_cli.py` from the venv `site-packages`, ran `relay-kit --help`, generated a Codex enterprise project with `relay-kit init <project> --codex`, and passed `relay-kit doctor <project>`.
 - Publication evidence is complete for `3.4.1`: `python relay_kit_public_cli.py publish status . --strict --json` returned `status: complete`.
 - Commercial dossier is ready for PyPI: `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --strict --json` returned `status: ready`.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25548643373, conclusion `success`.
+- Latest confirmed main CI before package-index maintenance branch: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25549224195, conclusion `success`.
 
 ## Known sharp edges
 
@@ -130,7 +131,7 @@
 - Internal-channel commercial dossier is verified ready with GitHub release asset package URL, public support SLA, public issue intake, and owner `b0ydeptraj`.
 - Default package onboarding is now full by default: install the package, then run `relay-kit . --codex`; use `relay-kit . --codex --baseline` only for the smaller bundle.
 - Skill changes should use `skill-evolution` and include trigger/frontmatter/allowed-tool review plus semantic gauntlet or route proof before claiming behavior changed. Profiled risk-sensitive skills must keep registry `allowed_tools` and generated `allowed-tools` frontmatter in sync.
-- PyPI publication is verified. Future package claims should cite `https://pypi.org/project/relay-kit/3.4.1/`, the publish status artifact, and the fresh venv install smoke.
+- PyPI publication is verified. Future package claims should cite `https://pypi.org/project/relay-kit/3.4.1/`, the publish status artifact, the `publish index-check` output, and the fresh venv install smoke.
 - `.relay-kit/contracts/project-context.md`, `.relay-kit/state/workflow-state.md`, `.relay-kit/state/team-board.md`, `.relay-kit/state/lane-registry.md`, and `.relay-kit/state/handoff-log.md` should stay synchronized after release or branch merges.
 
 ## Files or modules to mirror

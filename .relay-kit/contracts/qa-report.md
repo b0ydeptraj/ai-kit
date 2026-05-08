@@ -5,10 +5,18 @@
 > Used by: qa-governor, developer, test-hub, review-hub
 
 ## Scope checked
-Post-default-enterprise state refresh after PR #45 and refreshed GitHub release package proof.
+Package-index maintenance slice after PyPI `relay-kit==3.4.1` publication.
 
 Changed surfaces:
-- `.relay-kit/contracts/project-context.md`
+- `relay_kit_v3/publication.py`
+- `relay_kit_v3/commercial_dossier.py`
+- `relay_kit_public_cli.py`
+- `tests/test_publication_plan.py`
+- `tests/test_commercial_dossier.py`
+- `docs/relay-kit-publication-plan.md`
+- `docs/relay-kit-commercial-dossier.md`
+- `docs/relay-kit-upgrade-backlog.md`
+- `README.md`
 - `.relay-kit/contracts/qa-report.md`
 - `.relay-kit/state/workflow-state.md`
 - `.relay-kit/state/team-board.md`
@@ -16,32 +24,33 @@ Changed surfaces:
 - `.relay-kit/state/handoff-log.md`
 
 ## Acceptance coverage
-- State artifacts reference PR #45 and latest main CI `25273209967`.
-- Project context records default enterprise install behavior, refreshed GitHub release package assets, and the install proof that `relay-kit . --codex` generates enterprise by default.
-- Handoff log records the state refresh lane and expected return condition.
-- QA report records the feature evidence and the post-merge state-refresh evidence.
+- `relay-kit publish index-check` queries PyPI/TestPyPI JSON metadata through the publication module.
+- `relay-kit commercial dossier` includes the package-index gate for PyPI/TestPyPI channels.
+- Strict mode fails unless the target version is present, has release files, and matches the package-index latest version.
+- CLI writes `.relay-kit/release/package-index-check.json` by default, and this generated proof file is ignored.
+- Docs distinguish local publication proof (`publish status`) from remote package-index metadata proof (`publish index-check`).
 
 ## Risk matrix
-- State drift risk: low. This slice updates documentation/state only after the feature PR and main CI passed.
-- Commercial claim risk: medium-low for internal/GitHub release channel. PyPI publication is still unverified because PyPI credentials are not configured.
-- Regression risk: low. Runtime code was not changed in this state refresh branch.
+- State drift risk: low. This slice updates the publication tooling and live state together.
+- Commercial claim risk: lower. PyPI metadata is now checked directly instead of relying only on URL and upload-log evidence.
+- Regression risk: low-medium. The changed surface is CLI/publication logic, covered by focused tests and a live PyPI command run.
 
 ## Regression surface
-- Runtime doctor live-mode placeholder checks over `.relay-kit/state` and `.relay-kit/contracts`.
-- Enterprise doctor and readiness gates that read current state, commercial docs, release docs, and support diagnostics.
+- `relay-kit publish plan|trail|evidence|status` argument parsing and publication report rendering.
+- Publication docs and commercial dossier docs.
+- Live state/runtime doctor placeholder checks over `.relay-kit/state` and `.relay-kit/contracts`.
 
 ## Evidence collected
-- PR #45 merged: https://github.com/b0ydeptraj/Relay-kit/pull/45.
-- Main CI after PR #45 passed: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25273209967.
-- External package proof: `v3.4.0.dev0` GitHub prerelease exists with refreshed wheel and sdist assets.
-- External package proof: fresh venv install from the `v3.4.0.dev0` wheel URL succeeded; `relay-kit --help` showed `--bundle BUNDLE (default: enterprise)`.
-- External package proof: fresh installed `relay-kit <target> --codex` generated 87 v3 files including `.codex/skills/test-first-development/SKILL.md` and `.relay-kit/docs/enterprise-bundle.md`.
-- External support proof: support issue form exists at `https://github.com/b0ydeptraj/Relay-kit/issues/new?template=support.yml`.
-- External owner proof: `docs/relay-kit-commercial-ownership.md` records release, support, and legal/commercial owner `b0ydeptraj`.
-- Commercial dossier evidence: `relay-kit commercial dossier --channel internal ... --strict --json` returned `status: ready`.
-- State refresh evidence: `python scripts/runtime_doctor.py . --strict --state-mode live` passed with findings 0.
-- State refresh evidence: `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise` passed.
-- State refresh evidence: `python -m pytest tests/test_commercial_dossier.py tests/test_readiness_check.py -q` passed.
+- Focused tests: `python -m pytest tests\test_publication_plan.py -q` passed with 17 tests.
+- Focused tests: `python -m pytest tests\test_publication_plan.py tests\test_commercial_dossier.py -q` passed with 23 tests.
+- Full tests: `python -m pytest tests -q` passed with 191 tests.
+- Live package-index check: `python relay_kit_public_cli.py publish index-check . --channel pypi --target-version 3.4.1 --package-url https://pypi.org/project/relay-kit/3.4.1/ --strict --json` returned `status: published`, HTTP `200`, latest version `3.4.1`, release versions `3.4.0, 3.4.1`, and target file count `2`.
+- Commercial dossier: `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --strict --json` returned `status: ready` with `package-index` gate `pass`.
+- Runtime validation: `python scripts\validate_runtime.py` passed.
+- Runtime doctor: `python scripts\runtime_doctor.py . --strict --state-mode live` passed with findings 0.
+- Enterprise doctor: `python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise` passed.
+- Enterprise readiness: `python relay_kit_public_cli.py readiness check . --profile enterprise --json` returned `commercial-ready-candidate` with 191 pytest tests.
+- Main before this slice: `73e47e0da230d6855219e02df4e6917267f298e6`, with main CI https://github.com/b0ydeptraj/Relay-kit/actions/runs/25549224195 passing.
 
 ## Go / no-go recommendation
-Go for state-refresh PR after local runtime doctor, enterprise doctor, and focused state/docs checks pass.
+Go for package-index maintenance PR after focused tests, live package-index check, runtime doctor live mode, enterprise doctor, readiness, and diff checks pass.

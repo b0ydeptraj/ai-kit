@@ -50,6 +50,7 @@ Source audit status:
 - Fixed in Pulse publication dashboard pass: `relay-kit pulse build` can include publication-plan data, the HTML report shows publication readiness, and signal export emits `relay.publication.ready`.
 - Fixed in publication execution evidence pass: `relay-kit publish evidence` now writes `.relay-kit/release/publication-evidence.json` with wheel/sdist SHA-256 hashes, twine-check output proof, upload/package-index confirmation proof, and external CI/release/package URLs.
 - Fixed in publication trail hardening pass: `relay-kit publish trail` now writes JSON/Markdown runbooks with deterministic capture paths and copyable commands for readiness, release verify, build, twine-check capture, plan, upload-log capture, and evidence generation.
+- Fixed in package-index maintenance pass: `relay-kit publish index-check` now queries PyPI/TestPyPI metadata and strict-fails if the target version is missing, has no files, or is not latest.
 - Fixed in next-dev version hygiene pass: `main` now uses PEP 440 package version `3.4.0.dev0` after the published `v3.3.0` tag, with runtime version marker and trusted manifest regenerated for the next-dev channel.
 - Fixed in support request Pulse pass: `relay-kit pulse build` can include support-request readiness in JSON/HTML, and signal export emits `relay.support_request.ready`.
 - Fixed in support bundle request summary pass: support bundles include a redacted support-request summary when `.relay-kit/support/support-request.json` exists.
@@ -80,7 +81,7 @@ Source audit status:
 
 Current verdict:
 - Current readiness: PyPI publication is complete for `relay-kit` latest `3.4.1`; `3.4.0` was the initial upload and `3.4.1` is the smoke-clean patch release after fixing installed-package doctor behavior.
-- Commercial readiness: PyPI/GitHub release channel is verified by `relay-kit readiness check`, `relay-kit release verify`, `relay-kit support request`, `relay-kit support triage`, `relay-kit support soak`, `relay-kit publish trail`, `relay-kit publish plan`, `relay-kit publish evidence`, `relay-kit publish status`, and `relay-kit commercial dossier --channel pypi --strict`. The package happy path is now `pip install relay-kit`, then `relay-kit . --codex` for the full bundle.
+- Commercial readiness: PyPI/GitHub release channel is verified by `relay-kit readiness check`, `relay-kit release verify`, `relay-kit support request`, `relay-kit support triage`, `relay-kit support soak`, `relay-kit publish trail`, `relay-kit publish plan`, `relay-kit publish evidence`, `relay-kit publish status`, `relay-kit publish index-check`, and `relay-kit commercial dossier --channel pypi --strict`. The package happy path is now `pip install relay-kit`, then `relay-kit . --codex` for the full bundle.
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
 
@@ -674,6 +675,7 @@ Acceptance criteria:
 | Publication trail hardening | Done | P2 | `relay-kit publish trail` writes copyable shell commands and deterministic evidence paths so publish evidence is captured consistently. |
 | Publication execution evidence | Done | P2 | `relay-kit publish evidence` records dist artifact hashes, twine-check output, upload confirmation, and package-index URLs into a machine-readable evidence file. |
 | Publication trail status | Done | P2 | `relay-kit publish status` reads the trail and evidence files to show complete, pending, failed, and not-observable publication steps without uploading artifacts. |
+| Package-index maintenance | Done | P2 | `relay-kit publish index-check` reads package-index metadata and proves the target version is present, latest, and has release files. |
 | Support operations dashboard signal | Done | P2 | Pulse shows support-request readiness and `relay-kit signal export` emits `relay.support_request.ready`. |
 | Support bundle request summary | Done | P2 | `relay-kit support bundle` includes a redacted `diagnostics.support_request` summary when the intake artifact exists. |
 | Support operations soak | Done | P2 | `relay-kit support soak`, support triage, and readiness run P0/P1/P2 paid-support handoff and degraded bundle diagnostic checks. |
@@ -806,6 +808,7 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - `relay-kit publish trail --channel pypi --strict` reaches `ready` only after metadata, version/channel policy, release-lane status, shell support, and external CI/release/package URLs are present.
 - `relay-kit publish evidence --channel pypi --strict` reaches `published` only after wheel/sdist hashes, twine-check proof, upload confirmation, and external CI/release/package evidence are present.
 - `relay-kit publish status --strict` reaches `complete` only after the trail file, dist artifacts, twine-check log, upload log, publication plan, and publication evidence are locally inspectable.
+- `relay-kit publish index-check --channel pypi --strict` reaches `published` only after PyPI/TestPyPI metadata confirms the target version exists, is latest, and has release files.
 - `relay-kit commercial dossier --strict` reaches `ready` only after local readiness, publication status, support triage/soak, and external CI/release/package/SLA/support ownership evidence are present.
 - Pulse and signal export surface support-request readiness so support operations can see whether the intake artifact is actionable.
 - Pulse and signal export surface commercial dossier readiness so support/release review can see whether the final commercial proof binder is ready.
@@ -817,4 +820,4 @@ Relay-kit should not be called commercial-ready until all of these are true:
 
 Review-hub verdict for this backlog:
 - P0/P1/P2/P3 audit backlog items are implemented as first production-ready slices.
-- Internal/GitHub release commercial proof is ready. Continue with PyPI publication only after PyPI credentials are available.
+- PyPI publication and package-index metadata proof are complete for `relay-kit==3.4.1`. Continue with post-release monitoring, customer-support operations, or dashboard/eval polish only when those lanes are explicitly scoped.

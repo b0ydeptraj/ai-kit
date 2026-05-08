@@ -157,6 +157,111 @@ def test_public_cli_publish_plan_json_and_strict(tmp_path: Path, capsys) -> None
     assert payload["status"] == "hold"
 
 
+def test_package_index_check_published_when_pypi_metadata_has_target_version(tmp_path: Path) -> None:
+    write_publication_project(tmp_path, version="3.4.1")
+
+    def fake_fetcher(url: str, timeout: float) -> tuple[int, dict[str, object]]:
+        assert url == "https://pypi.org/pypi/relay-kit/json"
+        assert timeout == 3.0
+        return (
+            200,
+            {
+                "info": {"version": "3.4.1"},
+                "releases": {
+                    "3.4.0": [{"filename": "relay_kit-3.4.0-py3-none-any.whl"}],
+                    "3.4.1": [{"filename": "relay_kit-3.4.1-py3-none-any.whl"}],
+                },
+            },
+        )
+
+    report = publication.build_package_index_check(
+        tmp_path,
+        channel="pypi",
+        target_version="3.4.1",
+        package_url="https://pypi.org/project/relay-kit/3.4.1/",
+        timeout_seconds=3.0,
+        fetcher=fake_fetcher,
+    )
+
+    assert report["schema_version"] == "relay-kit.package-index-check.v1"
+    assert report["status"] == "published"
+    assert report["latest_version"] == "3.4.1"
+    assert report["target_file_count"] == 1
+    assert report["findings"] == []
+    assert {check["id"] for check in report["checks"]} >= {
+        "package-index-reachable",
+        "package-index-version",
+        "package-url",
+    }
+
+
+def test_package_index_check_holds_when_latest_or_target_drift(tmp_path: Path) -> None:
+    write_publication_project(tmp_path, version="3.4.1")
+
+    report = publication.build_package_index_check(
+        tmp_path,
+        channel="pypi",
+        target_version="3.4.1",
+        package_url="https://pypi.org/project/relay-kit/3.4.1/",
+        fetcher=lambda url, timeout: (
+            200,
+            {
+                "info": {"version": "3.4.2"},
+                "releases": {"3.4.2": [{"filename": "relay_kit-3.4.2-py3-none-any.whl"}]},
+            },
+        ),
+    )
+
+    assert report["status"] == "hold"
+    version_check = next(check for check in report["checks"] if check["id"] == "package-index-version")
+    assert version_check["status"] == "hold"
+    assert "target version 3.4.1 is not present" in version_check["summary"]
+    assert "latest version 3.4.2 does not match target 3.4.1" in version_check["summary"]
+
+
+def test_public_cli_publish_index_check_writes_default_artifact(tmp_path: Path, capsys, monkeypatch) -> None:
+    write_publication_project(tmp_path, version="3.4.1")
+
+    def fake_builder(project_path: str, **kwargs) -> dict[str, object]:
+        return {
+            "schema_version": "relay-kit.package-index-check.v1",
+            "status": "published",
+            "project_path": project_path,
+            "channel": kwargs["channel"],
+            "package_name": "relay-kit",
+            "target_version": kwargs["target_version"],
+            "latest_version": "3.4.1",
+            "checks": [],
+            "findings": [],
+        }
+
+    monkeypatch.setattr(relay_kit_public_cli, "build_package_index_check", fake_builder)
+
+    exit_code = relay_kit_public_cli.main(
+        [
+            "publish",
+            "index-check",
+            str(tmp_path),
+            "--channel",
+            "pypi",
+            "--target-version",
+            "3.4.1",
+            "--package-url",
+            "https://pypi.org/project/relay-kit/3.4.1/",
+            "--strict",
+            "--json",
+        ]
+    )
+    payload = json.loads(capsys.readouterr().out)
+    output_path = tmp_path / ".relay-kit" / "release" / "package-index-check.json"
+
+    assert exit_code == 0
+    assert payload["output_file"] == str(output_path)
+    assert output_path.exists()
+    assert payload["index_check"]["schema_version"] == "relay-kit.package-index-check.v1"
+    assert payload["index_check"]["status"] == "published"
+
+
 def test_publication_evidence_published_when_execution_evidence_exists(tmp_path: Path) -> None:
     write_publication_project(tmp_path)
     twine_check, upload_log = write_publication_execution_evidence(tmp_path)

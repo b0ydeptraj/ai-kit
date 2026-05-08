@@ -30,6 +30,20 @@ def complete_publication(root: Path, trail_file: str | None) -> dict[str, Any]:
     }
 
 
+def published_package_index(root: Path, channel: str, package_url: str | None) -> dict[str, Any]:
+    return {
+        "schema_version": "relay-kit.package-index-check.v1",
+        "status": "published",
+        "project_path": str(root),
+        "channel": channel,
+        "package_url": package_url,
+        "target_version": "3.3.0",
+        "latest_version": "3.3.0",
+        "target_file_count": 2,
+        "findings": [],
+    }
+
+
 def ready_triage(root: Path, request_file: str | None, bundle_file: str | None) -> dict[str, Any]:
     return {
         "schema_version": "relay-kit.support-triage.v1",
@@ -66,6 +80,7 @@ def test_commercial_dossier_ready_with_external_and_local_proof(tmp_path: Path) 
         support_owner="support@example.com",
         readiness_builder=ready_readiness,
         publication_status_builder=complete_publication,
+        package_index_builder=published_package_index,
         support_triage_builder=ready_triage,
         support_soak_builder=passing_soak,
     )
@@ -76,6 +91,7 @@ def test_commercial_dossier_ready_with_external_and_local_proof(tmp_path: Path) 
     assert report["findings"] == []
     assert report["checks_by_id"]["readiness"]["status"] == "pass"
     assert report["checks_by_id"]["publication-status"]["status"] == "pass"
+    assert report["checks_by_id"]["package-index"]["status"] == "pass"
     assert report["checks_by_id"]["support-triage"]["status"] == "pass"
     assert report["checks_by_id"]["support-soak"]["status"] == "pass"
     assert report["external_proof"]["legal_owner"] == "ops@example.com"
@@ -87,6 +103,7 @@ def test_commercial_dossier_holds_when_external_proof_is_missing(tmp_path: Path)
         channel="pypi",
         readiness_builder=ready_readiness,
         publication_status_builder=complete_publication,
+        package_index_builder=published_package_index,
         support_triage_builder=ready_triage,
         support_soak_builder=passing_soak,
     )
@@ -115,6 +132,7 @@ def test_commercial_dossier_holds_when_local_gate_is_not_ready(tmp_path: Path) -
         support_owner="support@example.com",
         readiness_builder=limited_readiness,
         publication_status_builder=complete_publication,
+        package_index_builder=published_package_index,
         support_triage_builder=ready_triage,
         support_soak_builder=passing_soak,
     )
@@ -122,6 +140,35 @@ def test_commercial_dossier_holds_when_local_gate_is_not_ready(tmp_path: Path) -
     assert report["status"] == "hold"
     assert report["checks_by_id"]["readiness"]["status"] == "hold"
     assert any(finding["gate"] == "readiness" for finding in report["findings"])
+
+
+def test_commercial_dossier_holds_when_package_index_is_not_published(tmp_path: Path) -> None:
+    def missing_package_index(root: Path, channel: str, package_url: str | None) -> dict[str, Any]:
+        payload = published_package_index(root, channel, package_url)
+        payload["status"] = "hold"
+        payload["findings"] = [{"gate": "package-index-version", "status": "hold", "summary": "target missing"}]
+        return payload
+
+    report = commercial_dossier.build_commercial_dossier(
+        tmp_path,
+        channel="pypi",
+        ci_url="https://github.com/b0ydeptraj/Relay-kit/actions/runs/1",
+        release_url="https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.3.0",
+        package_url="https://pypi.org/project/relay-kit/3.3.0/",
+        sla_url="https://example.com/relay-kit/support-sla",
+        support_url="https://example.com/relay-kit/support-intake",
+        legal_owner="ops@example.com",
+        support_owner="support@example.com",
+        readiness_builder=ready_readiness,
+        publication_status_builder=complete_publication,
+        package_index_builder=missing_package_index,
+        support_triage_builder=ready_triage,
+        support_soak_builder=passing_soak,
+    )
+
+    assert report["status"] == "hold"
+    assert report["checks_by_id"]["package-index"]["status"] == "hold"
+    assert any(finding["gate"] == "package-index" for finding in report["findings"])
 
 
 def test_write_commercial_dossier_uses_default_artifact_path(tmp_path: Path) -> None:

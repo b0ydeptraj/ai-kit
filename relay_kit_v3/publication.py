@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import urllib.error
+import urllib.request
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 
 from relay_kit_v3.release_lane import build_release_lane_report
 
@@ -19,12 +21,15 @@ SCHEMA_VERSION = "relay-kit.publication-plan.v1"
 EVIDENCE_SCHEMA_VERSION = "relay-kit.publication-evidence.v1"
 TRAIL_SCHEMA_VERSION = "relay-kit.publication-trail.v1"
 TRAIL_STATUS_SCHEMA_VERSION = "relay-kit.publication-trail-status.v1"
+INDEX_CHECK_SCHEMA_VERSION = "relay-kit.package-index-check.v1"
 CHANNELS = {"pypi", "testpypi", "internal"}
 SHELLS = {"powershell", "bash"}
 DEFAULT_OUTPUT = Path(".relay-kit") / "release" / "publication-plan.json"
 DEFAULT_EVIDENCE_OUTPUT = Path(".relay-kit") / "release" / "publication-evidence.json"
 DEFAULT_TRAIL_OUTPUT = Path(".relay-kit") / "release" / "publication-trail.json"
 DEFAULT_TRAIL_MARKDOWN = Path(".relay-kit") / "release" / "publication-trail.md"
+DEFAULT_INDEX_CHECK_OUTPUT = Path(".relay-kit") / "release" / "package-index-check.json"
+PackageIndexFetcher = Callable[[str, float], tuple[int, Mapping[str, Any]]]
 
 
 def build_publication_plan(
@@ -407,6 +412,106 @@ def build_publication_trail_status(
     }
 
 
+def build_package_index_check(
+    project_root: Path | str,
+    *,
+    channel: str = "pypi",
+    target_version: str | None = None,
+    package_url: str | None = None,
+    timeout_seconds: float = 10.0,
+    fetcher: PackageIndexFetcher | None = None,
+) -> dict[str, Any]:
+    root = Path(project_root).resolve()
+    selected_channel = channel.lower()
+    package = read_package_metadata(root)
+    package_name = str(package.get("name") or "")
+    local_version = str(package.get("version") or "")
+    expected_version = target_version or local_version
+    index_url = package_index_json_url(selected_channel, package_name)
+
+    checks: list[dict[str, Any]] = [
+        package_metadata_check(package),
+        version_channel_check(local_version, selected_channel, target_version=target_version, allow_dev=False),
+    ]
+    index_payload: Mapping[str, Any] = {}
+    http_status: int | None = None
+    fetch_error = ""
+
+    if index_url:
+        try:
+            http_status, index_payload = (fetcher or fetch_package_index_json)(index_url, timeout_seconds)
+        except Exception as exc:  # pragma: no cover - concrete branches are covered through fake fetchers
+            fetch_error = str(exc)
+    else:
+        fetch_error = f"unsupported package index channel: {selected_channel}"
+
+    index_check = package_index_reachable_check(index_url, http_status=http_status, error=fetch_error)
+    checks.append(index_check)
+
+    releases = _mapping(index_payload.get("releases"))
+    info = _mapping(index_payload.get("info"))
+    latest_version = str(info.get("version") or "")
+    release_versions = sorted(str(version) for version in releases.keys())
+    target_files = releases.get(expected_version, [])
+    target_file_count = len(target_files) if isinstance(target_files, list) else 0
+
+    checks.append(
+        package_index_version_check(
+            expected_version,
+            latest_version=latest_version,
+            release_versions=release_versions,
+            target_file_count=target_file_count,
+        )
+    )
+    checks.append(package_url_check(package_url, package_name=package_name, version=expected_version, channel=selected_channel))
+
+    findings = [
+        {
+            "gate": check["id"],
+            "status": check["status"],
+            "summary": check.get("summary", ""),
+        }
+        for check in checks
+        if check["status"] != "pass"
+    ]
+    return {
+        "schema_version": INDEX_CHECK_SCHEMA_VERSION,
+        "status": "published" if not findings else "hold",
+        "project_path": str(root),
+        "channel": selected_channel,
+        "package_name": package_name,
+        "local_version": local_version,
+        "target_version": expected_version,
+        "package_url": package_url,
+        "index_url": index_url,
+        "http_status": http_status,
+        "latest_version": latest_version,
+        "release_versions": release_versions,
+        "target_file_count": target_file_count,
+        "checks": checks,
+        "findings": findings,
+        "residual_risks": [
+            "This check verifies package-index metadata only; it does not prove install smoke or owner controls.",
+            "Internal package indexes need a channel-specific implementation before strict use.",
+        ],
+    }
+
+
+def write_package_index_check(
+    project_root: Path | str,
+    report: Mapping[str, Any],
+    *,
+    output_file: Path | str | None = None,
+) -> Path:
+    root = Path(project_root).resolve()
+    output_path = Path(output_file) if output_file is not None else root / DEFAULT_INDEX_CHECK_OUTPUT
+    if not output_path.is_absolute():
+        output_path = root / output_path
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(report, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+    return output_path
+
+
 def write_publication_trail(
     project_root: Path | str,
     report: Mapping[str, Any],
@@ -441,6 +546,23 @@ def render_publication_trail_status(report: Mapping[str, Any]) -> str:
     for step in report.get("steps", []):
         if isinstance(step, Mapping):
             lines.append(f"  - {step.get('id')}: {step.get('status')} - {step.get('summary')}")
+    return "\n".join(lines)
+
+
+def render_package_index_check(report: Mapping[str, Any]) -> str:
+    lines = [
+        "Relay-kit package index check",
+        f"- project: {report.get('project_path')}",
+        f"- channel: {report.get('channel')}",
+        f"- package: {report.get('package_name')}",
+        f"- target version: {report.get('target_version')}",
+        f"- latest version: {report.get('latest_version')}",
+        f"- status: {report.get('status')}",
+        f"- findings: {len(report.get('findings', []))}",
+    ]
+    for check_result in report.get("checks", []):
+        if isinstance(check_result, Mapping):
+            lines.append(f"  - {check_result.get('label', check_result.get('id'))}: {check_result.get('status')} - {check_result.get('summary')}")
     return "\n".join(lines)
 
 
@@ -556,6 +678,30 @@ def render_publication_trail_markdown(report: Mapping[str, Any]) -> str:
                 ]
             )
     return "\n".join(lines).rstrip()
+
+
+def package_index_json_url(channel: str, package_name: str) -> str:
+    if not package_name:
+        return ""
+    if channel == "pypi":
+        return f"https://pypi.org/pypi/{package_name}/json"
+    if channel == "testpypi":
+        return f"https://test.pypi.org/pypi/{package_name}/json"
+    return ""
+
+
+def fetch_package_index_json(url: str, timeout_seconds: float) -> tuple[int, Mapping[str, Any]]:
+    request = urllib.request.Request(url, headers={"User-Agent": "relay-kit-publication-check/1"})
+    try:
+        with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
+            status = int(getattr(response, "status", response.getcode()))
+            raw = response.read()
+    except urllib.error.HTTPError as exc:
+        return int(exc.code), {}
+    payload = json.loads(raw.decode("utf-8"))
+    if not isinstance(payload, Mapping):
+        raise ValueError("package index response is not a JSON object")
+    return status, payload
 
 
 def read_package_metadata(root: Path) -> dict[str, Any]:
@@ -705,6 +851,75 @@ def external_evidence_check(
         status,
         "; ".join(summary_parts) if summary_parts else "external evidence URLs recorded",
         details={"missing": missing, "invalid": invalid, "ci_url": ci_url, "release_url": release_url, "package_url": package_url},
+    )
+
+
+def package_index_reachable_check(index_url: str, *, http_status: int | None, error: str) -> dict[str, Any]:
+    findings: list[str] = []
+    if not index_url:
+        findings.append("missing package index URL")
+    if error:
+        findings.append(error)
+    if http_status is None:
+        findings.append("package index was not reached")
+    elif http_status != 200:
+        findings.append(f"package index returned HTTP {http_status}")
+    return check(
+        "package-index-reachable",
+        "package index reachable",
+        "pass" if not findings else "hold",
+        "; ".join(findings) if findings else "package index metadata fetched",
+        details={"index_url": index_url, "http_status": http_status, "error": error},
+    )
+
+
+def package_index_version_check(
+    expected_version: str,
+    *,
+    latest_version: str,
+    release_versions: list[str],
+    target_file_count: int,
+) -> dict[str, Any]:
+    findings: list[str] = []
+    if not expected_version:
+        findings.append("missing target version")
+    elif expected_version not in release_versions:
+        findings.append(f"target version {expected_version} is not present")
+    elif target_file_count <= 0:
+        findings.append(f"target version {expected_version} has no release files")
+    if expected_version and latest_version and latest_version != expected_version:
+        findings.append(f"latest version {latest_version} does not match target {expected_version}")
+    if not latest_version:
+        findings.append("missing latest version in package index metadata")
+    return check(
+        "package-index-version",
+        "package index version",
+        "pass" if not findings else "hold",
+        "; ".join(findings) if findings else "target version is latest and has files",
+        details={
+            "target_version": expected_version,
+            "latest_version": latest_version,
+            "release_versions": release_versions,
+            "target_file_count": target_file_count,
+        },
+    )
+
+
+def package_url_check(package_url: str | None, *, package_name: str, version: str, channel: str) -> dict[str, Any]:
+    if not package_url:
+        return check("package-url", "package URL", "hold", "missing package URL", details={"package_url": None})
+    findings: list[str] = []
+    if not _looks_like_url(package_url):
+        findings.append("package URL is not http(s)")
+    expected_fragment = f"/project/{package_name}/{version}/"
+    if channel in {"pypi", "testpypi"} and expected_fragment not in package_url:
+        findings.append(f"package URL does not include {expected_fragment}")
+    return check(
+        "package-url",
+        "package URL",
+        "pass" if not findings else "hold",
+        "; ".join(findings) if findings else "package URL matches target version",
+        details={"package_url": package_url, "expected_fragment": expected_fragment},
     )
 
 
