@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-Keep Relay-kit workflow-eval state current after route-quality tightening landed and ready for the next single-lane implementation slice.
+Keep Relay-kit readiness/eval state current after route-quality gating landed and ready for the next single-lane implementation slice.
 
 ## Active orchestrator
 - workflow-router
@@ -9,7 +9,7 @@ Keep Relay-kit workflow-eval state current after route-quality tightening landed
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PR #71 removed default weak workflow routes and main CI passed. |
+| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | Source-of-truth refreshed after PR #73 made readiness fail weak workflow routes and main CI passed. |
 | lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
@@ -24,7 +24,7 @@ Keep Relay-kit workflow-eval state current after route-quality tightening landed
 Primary lane only. Parallel lanes are parked until explicitly routed.
 
 ## Merge prerequisites
-Runtime doctor live mode passed, focused pytest passed, enterprise doctor passed, readiness enterprise passed, and main CI for PR #71 passed. Remote CI must pass after this state refresh PR.
+Runtime doctor live mode passed, focused pytest passed, enterprise doctor passed, readiness enterprise passed, and main CI for PR #73 passed. Remote CI must pass after this state refresh PR.
 
 ## Conflict risks
 Low. This slice edits state/context artifacts only.
@@ -61,3 +61,4 @@ Low. This slice edits state/context artifacts only.
 - 2026-05-06: Refresh state artifacts after PR #64 expanded workflow eval to 43 scenarios with all registry roles covered, main CI `25421305874` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-06: Refresh state artifacts after PR #66 expanded workflow eval to 55 scenarios with all 47 current registry skills covered, main CI `25421911099` passed, and local readiness returned `commercial-ready-candidate`.
 - 2026-05-08: Refresh state artifacts after PR #71 tightened workflow route quality to `weak_route_count=0`, main CI `25536489943` passed, and local readiness returned `commercial-ready-candidate`.
+- 2026-05-08: Refresh state artifacts after PR #73 made enterprise readiness fail weak workflow routes or `min_route_margin < 4`, main CI `25537111543` passed, and local readiness returned `commercial-ready-candidate`.
