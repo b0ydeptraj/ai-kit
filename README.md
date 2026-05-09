@@ -68,6 +68,7 @@ It makes agents behave less like improvising interns and more like engineers wor
 - reusable runtime skills for `.claude`, `.agent`, and `.codex`
 - shared workflow artifacts in `.relay-kit/`
 - a read-only `memory-search` utility for retrieving prior decisions and handoffs
+- a `context audit` gate for checking source authority, freshness, and missing handoff context
 - a `release-readiness` utility for pre/post deploy smoke gates and rollback signals
 - an `accessibility-review` gate so frontend quality is not only visual
 - a `skill-gauntlet` regression gate to keep skill routing behavior stable
@@ -124,6 +125,12 @@ relay-kit doctor /path/to/project --json
 ```
 
 Doctor writes local JSONL events to `.relay-kit/evidence/events.jsonl`.
+
+Audit context freshness before continuing a long-running lane:
+
+```bash
+relay-kit context audit /path/to/project --strict --json
+```
 
 Export planning and QA contracts as machine-readable JSON:
 

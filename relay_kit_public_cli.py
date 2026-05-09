@@ -23,6 +23,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit pulse build <project_path>
   relay-kit signal export <project_path>
   relay-kit contract import <project_path> --contract-file <relay-contract.json>
+  relay-kit context audit <project_path>
 
 It maps to the existing canonical runtime entrypoint (`relay_kit.py`)
 without changing the underlying generation flow.
@@ -69,6 +70,7 @@ from relay_kit_v3.readiness import build_readiness_report, render_readiness_repo
 from relay_kit_v3.signal_export import build_signal_export, write_signal_export
 from relay_kit_v3.contract_export import write_contract_export
 from relay_kit_v3.contract_import import import_contracts, render_contract_import_report
+from relay_kit_v3.context_governance import build_context_audit, render_context_audit, write_context_audit
 from relay_kit_v3.support_bundle import build_support_bundle, write_support_bundle
 from relay_kit_v3.support_request import build_support_request, render_support_request, write_support_request
 from relay_kit_v3.support_triage import (
@@ -222,6 +224,21 @@ def _parse_contract_args(argv: list[str]) -> argparse.Namespace:
     import_cmd.add_argument("--force", action="store_true", help="Overwrite concrete existing contract sections")
     import_cmd.add_argument("--strict", action="store_true", help="Return non-zero on invalid contract JSON or skipped conflicts")
     import_cmd.add_argument("--json", action="store_true", help="Emit machine-readable import report")
+    return parser.parse_args(argv)
+
+
+def _parse_context_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit context",
+        description="Audit Relay-kit context and memory governance surfaces.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    audit = subparsers.add_parser("audit", help="Audit source freshness and authority")
+    audit.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    audit.add_argument("--stale-days", type=int, default=30, help="Age threshold for stale sources")
+    audit.add_argument("--output-file", default=None, help="Optional context audit JSON output path")
+    audit.add_argument("--strict", action="store_true", help="Return non-zero unless context audit passes")
+    audit.add_argument("--json", action="store_true", help="Emit machine-readable context audit")
     return parser.parse_args(argv)
 
 
@@ -905,6 +922,23 @@ def run_contract(args: argparse.Namespace) -> int:
     return 2
 
 
+def run_context(args: argparse.Namespace) -> int:
+    if args.action != "audit":
+        return 2
+    report = build_context_audit(args.project_path, stale_days=args.stale_days)
+    if args.output_file:
+        write_context_audit(args.project_path, report, output_file=args.output_file)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_context_audit(report))
+        if args.output_file:
+            print(f"Wrote {args.output_file}")
+    if args.strict and report["status"] != "pass":
+        return 1
+    return 0
+
+
 def run_manifest(args: argparse.Namespace) -> int:
     if args.action == "write":
         output_path = write_manifest(args.project_path, args.output_file)
@@ -1351,6 +1385,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_evidence(_parse_evidence_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "contract":
         return run_contract(_parse_contract_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "context":
+        return run_context(_parse_context_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "manifest":
         return run_manifest(_parse_manifest_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "eval":

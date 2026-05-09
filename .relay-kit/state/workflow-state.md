@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh live workflow state after package-index Pulse/signal visibility merged and main CI passed.
+Implement Claude-adoption phase 2 slice 1: context and memory governance.
 
 ## Active lane
 - Lane id: primary
@@ -10,24 +10,24 @@ Refresh live workflow state after package-index Pulse/signal visibility merged a
 
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: bootstrap
-- Active specialist: bootstrap
+- Layer-2 workflow hub: fix-hub
+- Active specialist: developer
 
 ## Active utility providers
-- Primary utility provider: memory-search
-- Additional utilities in play: evidence-before-completion
+- Primary utility provider: test-first-development
+- Additional utilities in play: context-continuity, memory-search, runtime-doctor
 
 ## Active standalone/domain skill
-- Skill: bootstrap
-- Why selected: this is a bounded post-merge state/context refresh after package-index Pulse/signal visibility landed.
+- Skill: developer
+- Why selected: the plan is approved and this slice changes code, docs, tests, and state in a controlled scope.
 
 ## Complexity level
-- Level: L1
-- Reasoning: implementation is complete; this pass only removes state drift.
+- Level: L2
+- Reasoning: this slice adds a public CLI gate plus script metadata and runtime-doctor checks, but stays inside context governance.
 
 ## Chosen track
-- Track: quick-flow
-- Why this track fits: the slice updates live state/context after a completed merge.
+- Track: product-flow
+- Why this track fits: phase 2 is broad, but this first PR is a bounded product/runtime slice.
 
 ## Completed artifacts
 - [ ] product-brief
@@ -49,15 +49,22 @@ Refresh live workflow state after package-index Pulse/signal visibility merged a
 | none | none | none | none |
 
 ## Next skill
-workflow-router
+test-hub
 
 ## Known blockers
-No active blockers. PyPI publication proof and package-index maintenance are complete for `relay-kit==3.4.1`.
+No active blockers. PyPI publication proof and package-index monitoring are complete; Claude-adoption phase 2 is now in progress.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
+- Active branch: `codex/context-memory-governance`.
+- Current branch objective: add `relay-kit context audit`, source authority/freshness metadata, enriched memory-search output, continuity source metadata, and guarded stale-main-pointer detection.
+- Current branch evidence: `python -m pytest tests\test_context_governance.py tests\test_live_state_hygiene.py -q` passed with 9 tests.
+- Current branch evidence: `python relay_kit_public_cli.py context audit . --strict --json` returned `status: pass` with 2 authoritative sources, 4 recent sources, 0 stale required sources, and 0 missing required sources.
+- Current branch evidence: `python scripts\memory_search.py . --query "package-index" --json --max-results 1` returned source metadata fields including `source_type`, `confidence`, `age_days`, and `stale_warning`.
+- Current branch evidence: `python scripts\context_continuity.py checkpoint .tmp\context-governance-smoke --objective "context governance smoke" --next-step "verify metadata" --json` wrote `sources` metadata into the checkpoint payload.
+- Current branch evidence: `python -m pytest tests -q` passed with 200 tests and `python scripts\validate_runtime.py` passed.
 - PR #81 merged package-index Pulse/signal visibility: https://github.com/b0ydeptraj/Relay-kit/pull/81.
 - Current main baseline after PR #81: `51ac7240b9c3b41f9e39fd3afb2a4b3a0f728d11`.
 - Main CI after PR #81: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25568791057, conclusion `success`.
@@ -166,4 +173,4 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Readiness route-quality gate verification: PR #73 added readiness parsing for workflow-eval route quality; local `python -m pytest tests -q` passed with 184 tests, workflow eval reported 55/55 scenarios with `weak_route_count=0` and `min_route_margin=5`, enterprise readiness returned `commercial-ready-candidate` with workflow details, PR CI `25537068673` passed, and main CI `25537111543` passed.
 
 ## Recommended next lane
-Next useful feature lane: broader dashboard/eval polish or customer-support operations. PyPI publication, package-index metadata proof, and package-index monitoring visibility are complete for `3.4.1`.
+Finish context/memory governance through test-hub, PR CI, merge, and post-merge state refresh. Then continue Claude-adoption phase 2 with multi-lane coordination hardening.
