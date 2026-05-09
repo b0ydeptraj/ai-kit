@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh after PR #83 context governance merge and fix runtime-doctor shallow checkout ancestry handling.
+Refresh after PR #84 runtime-doctor shallow ancestry fix and prepare Claude-adoption phase 2 slice 2.
 
 ## Active lane
 - Lane id: primary
@@ -10,20 +10,20 @@ Refresh after PR #83 context governance merge and fix runtime-doctor shallow che
 
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: fix-hub
-- Active specialist: developer
+- Layer-2 workflow hub: bootstrap
+- Active specialist: context-continuity
 
 ## Active utility providers
-- Primary utility provider: test-first-development
-- Additional utilities in play: context-continuity, memory-search, runtime-doctor
+- Primary utility provider: context-continuity
+- Additional utilities in play: runtime-doctor, evidence-before-completion
 
 ## Active standalone/domain skill
-- Skill: developer
-- Why selected: the plan is approved and this slice changes code, docs, tests, and state in a controlled scope.
+- Skill: bootstrap
+- Why selected: PR #84 merged and live state must point at the successful main baseline before the next phase-2 slice starts.
 
 ## Complexity level
 - Level: L2
-- Reasoning: this is a focused follow-up because main CI exposed a shallow checkout edge in the new stale-main-pointer gate.
+- Reasoning: state-only refresh after a merged runtime fix.
 
 ## Chosen track
 - Track: product-flow
@@ -49,22 +49,26 @@ Refresh after PR #83 context governance merge and fix runtime-doctor shallow che
 | none | none | none | none |
 
 ## Next skill
-test-hub
+developer
 
 ## Known blockers
-Active blocker under repair: main CI after PR #83 failed in live runtime doctor because shallow GitHub checkout could not prove the recorded baseline was an ancestor. This branch treats unknown ancestry as non-actionable instead of stale.
+No active blockers. PR #84 repaired the shallow checkout ancestry false failure and main CI passed.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Active branch: `codex/post-context-governance-state-refresh`.
-- Current branch objective: refresh live state after PR #83 and fix the runtime-doctor stale-main-pointer check for shallow checkout ancestry results.
+- Active branch: `codex/post-runtime-ancestry-state-refresh`.
+- Current branch objective: refresh live state after PR #84 and prepare the next Claude-adoption phase 2 slice.
 - PR #83 merged context/memory governance: https://github.com/b0ydeptraj/Relay-kit/pull/83.
 - PR #83 merge commit: `e972ea3d516cb3584e028ff5b82c173009131c9e`.
 - Main CI after PR #83: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25608258138, conclusion `failure` due shallow checkout ancestry being treated as stale.
-- Current main baseline after PR #83: `e972ea3d516cb3584e028ff5b82c173009131c9e`.
+- PR #84 merged runtime-doctor shallow ancestry guard: https://github.com/b0ydeptraj/Relay-kit/pull/84.
+- PR #84 merge commit: `d8d428eeb57490e452e46cd36b7ba20a8dc1e0db`.
+- Main CI after PR #84: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25608436233, conclusion `success`.
+- Current main baseline after PR #84: `d8d428eeb57490e452e46cd36b7ba20a8dc1e0db`.
 - PR #83 local evidence: `python -m pytest tests -q` passed with 200 tests, context audit returned `status: pass`, enterprise readiness returned `commercial-ready-candidate`, Pulse returned `status: pass`, and signal export emitted 74 signals.
+- PR #84 local evidence: `python -m pytest tests -q` passed with 201 tests, runtime doctor live returned 0 findings, context audit returned `status: pass`, enterprise readiness returned `commercial-ready-candidate`, and PR/main CI passed.
 - PR #81 merged package-index Pulse/signal visibility: https://github.com/b0ydeptraj/Relay-kit/pull/81.
 - Current main baseline after PR #81: `51ac7240b9c3b41f9e39fd3afb2a4b3a0f728d11`.
 - Main CI after PR #81: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25568791057, conclusion `success`.
@@ -173,4 +177,4 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Readiness route-quality gate verification: PR #73 added readiness parsing for workflow-eval route quality; local `python -m pytest tests -q` passed with 184 tests, workflow eval reported 55/55 scenarios with `weak_route_count=0` and `min_route_margin=5`, enterprise readiness returned `commercial-ready-candidate` with workflow details, PR CI `25537068673` passed, and main CI `25537111543` passed.
 
 ## Recommended next lane
-Merge the post-context governance state refresh and shallow ancestry fix, verify main CI, then continue Claude-adoption phase 2 with multi-lane coordination hardening.
+Continue Claude-adoption phase 2 with multi-lane coordination hardening: `relay-kit lane audit`, lane-lock scope checks, parked-lane resume conditions, merge wave/dependency fields, and team/router template updates.
