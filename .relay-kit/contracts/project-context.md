@@ -105,6 +105,7 @@
 - PR #79 merged package-index maintenance and commercial dossier package-index gate: https://github.com/b0ydeptraj/Relay-kit/pull/79, merge commit `84df24cdfcfad44190abf64c110f1b0585486b85`.
 - PR #80 merged post-package-index state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/80, merge commit `b659973d812589abd092aeec8887ffb5665d4e29`.
 - PR #81 merged package-index Pulse/signal visibility: https://github.com/b0ydeptraj/Relay-kit/pull/81, merge commit `51ac7240b9c3b41f9e39fd3afb2a4b3a0f728d11`.
+- PR #83 merged context and memory governance: https://github.com/b0ydeptraj/Relay-kit/pull/83, merge commit `e972ea3d516cb3584e028ff5b82c173009131c9e`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
 - GitHub release `v3.4.0` published: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.
@@ -139,6 +140,7 @@
 - Skill changes should use `skill-evolution` and include trigger/frontmatter/allowed-tool review plus semantic gauntlet or route proof before claiming behavior changed. Profiled risk-sensitive skills must keep registry `allowed_tools` and generated `allowed-tools` frontmatter in sync.
 - PyPI publication is verified. Future package claims should cite `https://pypi.org/project/relay-kit/3.4.1/`, the publish status artifact, the `publish index-check` output, and the fresh venv install smoke.
 - `.relay-kit/contracts/project-context.md`, `.relay-kit/state/workflow-state.md`, `.relay-kit/state/team-board.md`, `.relay-kit/state/lane-registry.md`, and `.relay-kit/state/handoff-log.md` should stay synchronized after release or branch merges.
+- Runtime doctor's stale-main-pointer check must not treat shallow checkout or unknown ancestor status as a stale-state finding. In full-history local repos it should still flag a known non-ancestor baseline.
 
 ## Files or modules to mirror
 

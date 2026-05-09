@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Implement Claude-adoption phase 2 slice 1: context and memory governance.
+Refresh after PR #83 context governance merge and fix runtime-doctor shallow checkout ancestry handling.
 
 ## Active lane
 - Lane id: primary
@@ -23,7 +23,7 @@ Implement Claude-adoption phase 2 slice 1: context and memory governance.
 
 ## Complexity level
 - Level: L2
-- Reasoning: this slice adds a public CLI gate plus script metadata and runtime-doctor checks, but stays inside context governance.
+- Reasoning: this is a focused follow-up because main CI exposed a shallow checkout edge in the new stale-main-pointer gate.
 
 ## Chosen track
 - Track: product-flow
@@ -52,19 +52,19 @@ Implement Claude-adoption phase 2 slice 1: context and memory governance.
 test-hub
 
 ## Known blockers
-No active blockers. PyPI publication proof and package-index monitoring are complete; Claude-adoption phase 2 is now in progress.
+Active blocker under repair: main CI after PR #83 failed in live runtime doctor because shallow GitHub checkout could not prove the recorded baseline was an ancestor. This branch treats unknown ancestry as non-actionable instead of stale.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Active branch: `codex/context-memory-governance`.
-- Current branch objective: add `relay-kit context audit`, source authority/freshness metadata, enriched memory-search output, continuity source metadata, and guarded stale-main-pointer detection.
-- Current branch evidence: `python -m pytest tests\test_context_governance.py tests\test_live_state_hygiene.py -q` passed with 9 tests.
-- Current branch evidence: `python relay_kit_public_cli.py context audit . --strict --json` returned `status: pass` with 2 authoritative sources, 4 recent sources, 0 stale required sources, and 0 missing required sources.
-- Current branch evidence: `python scripts\memory_search.py . --query "package-index" --json --max-results 1` returned source metadata fields including `source_type`, `confidence`, `age_days`, and `stale_warning`.
-- Current branch evidence: `python scripts\context_continuity.py checkpoint .tmp\context-governance-smoke --objective "context governance smoke" --next-step "verify metadata" --json` wrote `sources` metadata into the checkpoint payload.
-- Current branch evidence: `python -m pytest tests -q` passed with 200 tests and `python scripts\validate_runtime.py` passed.
+- Active branch: `codex/post-context-governance-state-refresh`.
+- Current branch objective: refresh live state after PR #83 and fix the runtime-doctor stale-main-pointer check for shallow checkout ancestry results.
+- PR #83 merged context/memory governance: https://github.com/b0ydeptraj/Relay-kit/pull/83.
+- PR #83 merge commit: `e972ea3d516cb3584e028ff5b82c173009131c9e`.
+- Main CI after PR #83: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25608258138, conclusion `failure` due shallow checkout ancestry being treated as stale.
+- Current main baseline after PR #83: `e972ea3d516cb3584e028ff5b82c173009131c9e`.
+- PR #83 local evidence: `python -m pytest tests -q` passed with 200 tests, context audit returned `status: pass`, enterprise readiness returned `commercial-ready-candidate`, Pulse returned `status: pass`, and signal export emitted 74 signals.
 - PR #81 merged package-index Pulse/signal visibility: https://github.com/b0ydeptraj/Relay-kit/pull/81.
 - Current main baseline after PR #81: `51ac7240b9c3b41f9e39fd3afb2a4b3a0f728d11`.
 - Main CI after PR #81: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25568791057, conclusion `success`.
@@ -173,4 +173,4 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Readiness route-quality gate verification: PR #73 added readiness parsing for workflow-eval route quality; local `python -m pytest tests -q` passed with 184 tests, workflow eval reported 55/55 scenarios with `weak_route_count=0` and `min_route_margin=5`, enterprise readiness returned `commercial-ready-candidate` with workflow details, PR CI `25537068673` passed, and main CI `25537111543` passed.
 
 ## Recommended next lane
-Finish context/memory governance through test-hub, PR CI, merge, and post-merge state refresh. Then continue Claude-adoption phase 2 with multi-lane coordination hardening.
+Merge the post-context governance state refresh and shallow ancestry fix, verify main CI, then continue Claude-adoption phase 2 with multi-lane coordination hardening.

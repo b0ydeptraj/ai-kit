@@ -178,7 +178,7 @@ def workflow_state_baseline(root: Path) -> str:
     return match.group(1).strip() if match else ""
 
 
-def is_ancestor(root: Path, ancestor_sha: str, head_sha: str) -> bool:
+def is_ancestor(root: Path, ancestor_sha: str, head_sha: str) -> bool | None:
     result = subprocess.run(
         ["git", "merge-base", "--is-ancestor", ancestor_sha, head_sha],
         cwd=root,
@@ -186,7 +186,11 @@ def is_ancestor(root: Path, ancestor_sha: str, head_sha: str) -> bool:
         capture_output=True,
         check=False,
     )
-    return result.returncode == 0
+    if result.returncode == 0:
+        return True
+    if result.returncode == 1:
+        return False
+    return None
 
 
 def check_stale_main_pointer(
@@ -208,8 +212,10 @@ def check_stale_main_pointer(
         return
     if baseline == head or head.startswith(baseline):
         return
-    if head_sha is None and is_ancestor(root, baseline, head):
-        return
+    if head_sha is None:
+        ancestor_status = is_ancestor(root, baseline, head)
+        if ancestor_status is not False:
+            return
     findings.append(
         "workflow-state main baseline is stale: "
         f".relay-kit/state/workflow-state.md has {baseline}, current HEAD is {head}"

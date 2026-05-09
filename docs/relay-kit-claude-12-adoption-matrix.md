@@ -50,6 +50,7 @@ Latest verified implementation evidence:
 - PR #49: high-risk skill profile gate.
 - PR #51: risk-sensitive support skill profile expansion.
 - PR #52: state/context refresh after PR #51.
+- PR #83: context and memory governance first slice.
 - Local context-governance slice evidence: `python -m pytest tests -q` passed 200 tests.
 - Local context-governance slice evidence: `python relay_kit_public_cli.py context audit . --strict --json` returned `status: pass`.
 - Local context-governance slice evidence: enterprise readiness returned `commercial-ready-candidate`.

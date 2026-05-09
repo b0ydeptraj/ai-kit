@@ -140,7 +140,7 @@ def current_git_branch(root: Path) -> str:
     return result.stdout.strip()
 
 
-def is_ancestor(root: Path, ancestor_sha: str, head_sha: str) -> bool:
+def is_ancestor(root: Path, ancestor_sha: str, head_sha: str) -> bool | None:
     result = subprocess.run(
         ["git", "merge-base", "--is-ancestor", ancestor_sha, head_sha],
         cwd=root,
@@ -148,7 +148,11 @@ def is_ancestor(root: Path, ancestor_sha: str, head_sha: str) -> bool:
         capture_output=True,
         check=False,
     )
-    return result.returncode == 0
+    if result.returncode == 0:
+        return True
+    if result.returncode == 1:
+        return False
+    return None
 
 
 def workflow_state_main_baseline(root: Path) -> str:
@@ -196,7 +200,8 @@ def build_context_audit(root: Path | str, *, stale_days: int = 30) -> dict[str, 
     head = current_git_head(project)
     baseline_is_current = False
     if baseline and head:
-        baseline_is_current = baseline == head or head.startswith(baseline) or is_ancestor(project, baseline, head)
+        ancestor_status = is_ancestor(project, baseline, head)
+        baseline_is_current = baseline == head or head.startswith(baseline) or ancestor_status is not False
     if branch == "main" and baseline and head and not baseline_is_current:
         findings.append(
             {

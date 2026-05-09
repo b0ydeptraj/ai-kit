@@ -53,6 +53,7 @@ Source audit status:
 - Fixed in package-index maintenance pass: `relay-kit publish index-check` now queries PyPI/TestPyPI metadata and strict-fails if the target version is missing, has no files, or is not latest.
 - Fixed in package-index Pulse/signal pass: Pulse can include package-index check artifacts and signal export emits `relay.package_index.published`.
 - Fixed in context governance pass: `relay-kit context audit` classifies context sources by authority/freshness, memory search reports source confidence/age, continuity checkpoints include source metadata, and runtime doctor can detect invalid main baseline pointers.
+- Fixed in post-context governance CI guard pass: runtime doctor treats shallow checkout ancestry as unknown instead of stale, while full-history known non-ancestor baselines still fail.
 - Fixed in next-dev version hygiene pass: `main` now uses PEP 440 package version `3.4.0.dev0` after the published `v3.3.0` tag, with runtime version marker and trusted manifest regenerated for the next-dev channel.
 - Fixed in support request Pulse pass: `relay-kit pulse build` can include support-request readiness in JSON/HTML, and signal export emits `relay.support_request.ready`.
 - Fixed in support bundle request summary pass: support bundles include a redacted support-request summary when `.relay-kit/support/support-request.json` exists.

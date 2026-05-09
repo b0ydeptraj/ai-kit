@@ -140,3 +140,15 @@ def test_runtime_doctor_detects_stale_main_pointer_when_on_main(tmp_path: Path) 
     )
 
     assert any("workflow-state main baseline is stale" in finding for finding in findings)
+
+
+def test_runtime_doctor_skips_stale_main_pointer_when_ancestor_status_unknown(tmp_path: Path, monkeypatch) -> None:
+    write_context_project(tmp_path)
+    findings: list[str] = []
+    monkeypatch.setattr(runtime_doctor, "current_git_branch", lambda _root: "main")
+    monkeypatch.setattr(runtime_doctor, "current_git_head", lambda _root: "def456")
+    monkeypatch.setattr(runtime_doctor, "is_ancestor", lambda _root, _ancestor, _head: None)
+
+    runtime_doctor.check_stale_main_pointer(tmp_path, findings, mode="live")
+
+    assert findings == []
