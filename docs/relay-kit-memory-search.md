@@ -31,5 +31,6 @@ Useful options:
 
 - This utility does not modify any files.
 - Keep it read-only in phase 2.
-- Every result now carries section, freshness (`fresh|stale`), and score metadata so hubs can avoid stale-context drift.
+- Every result now carries section, freshness (`fresh|stale`), source type, confidence, source age, stale warning, and score metadata so hubs can avoid stale-context drift.
+- Source type is aligned with `relay-kit context audit`: authoritative, recent, stale, inferred, or missing.
 - Use findings as evidence input to the active hub or specialist.

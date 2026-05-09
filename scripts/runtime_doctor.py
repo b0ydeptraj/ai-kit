@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import argparse
+import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -142,6 +144,78 @@ def check_contract_placeholders(root: Path, findings: list[str], mode: str) -> N
             findings.append(f"Live contract artifact still contains TBD markers: {rel}")
 
 
+def current_git_branch(root: Path) -> str:
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return ""
+    return result.stdout.strip()
+
+
+def current_git_head(root: Path) -> str:
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return ""
+    return result.stdout.strip()
+
+
+def workflow_state_baseline(root: Path) -> str:
+    path = root / ".relay-kit" / "state" / "workflow-state.md"
+    if not path.exists():
+        return ""
+    match = re.search(r"Current main baseline[^`]*`([^`]+)`", path.read_text(encoding="utf-8"))
+    return match.group(1).strip() if match else ""
+
+
+def is_ancestor(root: Path, ancestor_sha: str, head_sha: str) -> bool:
+    result = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ancestor_sha, head_sha],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return result.returncode == 0
+
+
+def check_stale_main_pointer(
+    root: Path,
+    findings: list[str],
+    *,
+    mode: str,
+    current_branch: str | None = None,
+    head_sha: str | None = None,
+) -> None:
+    if mode != "live":
+        return
+    branch = current_branch if current_branch is not None else current_git_branch(root)
+    if branch != "main":
+        return
+    baseline = workflow_state_baseline(root)
+    head = head_sha if head_sha is not None else current_git_head(root)
+    if not baseline or not head:
+        return
+    if baseline == head or head.startswith(baseline):
+        return
+    if head_sha is None and is_ancestor(root, baseline, head):
+        return
+    findings.append(
+        "workflow-state main baseline is stale: "
+        f".relay-kit/state/workflow-state.md has {baseline}, current HEAD is {head}"
+    )
+
+
 def main() -> int:
     args = parse_args()
     root = Path(args.project).resolve()
@@ -152,6 +226,7 @@ def main() -> int:
     check_adapter_parity(root, findings, adapters)
     check_state_placeholders(root, findings, args.state_mode)
     check_contract_placeholders(root, findings, args.state_mode)
+    check_stale_main_pointer(root, findings, mode=args.state_mode)
 
     print("Runtime doctor report")
     print(f"- state mode: {args.state_mode}")

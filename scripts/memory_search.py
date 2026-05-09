@@ -5,10 +5,17 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, List
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from relay_kit_v3.context_governance import configured_source_type, confidence_for
 
 
 @dataclass(frozen=True)
@@ -21,6 +28,10 @@ class Match:
     section: str
     modified_utc: str
     stale: bool
+    age_days: int
+    source_type: str
+    confidence: str
+    stale_warning: str
     score: float
 
 
@@ -189,6 +200,8 @@ def find_matches(
             end = min(len(lines), index + context + 1)
             section = nearest_section(lines, index)
             score = compute_score(relative_path, line, section, query_tokens, intent)
+            stale = age_days > max(stale_days, 0)
+            configured_type = configured_source_type(relative_path)
             matches.append(
                 Match(
                     path=relative_path,
@@ -198,7 +211,11 @@ def find_matches(
                     after=[entry.rstrip() for entry in lines[index + 1 : end]],
                     section=section,
                     modified_utc=modified_utc,
-                    stale=age_days > max(stale_days, 0),
+                    stale=stale,
+                    age_days=max(0, age_days),
+                    source_type="stale" if stale else configured_type,
+                    confidence=confidence_for(configured_type, stale),
+                    stale_warning="stale source" if stale else "",
                     score=score,
                 )
             )
@@ -214,7 +231,8 @@ def render_markdown(matches: List[Match], query: str) -> str:
         stale_label = "stale" if match.stale else "fresh"
         lines.append(
             f"- {match.path}:{match.line} [{stale_label}] "
-            f"(section: {match.section}, updated: {match.modified_utc}, score: {match.score:.2f})"
+            f"(section: {match.section}, type: {match.source_type}, confidence: {match.confidence}, "
+            f"age: {match.age_days}d, updated: {match.modified_utc}, score: {match.score:.2f})"
         )
         if match.before:
             for before in match.before:
@@ -239,6 +257,10 @@ def render_json(matches: List[Match], query: str) -> str:
                 "section": match.section,
                 "modified_utc": match.modified_utc,
                 "stale": match.stale,
+                "age_days": match.age_days,
+                "source_type": match.source_type,
+                "confidence": match.confidence,
+                "stale_warning": match.stale_warning,
                 "score": round(match.score, 3),
             }
             for match in matches

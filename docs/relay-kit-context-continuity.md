@@ -46,3 +46,5 @@ python scripts/context_continuity.py diff-since-last /path/to/project
 - `.relay-kit/state/open-loops.md`
 - `.relay-kit/state/evidence-index.md`
 - `.relay-kit/handoffs/<timestamp>-<reason>.md`
+
+`context-manifest.json` includes a `sources` array with each tracked file's source type, confidence, age, and stale flag. Use `relay-kit context audit <project> --strict --json` before handoff if the lane depends on fresh authoritative context.

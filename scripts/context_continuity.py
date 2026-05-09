@@ -7,9 +7,16 @@ import argparse
 import hashlib
 import json
 import re
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from relay_kit_v3.context_governance import source_metadata_for_paths
 
 
 WATCH_FILES = [
@@ -155,6 +162,7 @@ def run_checkpoint(args: argparse.Namespace) -> int:
     ensure_structure(base)
     previous = load_manifest(base)
     snapshot = collect_snapshot(base)
+    sources = source_metadata_for_paths(base, snapshot.keys(), stale_days=30)
     updated_at = now_utc_iso()
 
     payload: Dict[str, object] = {
@@ -166,6 +174,7 @@ def run_checkpoint(args: argparse.Namespace) -> int:
         "next_step": args.next_step or previous.get("next_step", "TBD"),
         "note": args.note,
         "tracked_files": snapshot,
+        "sources": sources,
     }
     write_manifest(base, payload)
     append_current_state_checkpoint(base, payload)

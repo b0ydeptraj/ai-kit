@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-Keep Relay-kit source-of-truth state current after package-index Pulse/signal visibility merged.
+Complete Claude-adoption phase 2 without mixing it into the already-complete core commercial backlog.
 
 ## Active orchestrator
 - workflow-router
@@ -9,7 +9,7 @@ Keep Relay-kit source-of-truth state current after package-index Pulse/signal vi
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | none | project-context/workflow-state/team-board/lane-registry/handoff-log | none | ready for merge | verified | State refreshed after PR #81 package-index Pulse/signal merge and main CI success. |
+| primary | developer | fix-hub | context and memory governance | context governance code/docs/tests/state | active | test-hub next | Focused tests, context audit, memory search, continuity smoke, full pytest, and validate runtime pass locally. |
 | lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
@@ -24,10 +24,10 @@ Keep Relay-kit source-of-truth state current after package-index Pulse/signal vi
 Primary lane only. Parallel lanes are parked until explicitly routed.
 
 ## Merge prerequisites
-Runtime doctor live mode, enterprise doctor, readiness enterprise, and main CI after PR #81 passed. Remote CI must pass after this state refresh PR.
+Full local gates must pass: pytest, validate runtime, runtime doctor live, semantic gauntlet, enterprise doctor, readiness enterprise, Pulse, signal export, and `git diff --check`. Remote PR CI must pass before merge.
 
 ## Conflict risks
-Low. This slice edits state/context artifacts only.
+Medium. This slice edits CLI, scripts, runtime doctor, context governance docs, tests, and live state artifacts.
 
 ## Decision log
 - 2026-04-27: Refresh state artifacts instead of starting a new feature slice because project-context was empty and workflow-state still referenced completed branch work.
@@ -68,3 +68,4 @@ Low. This slice edits state/context artifacts only.
 - 2026-05-08: Refresh state artifacts after PR #79 merged package-index maintenance; main CI `25564536474` passed.
 - 2026-05-08: Start package-index Pulse/signal visibility on `codex/package-index-pulse-signals`; focused tests pass and live Pulse/signal proof shows package-index `published`.
 - 2026-05-08: Refresh state artifacts after PR #81 merged package-index Pulse/signal visibility; main CI `25568791057` passed.
+- 2026-05-09: Start Claude-adoption phase 2 context/memory governance on `codex/context-memory-governance`; focused tests, context audit, memory search metadata, continuity metadata, full pytest, and validate runtime pass locally.

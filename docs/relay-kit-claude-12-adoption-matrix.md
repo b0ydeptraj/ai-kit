@@ -42,6 +42,7 @@ Already implemented:
 - Risk-sensitive support skill profiles for API, data, dependency, media, browser, and multimodal evidence utilities.
 - Bundled workflow scenarios covering all profiled support skills, including browser, media, and multimodal evidence routes.
 - Workflow eval support-route review for duplicate/noisy nearby support-skill triggers.
+- Context governance first slice with `relay-kit context audit`, source freshness/confidence metadata, continuity manifest source metadata, and guarded stale-main-pointer detection.
 
 Latest verified implementation evidence:
 
@@ -49,8 +50,9 @@ Latest verified implementation evidence:
 - PR #49: high-risk skill profile gate.
 - PR #51: risk-sensitive support skill profile expansion.
 - PR #52: state/context refresh after PR #51.
-- Main CI `25301888509`: success.
-- Local readiness before merge: `commercial-ready-candidate`, with `175 passed` in readiness pytest gate.
+- Local context-governance slice evidence: `python -m pytest tests -q` passed 200 tests.
+- Local context-governance slice evidence: `python relay_kit_public_cli.py context audit . --strict --json` returned `status: pass`.
+- Local context-governance slice evidence: enterprise readiness returned `commercial-ready-candidate`.
 
 ## 12-Report Relay-kit Translation Matrix
 
@@ -58,8 +60,8 @@ Latest verified implementation evidence:
 |---|---|---:|---:|---|
 | 01 Lessons Learned | Skill operating rules: context budget discipline, worktree/lane hygiene, evidence before claims, avoid context pollution. | Partially implemented | P1 | Strengthen `skill-evolution`, `workflow-router`, `team`, and state-refresh rules. |
 | 02 Bridge / IDE Integration | Adapter-neutral editor bridge guidance for Codex, Claude, Cursor/Roo/OpenCode-style tools without binding to one IDE. | Backlog | P2 | Add adapter capability matrix and install diagnostics to docs/CLI. |
-| 03 Context Building | Better context packing, relevance scoring, and handoff minimization for long Relay-kit lanes. | Backlog | P1 | Upgrade `handoff-context`, `context-continuity`, and eval fixtures. |
-| 04 Memory System | Memory lifecycle rules: source ranking, stale memory labels, conflict handling, and state-vs-memory boundaries. | Backlog | P1 | Upgrade `memory-search`, `.relay-kit/state`, and runtime doctor stale-context checks. |
+| 03 Context Building | Better context packing, relevance scoring, and handoff minimization for long Relay-kit lanes. | Implemented first slice | P1 | `relay-kit context audit` and continuity source metadata now classify authority/freshness; remaining work is Pulse/signal visibility. |
+| 04 Memory System | Memory lifecycle rules: source ranking, stale memory labels, conflict handling, and state-vs-memory boundaries. | Implemented first slice | P1 | `memory-search` now returns source type, age, confidence, and stale warning; remaining work is dashboard surfacing. |
 | 05 Multi-agent Coordinator | Lane ownership, parallel work locks, merge order, collision prevention, and handoff return conditions. | Partially implemented | P2 | Harden `team`, lane registry checks, and multi-lane runtime doctor rules. |
 | 06 QueryEngine | Search/query ranking over docs, state, registry, scenarios, and evidence without relying on broad text dumps. | Backlog | P2 | Add Relay-kit docs/state query utility or enhance `doc-pointers` and `repo-map`. |
 | 07 Service Layer | Clearer runtime service boundaries for CLI, registry, gates, support, release, telemetry, and publication modules. | Partially implemented | P2 | Add architecture map and module-boundary tests for `relay_kit_v3/*`. |
@@ -82,12 +84,13 @@ Already done:
 - generated `allowed-tools`
 - risk-sensitive support profiles
 - support-route noise review in workflow eval
+- support evidence-contract checks
 
 Next:
 
 - Done: add semantic fixtures proving API/data/dependency/media/browser/multimodal prompts route to the right skill.
 - Done: add duplicate/noisy-trigger detection across nearby support skills.
-- Add evidence-contract checks for these fixtures, not only predicted-skill checks.
+- Done: add evidence-contract checks for these fixtures, not only predicted-skill checks.
 
 Candidate files:
 
@@ -106,6 +109,14 @@ Adopt from reports 03, 04, and 08:
 - memory search should label source age and confidence
 - handoff state should distinguish live state from reusable memory
 - runtime doctor should catch stale source-of-truth pointers after merge
+
+Implemented first slice:
+
+- `relay-kit context audit <project> --strict --json`
+- context source classification: `authoritative`, `recent`, `stale`, `inferred`, `missing`
+- `memory-search` source type, age, confidence, and stale warning
+- continuity checkpoint source metadata in `context-manifest.json`
+- guarded runtime-doctor stale-main-pointer helper
 
 Candidate files:
 
@@ -204,16 +215,14 @@ These ideas are deliberately not adopted as-is:
 
 Recommended next slice:
 
-Add evidence-contract checks for profiled support-skill scenarios, not only predicted-skill checks.
+Add multi-lane coordination hardening with `relay-kit lane audit`.
 
 Acceptance criteria:
 
-- API/data/dependency/media/browser/multimodal support scenarios require contract terms that prove handoff, evidence, and allowed-tool stance.
-- `workflow eval` reports missing evidence terms for any profiled support skill.
-- `support_route_review` remains clean for nearby support-skill collisions.
-- `skill_gauntlet --semantic --strict` passes.
-- `python -m pytest tests/test_skill_gauntlet_semantic.py tests/test_enterprise_bundle.py -q` passes.
-- `python relay_kit_public_cli.py readiness check . --profile enterprise --json` remains `commercial-ready-candidate`.
+- `relay-kit lane audit <project> --strict --json` reports lane conflicts, missing resume conditions, missing wave/dependency metadata, and incomplete handoffs.
+- `runtime_doctor --state-mode live` can call lane audit without breaking single-lane projects.
+- Team/lane templates include `depends_on`, `wave_id`, and `resume_condition`.
+- Pulse/signal visibility can consume lane audit artifacts in a later dashboard slice.
 
 ## Progress Definition
 

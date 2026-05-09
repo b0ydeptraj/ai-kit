@@ -8,7 +8,7 @@
 ## Active lanes
 | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | Merge prerequisite | Status |
 |---|---|---|---|---|---|---|---|
-| primary | bootstrap | workflow-router | none | `.relay-kit/contracts/project-context.md`, `.relay-kit/state/*.md` | state refresh after PR #81 | CI after state refresh PR | ready-for-merge |
+| primary | developer | workflow-router | test-hub | context governance CLI/scripts/docs/tests | Claude-adoption context/memory governance | full local gates and PR CI | active |
 | lane-2 | unassigned | none | none | none | none | none | parked |
 | lane-3 | unassigned | none | none | none | none | none | parked |
 
