@@ -9,7 +9,7 @@ Complete Claude-adoption phase 2 without mixing it into the already-complete cor
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|
-| primary | developer | fix-hub | post-context governance state refresh | runtime doctor ancestry guard and live state | active | test-hub next | PR #83 merged; main CI failed because shallow checkout made ancestor status unknown. Current branch fixes unknown handling and refreshes state. |
+| primary | bootstrap | workflow-router | post-runtime ancestry state refresh | live state and next-lane pointer | active | developer next | PR #84 merged and main CI `25608436233` passed; next implementation slice is multi-lane coordination hardening. |
 | lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
 
@@ -71,3 +71,5 @@ Medium. This slice edits CLI, scripts, runtime doctor, context governance docs, 
 - 2026-05-09: Start Claude-adoption phase 2 context/memory governance on `codex/context-memory-governance`; focused tests, context audit, memory search metadata, continuity metadata, full pytest, and validate runtime pass locally.
 - 2026-05-09: PR #83 merged context/memory governance; main CI `25608258138` failed in runtime doctor live because shallow checkout ancestry was treated as stale.
 - 2026-05-09: Start post-context governance state refresh and runtime-doctor shallow ancestry guard on `codex/post-context-governance-state-refresh`.
+- 2026-05-09: PR #84 merged runtime-doctor shallow ancestry guard; main CI `25608436233` passed.
+- 2026-05-09: Start final state refresh on `codex/post-runtime-ancestry-state-refresh`; next feature slice is multi-lane coordination hardening.
