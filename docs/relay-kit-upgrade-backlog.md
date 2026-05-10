@@ -55,6 +55,7 @@ Source audit status:
 - Fixed in context governance pass: `relay-kit context audit` classifies context sources by authority/freshness, memory search reports source confidence/age, continuity checkpoints include source metadata, and runtime doctor can detect invalid main baseline pointers.
 - Fixed in post-context governance CI guard pass: runtime doctor treats shallow checkout ancestry as unknown instead of stale, while full-history known non-ancestor baselines still fail.
 - Fixed in lane coordination audit pass: `relay-kit lane audit` checks lock conflicts, broad scopes, parked-lane resume conditions, wave/dependency metadata, and handoff return conditions; live runtime doctor calls the lane audit.
+- Fixed in adapter diagnostics pass: `relay-kit adapter diagnose` checks Codex/Claude/Agent generated skill parity, non-allowlisted extras, frontmatter metadata drift, and adapter metadata stance; enterprise readiness includes it as a required gate.
 - Fixed in next-dev version hygiene pass: `main` now uses PEP 440 package version `3.4.0.dev0` after the published `v3.3.0` tag, with runtime version marker and trusted manifest regenerated for the next-dev channel.
 - Fixed in support request Pulse pass: `relay-kit pulse build` can include support-request readiness in JSON/HTML, and signal export emits `relay.support_request.ready`.
 - Fixed in support bundle request summary pass: support bundles include a redacted support-request summary when `.relay-kit/support/support-request.json` exists.

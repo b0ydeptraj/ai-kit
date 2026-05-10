@@ -44,6 +44,7 @@ Already implemented:
 - Workflow eval support-route review for duplicate/noisy nearby support-skill triggers.
 - Context governance first slice with `relay-kit context audit`, source freshness/confidence metadata, continuity manifest source metadata, and guarded stale-main-pointer detection.
 - Multi-lane coordination first slice with `relay-kit lane audit`, lock-conflict checks, wave/dependency metadata, parked-lane resume conditions, and runtime-doctor live integration.
+- Adapter/IDE bridge diagnostics first slice with `relay-kit adapter diagnose`, generated skill parity checks, metadata drift checks, and explicit advisory metadata reporting for Agent/Antigravity.
 
 Latest verified implementation evidence:
 
@@ -58,13 +59,14 @@ Latest verified implementation evidence:
 - Local context-governance slice evidence: `python relay_kit_public_cli.py context audit . --strict --json` returned `status: pass`.
 - Local context-governance slice evidence: enterprise readiness returned `commercial-ready-candidate`.
 - Local lane-coordination slice evidence: `python -m pytest tests -q` passed 209 tests, live lane audit returned `status: pass`, and main CI `25620406371` passed.
+- Local adapter-diagnostics slice evidence: `python relay_kit_public_cli.py adapter diagnose . --adapter all --strict --json` returned `status: pass`; enterprise readiness included required `adapter-diagnostics` gate with 0 findings.
 
 ## 12-Report Relay-kit Translation Matrix
 
 | Report | Relay-kit capability to extract | Status | Priority | Target implementation |
 |---|---|---:|---:|---|
 | 01 Lessons Learned | Skill operating rules: context budget discipline, worktree/lane hygiene, evidence before claims, avoid context pollution. | Partially implemented | P1 | Strengthen `skill-evolution`, `workflow-router`, `team`, and state-refresh rules. |
-| 02 Bridge / IDE Integration | Adapter-neutral editor bridge guidance for Codex, Claude, Cursor/Roo/OpenCode-style tools without binding to one IDE. | Backlog | P2 | Add adapter capability matrix and install diagnostics to docs/CLI. |
+| 02 Bridge / IDE Integration | Adapter-neutral editor bridge guidance for Codex, Claude, Cursor/Roo/OpenCode-style tools without binding to one IDE. | Implemented first slice | P2 | `relay-kit adapter diagnose` checks generated skill parity, extra skills, metadata drift, and adapter metadata stance. |
 | 03 Context Building | Better context packing, relevance scoring, and handoff minimization for long Relay-kit lanes. | Implemented first slice | P1 | `relay-kit context audit` and continuity source metadata now classify authority/freshness; remaining work is Pulse/signal visibility. |
 | 04 Memory System | Memory lifecycle rules: source ranking, stale memory labels, conflict handling, and state-vs-memory boundaries. | Implemented first slice | P1 | `memory-search` now returns source type, age, confidence, and stale warning; remaining work is dashboard surfacing. |
 | 05 Multi-agent Coordinator | Lane ownership, parallel work locks, merge order, collision prevention, and handoff return conditions. | Implemented first slice | P2 | `relay-kit lane audit` checks lock conflicts, broad lock scopes, parked-lane resume conditions, waves/dependencies, and handoff return conditions. |
@@ -198,6 +200,15 @@ Candidate files:
 - `scripts/validate_runtime.py`
 - `docs/relay-kit-bundle-manifest.md`
 
+Implemented first slice:
+
+- `relay-kit adapter diagnose <project> --adapter all --strict --json`
+- generated skill parity checks for `.codex`, `.claude`, and `.agent`
+- non-allowlisted extra skill checks
+- frontmatter drift checks for `name`, `description`, `paths`, `context`, `allowed-tools`, and `effort`
+- explicit metadata policy reporting for Codex, Claude, and Agent/Antigravity
+- required enterprise readiness gate for adapter diagnostics
+
 ### Package F: Query And Service Boundaries
 
 Goal: Make Relay-kit easier to maintain as runtime gates grow.
@@ -229,14 +240,13 @@ These ideas are deliberately not adopted as-is:
 
 Recommended next slice:
 
-Continue from multi-lane coordination hardening into adapter/IDE bridge diagnostics.
+Continue from adapter/IDE bridge diagnostics into query search and service-boundary mapping.
 
 Acceptance criteria:
 
-- Done: `relay-kit lane audit <project> --strict --json` reports lane conflicts, missing resume conditions, missing wave/dependency metadata, and incomplete handoffs.
-- Done: `runtime_doctor --state-mode live` calls lane audit without breaking single-lane projects.
-- Done: Team/lane templates include `depends_on`, `wave_id`, and `resume_condition`.
-- Pulse/signal visibility can consume lane audit artifacts in a later dashboard slice.
+- Done: `relay-kit adapter diagnose <project> --adapter all --strict --json` reports missing skills, unexpected skills, metadata drift, and adapter metadata stance.
+- Done: enterprise readiness includes adapter diagnostics as a required gate.
+- Next: add `relay-kit query search` plus service-boundary map and boundary tests.
 
 ## Progress Definition
 

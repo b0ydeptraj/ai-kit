@@ -14,6 +14,7 @@ from relay_kit_v3.contract_export import export_contracts
 from relay_kit_v3.contract_import import IMPORT_SCHEMA_VERSION as CONTRACT_IMPORT_SCHEMA_VERSION
 from relay_kit_v3.contract_import import import_contracts
 from relay_kit_v3.release_lane import build_release_lane_report
+from relay_kit_v3.adapter_diagnostics import build_adapter_diagnostics
 from relay_kit_v3.support_bundle import SCHEMA_VERSION as SUPPORT_SCHEMA_VERSION
 from relay_kit_v3.support_bundle import build_support_bundle
 from relay_kit_v3.support_triage import support_bundle_findings
@@ -29,6 +30,7 @@ COMMERCIAL_DOCS = [
     "docs/relay-kit-enterprise-bundle.md",
     "docs/relay-kit-contract-sync.md",
     "docs/relay-kit-commercial-dossier.md",
+    "docs/relay-kit-adapter-diagnostics.md",
     ".relay-kit/contracts/support-request.md",
 ]
 READINESS_PYTEST_BASETEMP = Path(".tmp") / "readiness-pytest"
@@ -66,6 +68,7 @@ def build_readiness_report(
     gates.append(_support_bundle_gate(root, selected_profile, support))
     gates.append(_upgrade_gate(root, upgrade))
     gates.append(_contract_sync_gate(root, contract_export, contract_import))
+    gates.append(_adapter_diagnostics_gate(root))
     gates.append(_signal_export_gate(root, selected_profile))
     gates.append(_release_lane_gate(root))
     gates.append(_commercial_docs_gate(root))
@@ -408,6 +411,32 @@ def _contract_sync_gate(
         }
     except Exception as exc:  # pragma: no cover - defensive gate summary
         return _exception_gate("contract-sync", "contract sync", exc)
+
+
+def _adapter_diagnostics_gate(root: Path) -> dict[str, Any]:
+    try:
+        report = build_adapter_diagnostics(root, adapter="all")
+        findings = report.get("findings", [])
+        ok = report.get("status") == "pass"
+        return {
+            "id": "adapter-diagnostics",
+            "label": "adapter diagnostics",
+            "status": "pass" if ok else "fail",
+            "required": True,
+            "summary": (
+                "adapter diagnostics ok"
+                if ok
+                else f"adapter diagnostics findings: {len(findings)}"
+            ),
+            "details": {
+                "findings_count": len(findings),
+                "summary": report.get("summary", {}),
+                "adapters": report.get("adapters", []),
+                "findings": findings[:12],
+            },
+        }
+    except Exception as exc:  # pragma: no cover - defensive gate summary
+        return _exception_gate("adapter-diagnostics", "adapter diagnostics", exc)
 
 
 def _signal_export_gate(root: Path, profile: str) -> dict[str, Any]:

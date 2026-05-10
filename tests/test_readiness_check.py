@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import json
+import shutil
 import subprocess
 from pathlib import Path
 
 import relay_kit_public_cli
 from relay_kit_v3 import readiness
+from relay_kit_v3.generator import emit_core_skills
 from relay_kit_v3.support_bundle import SCHEMA_VERSION as SUPPORT_SCHEMA_VERSION
 from relay_kit_v3.contract_export import SCHEMA_VERSION as CONTRACT_EXPORT_SCHEMA_VERSION
 from relay_kit_v3.contract_import import IMPORT_SCHEMA_VERSION as CONTRACT_IMPORT_SCHEMA_VERSION
@@ -64,6 +66,7 @@ def healthy_workflow_eval_payload() -> dict[str, object]:
 
 
 def write_required_docs(root: Path) -> None:
+    emit_core_skills(root, "all", "enterprise")
     (root / "README.md").write_text("# Relay-kit\n", encoding="utf-8")
     (root / "docs").mkdir(parents=True, exist_ok=True)
     (root / "docs" / "relay-kit-support-sla.md").write_text("# Support\n", encoding="utf-8")
@@ -76,6 +79,7 @@ def write_required_docs(root: Path) -> None:
     (root / "docs" / "relay-kit-release-lane.md").write_text("# Release Lane\n", encoding="utf-8")
     (root / "docs" / "relay-kit-publication-plan.md").write_text("# Publication Plan\n", encoding="utf-8")
     (root / "docs" / "relay-kit-commercial-dossier.md").write_text("# Commercial Dossier\n", encoding="utf-8")
+    (root / "docs" / "relay-kit-adapter-diagnostics.md").write_text("# Adapter Diagnostics\n", encoding="utf-8")
     (root / ".relay-kit" / "contracts").mkdir(parents=True, exist_ok=True)
     (root / ".relay-kit" / "contracts" / "support-request.md").write_text("# Support Request\n", encoding="utf-8")
     (root / "pyproject.toml").write_text(
@@ -184,6 +188,7 @@ def test_readiness_report_returns_candidate_when_required_gates_pass(tmp_path: P
         "signal-export",
         "release-lane",
         "commercial-docs",
+        "adapter-diagnostics",
     }
     signal_gate = next(gate for gate in report["gates"] if gate["id"] == "signal-export")
     assert signal_gate["status"] == "pass"
@@ -295,6 +300,32 @@ def test_readiness_report_holds_when_support_bundle_diagnostics_are_degraded(tmp
     assert gate["status"] == "fail"
     assert gate["details"]["findings_count"] == 1
     assert "diagnostics" in gate["summary"]
+
+
+def test_readiness_report_holds_when_adapter_diagnostics_findings_exist(tmp_path: Path) -> None:
+    write_required_docs(tmp_path)
+    shutil.rmtree(tmp_path / ".codex" / "skills" / "developer")
+
+    report = readiness.build_readiness_report(
+        tmp_path,
+        profile="enterprise",
+        command_runner=passing_command_runner,
+        support_builder=lambda root, policy_pack: healthy_support_bundle_payload(),
+        upgrade_builder=lambda root: {"status": "pass", "findings_count": 0},
+        contract_exporter=lambda root: {"schema_version": CONTRACT_EXPORT_SCHEMA_VERSION},
+        contract_importer=lambda root, payload: {
+            "schema_version": CONTRACT_IMPORT_SCHEMA_VERSION,
+            "status": "pass",
+            "findings": [],
+        },
+    )
+
+    gate = next(gate for gate in report["gates"] if gate["id"] == "adapter-diagnostics")
+
+    assert report["status"] == "hold"
+    assert gate["status"] == "fail"
+    assert gate["details"]["findings_count"] == 1
+    assert "adapter diagnostics findings: 1" in gate["summary"]
 
 
 def test_readiness_report_is_limited_beta_when_tests_are_skipped(tmp_path: Path) -> None:

@@ -25,6 +25,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit contract import <project_path> --contract-file <relay-contract.json>
   relay-kit context audit <project_path>
   relay-kit lane audit <project_path>
+  relay-kit adapter diagnose <project_path>
 
 It maps to the existing canonical runtime entrypoint (`relay_kit.py`)
 without changing the underlying generation flow.
@@ -73,6 +74,11 @@ from relay_kit_v3.contract_export import write_contract_export
 from relay_kit_v3.contract_import import import_contracts, render_contract_import_report
 from relay_kit_v3.context_governance import build_context_audit, render_context_audit, write_context_audit
 from relay_kit_v3.lane_audit import build_lane_audit, render_lane_audit, write_lane_audit
+from relay_kit_v3.adapter_diagnostics import (
+    build_adapter_diagnostics,
+    render_adapter_diagnostics,
+    write_adapter_diagnostics,
+)
 from relay_kit_v3.support_bundle import build_support_bundle, write_support_bundle
 from relay_kit_v3.support_request import build_support_request, render_support_request, write_support_request
 from relay_kit_v3.support_triage import (
@@ -255,6 +261,26 @@ def _parse_lane_args(argv: list[str]) -> argparse.Namespace:
     audit.add_argument("--output-file", default=None, help="Optional lane audit JSON output path")
     audit.add_argument("--strict", action="store_true", help="Return non-zero unless lane audit passes")
     audit.add_argument("--json", action="store_true", help="Emit machine-readable lane audit")
+    return parser.parse_args(argv)
+
+
+def _parse_adapter_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit adapter",
+        description="Diagnose Relay-kit adapter skill surfaces.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    diagnose = subparsers.add_parser("diagnose", help="Check adapter skill parity and metadata drift")
+    diagnose.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    diagnose.add_argument(
+        "--adapter",
+        choices=["codex", "claude", "agent", "antigravity", "all"],
+        default="all",
+        help="Adapter surface to inspect",
+    )
+    diagnose.add_argument("--output-file", default=None, help="Optional adapter diagnostics JSON output path")
+    diagnose.add_argument("--strict", action="store_true", help="Return non-zero unless diagnostics pass")
+    diagnose.add_argument("--json", action="store_true", help="Emit machine-readable diagnostics")
     return parser.parse_args(argv)
 
 
@@ -972,6 +998,23 @@ def run_lane(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_adapter(args: argparse.Namespace) -> int:
+    if args.action != "diagnose":
+        return 2
+    report = build_adapter_diagnostics(args.project_path, adapter=args.adapter)
+    if args.output_file:
+        write_adapter_diagnostics(args.project_path, report, output_file=args.output_file)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_adapter_diagnostics(report))
+        if args.output_file:
+            print(f"Wrote {args.output_file}")
+    if args.strict and report["status"] != "pass":
+        return 1
+    return 0
+
+
 def run_manifest(args: argparse.Namespace) -> int:
     if args.action == "write":
         output_path = write_manifest(args.project_path, args.output_file)
@@ -1422,6 +1465,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_context(_parse_context_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "lane":
         return run_lane(_parse_lane_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "adapter":
+        return run_adapter(_parse_adapter_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "manifest":
         return run_manifest(_parse_manifest_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "eval":
