@@ -111,11 +111,11 @@ def render_team_board() -> str:
         - team
 
         ## Lanes
-        | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
-        |---|---|---|---|---|---|---|---|
-        | primary | unassigned | none | none | none | queued | none | empty lane |
-        | lane-2 | unassigned | none | none | none | parked | none | empty lane |
-        | lane-3 | unassigned | none | none | none | parked | none | empty lane |
+        | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | depends_on | wave_id | resume_condition | Handoff status | Notes |
+        |---|---|---|---|---|---|---|---|---|---|---|
+        | primary | unassigned | none | none | none | queued | none | wave-1 | active | none | empty lane |
+        | lane-2 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | empty lane |
+        | lane-3 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | empty lane |
 
         ## Shared artifacts that must stay authoritative
         - `.relay-kit/state/workflow-state.md`
@@ -126,10 +126,10 @@ def render_team_board() -> str:
         - `.relay-kit/contracts/architecture.md`
 
         ## Merge order
-        Primary lane first when active; parallel lanes merge only after explicit handoff.
+        wave-1 before wave-2 by default; parallel lanes must record depends_on before merge.
 
         ## Merge prerequisites
-        Passing gates, no active lock conflicts, and handoff evidence linked.
+        Passing gates, no active lock conflicts, handoff evidence linked, and lane audit pass.
 
         ## Conflict risks
         none recorded
@@ -151,11 +151,11 @@ def render_lane_registry() -> str:
         - Release or reassign the lock before a different lane edits the same artifact section.
 
         ## Active lanes
-        | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | Merge prerequisite | Status |
-        |---|---|---|---|---|---|---|---|
-        | primary | unassigned | workflow-router | none | none | none | none | active |
-        | lane-2 | unassigned | team | none | none | none | none | parked |
-        | lane-3 | unassigned | team | none | none | none | none | parked |
+        | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | depends_on | wave_id | resume_condition | Merge prerequisite | Status |
+        |---|---|---|---|---|---|---|---|---|---|---|
+        | primary | unassigned | workflow-router | none | none | none | none | wave-1 | active | none | active |
+        | lane-2 | unassigned | team | none | none | none | primary | wave-2 | explicitly routed by team | none | parked |
+        | lane-3 | unassigned | team | none | none | none | primary | wave-2 | explicitly routed by team | none | parked |
 
         ## Released locks
         | Lane | Artifact | Previous scope | Released because |

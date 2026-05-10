@@ -113,7 +113,8 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
                - `plan-hub` when planning artifacts are missing or stale
                - `debug-hub` when the request starts from a failure or regression
             7. Mark the lane mode explicitly as one of: discovery, planning, implementation, or verification.
-            8. Update `.relay-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
+            8. When parallel or parked lanes exist, record `depends_on`, `wave_id`, and `resume_condition` in team-board and lane-registry.
+            9. Update `.relay-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
 
             ## Escalation rules
             Escalate immediately when:
@@ -174,6 +175,7 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             "Use `.relay-kit/docs/parallel-execution.md` to decide when work is independent enough to split safely.",
             "Require context-continuity handoff packs when ownership shifts across sessions or AIs.",
             "Prefer wave-based execution: parallel inside a wave, strict dependency gate between waves.",
+            "Run `relay-kit lane audit <project> --strict --json` before trusting a multi-lane handoff.",
         ],
         next_steps=["cook", "plan-hub", "scout-hub", "debug-hub", "review-hub", "context-continuity"],
         body=dedent(
@@ -188,7 +190,8 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             4. If one lane uncovers architecture or scope drift, update workflow-state and notify all affected lanes.
             5. Park lanes that are blocked instead of letting them thrash.
             6. Record lock scope and handoff status whenever a lane changes ownership or pauses.
-            7. For each lane, record `depends_on` and `wave_id`, then only advance to the next wave after current-wave verification gates pass.
+            7. For each lane, record `depends_on`, `wave_id`, and `resume_condition`, then only advance to the next wave after current-wave verification gates pass.
+            8. Run `relay-kit lane audit <project> --strict --json` before claiming multi-lane state is safe.
 
             ## Do not do this
             - Do not let two lanes silently diverge on the same acceptance criteria.

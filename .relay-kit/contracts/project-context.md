@@ -133,6 +133,7 @@
 - Workflow eval support route review currently covers 12 profiled support routes across 6/6 profiled support skills and reports 0 weak profiled support routes and 0 nearby support route collisions after PR #60.
 - Workflow eval support evidence-contract review currently covers 12 profiled support scenarios across 6/6 profiled support skills and reports 0 term gaps and 0 prompt gaps after PR #60.
 - Workflow eval support fixture-depth review currently covers 12 profiled support scenarios across 6/6 profiled support skills and reports 0 depth gaps and 0 duplicate prompt pairs after PR #62.
+- Lane coordination now includes `relay-kit lane audit`, which checks active-lane lock conflicts, broad lock scopes, parked-lane `resume_condition`, active-lane `wave_id`, required `depends_on`/`wave_id`/`resume_condition` columns, and handoff expected return conditions.
 - Support operations now include `relay-kit support soak`, which validates P0/P1/P2 paid-support handoff fixtures and fails degraded support bundle diagnostics.
 - Commercial proof now includes `relay-kit commercial dossier`, which writes `.relay-kit/commercial/commercial-dossier.json` and strict-fails unless local readiness, publication status, support triage/soak, and external CI/release/package/SLA/support owner proof are present.
 - Commercial dossier proof is visible in Pulse JSON/HTML and signal export when included from the generated dossier file.
@@ -150,6 +151,7 @@
 - Release readiness logic: `relay_kit_v3/release_lane.py`, `relay_kit_v3/readiness.py`, `scripts/release_readiness.py`
 - Publication planning and evidence logic: `relay_kit_v3/publication.py`, `relay_kit_v3/commercial_dossier.py`
 - Support diagnostics, request intake, and triage logic: `relay_kit_v3/support_bundle.py`, `relay_kit_v3/support_request.py`, `relay_kit_v3/support_triage.py`
+- Lane coordination logic: `relay_kit_v3/lane_audit.py`, `scripts/runtime_doctor.py`, `.relay-kit/state/team-board.md`, `.relay-kit/state/lane-registry.md`, `.relay-kit/state/handoff-log.md`
 - Signal and observability logic: `relay_kit_v3/signal_export.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/evidence_ledger.py`
 - Tests to mirror for new CLI slices: `tests/test_publication_plan.py`, `tests/test_commercial_dossier.py`, `tests/test_signal_export.py`, `tests/test_release_lane.py`, `tests/test_readiness_check.py`, `tests/test_public_cli_doctor.py`
 - Skill-system slices should mirror `tests/test_enterprise_bundle.py` and `tests/test_skill_gauntlet_semantic.py`.

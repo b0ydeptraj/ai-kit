@@ -28,7 +28,8 @@ Act as the routing kernel for the whole system: choose the track, choose the act
    - `plan-hub` when planning artifacts are missing or stale
    - `debug-hub` when the request starts from a failure or regression
 7. Mark the lane mode explicitly as one of: discovery, planning, implementation, or verification.
-8. Update `.relay-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
+8. When parallel or parked lanes exist, record `depends_on`, `wave_id`, and `resume_condition` in team-board and lane-registry.
+9. Update `.relay-kit/state/workflow-state.md` with the chosen track, orchestrator, hub, exact next skill, and any blockers.
 
 ## Escalation rules
 Escalate immediately when:

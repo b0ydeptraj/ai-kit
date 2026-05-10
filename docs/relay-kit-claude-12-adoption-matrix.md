@@ -43,6 +43,7 @@ Already implemented:
 - Bundled workflow scenarios covering all profiled support skills, including browser, media, and multimodal evidence routes.
 - Workflow eval support-route review for duplicate/noisy nearby support-skill triggers.
 - Context governance first slice with `relay-kit context audit`, source freshness/confidence metadata, continuity manifest source metadata, and guarded stale-main-pointer detection.
+- Multi-lane coordination first slice with `relay-kit lane audit`, lock-conflict checks, wave/dependency metadata, parked-lane resume conditions, and runtime-doctor live integration.
 
 Latest verified implementation evidence:
 
@@ -64,7 +65,7 @@ Latest verified implementation evidence:
 | 02 Bridge / IDE Integration | Adapter-neutral editor bridge guidance for Codex, Claude, Cursor/Roo/OpenCode-style tools without binding to one IDE. | Backlog | P2 | Add adapter capability matrix and install diagnostics to docs/CLI. |
 | 03 Context Building | Better context packing, relevance scoring, and handoff minimization for long Relay-kit lanes. | Implemented first slice | P1 | `relay-kit context audit` and continuity source metadata now classify authority/freshness; remaining work is Pulse/signal visibility. |
 | 04 Memory System | Memory lifecycle rules: source ranking, stale memory labels, conflict handling, and state-vs-memory boundaries. | Implemented first slice | P1 | `memory-search` now returns source type, age, confidence, and stale warning; remaining work is dashboard surfacing. |
-| 05 Multi-agent Coordinator | Lane ownership, parallel work locks, merge order, collision prevention, and handoff return conditions. | Partially implemented | P2 | Harden `team`, lane registry checks, and multi-lane runtime doctor rules. |
+| 05 Multi-agent Coordinator | Lane ownership, parallel work locks, merge order, collision prevention, and handoff return conditions. | Implemented first slice | P2 | `relay-kit lane audit` checks lock conflicts, broad lock scopes, parked-lane resume conditions, waves/dependencies, and handoff return conditions. |
 | 06 QueryEngine | Search/query ranking over docs, state, registry, scenarios, and evidence without relying on broad text dumps. | Backlog | P2 | Add Relay-kit docs/state query utility or enhance `doc-pointers` and `repo-map`. |
 | 07 Service Layer | Clearer runtime service boundaries for CLI, registry, gates, support, release, telemetry, and publication modules. | Partially implemented | P2 | Add architecture map and module-boundary tests for `relay_kit_v3/*`. |
 | 08 Session Storage | Resume, session snapshot, handoff ledger, and state persistence contracts. | Partially implemented | P1 | Upgrade `context-continuity`, evidence ledger, and live-state schemas. |
@@ -149,6 +150,15 @@ Candidate files:
 - `.relay-kit/docs/parallel-execution.md`
 - `scripts/runtime_doctor.py`
 
+Implemented first slice:
+
+- `relay-kit lane audit <project> --strict --json`
+- active-lane lock conflict and broad lock-scope checks
+- parked-lane `resume_condition` checks
+- active-lane `wave_id` checks and `depends_on`/`wave_id`/`resume_condition` template columns
+- handoff expected-return-condition checks
+- live runtime doctor calls lane audit without breaking single-lane projects
+
 ### Package D: Tool And Permission Hardening
 
 Goal: Make tool access and shell risk visible before enterprise users trust the kit.
@@ -217,13 +227,13 @@ These ideas are deliberately not adopted as-is:
 
 Recommended next slice:
 
-Add multi-lane coordination hardening with `relay-kit lane audit`.
+Continue from multi-lane coordination hardening into adapter/IDE bridge diagnostics.
 
 Acceptance criteria:
 
-- `relay-kit lane audit <project> --strict --json` reports lane conflicts, missing resume conditions, missing wave/dependency metadata, and incomplete handoffs.
-- `runtime_doctor --state-mode live` can call lane audit without breaking single-lane projects.
-- Team/lane templates include `depends_on`, `wave_id`, and `resume_condition`.
+- Done: `relay-kit lane audit <project> --strict --json` reports lane conflicts, missing resume conditions, missing wave/dependency metadata, and incomplete handoffs.
+- Done: `runtime_doctor --state-mode live` calls lane audit without breaking single-lane projects.
+- Done: Team/lane templates include `depends_on`, `wave_id`, and `resume_condition`.
 - Pulse/signal visibility can consume lane audit artifacts in a later dashboard slice.
 
 ## Progress Definition
