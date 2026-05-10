@@ -10,6 +10,7 @@
 - Active runtime package code lives under `relay_kit_v3/`. The historical v3 shim package remains only for compatibility and is not the active namespace.
 - Public CLI orchestration lives in `relay_kit_public_cli.py`; default runtime generation is the full enterprise bundle, while `--baseline` explicitly opts into the smaller install. Legacy generation compatibility remains in `relay_kit.py`, `relay_kit_legacy.py`, and `relay_kit_compat.py`.
 - Runtime skills are generated from registry data under `relay_kit_v3/registry/` and validated by `scripts/validate_runtime.py`, `scripts/runtime_doctor.py`, `scripts/migration_guard.py`, `scripts/skill_gauntlet.py`, `scripts/policy_guard.py`, and `scripts/eval_workflows.py`.
+- Adapter diagnostics live in `relay_kit_v3/adapter_diagnostics.py` and the public command is `relay-kit adapter diagnose`; enterprise readiness requires this gate to catch generated skill parity and frontmatter drift.
 - The discipline utility bundle includes `skill-evolution`, a Relay-kit-owned skill for creating, upgrading, reviewing, and pruning skills with path-scoped activation, fork context, allowed-tool stance, and semantic route proof.
 - Semantic skill gauntlet now enforces `allowed-tools` frontmatter for configured profiled risk-sensitive skills and fails drift against registry tool profiles. Current profiled support skills include API, data, dependency, media, browser, and multimodal evidence utilities.
 - Workflow eval now reports `quality.support_route_review` for profiled support-skill coverage, weak support routes, and nearby support-skill collisions within the support margin threshold. It also reports `quality.support_evidence_contract_review` for profiled support-skill prompt and expected-term gaps, plus `quality.support_fixture_depth_review` for report-level support fixture depth gaps. The default 55-scenario suite currently reports `weak_route_count=0` and `min_route_margin=5`, and enterprise readiness fails if weak routes appear or `min_route_margin` drops below `4`.
@@ -37,7 +38,7 @@
 ## Domain and compliance constraints
 
 - Relay-kit is positioned as an agent workflow governance kit, not a CrewAI/n8n-style full agent runtime.
-- Commercial readiness is gated by `relay-kit readiness check . --profile enterprise --json`, `relay-kit release verify . --json`, `relay-kit support request . --json`, `relay-kit support triage . --json`, `relay-kit support soak . --json`, `relay-kit publish trail . --channel pypi --json`, `relay-kit publish plan . --channel pypi --json`, `relay-kit publish evidence . --channel pypi --json`, `relay-kit publish status . --json` when package upload evidence exists, `relay-kit publish index-check . --channel pypi --strict --json` for public package-index metadata proof, `relay-kit context audit . --strict --json` for source freshness/authority proof, and `relay-kit commercial dossier . --strict --json` when external CI/release/package/SLA/support owner proof exists.
+- Commercial readiness is gated by `relay-kit readiness check . --profile enterprise --json`, `relay-kit release verify . --json`, `relay-kit support request . --json`, `relay-kit support triage . --json`, `relay-kit support soak . --json`, `relay-kit publish trail . --channel pypi --json`, `relay-kit publish plan . --channel pypi --json`, `relay-kit publish evidence . --channel pypi --json`, `relay-kit publish status . --json` when package upload evidence exists, `relay-kit publish index-check . --channel pypi --strict --json` for public package-index metadata proof, `relay-kit context audit . --strict --json` for source freshness/authority proof, `relay-kit adapter diagnose . --adapter all --strict --json` for adapter parity/metadata proof, and `relay-kit commercial dossier . --strict --json` when external CI/release/package/SLA/support owner proof exists.
 - Pulse can include package-index checks through `relay-kit pulse build . --package-index-file <path>` or `--include-package-index`, and signal export emits `relay.package_index.published` for dashboard or OTLP consumers.
 - Pulse can include the commercial dossier through `relay-kit pulse build . --commercial-dossier-file <path>`, and signal export emits `relay.commercial_dossier.ready` for dashboard or OTLP consumers.
 - Enterprise trust metadata is deterministic, not cryptographic. `relay-kit manifest verify . --trusted` is required before enterprise readiness claims.
@@ -109,6 +110,7 @@
 - PR #84 merged runtime-doctor shallow ancestry guard: https://github.com/b0ydeptraj/Relay-kit/pull/84, merge commit `d8d428eeb57490e452e46cd36b7ba20a8dc1e0db`.
 - PR #85 merged post-runtime ancestry state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/85, merge commit `9f6b5dbce8f6bf755108dc678b0528659311b14a`.
 - PR #86 merged multi-lane coordination hardening: https://github.com/b0ydeptraj/Relay-kit/pull/86, merge commit `d582a7a9505ffb648f3a830232d6a0c43c3f1c71`.
+- PR #87 merged post-lane audit state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/87, merge commit `5b42a377f772f3f4f5f6a41ae086253c3761347e`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
 - GitHub release `v3.4.0` published: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.
@@ -121,7 +123,7 @@
 - Publication evidence is complete for `3.4.1`: `python relay_kit_public_cli.py publish status . --strict --json` returned `status: complete`.
 - Commercial dossier is ready for PyPI: `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --strict --json` returned `status: ready`.
 - Package-index Pulse/signal proof: focused Pulse/signal tests passed with 26 tests; live `publish index-check` returned `status: published`; Pulse build included package-index `pass`; signal export emitted `relay.package_index.published=1`.
-- Latest confirmed main CI after PR #86: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25620406371, conclusion `success`.
+- Latest confirmed main CI after PR #87: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25620528628, conclusion `success`.
 
 ## Known sharp edges
 
@@ -154,6 +156,7 @@
 - Publication planning and evidence logic: `relay_kit_v3/publication.py`, `relay_kit_v3/commercial_dossier.py`
 - Support diagnostics, request intake, and triage logic: `relay_kit_v3/support_bundle.py`, `relay_kit_v3/support_request.py`, `relay_kit_v3/support_triage.py`
 - Lane coordination logic: `relay_kit_v3/lane_audit.py`, `scripts/runtime_doctor.py`, `.relay-kit/state/team-board.md`, `.relay-kit/state/lane-registry.md`, `.relay-kit/state/handoff-log.md`
+- Adapter diagnostics logic: `relay_kit_v3/adapter_diagnostics.py`, `relay_kit_public_cli.py`, `relay_kit_v3/readiness.py`, `docs/relay-kit-adapter-diagnostics.md`
 - Signal and observability logic: `relay_kit_v3/signal_export.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/evidence_ledger.py`
 - Tests to mirror for new CLI slices: `tests/test_publication_plan.py`, `tests/test_commercial_dossier.py`, `tests/test_signal_export.py`, `tests/test_release_lane.py`, `tests/test_readiness_check.py`, `tests/test_public_cli_doctor.py`
 - Skill-system slices should mirror `tests/test_enterprise_bundle.py` and `tests/test_skill_gauntlet_semantic.py`.

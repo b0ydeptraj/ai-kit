@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh state after PR #86 multi-lane coordination hardening and prepare the next Claude-adoption phase 2 slice.
+Implement Claude-adoption phase 2 slice 3: adapter/IDE bridge diagnostics.
 
 ## Active lane
 - Lane id: primary
@@ -10,20 +10,20 @@ Refresh state after PR #86 multi-lane coordination hardening and prepare the nex
 
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: bootstrap
-- Active specialist: bootstrap
+- Layer-2 workflow hub: fix-hub
+- Active specialist: developer
 
 ## Active utility providers
 - Primary utility provider: test-first-development
-- Additional utilities in play: runtime-doctor, context-continuity, evidence-before-completion
+- Additional utilities in play: runtime-doctor, skill-gauntlet, evidence-before-completion
 
 ## Active standalone/domain skill
-- Skill: bootstrap
-- Why selected: PR #86 merged and main CI passed; live state must point to the next implementation lane.
+- Skill: developer
+- Why selected: slice 3 needs a public CLI diagnostic, adapter metadata checks, readiness integration, docs, tests, and state updates.
 
 ## Complexity level
 - Level: L2
-- Reasoning: this is a bounded post-merge state refresh after a runtime governance slice.
+- Reasoning: this slice adds deterministic adapter diagnostics and readiness gating while staying inside local runtime governance.
 
 ## Chosen track
 - Track: product-flow
@@ -52,14 +52,19 @@ Refresh state after PR #86 multi-lane coordination hardening and prepare the nex
 developer
 
 ## Known blockers
-No active blockers. PR #86 lane audit passed PR CI, merged into main, and main CI passed; next feature slice is adapter/IDE bridge diagnostics.
+No active blockers. PR #87 state refresh passed main CI; adapter diagnostics is active on a new feature branch.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Active branch: `codex/post-lane-audit-state-refresh`.
-- Current branch objective: refresh live state after PR #86 and point the next implementation lane to adapter/IDE bridge diagnostics.
+- Active branch: `codex/adapter-bridge-diagnostics`.
+- Current branch objective: add `relay-kit adapter diagnose`, check generated adapter parity and frontmatter drift, document adapter metadata stance, and wire adapter diagnostics into enterprise readiness.
+- PR #87 merged post-lane audit state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/87.
+- PR #87 merge commit: `5b42a377f772f3f4f5f6a41ae086253c3761347e`.
+- Main CI after PR #87: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25620528628, conclusion `success`.
+- Current main baseline after PR #87: `5b42a377f772f3f4f5f6a41ae086253c3761347e`.
+- Adapter diagnostics red/green evidence so far: focused tests first failed because `relay_kit_v3.adapter_diagnostics`, CLI `adapter diagnose`, and readiness adapter gate were missing; after implementation `python -m pytest tests\test_adapter_diagnostics.py tests\test_readiness_check.py -q` passed with 13 tests.
 - PR #86 merged multi-lane coordination hardening: https://github.com/b0ydeptraj/Relay-kit/pull/86.
 - PR #86 merge commit: `d582a7a9505ffb648f3a830232d6a0c43c3f1c71`.
 - Main CI after PR #86: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25620406371, conclusion `success`.

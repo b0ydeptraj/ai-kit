@@ -70,6 +70,7 @@ It makes agents behave less like improvising interns and more like engineers wor
 - a read-only `memory-search` utility for retrieving prior decisions and handoffs
 - a `context audit` gate for checking source authority, freshness, and missing handoff context
 - a `lane audit` gate for checking lock conflicts, parked-lane resume conditions, and handoff return contracts
+- an `adapter diagnose` gate for checking generated Codex, Claude, and Agent skill parity plus frontmatter drift
 - a `release-readiness` utility for pre/post deploy smoke gates and rollback signals
 - an `accessibility-review` gate so frontend quality is not only visual
 - a `skill-gauntlet` regression gate to keep skill routing behavior stable
@@ -137,6 +138,12 @@ Audit lane coordination before trusting parallel work:
 
 ```bash
 relay-kit lane audit /path/to/project --strict --json
+```
+
+Audit adapter runtime surfaces before trusting editor handoff:
+
+```bash
+relay-kit adapter diagnose /path/to/project --adapter all --strict --json
 ```
 
 Export planning and QA contracts as machine-readable JSON:
