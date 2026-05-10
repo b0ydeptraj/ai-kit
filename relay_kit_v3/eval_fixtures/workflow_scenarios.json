@@ -328,5 +328,35 @@
     "prompt": "Use test-first-development because implementation should follow a red-green-refactor loop: write the failing test first, make it green, then clean up one behavior.",
     "expected_skill": "test-first-development",
     "expected_terms": ["red-green-refactor", "failing test", "one behavior"]
+  },
+  {
+    "id": "context-continuity-governance-health",
+    "prompt": "Use context-continuity when a long Relay-kit lane needs source freshness, checkpoint, rehydrate, handoff, and diff continuity before dashboard evidence is trusted.",
+    "expected_skill": "context-continuity",
+    "expected_terms": ["checkpoint", "handoff", "diff"]
+  },
+  {
+    "id": "team-lane-health-audit",
+    "prompt": "Use team when multi-lane state needs lane locks, depends_on, wave_id, resume_condition, merge order, and a relay-kit lane audit before parallel work continues.",
+    "expected_skill": "team",
+    "expected_terms": ["depends_on", "wave_id", "resume_condition"]
+  },
+  {
+    "id": "runtime-doctor-adapter-diagnostics",
+    "prompt": "Use runtime-doctor when adapter diagnostics must check adapter parity, missing skills, extra skills, metadata drift, and live mode runtime integrity before release.",
+    "expected_skill": "runtime-doctor",
+    "expected_terms": ["adapter parity", "missing", "live mode"]
+  },
+  {
+    "id": "memory-search-query-source-lookup",
+    "prompt": "Use memory-search when the hub needs ranked state and contract lookup with file paths, line-level excerpts, stale hits, and prior decisions for dashboard evidence.",
+    "expected_skill": "memory-search",
+    "expected_terms": ["file paths", "line-level excerpts", "stale hits"]
+  },
+  {
+    "id": "repo-map-service-boundary-review",
+    "prompt": "Use repo-map when service-boundary mapping needs entrypoints, modules, dependency direction, and impact surface for CLI, registry, gates, support, release, publication, and Pulse.",
+    "expected_skill": "repo-map",
+    "expected_terms": ["entrypoints", "modules", "dependency direction"]
   }
 ]

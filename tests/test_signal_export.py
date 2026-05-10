@@ -47,6 +47,36 @@ def write_pulse_report(root: Path) -> Path:
                     "support_fixture_depth_gap_count": 4,
                     "next_actions": [{"action": "Review low-margin routes."}],
                 },
+                "context_health": {
+                    "status": "pass",
+                    "stale_sources": 0,
+                    "missing_sources": 0,
+                    "authoritative_sources": 2,
+                },
+                "lane_health": {
+                    "status": "pass",
+                    "conflicts": 0,
+                    "broad_locks": 0,
+                    "incomplete_handoffs": 0,
+                },
+                "adapter_health": {
+                    "status": "pass",
+                    "metadata_drift": 0,
+                    "missing_skills": 0,
+                    "unexpected_skills": 0,
+                },
+                "query_health": {
+                    "status": "pass",
+                    "authoritative_hits": 2,
+                    "returned": 3,
+                    "hit_count": 10,
+                },
+                "service_boundary_health": {
+                    "status": "pass",
+                    "findings": 0,
+                    "boundary_count": 8,
+                    "module_count": 33,
+                },
                 "readiness": {
                     "status": "pass",
                     "verdict": "commercial-ready-candidate",
@@ -127,6 +157,11 @@ def test_signal_export_builds_metrics_and_events(tmp_path: Path) -> None:
     assert "relay.workflow.coverage_gap_count" in metric_names
     assert "relay.workflow.support_evidence_gap_count" in metric_names
     assert "relay.workflow.support_fixture_depth_gap_count" in metric_names
+    assert "relay.context.stale_sources" in metric_names
+    assert "relay.lanes.conflicts" in metric_names
+    assert "relay.adapter.metadata_drift" in metric_names
+    assert "relay.query.authoritative_hits" in metric_names
+    assert "relay.service.boundary_findings" in metric_names
     assert "relay.gates.pass" in metric_names
     assert "relay.gates.attention" in metric_names
     assert "relay.gates.hold" in metric_names

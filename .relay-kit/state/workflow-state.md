@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh live state after Claude-adoption phase 2 query/service boundary slice and prepare dashboard/eval polish advanced.
+Implement Claude-adoption phase 2 dashboard/eval polish advanced.
 
 ## Active lane
 - Lane id: primary
@@ -10,24 +10,24 @@ Refresh live state after Claude-adoption phase 2 query/service boundary slice an
 
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: bootstrap
-- Active specialist: bootstrap
+- Layer-2 workflow hub: fix-hub
+- Active specialist: developer
 
 ## Active utility providers
-- Primary utility provider: runtime-doctor
-- Additional utilities in play: evidence-before-completion, memory-search
+- Primary utility provider: test-first-development
+- Additional utilities in play: runtime-doctor, evidence-before-completion, repo-map
 
 ## Active standalone/domain skill
-- Skill: bootstrap
-- Why selected: PR #90 has merged and live state must point to the next implementation slice.
+- Skill: developer
+- Why selected: this slice changes Pulse, signal export, workflow eval fixtures, public CLI options, docs, tests, and live state.
 
 ## Complexity level
 - Level: L2
-- Reasoning: this is a post-merge state refresh after a bounded runtime governance slice.
+- Reasoning: this is the final Claude-adoption phase 2 feature slice, touching observability/eval surfaces but not package metadata.
 
 ## Chosen track
 - Track: product-flow
-- Why this track fits: phase 2 continues through serial PRs with live-state refresh after each merge.
+- Why this track fits: the slice is implementation-ready and already constrained to local Pulse/signal/eval artifacts.
 
 ## Completed artifacts
 - [ ] product-brief
@@ -52,14 +52,21 @@ Refresh live state after Claude-adoption phase 2 query/service boundary slice an
 developer
 
 ## Known blockers
-No active blockers. PR #90 query/service boundary mapping merged and main CI passed.
+No active blockers. PR #91 post-query/service state refresh merged and main CI passed; dashboard/eval polish advanced is active.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Active branch: `codex/post-query-service-state-refresh`.
-- Current branch objective: refresh live state after PR #90 and point the next implementation slice to dashboard/eval polish advanced.
+- Active branch: `codex/dashboard-eval-polish-advanced`.
+- Current branch objective: surface context, lane, adapter, query, and service-boundary artifacts in Pulse/signal export and workflow eval scenarios.
+- PR #91 merged post-query/service state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/91.
+- PR #91 merge commit: `429604ba8607581b71899459b1e79e9c0c5b1cf6`.
+- Main CI after PR #91: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25621324662, conclusion `success`.
+- Current main baseline after PR #91: `429604ba8607581b71899459b1e79e9c0c5b1cf6`.
+- Dashboard/eval red/green evidence so far: focused tests first failed because Pulse had no governance artifact inputs, signal export lacked governance metrics, and workflow eval still had 55 scenarios; after implementation governance Pulse tests, signal metric test, and workflow eval focused test passed.
+- Dashboard/eval live evidence so far: `relay-kit pulse build . --include-context-audit --include-lane-audit --include-adapter-diagnostics --include-query-search --query-search-text "dashboard eval polish" --include-service-boundaries --json --no-history` returned `status: pass`, score 93, `governance_health.status: pass`; `python scripts\eval_workflows.py . --strict --json` returned 60/60 scenarios; `relay-kit signal export . --otlp --json` emitted 79 signals including `relay.context.stale_sources`, `relay.lanes.conflicts`, `relay.adapter.metadata_drift`, `relay.query.authoritative_hits`, and `relay.service.boundary_findings`.
+- Dashboard/eval full local gate evidence: `python -m pytest tests -q` passed with 223 tests; validate runtime passed; runtime doctor live returned 0 findings; semantic gauntlet checked 141 skill files and 60 scenario fixtures with 0 findings; enterprise doctor passed; readiness enterprise returned `commercial-ready-candidate`; `git diff --check` passed.
 - PR #90 merged query search and service-boundary mapping: https://github.com/b0ydeptraj/Relay-kit/pull/90.
 - PR #90 merge commit: `91dec7608101269c7dd9bffb524b0b8a088ca1b8`.
 - Main CI after PR #90: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25621218408, conclusion `success`.
@@ -206,4 +213,4 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Readiness route-quality gate verification: PR #73 added readiness parsing for workflow-eval route quality; local `python -m pytest tests -q` passed with 184 tests, workflow eval reported 55/55 scenarios with `weak_route_count=0` and `min_route_margin=5`, enterprise readiness returned `commercial-ready-candidate` with workflow details, PR CI `25537068673` passed, and main CI `25537111543` passed.
 
 ## Recommended next lane
-Start dashboard/eval polish advanced. The next feature slice should surface context, lane, adapter, query, and service-boundary artifacts in Pulse/signal export and workflow eval scenarios, then finish with PR CI, merge, and state refresh.
+Finish dashboard/eval polish advanced through full pytest, validate runtime, runtime doctor live, semantic gauntlet, enterprise doctor, readiness, Pulse/signal proof, PR CI, merge, and state refresh. After this slice, Claude-adoption phase 2 should be marked complete.

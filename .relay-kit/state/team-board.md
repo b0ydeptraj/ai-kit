@@ -9,7 +9,7 @@ Complete Claude-adoption phase 2 without mixing it into the already-complete cor
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | depends_on | wave_id | resume_condition | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|
-| primary | bootstrap | workflow-router | post-query/service state refresh | live state and next-lane pointer | active | none | wave-1 | active | developer next | PR #90 merged and main CI `25621218408` passed; next implementation slice is dashboard/eval polish advanced. |
+| primary | developer | fix-hub | dashboard/eval polish advanced | Pulse/signal/eval code, docs, tests, and live state | active | none | wave-1 | active | PR CI next | Focused governance tests, live Pulse/signal/eval proof, full pytest, runtime gates, enterprise doctor, readiness, and diff hygiene pass locally. |
 | lane-2 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | No parallel work active. |
 
@@ -21,13 +21,13 @@ Complete Claude-adoption phase 2 without mixing it into the already-complete cor
 - `.relay-kit/state/team-board.md`
 
 ## Merge order
-Primary state-refresh lane first. Parked lanes depend_on primary and resume only when explicitly routed by team.
+Primary dashboard/eval lane first. Parked lanes depend_on primary and resume only when explicitly routed by team.
 
 ## Merge prerequisites
-State refresh must pass live runtime doctor, enterprise doctor, readiness enterprise, and `git diff --check`. Remote PR CI must pass before merge.
+Feature slice must pass focused Pulse/signal/eval tests, live Pulse/signal/eval proof, full pytest, runtime doctor, semantic gauntlet, enterprise doctor, readiness enterprise, and `git diff --check`. Remote PR CI must pass before merge.
 
 ## Conflict risks
-Low. This slice edits live state and tracking docs only.
+Medium. This slice changes dashboard inputs, signal metrics, workflow eval fixture count, public Pulse CLI options, docs, and state.
 
 ## Decision log
 - 2026-04-27: Refresh state artifacts instead of starting a new feature slice because project-context was empty and workflow-state still referenced completed branch work.
@@ -79,3 +79,5 @@ Low. This slice edits live state and tracking docs only.
 - 2026-05-10: Start query search and service-boundary mapping on `codex/query-service-boundary-map`; focused tests pass and full runtime gates are next.
 - 2026-05-10: Query search and service-boundary mapping local gates passed: 221 pytest tests, live query/service CLI proof, validate runtime, runtime doctor live, semantic gauntlet, enterprise doctor, readiness enterprise, Pulse, signal export, and diff hygiene.
 - 2026-05-10: Refresh state artifacts after PR #90 merged query search and service-boundary mapping; main CI `25621218408` passed and next slice is dashboard/eval polish advanced.
+- 2026-05-10: Start dashboard/eval polish advanced on `codex/dashboard-eval-polish-advanced`; focused Pulse/signal/eval tests pass and live Pulse/signal proof shows governance health plus 79 exported signals.
+- 2026-05-10: Dashboard/eval polish advanced full local gates pass: 223 pytest tests, validate runtime, runtime doctor live, semantic gauntlet with 60 fixtures, enterprise doctor, readiness enterprise, Pulse governance, signal export, and diff hygiene.

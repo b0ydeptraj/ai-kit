@@ -691,11 +691,22 @@ def _parse_pulse_args(argv: list[str]) -> argparse.Namespace:
     build.add_argument("--include-package-index", action="store_true", help="Read default package-index check artifact and include it")
     build.add_argument("--include-support-request", action="store_true", help="Read default support request intake artifact and include it")
     build.add_argument("--include-commercial-dossier", action="store_true", help="Read default commercial dossier artifact and include it")
+    build.add_argument("--include-context-audit", action="store_true", help="Run context audit and include governance health")
+    build.add_argument("--include-lane-audit", action="store_true", help="Run lane audit and include lane health")
+    build.add_argument("--include-adapter-diagnostics", action="store_true", help="Run adapter diagnostics and include adapter health")
+    build.add_argument("--include-query-search", action="store_true", help="Run query search and include query health")
+    build.add_argument("--include-service-boundaries", action="store_true", help="Run service-boundary checks and include service health")
     build.add_argument("--readiness-file", default=None, help="Existing readiness JSON report to include")
     build.add_argument("--publication-file", default=None, help="Existing publication plan JSON report to include")
     build.add_argument("--package-index-file", default=None, help="Existing package-index check JSON report to include")
     build.add_argument("--support-request-file", default=None, help="Existing support request JSON report to include")
     build.add_argument("--commercial-dossier-file", default=None, help="Existing commercial dossier JSON report to include")
+    build.add_argument("--context-audit-file", default=None, help="Existing context audit JSON report to include")
+    build.add_argument("--lane-audit-file", default=None, help="Existing lane audit JSON report to include")
+    build.add_argument("--adapter-diagnostics-file", default=None, help="Existing adapter diagnostics JSON report to include")
+    build.add_argument("--query-search-file", default=None, help="Existing query search JSON report to include")
+    build.add_argument("--service-boundaries-file", default=None, help="Existing service-boundary JSON report to include")
+    build.add_argument("--query-search-text", default="relay governance", help="Query text when --include-query-search builds a report")
     build.add_argument("--workflow-eval-file", default=None, help="Existing workflow eval JSON report to include")
     build.add_argument("--evidence-limit", type=int, default=20, help="Recent evidence events to include")
     build.add_argument("--history-limit", type=int, default=20, help="Historical Pulse snapshots to include")
@@ -1477,12 +1488,23 @@ def run_pulse(args: argparse.Namespace) -> int:
         include_package_index=args.include_package_index,
         include_support_request=args.include_support_request,
         include_commercial_dossier=args.include_commercial_dossier,
+        include_context_audit=args.include_context_audit,
+        include_lane_audit=args.include_lane_audit,
+        include_adapter_diagnostics=args.include_adapter_diagnostics,
+        include_query_search=args.include_query_search,
+        include_service_boundaries=args.include_service_boundaries,
         workflow_eval_file=args.workflow_eval_file,
         readiness_file=args.readiness_file,
         publication_file=args.publication_file,
         package_index_file=args.package_index_file,
         support_request_file=args.support_request_file,
         commercial_dossier_file=args.commercial_dossier_file,
+        context_audit_file=args.context_audit_file,
+        lane_audit_file=args.lane_audit_file,
+        adapter_diagnostics_file=args.adapter_diagnostics_file,
+        query_search_file=args.query_search_file,
+        service_boundaries_file=args.service_boundaries_file,
+        query_search_text=args.query_search_text,
         output_dir=args.output_dir,
         history_limit=args.history_limit,
     )

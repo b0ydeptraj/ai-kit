@@ -8,10 +8,15 @@ from html import escape
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
+from relay_kit_v3.adapter_diagnostics import build_adapter_diagnostics
 from relay_kit_v3.commercial_dossier import DEFAULT_OUTPUT as DEFAULT_COMMERCIAL_DOSSIER_OUTPUT
+from relay_kit_v3.context_governance import build_context_audit
 from relay_kit_v3.evidence_ledger import LedgerSummary, summarize_events, utc_timestamp
+from relay_kit_v3.lane_audit import build_lane_audit
 from relay_kit_v3.publication import DEFAULT_INDEX_CHECK_OUTPUT, build_publication_plan
+from relay_kit_v3.query_search import build_query_search
 from relay_kit_v3.readiness import build_readiness_report
+from relay_kit_v3.service_boundaries import build_service_boundary_report
 from relay_kit_v3.support_request import DEFAULT_OUTPUT as DEFAULT_SUPPORT_REQUEST_OUTPUT
 from scripts import eval_workflows
 
@@ -28,6 +33,11 @@ PublicationBuilder = Callable[[Path], Mapping[str, Any]]
 PackageIndexBuilder = Callable[[Path], Mapping[str, Any]]
 SupportRequestBuilder = Callable[[Path], Mapping[str, Any]]
 CommercialDossierBuilder = Callable[[Path], Mapping[str, Any]]
+ContextAuditBuilder = Callable[[Path], Mapping[str, Any]]
+LaneAuditBuilder = Callable[[Path], Mapping[str, Any]]
+AdapterDiagnosticsBuilder = Callable[[Path], Mapping[str, Any]]
+QuerySearchBuilder = Callable[[Path, str], Mapping[str, Any]]
+ServiceBoundariesBuilder = Callable[[Path], Mapping[str, Any]]
 EvidenceSummarizer = Callable[[Path, int], LedgerSummary]
 
 
@@ -44,10 +54,21 @@ def build_pulse_report(
     package_index_file: Path | str | None = None,
     support_request_file: Path | str | None = None,
     commercial_dossier_file: Path | str | None = None,
+    context_audit_file: Path | str | None = None,
+    lane_audit_file: Path | str | None = None,
+    adapter_diagnostics_file: Path | str | None = None,
+    query_search_file: Path | str | None = None,
+    service_boundaries_file: Path | str | None = None,
     include_publication: bool = False,
     include_package_index: bool = False,
     include_support_request: bool = False,
     include_commercial_dossier: bool = False,
+    include_context_audit: bool = False,
+    include_lane_audit: bool = False,
+    include_adapter_diagnostics: bool = False,
+    include_query_search: bool = False,
+    include_service_boundaries: bool = False,
+    query_search_text: str = "relay governance",
     output_dir: Path | str | None = None,
     history_limit: int = 20,
     workflow_eval_builder: WorkflowEvalBuilder | None = None,
@@ -56,6 +77,11 @@ def build_pulse_report(
     package_index_builder: PackageIndexBuilder | None = None,
     support_request_builder: SupportRequestBuilder | None = None,
     commercial_dossier_builder: CommercialDossierBuilder | None = None,
+    context_audit_builder: ContextAuditBuilder | None = None,
+    lane_audit_builder: LaneAuditBuilder | None = None,
+    adapter_diagnostics_builder: AdapterDiagnosticsBuilder | None = None,
+    query_search_builder: QuerySearchBuilder | None = None,
+    service_boundaries_builder: ServiceBoundariesBuilder | None = None,
     evidence_summarizer: EvidenceSummarizer | None = None,
 ) -> dict[str, Any]:
     root = Path(project_root).resolve()
@@ -92,6 +118,49 @@ def build_pulse_report(
         commercial_dossier_file=commercial_dossier_file,
         commercial_dossier_builder=commercial_dossier_builder,
     )
+    context_audit = _load_or_build_context_audit(
+        root,
+        include_context_audit=include_context_audit,
+        context_audit_file=context_audit_file,
+        context_audit_builder=context_audit_builder,
+    )
+    lane_audit = _load_or_build_lane_audit(
+        root,
+        include_lane_audit=include_lane_audit,
+        lane_audit_file=lane_audit_file,
+        lane_audit_builder=lane_audit_builder,
+    )
+    adapter_diagnostics = _load_or_build_adapter_diagnostics(
+        root,
+        include_adapter_diagnostics=include_adapter_diagnostics,
+        adapter_diagnostics_file=adapter_diagnostics_file,
+        adapter_diagnostics_builder=adapter_diagnostics_builder,
+    )
+    query_search = _load_or_build_query_search(
+        root,
+        include_query_search=include_query_search,
+        query_search_file=query_search_file,
+        query_search_text=query_search_text,
+        query_search_builder=query_search_builder,
+    )
+    service_boundaries = _load_or_build_service_boundaries(
+        root,
+        include_service_boundaries=include_service_boundaries,
+        service_boundaries_file=service_boundaries_file,
+        service_boundaries_builder=service_boundaries_builder,
+    )
+    context_health = build_context_health(context_audit)
+    lane_health = build_lane_health(lane_audit)
+    adapter_health = build_adapter_health(adapter_diagnostics)
+    query_health = build_query_health(query_search)
+    service_boundary_health = build_service_boundary_health(service_boundaries)
+    governance_health = build_governance_health(
+        context_health,
+        lane_health,
+        adapter_health,
+        query_health,
+        service_boundary_health,
+    )
     evidence = _evidence_payload(root, evidence_limit, evidence_summarizer)
     status = pulse_status(eval_report, readiness_report, publication_report, package_index, support_request, commercial_dossier, evidence)
     score = pulse_score(eval_report, readiness_report, publication_report, package_index, support_request, commercial_dossier, evidence)
@@ -127,6 +196,17 @@ def build_pulse_report(
         "package_index": package_index,
         "support_request": support_request,
         "commercial_dossier": commercial_dossier,
+        "context_audit": context_audit,
+        "lane_audit": lane_audit,
+        "adapter_diagnostics": adapter_diagnostics,
+        "query_search": query_search,
+        "service_boundaries": service_boundaries,
+        "context_health": context_health,
+        "lane_health": lane_health,
+        "adapter_health": adapter_health,
+        "query_health": query_health,
+        "service_boundary_health": service_boundary_health,
+        "governance_health": governance_health,
         "workflow_focus": workflow_focus,
         "gate_summary": gate_summary,
         "evidence": evidence,
@@ -166,6 +246,11 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
     package_index = _mapping(report.get("package_index"))
     support_request = _mapping(report.get("support_request"))
     commercial_dossier = _mapping(report.get("commercial_dossier"))
+    context_health = _mapping(report.get("context_health"))
+    lane_health = _mapping(report.get("lane_health"))
+    adapter_health = _mapping(report.get("adapter_health"))
+    query_health = _mapping(report.get("query_health"))
+    service_boundary_health = _mapping(report.get("service_boundary_health"))
     gate_summary = _mapping(report.get("gate_summary"))
     workflow_focus = _mapping(report.get("workflow_focus"))
     evidence = _mapping(report.get("evidence"))
@@ -190,6 +275,10 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
         ("Package index", str(package_index.get("status", "not-run"))),
         ("Support request", str(support_request.get("status", "not-run"))),
         ("Commercial dossier", str(commercial_dossier.get("status", "not-run"))),
+        ("Context stale", str(context_health.get("stale_sources", 0))),
+        ("Lane conflicts", str(lane_health.get("conflicts", 0))),
+        ("Adapter drift", str(adapter_health.get("metadata_drift", 0))),
+        ("Boundary findings", str(service_boundary_health.get("findings", 0))),
         ("Score delta", _signed(trend.get("pulse_score_delta"))),
         ("Ledger events", str(evidence.get("total_events", 0))),
         ("Recent failures", str(status_counts.get("fail", 0))),
@@ -210,6 +299,26 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
     package_index_rows = _package_index_rows(package_index)
     support_request_rows = _support_request_rows(support_request)
     commercial_dossier_rows = _commercial_dossier_rows(commercial_dossier)
+    context_health_rows = _health_rows(
+        context_health,
+        ("status", "total_sources", "authoritative_sources", "stale_sources", "missing_sources"),
+    )
+    lane_health_rows = _health_rows(
+        lane_health,
+        ("status", "active_lanes", "parked_lanes", "conflicts", "broad_locks", "incomplete_handoffs"),
+    )
+    adapter_health_rows = _health_rows(
+        adapter_health,
+        ("status", "adapter_count", "missing_skills", "unexpected_skills", "metadata_drift"),
+    )
+    query_health_rows = _health_rows(
+        query_health,
+        ("status", "query", "hit_count", "returned", "authoritative_hits"),
+    )
+    service_boundary_rows = _health_rows(
+        service_boundary_health,
+        ("status", "boundary_count", "module_count", "findings"),
+    )
 
     report_json = escape(json.dumps(report, ensure_ascii=True, indent=2))
     return f"""<!doctype html>
@@ -387,6 +496,41 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
       <table>
         <tr><th>Signal</th><th>Value</th></tr>
         {commercial_dossier_rows}
+      </table>
+    </section>
+    <section class="panel">
+      <h2>Context Health</h2>
+      <table>
+        <tr><th>Signal</th><th>Value</th></tr>
+        {context_health_rows}
+      </table>
+    </section>
+    <section class="panel">
+      <h2>Lane Health</h2>
+      <table>
+        <tr><th>Signal</th><th>Value</th></tr>
+        {lane_health_rows}
+      </table>
+    </section>
+    <section class="panel">
+      <h2>Adapter Health</h2>
+      <table>
+        <tr><th>Signal</th><th>Value</th></tr>
+        {adapter_health_rows}
+      </table>
+    </section>
+    <section class="panel">
+      <h2>Query Health</h2>
+      <table>
+        <tr><th>Signal</th><th>Value</th></tr>
+        {query_health_rows}
+      </table>
+    </section>
+    <section class="panel">
+      <h2>Service Boundaries</h2>
+      <table>
+        <tr><th>Signal</th><th>Value</th></tr>
+        {service_boundary_rows}
       </table>
     </section>
     <section class="panel">
@@ -588,6 +732,103 @@ def build_workflow_focus(workflow_eval: Mapping[str, Any]) -> dict[str, Any]:
             "duplicate_prompt_pairs": _list(support_fixture_depth.get("duplicate_prompt_pairs"))[:DRILLDOWN_LIMIT],
         },
         "next_actions": next_actions,
+    }
+
+
+def build_context_health(context_audit: Mapping[str, Any] | None) -> dict[str, Any]:
+    if context_audit is None:
+        return {"status": "not-run", "total_sources": 0, "authoritative_sources": 0, "stale_sources": 0, "missing_sources": 0}
+    summary = _mapping(context_audit.get("summary"))
+    return {
+        "status": str(context_audit.get("status", "not-run")),
+        "total_sources": int(summary.get("total_sources", 0) or 0),
+        "authoritative_sources": int(summary.get("authoritative_sources", 0) or 0),
+        "recent_sources": int(summary.get("recent_sources", 0) or 0),
+        "stale_sources": int(summary.get("stale_sources", 0) or 0),
+        "missing_sources": int(summary.get("missing_sources", 0) or 0),
+        "optional_missing_sources": int(summary.get("optional_missing_sources", 0) or 0),
+        "findings": int(summary.get("findings", 0) or 0),
+    }
+
+
+def build_lane_health(lane_audit: Mapping[str, Any] | None) -> dict[str, Any]:
+    if lane_audit is None:
+        return {"status": "not-run", "active_lanes": 0, "parked_lanes": 0, "conflicts": 0, "broad_locks": 0, "incomplete_handoffs": 0}
+    summary = _mapping(lane_audit.get("summary"))
+    return {
+        "status": str(lane_audit.get("status", "not-run")),
+        "active_lanes": int(summary.get("active_lanes", 0) or 0),
+        "parked_lanes": int(summary.get("parked_lanes", 0) or 0),
+        "conflicts": int(summary.get("conflicts", 0) or 0),
+        "broad_locks": int(summary.get("broad_locks", 0) or 0),
+        "incomplete_handoffs": int(summary.get("incomplete_handoffs", 0) or 0),
+        "findings": int(summary.get("findings", 0) or 0),
+    }
+
+
+def build_adapter_health(adapter_diagnostics: Mapping[str, Any] | None) -> dict[str, Any]:
+    if adapter_diagnostics is None:
+        return {"status": "not-run", "adapter_count": 0, "missing_skills": 0, "unexpected_skills": 0, "metadata_drift": 0}
+    summary = _mapping(adapter_diagnostics.get("summary"))
+    return {
+        "status": str(adapter_diagnostics.get("status", "not-run")),
+        "adapter_count": int(summary.get("adapter_count", 0) or 0),
+        "expected_skill_count": int(summary.get("expected_skill_count", 0) or 0),
+        "missing_skills": int(summary.get("missing_skills", 0) or 0),
+        "unexpected_skills": int(summary.get("unexpected_skills", 0) or 0),
+        "metadata_drift": int(summary.get("metadata_drift", 0) or 0),
+        "findings": int(summary.get("findings", 0) or 0),
+    }
+
+
+def build_query_health(query_search: Mapping[str, Any] | None) -> dict[str, Any]:
+    if query_search is None:
+        return {"status": "not-run", "query": "", "hit_count": 0, "returned": 0, "authoritative_hits": 0}
+    summary = _mapping(query_search.get("summary"))
+    results = [
+        item
+        for item in _list(query_search.get("results"))
+        if isinstance(item, Mapping)
+    ]
+    authoritative_hits = sum(1 for item in results if _float(item.get("authority")) >= 0.9)
+    return {
+        "status": str(query_search.get("status", "not-run")),
+        "query": str(query_search.get("query", "")),
+        "hit_count": int(summary.get("hit_count", 0) or 0),
+        "returned": int(summary.get("returned", len(results)) or 0),
+        "scope_count": int(summary.get("scope_count", 0) or 0),
+        "authoritative_hits": authoritative_hits,
+    }
+
+
+def build_service_boundary_health(service_boundaries: Mapping[str, Any] | None) -> dict[str, Any]:
+    if service_boundaries is None:
+        return {"status": "not-run", "boundary_count": 0, "module_count": 0, "findings": 0}
+    summary = _mapping(service_boundaries.get("summary"))
+    return {
+        "status": str(service_boundaries.get("status", "not-run")),
+        "boundary_count": int(summary.get("boundary_count", 0) or 0),
+        "module_count": int(summary.get("module_count", 0) or 0),
+        "findings": int(summary.get("findings", len(_list(service_boundaries.get("findings")))) or 0),
+    }
+
+
+def build_governance_health(*health_sections: Mapping[str, Any]) -> dict[str, Any]:
+    statuses = [str(section.get("status", "not-run")) for section in health_sections]
+    run_statuses = [status for status in statuses if status != "not-run"]
+    if not run_statuses:
+        status = "not-run"
+    elif any(status in {"fail", "hold"} for status in run_statuses):
+        status = "hold"
+    elif any(status == "attention" for status in run_statuses):
+        status = "attention"
+    else:
+        status = "pass"
+    return {
+        "status": status,
+        "sections_run": len(run_statuses),
+        "sections_total": len(statuses),
+        "section_statuses": statuses,
     }
 
 
@@ -1197,6 +1438,82 @@ def _load_or_build_commercial_dossier(
     return builder(root)
 
 
+def _load_or_build_context_audit(
+    root: Path,
+    *,
+    include_context_audit: bool,
+    context_audit_file: Path | str | None,
+    context_audit_builder: ContextAuditBuilder | None,
+) -> Mapping[str, Any] | None:
+    if context_audit_file is not None:
+        return _read_json(root, context_audit_file)
+    if not include_context_audit:
+        return None
+    builder = context_audit_builder or (lambda project_root: build_context_audit(project_root))
+    return builder(root)
+
+
+def _load_or_build_lane_audit(
+    root: Path,
+    *,
+    include_lane_audit: bool,
+    lane_audit_file: Path | str | None,
+    lane_audit_builder: LaneAuditBuilder | None,
+) -> Mapping[str, Any] | None:
+    if lane_audit_file is not None:
+        return _read_json(root, lane_audit_file)
+    if not include_lane_audit:
+        return None
+    builder = lane_audit_builder or (lambda project_root: build_lane_audit(project_root))
+    return builder(root)
+
+
+def _load_or_build_adapter_diagnostics(
+    root: Path,
+    *,
+    include_adapter_diagnostics: bool,
+    adapter_diagnostics_file: Path | str | None,
+    adapter_diagnostics_builder: AdapterDiagnosticsBuilder | None,
+) -> Mapping[str, Any] | None:
+    if adapter_diagnostics_file is not None:
+        return _read_json(root, adapter_diagnostics_file)
+    if not include_adapter_diagnostics:
+        return None
+    builder = adapter_diagnostics_builder or (lambda project_root: build_adapter_diagnostics(project_root, adapter="all"))
+    return builder(root)
+
+
+def _load_or_build_query_search(
+    root: Path,
+    *,
+    include_query_search: bool,
+    query_search_file: Path | str | None,
+    query_search_text: str,
+    query_search_builder: QuerySearchBuilder | None,
+) -> Mapping[str, Any] | None:
+    if query_search_file is not None:
+        return _read_json(root, query_search_file)
+    if not include_query_search:
+        return None
+    builder = query_search_builder or (lambda project_root, query: build_query_search(project_root, query=query))
+    return builder(root, query_search_text)
+
+
+def _load_or_build_service_boundaries(
+    root: Path,
+    *,
+    include_service_boundaries: bool,
+    service_boundaries_file: Path | str | None,
+    service_boundaries_builder: ServiceBoundariesBuilder | None,
+) -> Mapping[str, Any] | None:
+    if service_boundaries_file is not None:
+        return _read_json(root, service_boundaries_file)
+    if not include_service_boundaries:
+        return None
+    builder = service_boundaries_builder or (lambda project_root: build_service_boundary_report(project_root))
+    return builder(root)
+
+
 def _evidence_payload(
     root: Path,
     evidence_limit: int,
@@ -1440,6 +1757,14 @@ def _commercial_dossier_rows(commercial_dossier: Mapping[str, Any]) -> str:
             ("External proof fields", str(present_external)),
             ("Findings", str(len(findings) if isinstance(findings, list) else 0)),
         ]
+    return "\n".join(
+        f"<tr><td>{escape(label)}</td><td>{escape(value)}</td></tr>"
+        for label, value in rows
+    )
+
+
+def _health_rows(health: Mapping[str, Any], keys: tuple[str, ...]) -> str:
+    rows = [(key.replace("_", " ").title(), str(health.get(key, "-"))) for key in keys]
     return "\n".join(
         f"<tr><td>{escape(label)}</td><td>{escape(value)}</td></tr>"
         for label, value in rows
