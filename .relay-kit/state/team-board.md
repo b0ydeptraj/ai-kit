@@ -9,7 +9,7 @@ Complete Claude-adoption phase 2 without mixing it into the already-complete cor
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | depends_on | wave_id | resume_condition | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|
-| primary | developer | fix-hub | adapter/IDE bridge diagnostics | adapter diagnostics code/docs/tests/state | active | none | wave-1 | active | test-hub next | Build `relay-kit adapter diagnose` after PR #87 state refresh. |
+| primary | bootstrap | workflow-router | post-adapter diagnostics state refresh | live state and next-lane pointer | active | none | wave-1 | active | developer next | PR #88 merged and main CI `25620846850` passed; next implementation slice is query search and service-boundary mapping. |
 | lane-2 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | No parallel work active. |
 
@@ -24,10 +24,10 @@ Complete Claude-adoption phase 2 without mixing it into the already-complete cor
 Primary state-refresh lane first. Parked lanes depend_on primary and resume only when explicitly routed by team.
 
 ## Merge prerequisites
-Full local gates must pass: pytest, validate runtime, runtime doctor live, semantic gauntlet, enterprise doctor, readiness enterprise, adapter diagnostics, Pulse, signal export, and `git diff --check`. Remote PR CI must pass before merge.
+State refresh must pass live runtime doctor, enterprise doctor, readiness enterprise, and `git diff --check`. Remote PR CI must pass before merge.
 
 ## Conflict risks
-Medium. This slice edits public CLI, readiness gates, docs, tests, and live state artifacts.
+Low. This slice edits live state and tracking docs only.
 
 ## Decision log
 - 2026-04-27: Refresh state artifacts instead of starting a new feature slice because project-context was empty and workflow-state still referenced completed branch work.
@@ -75,3 +75,4 @@ Medium. This slice edits public CLI, readiness gates, docs, tests, and live stat
 - 2026-05-09: Start multi-lane coordination hardening on `codex/lane-coordination-audit`; target artifact is `relay-kit lane audit`.
 - 2026-05-10: Refresh state artifacts after PR #86 merged multi-lane coordination hardening; main CI `25620406371` passed and next slice is adapter/IDE bridge diagnostics.
 - 2026-05-10: Start adapter/IDE bridge diagnostics on `codex/adapter-bridge-diagnostics`; target artifact is `relay-kit adapter diagnose`.
+- 2026-05-10: Refresh state artifacts after PR #88 merged adapter/IDE bridge diagnostics; main CI `25620846850` passed and next slice is query search plus service-boundary mapping.
