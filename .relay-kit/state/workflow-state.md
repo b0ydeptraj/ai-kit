@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Implement Claude-adoption phase 2 dashboard/eval polish advanced.
+Refresh state after PR #92 dashboard/eval polish advanced.
 
 ## Active lane
 - Lane id: primary
@@ -9,25 +9,25 @@ Implement Claude-adoption phase 2 dashboard/eval polish advanced.
 - Lane owner: Codex
 
 ## Active orchestration
-- Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: fix-hub
-- Active specialist: developer
+- Layer-1 orchestrator: bootstrap
+- Layer-2 workflow hub: state refresh
+- Active specialist: qa-governor
 
 ## Active utility providers
-- Primary utility provider: test-first-development
-- Additional utilities in play: runtime-doctor, evidence-before-completion, repo-map
+- Primary utility provider: runtime-doctor
+- Additional utilities in play: evidence-before-completion
 
 ## Active standalone/domain skill
-- Skill: developer
-- Why selected: this slice changes Pulse, signal export, workflow eval fixtures, public CLI options, docs, tests, and live state.
+- Skill: bootstrap
+- Why selected: PR #92 merged and live state/adoption tracking must be refreshed before declaring phase 2 complete.
 
 ## Complexity level
-- Level: L2
-- Reasoning: this is the final Claude-adoption phase 2 feature slice, touching observability/eval surfaces but not package metadata.
+- Level: L1
+- Reasoning: post-merge state refresh only touches docs/state tracking after the feature PR and main CI succeeded.
 
 ## Chosen track
-- Track: product-flow
-- Why this track fits: the slice is implementation-ready and already constrained to local Pulse/signal/eval artifacts.
+- Track: quick-flow
+- Why this track fits: the implementation is merged; this lane refreshes source-of-truth artifacts.
 
 ## Completed artifacts
 - [ ] product-brief
@@ -49,17 +49,21 @@ Implement Claude-adoption phase 2 dashboard/eval polish advanced.
 | none | none | none | none |
 
 ## Next skill
-developer
+qa-governor
 
 ## Known blockers
-No active blockers. PR #91 post-query/service state refresh merged and main CI passed; dashboard/eval polish advanced is active.
+No active blockers. PR #92 dashboard/eval polish advanced merged and main CI passed; post-merge state refresh is active.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Active branch: `codex/dashboard-eval-polish-advanced`.
-- Current branch objective: surface context, lane, adapter, query, and service-boundary artifacts in Pulse/signal export and workflow eval scenarios.
+- Active branch: `codex/post-dashboard-eval-state-refresh`.
+- Current branch objective: mark Claude-adoption phase 2 complete after PR #92 and final main CI.
+- PR #92 merged dashboard/eval polish advanced: https://github.com/b0ydeptraj/Relay-kit/pull/92.
+- PR #92 merge commit: `1653696009b3b3bda8d457b162e01e7d3ff6eda7`.
+- Main CI after PR #92: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25632979363, conclusion `success`.
+- Current main baseline after PR #92: `1653696009b3b3bda8d457b162e01e7d3ff6eda7`.
 - PR #91 merged post-query/service state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/91.
 - PR #91 merge commit: `429604ba8607581b71899459b1e79e9c0c5b1cf6`.
 - Main CI after PR #91: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25621324662, conclusion `success`.

@@ -46,7 +46,8 @@ Already implemented:
 - Multi-lane coordination first slice with `relay-kit lane audit`, lock-conflict checks, wave/dependency metadata, parked-lane resume conditions, and runtime-doctor live integration.
 - Adapter/IDE bridge diagnostics first slice with `relay-kit adapter diagnose`, generated skill parity checks, metadata drift checks, and explicit advisory metadata reporting for Agent/Antigravity.
 - Query/service boundary first slice with `relay-kit query search`, ranked source lookup, and `relay-kit service boundaries` static dependency checks.
-- Dashboard/eval polish final slice implemented locally with Pulse governance health, five governance signal metrics, and 60 workflow eval scenarios; PR/CI/state-refresh proof is still pending.
+- Dashboard/eval polish final slice with Pulse governance health, five governance signal metrics, and 60 workflow eval scenarios.
+- Claude-adoption phase 2 status: 100% after PR #92 and final state refresh.
 
 Latest verified implementation evidence:
 
@@ -64,7 +65,9 @@ Latest verified implementation evidence:
 - Local lane-coordination slice evidence: `python -m pytest tests -q` passed 209 tests, live lane audit returned `status: pass`, and main CI `25620406371` passed.
 - Local adapter-diagnostics slice evidence: `python relay_kit_public_cli.py adapter diagnose . --adapter all --strict --json` returned `status: pass`; enterprise readiness included required `adapter-diagnostics` gate with 0 findings.
 - Local query/service slice evidence: live query search returned ranked hits with source metadata, live service boundaries returned `status: pass` with 0 findings, full pytest passed with 221 tests, and main CI `25621218408` passed.
-- Local dashboard/eval slice evidence so far: focused Pulse/signal/eval tests passed, live Pulse returned `governance_health.status: pass`, workflow eval returned 60/60 scenarios, and signal export emitted the five governance metrics; full gates and PR CI are pending.
+- PR #92: dashboard/eval polish advanced with Pulse governance health, governance signal metrics, and 60 workflow eval scenarios.
+- Local dashboard/eval slice evidence: focused Pulse/signal/eval tests passed; full pytest passed with 223 tests; runtime doctor live returned 0 findings; semantic gauntlet checked 60 scenario fixtures; enterprise readiness returned `commercial-ready-candidate`; live Pulse returned `governance_health.status: pass`; workflow eval returned 60/60 scenarios; signal export emitted the five governance metrics.
+- Main CI after PR #92: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25632979363, conclusion `success`.
 
 ## 12-Report Relay-kit Translation Matrix
 
@@ -72,8 +75,8 @@ Latest verified implementation evidence:
 |---|---|---:|---:|---|
 | 01 Lessons Learned | Skill operating rules: context budget discipline, worktree/lane hygiene, evidence before claims, avoid context pollution. | Partially implemented | P1 | Strengthen `skill-evolution`, `workflow-router`, `team`, and state-refresh rules. |
 | 02 Bridge / IDE Integration | Adapter-neutral editor bridge guidance for Codex, Claude, Cursor/Roo/OpenCode-style tools without binding to one IDE. | Implemented first slice | P2 | `relay-kit adapter diagnose` checks generated skill parity, extra skills, metadata drift, and adapter metadata stance. |
-| 03 Context Building | Better context packing, relevance scoring, and handoff minimization for long Relay-kit lanes. | Implemented with final dashboard slice pending CI | P1 | `relay-kit context audit` and continuity source metadata now classify authority/freshness; Pulse/signal governance visibility is implemented locally. |
-| 04 Memory System | Memory lifecycle rules: source ranking, stale memory labels, conflict handling, and state-vs-memory boundaries. | Implemented with final dashboard slice pending CI | P1 | `memory-search` now returns source type, age, confidence, and stale warning; Pulse/signal governance visibility is implemented locally. |
+| 03 Context Building | Better context packing, relevance scoring, and handoff minimization for long Relay-kit lanes. | Implemented | P1 | `relay-kit context audit` and continuity source metadata classify authority/freshness; Pulse/signal governance visibility is merged. |
+| 04 Memory System | Memory lifecycle rules: source ranking, stale memory labels, conflict handling, and state-vs-memory boundaries. | Implemented | P1 | `memory-search` returns source type, age, confidence, and stale warning; Pulse/signal governance visibility is merged. |
 | 05 Multi-agent Coordinator | Lane ownership, parallel work locks, merge order, collision prevention, and handoff return conditions. | Implemented first slice | P2 | `relay-kit lane audit` checks lock conflicts, broad lock scopes, parked-lane resume conditions, waves/dependencies, and handoff return conditions. |
 | 06 QueryEngine | Search/query ranking over docs, state, registry, scenarios, and evidence without relying on broad text dumps. | Implemented first slice | P2 | `relay-kit query search` ranks state, contracts, docs, evidence, and registry hits with authority/freshness metadata. |
 | 07 Service Layer | Clearer runtime service boundaries for CLI, registry, gates, support, release, telemetry, and publication modules. | Implemented first slice | P2 | `relay-kit service boundaries` reports the boundary map and static import findings. |
@@ -254,13 +257,13 @@ These ideas are deliberately not adopted as-is:
 
 Recommended next slice:
 
-Finish dashboard/eval polish advanced through full gates, PR CI, merge, and post-merge state refresh.
+No remaining Claude-adoption phase 2 implementation slice. Future work should be explicitly scoped as a new phase.
 
 Acceptance criteria:
 
 - Done: `relay-kit query search <project> --query "..."`
 - Done: `relay-kit service boundaries <project> --strict --json`
-- In progress: surface context, lane, adapter, query, and service-boundary artifacts in Pulse/signal export and workflow eval scenarios.
+- Done: surface context, lane, adapter, query, and service-boundary artifacts in Pulse/signal export and workflow eval scenarios.
 
 ## Progress Definition
 

@@ -92,10 +92,11 @@ Current verdict:
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
 
-Progress snapshot, updated 2026-05-08:
+Progress snapshot, updated 2026-05-10:
 - Repo-executable repair backlog: 100% for the original P0/P1/P2/P3 audit items, 7-day quick wins, and Skill and Rule Gap Matrix first production slices.
 - Commercial hardening roadmap: 100% for repo-owned proof tooling, visibility surfaces, internal-channel external proof, and PyPI package-index proof.
-- Overall tracked progress in this file: 100% for repo-owned backlog and package-index publication proof. This percentage excludes star/community/popularity and external customer contracts.
+- Claude-adoption phase 2: 100% after context/memory governance, multi-lane coordination, adapter diagnostics, query/service boundaries, and dashboard/eval governance surfacing.
+- Overall tracked progress in this file: 100% for repo-owned backlog, package-index publication proof, and Claude-adoption phase 2. This percentage excludes star/community/popularity and external customer contracts.
 
 ## Priority Backlog
 
@@ -834,3 +835,4 @@ Relay-kit should not be called commercial-ready until all of these are true:
 Review-hub verdict for this backlog:
 - P0/P1/P2/P3 audit backlog items are implemented as first production-ready slices.
 - PyPI publication and package-index metadata proof are complete for `relay-kit==3.4.1`. Continue with post-release monitoring, customer-support operations, or dashboard/eval polish only when those lanes are explicitly scoped.
+- Claude-adoption phase 2 is complete after PR #92 and this state refresh: no remaining phase 2 context, lane, adapter, query, service-boundary, Pulse, signal, or workflow-eval implementation item remains in the tracked note.
