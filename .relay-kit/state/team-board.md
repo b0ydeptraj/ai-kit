@@ -7,11 +7,11 @@ Complete Claude-adoption phase 2 without mixing it into the already-complete cor
 - workflow-router
 
 ## Lanes
-| Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | Handoff status | Notes |
-|---|---|---|---|---|---|---|---|
-| primary | bootstrap | workflow-router | post-runtime ancestry state refresh | live state and next-lane pointer | active | developer next | PR #84 merged and main CI `25608436233` passed; next implementation slice is multi-lane coordination hardening. |
-| lane-2 | unassigned | none | none | none | parked | none | No parallel work active. |
-| lane-3 | unassigned | none | none | none | parked | none | No parallel work active. |
+| Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | depends_on | wave_id | resume_condition | Handoff status | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|
+| primary | developer | fix-hub | multi-lane coordination hardening | lane audit code/docs/tests/state | active | none | wave-1 | active | test-hub next | Build `relay-kit lane audit` after PR #85 state refresh. |
+| lane-2 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | No parallel work active. |
+| lane-3 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | No parallel work active. |
 
 ## Shared artifacts that must stay authoritative
 - `.relay-kit/contracts/project-context.md`
@@ -21,10 +21,10 @@ Complete Claude-adoption phase 2 without mixing it into the already-complete cor
 - `.relay-kit/state/team-board.md`
 
 ## Merge order
-Primary lane only. Parallel lanes are parked until explicitly routed.
+wave-1 primary lane first; parked lanes depend_on primary and resume only when explicitly routed by team.
 
 ## Merge prerequisites
-Full local gates must pass: pytest, validate runtime, runtime doctor live, semantic gauntlet, enterprise doctor, readiness enterprise, Pulse, signal export, and `git diff --check`. Remote PR CI must pass before merge.
+Full local gates must pass: pytest, validate runtime, runtime doctor live with lane audit, semantic gauntlet, enterprise doctor, readiness enterprise, Pulse, signal export, and `git diff --check`. Remote PR CI must pass before merge.
 
 ## Conflict risks
 Medium. This slice edits CLI, scripts, runtime doctor, context governance docs, tests, and live state artifacts.
@@ -72,4 +72,4 @@ Medium. This slice edits CLI, scripts, runtime doctor, context governance docs, 
 - 2026-05-09: PR #83 merged context/memory governance; main CI `25608258138` failed in runtime doctor live because shallow checkout ancestry was treated as stale.
 - 2026-05-09: Start post-context governance state refresh and runtime-doctor shallow ancestry guard on `codex/post-context-governance-state-refresh`.
 - 2026-05-09: PR #84 merged runtime-doctor shallow ancestry guard; main CI `25608436233` passed.
-- 2026-05-09: Start final state refresh on `codex/post-runtime-ancestry-state-refresh`; next feature slice is multi-lane coordination hardening.
+- 2026-05-09: Start multi-lane coordination hardening on `codex/lane-coordination-audit`; target artifact is `relay-kit lane audit`.

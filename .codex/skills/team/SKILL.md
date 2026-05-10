@@ -13,7 +13,8 @@ Coordinate parallel work while preserving one authoritative source of truth for 
 4. If one lane uncovers architecture or scope drift, update workflow-state and notify all affected lanes.
 5. Park lanes that are blocked instead of letting them thrash.
 6. Record lock scope and handoff status whenever a lane changes ownership or pauses.
-7. For each lane, record `depends_on` and `wave_id`, then only advance to the next wave after current-wave verification gates pass.
+7. For each lane, record `depends_on`, `wave_id`, and `resume_condition`, then only advance to the next wave after current-wave verification gates pass.
+8. Run `relay-kit lane audit <project> --strict --json` before claiming multi-lane state is safe.
 
 ## Do not do this
 - Do not let two lanes silently diverge on the same acceptance criteria.
@@ -43,6 +44,7 @@ Coordinate parallel work while preserving one authoritative source of truth for 
 - Use `.relay-kit/docs/parallel-execution.md` to decide when work is independent enough to split safely.
 - Require context-continuity handoff packs when ownership shifts across sessions or AIs.
 - Prefer wave-based execution: parallel inside a wave, strict dependency gate between waves.
+- Run `relay-kit lane audit <project> --strict --json` before trusting a multi-lane handoff.
 
 ## Likely next step
 - cook

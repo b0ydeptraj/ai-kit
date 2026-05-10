@@ -6,11 +6,11 @@
 - Release or reassign the lock before a different lane edits the same artifact section.
 
 ## Active lanes
-| Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | Merge prerequisite | Status |
-|---|---|---|---|---|---|---|---|
-| primary | bootstrap | workflow-router | developer | post-runtime ancestry state refresh | live state and next-lane pointer | runtime doctor live, enterprise doctor, readiness, and PR CI | active |
-| lane-2 | unassigned | none | none | none | none | none | parked |
-| lane-3 | unassigned | none | none | none | none | none | parked |
+| Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | depends_on | wave_id | resume_condition | Merge prerequisite | Status |
+|---|---|---|---|---|---|---|---|---|---|---|
+| primary | developer | workflow-router | test-hub | lane coordination audit | lane audit code/docs/tests/state | none | wave-1 | active | full local gates and PR CI | active |
+| lane-2 | unassigned | team | none | none | none | primary | wave-2 | explicitly routed by team | none | parked |
+| lane-3 | unassigned | team | none | none | none | primary | wave-2 | explicitly routed by team | none | parked |
 
 ## Released locks
 | Lane | Artifact | Previous scope | Released because |
