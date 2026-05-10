@@ -8,7 +8,7 @@
 ## Active lanes
 | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | depends_on | wave_id | resume_condition | Merge prerequisite | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| primary | developer | workflow-router | test-hub | adapter/IDE bridge diagnostics | adapter diagnostics code/docs/tests/state | none | wave-1 | active | full local gates and PR CI | active |
+| primary | bootstrap | workflow-router | developer | post-adapter diagnostics state refresh | live state and next-lane pointer | none | wave-1 | active | runtime doctor, enterprise doctor, readiness, and PR CI | active |
 | lane-2 | unassigned | team | none | none | none | primary | wave-2 | explicitly routed by team | none | parked |
 | lane-3 | unassigned | team | none | none | none | primary | wave-2 | explicitly routed by team | none | parked |
 
@@ -38,6 +38,7 @@
 | primary | `scripts/runtime_doctor.py`, `relay_kit_v3/context_governance.py`, `tests/test_context_governance.py`, live state artifacts | runtime doctor shallow ancestry guard | PR #84 merged and main CI `25608436233` passed |
 | primary | `relay_kit_v3/lane_audit.py`, `relay_kit_public_cli.py`, `scripts/runtime_doctor.py`, team/lane templates, docs/tests/state | multi-lane coordination hardening | PR #86 merged and main CI `25620406371` passed |
 | primary | `.relay-kit/contracts/project-context.md`, `.relay-kit/state/*.md`, `docs/relay-kit-claude-12-adoption-matrix.md` | post-lane audit state refresh | PR #87 merged and main CI `25620528628` passed |
+| primary | `relay_kit_v3/adapter_diagnostics.py`, `relay_kit_public_cli.py`, `relay_kit_v3/readiness.py`, docs/tests/state | adapter/IDE bridge diagnostics | PR #88 merged and main CI `25620846850` passed |
 | primary | `scripts/eval_workflows.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, Pulse/signal docs/tests | workflow focus dashboard | PR #37 merged and CI passed |
 | primary | `relay_kit_v3/support_triage.py`, `relay_kit_v3/readiness.py`, `relay_kit_public_cli.py`, support docs/tests | support operations soak | PR #35 merged and CI passed |
 | primary | `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, temp path helpers, workflow eval docs/tests | workflow eval scenario expansion | PR #33 merged and CI passed |
