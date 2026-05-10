@@ -56,11 +56,13 @@ Latest verified implementation evidence:
 - PR #83: context and memory governance first slice.
 - PR #84: runtime-doctor shallow ancestry guard for context governance.
 - PR #86: multi-lane coordination hardening with `relay-kit lane audit`.
+- PR #90: query search and service-boundary mapping with `relay-kit query search` and `relay-kit service boundaries`.
 - Local context-governance slice evidence: `python -m pytest tests -q` passed 200 tests.
 - Local context-governance slice evidence: `python relay_kit_public_cli.py context audit . --strict --json` returned `status: pass`.
 - Local context-governance slice evidence: enterprise readiness returned `commercial-ready-candidate`.
 - Local lane-coordination slice evidence: `python -m pytest tests -q` passed 209 tests, live lane audit returned `status: pass`, and main CI `25620406371` passed.
 - Local adapter-diagnostics slice evidence: `python relay_kit_public_cli.py adapter diagnose . --adapter all --strict --json` returned `status: pass`; enterprise readiness included required `adapter-diagnostics` gate with 0 findings.
+- Local query/service slice evidence: live query search returned ranked hits with source metadata, live service boundaries returned `status: pass` with 0 findings, full pytest passed with 221 tests, and main CI `25621218408` passed.
 
 ## 12-Report Relay-kit Translation Matrix
 

@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Implement Claude-adoption phase 2 slice 4: query search and service-boundary mapping.
+Refresh live state after Claude-adoption phase 2 query/service boundary slice and prepare dashboard/eval polish advanced.
 
 ## Active lane
 - Lane id: primary
@@ -10,24 +10,24 @@ Implement Claude-adoption phase 2 slice 4: query search and service-boundary map
 
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: fix-hub
-- Active specialist: developer
+- Layer-2 workflow hub: bootstrap
+- Active specialist: bootstrap
 
 ## Active utility providers
-- Primary utility provider: test-first-development
-- Additional utilities in play: runtime-doctor, repo-map, evidence-before-completion
+- Primary utility provider: runtime-doctor
+- Additional utilities in play: evidence-before-completion, memory-search
 
 ## Active standalone/domain skill
-- Skill: developer
-- Why selected: slice 4 needs public CLI utilities, ranked search, static service-boundary checks, docs, tests, and state updates.
+- Skill: bootstrap
+- Why selected: PR #90 has merged and live state must point to the next implementation slice.
 
 ## Complexity level
 - Level: L2
-- Reasoning: this slice adds maintainability/query utilities while staying inside local runtime governance.
+- Reasoning: this is a post-merge state refresh after a bounded runtime governance slice.
 
 ## Chosen track
 - Track: product-flow
-- Why this track fits: phase 2 is broad, but this first PR is a bounded product/runtime slice.
+- Why this track fits: phase 2 continues through serial PRs with live-state refresh after each merge.
 
 ## Completed artifacts
 - [ ] product-brief
@@ -52,14 +52,18 @@ Implement Claude-adoption phase 2 slice 4: query search and service-boundary map
 developer
 
 ## Known blockers
-No active blockers. PR #89 state refresh passed main CI; query/service-boundary mapping is active on a new feature branch.
+No active blockers. PR #90 query/service boundary mapping merged and main CI passed.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Active branch: `codex/query-service-boundary-map`.
-- Current branch objective: add `relay-kit query search`, add `relay-kit service boundaries`, document the service map, and test static boundary rules.
+- Active branch: `codex/post-query-service-state-refresh`.
+- Current branch objective: refresh live state after PR #90 and point the next implementation slice to dashboard/eval polish advanced.
+- PR #90 merged query search and service-boundary mapping: https://github.com/b0ydeptraj/Relay-kit/pull/90.
+- PR #90 merge commit: `91dec7608101269c7dd9bffb524b0b8a088ca1b8`.
+- Main CI after PR #90: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25621218408, conclusion `success`.
+- Current main baseline after PR #90: `91dec7608101269c7dd9bffb524b0b8a088ca1b8`.
 - PR #89 merged post-adapter diagnostics state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/89.
 - PR #89 merge commit: `2c21dad41825783e37a3097a065f755ed7106bd8`.
 - Main CI after PR #89: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25620959903, conclusion `success`.
@@ -202,4 +206,4 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Readiness route-quality gate verification: PR #73 added readiness parsing for workflow-eval route quality; local `python -m pytest tests -q` passed with 184 tests, workflow eval reported 55/55 scenarios with `weak_route_count=0` and `min_route_margin=5`, enterprise readiness returned `commercial-ready-candidate` with workflow details, PR CI `25537068673` passed, and main CI `25537111543` passed.
 
 ## Recommended next lane
-Finish query search and service-boundary mapping through focused query/service tests, live CLI proof, full runtime gates, enterprise readiness, Pulse/signal, PR CI, merge, and state refresh. Next planned slice after this is dashboard/eval polish advanced.
+Start dashboard/eval polish advanced. The next feature slice should surface context, lane, adapter, query, and service-boundary artifacts in Pulse/signal export and workflow eval scenarios, then finish with PR CI, merge, and state refresh.

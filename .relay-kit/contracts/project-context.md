@@ -2,7 +2,7 @@
 
 > Path: `.relay-kit/contracts/project-context.md`
 > Purpose: Current source-of-truth context for Relay-kit work after PyPI publication and `3.4.1` patch release proof.
-> Last refreshed: 2026-05-08
+> Last refreshed: 2026-05-10
 
 ## Existing architecture
 
@@ -113,6 +113,8 @@
 - PR #86 merged multi-lane coordination hardening: https://github.com/b0ydeptraj/Relay-kit/pull/86, merge commit `d582a7a9505ffb648f3a830232d6a0c43c3f1c71`.
 - PR #87 merged post-lane audit state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/87, merge commit `5b42a377f772f3f4f5f6a41ae086253c3761347e`.
 - PR #88 merged adapter/IDE bridge diagnostics: https://github.com/b0ydeptraj/Relay-kit/pull/88, merge commit `abc8eb934ab2059865c88eb4ab46b9a6e8f270d1`.
+- PR #89 merged post-adapter diagnostics state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/89, merge commit `2c21dad41825783e37a3097a065f755ed7106bd8`.
+- PR #90 merged query search and service-boundary mapping: https://github.com/b0ydeptraj/Relay-kit/pull/90, merge commit `91dec7608101269c7dd9bffb524b0b8a088ca1b8`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
 - GitHub release `v3.4.0` published: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.
@@ -125,11 +127,12 @@
 - Publication evidence is complete for `3.4.1`: `python relay_kit_public_cli.py publish status . --strict --json` returned `status: complete`.
 - Commercial dossier is ready for PyPI: `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --strict --json` returned `status: ready`.
 - Package-index Pulse/signal proof: focused Pulse/signal tests passed with 26 tests; live `publish index-check` returned `status: published`; Pulse build included package-index `pass`; signal export emitted `relay.package_index.published=1`.
-- Latest confirmed main CI after PR #88: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25620846850, conclusion `success`.
+- Latest confirmed main CI after PR #90: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25621218408, conclusion `success`.
 
 ## Known sharp edges
 
 - `v3.4.1` is the current published release tag and PyPI latest. Do not claim `3.4.0` as the smoke-clean public package; it was superseded by `3.4.1`.
+- Query search and service-boundary mapping are implemented as first slices. Future dashboard/eval work should surface context, lane, adapter, query, and service-boundary artifacts in Pulse/signal export and workflow eval scenarios without renaming the Relay-kit-owned command surface.
 - `.relay-kit/manifest/bundles.json` and `.relay-kit/manifest/trust.json` are ignored generated artifacts. Regenerate and verify them locally when version, skill hashes, or trust metadata changes.
 - Package smoke on Windows may emit a harmless virtualenv path casing or 8.3-name warning after successful JSON output.
 - Pulse now includes `gate_summary`, per-gate `drilldown` rows, `workflow_focus`, and optional `commercial_dossier`; signal export emits `relay.gates.*`, `relay.workflow.weak_route_count`, `relay.workflow.coverage_gap_count`, `relay.workflow.support_evidence_gap_count`, `relay.workflow.support_fixture_depth_gap_count`, and `relay.commercial_dossier.ready`; future dashboard/eval work should preserve those schema keys.
