@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh state after PR #88 adapter/IDE bridge diagnostics and prepare the next Claude-adoption phase 2 slice.
+Implement Claude-adoption phase 2 slice 4: query search and service-boundary mapping.
 
 ## Active lane
 - Lane id: primary
@@ -10,20 +10,20 @@ Refresh state after PR #88 adapter/IDE bridge diagnostics and prepare the next C
 
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: bootstrap
-- Active specialist: bootstrap
+- Layer-2 workflow hub: fix-hub
+- Active specialist: developer
 
 ## Active utility providers
 - Primary utility provider: test-first-development
-- Additional utilities in play: runtime-doctor, context-continuity, evidence-before-completion
+- Additional utilities in play: runtime-doctor, repo-map, evidence-before-completion
 
 ## Active standalone/domain skill
-- Skill: bootstrap
-- Why selected: PR #88 merged and main CI passed; live state must point to the next implementation lane.
+- Skill: developer
+- Why selected: slice 4 needs public CLI utilities, ranked search, static service-boundary checks, docs, tests, and state updates.
 
 ## Complexity level
 - Level: L2
-- Reasoning: this is a bounded post-merge state refresh after a runtime governance slice.
+- Reasoning: this slice adds maintainability/query utilities while staying inside local runtime governance.
 
 ## Chosen track
 - Track: product-flow
@@ -52,14 +52,20 @@ Refresh state after PR #88 adapter/IDE bridge diagnostics and prepare the next C
 developer
 
 ## Known blockers
-No active blockers. PR #88 adapter diagnostics passed PR CI, merged into main, and main CI passed; next feature slice is query search and service-boundary mapping.
+No active blockers. PR #89 state refresh passed main CI; query/service-boundary mapping is active on a new feature branch.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Active branch: `codex/post-adapter-diagnostics-state-refresh`.
-- Current branch objective: refresh live state after PR #88 and point the next implementation lane to query search and service-boundary mapping.
+- Active branch: `codex/query-service-boundary-map`.
+- Current branch objective: add `relay-kit query search`, add `relay-kit service boundaries`, document the service map, and test static boundary rules.
+- PR #89 merged post-adapter diagnostics state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/89.
+- PR #89 merge commit: `2c21dad41825783e37a3097a065f755ed7106bd8`.
+- Main CI after PR #89: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25620959903, conclusion `success`.
+- Current main baseline after PR #89: `2c21dad41825783e37a3097a065f755ed7106bd8`.
+- Query/service red/green evidence so far: focused tests first failed because `relay_kit_v3.query_search`, `relay_kit_v3.service_boundaries`, CLI `query search`, and CLI `service boundaries` were missing; after implementation `python -m pytest tests\test_query_search.py tests\test_service_boundaries.py -q` passed with 7 tests.
+- Query/service local gate evidence: live `relay-kit query search . --query "adapter diagnostics" --json` returned ranked hits with score/authority/freshness/source_type/path/line; live `relay-kit service boundaries . --strict --json` returned `status: pass` with 8 boundaries and 0 findings; `python -m pytest tests -q` passed with 221 tests; validate runtime passed; runtime doctor live returned 0 findings; semantic gauntlet checked 141 skill files and 55 scenario fixtures with 0 findings; enterprise doctor passed; readiness enterprise returned `commercial-ready-candidate`; Pulse returned `status: pass` and score 93; signal export emitted 74 signals; `git diff --check` passed.
 - PR #88 merged adapter/IDE bridge diagnostics: https://github.com/b0ydeptraj/Relay-kit/pull/88.
 - PR #88 merge commit: `abc8eb934ab2059865c88eb4ab46b9a6e8f270d1`.
 - Main CI after PR #88: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25620846850, conclusion `success`.
@@ -196,4 +202,4 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Readiness route-quality gate verification: PR #73 added readiness parsing for workflow-eval route quality; local `python -m pytest tests -q` passed with 184 tests, workflow eval reported 55/55 scenarios with `weak_route_count=0` and `min_route_margin=5`, enterprise readiness returned `commercial-ready-candidate` with workflow details, PR CI `25537068673` passed, and main CI `25537111543` passed.
 
 ## Recommended next lane
-Finish multi-lane coordination hardening through focused lane audit tests, runtime doctor live, enterprise doctor, readiness, Pulse/signal, PR CI, merge, and state refresh. Next planned slice after this is adapter/IDE bridge diagnostics.
+Finish query search and service-boundary mapping through focused query/service tests, live CLI proof, full runtime gates, enterprise readiness, Pulse/signal, PR CI, merge, and state refresh. Next planned slice after this is dashboard/eval polish advanced.

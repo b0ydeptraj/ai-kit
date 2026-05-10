@@ -45,6 +45,7 @@ Already implemented:
 - Context governance first slice with `relay-kit context audit`, source freshness/confidence metadata, continuity manifest source metadata, and guarded stale-main-pointer detection.
 - Multi-lane coordination first slice with `relay-kit lane audit`, lock-conflict checks, wave/dependency metadata, parked-lane resume conditions, and runtime-doctor live integration.
 - Adapter/IDE bridge diagnostics first slice with `relay-kit adapter diagnose`, generated skill parity checks, metadata drift checks, and explicit advisory metadata reporting for Agent/Antigravity.
+- Query/service boundary first slice with `relay-kit query search`, ranked source lookup, and `relay-kit service boundaries` static dependency checks.
 
 Latest verified implementation evidence:
 
@@ -70,8 +71,8 @@ Latest verified implementation evidence:
 | 03 Context Building | Better context packing, relevance scoring, and handoff minimization for long Relay-kit lanes. | Implemented first slice | P1 | `relay-kit context audit` and continuity source metadata now classify authority/freshness; remaining work is Pulse/signal visibility. |
 | 04 Memory System | Memory lifecycle rules: source ranking, stale memory labels, conflict handling, and state-vs-memory boundaries. | Implemented first slice | P1 | `memory-search` now returns source type, age, confidence, and stale warning; remaining work is dashboard surfacing. |
 | 05 Multi-agent Coordinator | Lane ownership, parallel work locks, merge order, collision prevention, and handoff return conditions. | Implemented first slice | P2 | `relay-kit lane audit` checks lock conflicts, broad lock scopes, parked-lane resume conditions, waves/dependencies, and handoff return conditions. |
-| 06 QueryEngine | Search/query ranking over docs, state, registry, scenarios, and evidence without relying on broad text dumps. | Backlog | P2 | Add Relay-kit docs/state query utility or enhance `doc-pointers` and `repo-map`. |
-| 07 Service Layer | Clearer runtime service boundaries for CLI, registry, gates, support, release, telemetry, and publication modules. | Partially implemented | P2 | Add architecture map and module-boundary tests for `relay_kit_v3/*`. |
+| 06 QueryEngine | Search/query ranking over docs, state, registry, scenarios, and evidence without relying on broad text dumps. | Implemented first slice | P2 | `relay-kit query search` ranks state, contracts, docs, evidence, and registry hits with authority/freshness metadata. |
+| 07 Service Layer | Clearer runtime service boundaries for CLI, registry, gates, support, release, telemetry, and publication modules. | Implemented first slice | P2 | `relay-kit service boundaries` reports the boundary map and static import findings. |
 | 08 Session Storage | Resume, session snapshot, handoff ledger, and state persistence contracts. | Partially implemented | P1 | Upgrade `context-continuity`, evidence ledger, and live-state schemas. |
 | 09 Skills & Plugin System | Trigger metadata, paths, context mode, allowed tools, dynamic discovery concepts, and skill evolution rules. | Implemented first slice | P0 | Done via `skill-evolution`, generated frontmatter, and semantic gauntlet. |
 | 10 Multi-agent Coordinator duplicate | Duplicate of report 05; use only to confirm coordinator patterns, not as independent evidence. | Deduped | P3 | Keep excluded from scoring to avoid double-counting. |
@@ -226,6 +227,15 @@ Candidate files:
 - `tests/test_public_cli_doctor.py`
 - `tests/test_readiness_check.py`
 
+Implemented first slice:
+
+- `relay-kit query search <project> --query "..."`
+- default scopes: state, contracts, docs, evidence, and registry
+- ranked results include score, authority, freshness, source type, file, and line
+- `relay-kit service boundaries <project> --strict --json`
+- service-boundary map for public CLI, registry, gates, support, release, publication, telemetry/Pulse, and query
+- static tests for registry-to-CLI and runtime-to-scripts boundary violations
+
 ## Not Adopted
 
 These ideas are deliberately not adopted as-is:
@@ -240,13 +250,13 @@ These ideas are deliberately not adopted as-is:
 
 Recommended next slice:
 
-Continue from adapter/IDE bridge diagnostics into query search and service-boundary mapping.
+Continue from query/service boundaries into dashboard/eval polish advanced.
 
 Acceptance criteria:
 
-- Done: `relay-kit adapter diagnose <project> --adapter all --strict --json` reports missing skills, unexpected skills, metadata drift, and adapter metadata stance.
-- Done: enterprise readiness includes adapter diagnostics as a required gate.
-- Next: add `relay-kit query search` plus service-boundary map and boundary tests.
+- Done: `relay-kit query search <project> --query "..."`
+- Done: `relay-kit service boundaries <project> --strict --json`
+- Next: surface context, lane, adapter, query, and service-boundary artifacts in Pulse/signal export and workflow eval scenarios.
 
 ## Progress Definition
 
