@@ -152,6 +152,79 @@ def sample_commercial_dossier(*, status: str = "ready") -> dict[str, object]:
     }
 
 
+def sample_context_audit(*, stale_sources: int = 0) -> dict[str, object]:
+    return {
+        "schema_version": "relay-kit.context-audit.v1",
+        "status": "pass" if stale_sources == 0 else "attention",
+        "summary": {
+            "total_sources": 8,
+            "authoritative_sources": 2,
+            "recent_sources": 4,
+            "stale_sources": stale_sources,
+            "missing_sources": 0,
+            "optional_missing_sources": 2,
+            "findings": stale_sources,
+        },
+        "findings": [],
+    }
+
+
+def sample_lane_audit(*, conflicts: int = 0) -> dict[str, object]:
+    return {
+        "schema_version": "relay-kit.lane-audit.v1",
+        "status": "pass" if conflicts == 0 else "fail",
+        "summary": {
+            "active_lanes": 1,
+            "parked_lanes": 2,
+            "findings": conflicts,
+            "conflicts": conflicts,
+            "broad_locks": 0,
+            "incomplete_handoffs": 0,
+        },
+        "findings": [],
+    }
+
+
+def sample_adapter_diagnostics(*, metadata_drift: int = 0) -> dict[str, object]:
+    return {
+        "schema_version": "relay-kit.adapter-diagnostics.v1",
+        "status": "pass" if metadata_drift == 0 else "fail",
+        "summary": {
+            "adapter_count": 3,
+            "expected_skill_count": 47,
+            "missing_skills": 0,
+            "unexpected_skills": 0,
+            "metadata_drift": metadata_drift,
+            "findings": metadata_drift,
+        },
+        "findings": [],
+    }
+
+
+def sample_query_search(*, authoritative_hits: int = 2) -> dict[str, object]:
+    return {
+        "schema_version": "relay-kit.query-search.v1",
+        "status": "pass",
+        "query": "dashboard eval polish",
+        "summary": {"hit_count": 10, "returned": 3, "scope_count": 5},
+        "results": [
+            {"path": ".relay-kit/contracts/project-context.md", "authority": 1.0, "source_type": "contracts"},
+            {"path": ".relay-kit/state/workflow-state.md", "authority": 0.9, "source_type": "state"},
+            {"path": "docs/relay-kit-query-search.md", "authority": 0.7, "source_type": "docs"},
+        ][: authoritative_hits + 1],
+    }
+
+
+def sample_service_boundaries(*, findings: int = 0) -> dict[str, object]:
+    return {
+        "schema_version": "relay-kit.service-boundaries.v1",
+        "status": "pass" if findings == 0 else "fail",
+        "summary": {"boundary_count": 8, "module_count": 33, "findings": findings},
+        "boundaries": [{"id": "public-cli"}, {"id": "telemetry-pulse"}],
+        "findings": [] if findings == 0 else [{"check": "runtime-to-public-cli"}],
+    }
+
+
 def test_pulse_report_summarizes_eval_readiness_and_evidence(tmp_path: Path) -> None:
     append_event(tmp_path, {"command": "doctor", "gate": "policy guard", "status": "pass"})
     append_event(tmp_path, {"command": "doctor", "gate": "workflow eval", "status": "fail"})
@@ -171,6 +244,54 @@ def test_pulse_report_summarizes_eval_readiness_and_evidence(tmp_path: Path) -> 
     assert report["workflow_focus"]["coverage_gap_count"] == 1
     assert report["readiness"]["verdict"] == "commercial-ready-candidate"
     assert report["evidence"]["status_counts"]["fail"] == 1
+
+
+def test_pulse_report_includes_governance_health_sections(tmp_path: Path) -> None:
+    report = pulse.build_pulse_report(
+        tmp_path,
+        workflow_eval_builder=lambda root: sample_eval_report(),
+        include_context_audit=True,
+        include_lane_audit=True,
+        include_adapter_diagnostics=True,
+        include_query_search=True,
+        include_service_boundaries=True,
+        context_audit_builder=lambda root: sample_context_audit(stale_sources=0),
+        lane_audit_builder=lambda root: sample_lane_audit(conflicts=0),
+        adapter_diagnostics_builder=lambda root: sample_adapter_diagnostics(metadata_drift=0),
+        query_search_builder=lambda root, query: sample_query_search(authoritative_hits=2),
+        service_boundaries_builder=lambda root: sample_service_boundaries(findings=0),
+    )
+
+    assert report["context_health"]["stale_sources"] == 0
+    assert report["lane_health"]["conflicts"] == 0
+    assert report["adapter_health"]["metadata_drift"] == 0
+    assert report["query_health"]["authoritative_hits"] == 2
+    assert report["service_boundary_health"]["findings"] == 0
+    assert report["governance_health"]["status"] == "pass"
+
+
+def test_pulse_html_renders_governance_sections(tmp_path: Path) -> None:
+    report = pulse.build_pulse_report(
+        tmp_path,
+        workflow_eval_builder=lambda root: sample_eval_report(),
+        include_context_audit=True,
+        include_lane_audit=True,
+        include_adapter_diagnostics=True,
+        include_query_search=True,
+        include_service_boundaries=True,
+        context_audit_builder=lambda root: sample_context_audit(),
+        lane_audit_builder=lambda root: sample_lane_audit(),
+        adapter_diagnostics_builder=lambda root: sample_adapter_diagnostics(),
+        query_search_builder=lambda root, query: sample_query_search(),
+        service_boundaries_builder=lambda root: sample_service_boundaries(),
+    )
+
+    html = pulse.render_pulse_html(report)
+
+    assert "Context Health" in html
+    assert "Lane Health" in html
+    assert "Adapter Health" in html
+    assert "Service Boundaries" in html
 
 
 def test_pulse_workflow_focus_surfaces_support_evidence_contract_gaps(tmp_path: Path) -> None:

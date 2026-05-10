@@ -147,6 +147,11 @@ def metric_signals(pulse_report: Mapping[str, Any]) -> list[dict[str, Any]]:
     gate_summary = _mapping(pulse_report.get("gate_summary"))
     gate_status_counts = _mapping(gate_summary.get("status_counts"))
     workflow_focus = _mapping(pulse_report.get("workflow_focus"))
+    context_health = _mapping(pulse_report.get("context_health"))
+    lane_health = _mapping(pulse_report.get("lane_health"))
+    adapter_health = _mapping(pulse_report.get("adapter_health"))
+    query_health = _mapping(pulse_report.get("query_health"))
+    service_boundary_health = _mapping(pulse_report.get("service_boundary_health"))
     coverage_gaps = _mapping(quality.get("coverage_gaps"))
     coverage_gap_count = workflow_focus.get("coverage_gap_count")
     if coverage_gap_count is None:
@@ -181,6 +186,11 @@ def metric_signals(pulse_report: Mapping[str, Any]) -> list[dict[str, Any]]:
         metric("relay.workflow.coverage_gap_count", _number(coverage_gap_count), "1", base_attrs),
         metric("relay.workflow.support_evidence_gap_count", _number(support_evidence_gap_count), "1", base_attrs),
         metric("relay.workflow.support_fixture_depth_gap_count", _number(support_fixture_depth_gap_count), "1", base_attrs),
+        metric("relay.context.stale_sources", _number(context_health.get("stale_sources")), "1", base_attrs),
+        metric("relay.lanes.conflicts", _number(lane_health.get("conflicts")), "1", base_attrs),
+        metric("relay.adapter.metadata_drift", _number(adapter_health.get("metadata_drift")), "1", base_attrs),
+        metric("relay.query.authoritative_hits", _number(query_health.get("authoritative_hits")), "1", base_attrs),
+        metric("relay.service.boundary_findings", _number(service_boundary_health.get("findings")), "1", base_attrs),
         metric("relay.gates.pass", _number(gate_status_counts.get("pass")), "1", base_attrs),
         metric("relay.gates.attention", _number(gate_status_counts.get("attention")), "1", base_attrs),
         metric("relay.gates.hold", _number(gate_status_counts.get("hold")), "1", base_attrs),
