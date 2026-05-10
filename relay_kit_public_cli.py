@@ -26,6 +26,8 @@ This wrapper exposes a friendlier command surface:
   relay-kit context audit <project_path>
   relay-kit lane audit <project_path>
   relay-kit adapter diagnose <project_path>
+  relay-kit query search <project_path> --query "..."
+  relay-kit service boundaries <project_path>
 
 It maps to the existing canonical runtime entrypoint (`relay_kit.py`)
 without changing the underlying generation flow.
@@ -78,6 +80,12 @@ from relay_kit_v3.adapter_diagnostics import (
     build_adapter_diagnostics,
     render_adapter_diagnostics,
     write_adapter_diagnostics,
+)
+from relay_kit_v3.query_search import build_query_search, render_query_search, write_query_search
+from relay_kit_v3.service_boundaries import (
+    build_service_boundary_report,
+    render_service_boundary_report,
+    write_service_boundary_report,
 )
 from relay_kit_v3.support_bundle import build_support_bundle, write_support_bundle
 from relay_kit_v3.support_request import build_support_request, render_support_request, write_support_request
@@ -281,6 +289,42 @@ def _parse_adapter_args(argv: list[str]) -> argparse.Namespace:
     diagnose.add_argument("--output-file", default=None, help="Optional adapter diagnostics JSON output path")
     diagnose.add_argument("--strict", action="store_true", help="Return non-zero unless diagnostics pass")
     diagnose.add_argument("--json", action="store_true", help="Emit machine-readable diagnostics")
+    return parser.parse_args(argv)
+
+
+def _parse_query_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit query",
+        description="Search Relay-kit state, contracts, docs, evidence, and registry sources.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    search = subparsers.add_parser("search", help="Rank local Relay-kit sources for a query")
+    search.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    search.add_argument("--query", required=True, help="Query text")
+    search.add_argument(
+        "--scope",
+        action="append",
+        choices=["state", "contracts", "docs", "evidence", "registry"],
+        help="Limit search to one or more scopes; defaults to all scopes",
+    )
+    search.add_argument("--limit", type=int, default=10, help="Maximum result count")
+    search.add_argument("--stale-days", type=int, default=30, help="Freshness threshold in days")
+    search.add_argument("--output-file", default=None, help="Optional query search JSON output path")
+    search.add_argument("--json", action="store_true", help="Emit machine-readable search results")
+    return parser.parse_args(argv)
+
+
+def _parse_service_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit service",
+        description="Inspect Relay-kit service-boundary map and static dependency rules.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    boundaries = subparsers.add_parser("boundaries", help="Check service-boundary map and static import rules")
+    boundaries.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    boundaries.add_argument("--output-file", default=None, help="Optional service-boundary JSON output path")
+    boundaries.add_argument("--strict", action="store_true", help="Return non-zero when boundary findings exist")
+    boundaries.add_argument("--json", action="store_true", help="Emit machine-readable boundary report")
     return parser.parse_args(argv)
 
 
@@ -1015,6 +1059,44 @@ def run_adapter(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_query(args: argparse.Namespace) -> int:
+    if args.action != "search":
+        return 2
+    report = build_query_search(
+        args.project_path,
+        query=args.query,
+        scopes=args.scope,
+        limit=args.limit,
+        stale_days=args.stale_days,
+    )
+    if args.output_file:
+        write_query_search(args.project_path, report, output_file=args.output_file)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_query_search(report))
+        if args.output_file:
+            print(f"Wrote {args.output_file}")
+    return 0 if report["status"] in {"pass", "empty"} else 2
+
+
+def run_service(args: argparse.Namespace) -> int:
+    if args.action != "boundaries":
+        return 2
+    report = build_service_boundary_report(args.project_path)
+    if args.output_file:
+        write_service_boundary_report(args.project_path, report, output_file=args.output_file)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_service_boundary_report(report))
+        if args.output_file:
+            print(f"Wrote {args.output_file}")
+    if args.strict and report["status"] != "pass":
+        return 1
+    return 0
+
+
 def run_manifest(args: argparse.Namespace) -> int:
     if args.action == "write":
         output_path = write_manifest(args.project_path, args.output_file)
@@ -1467,6 +1549,10 @@ def main(argv: list[str] | None = None) -> int:
         return run_lane(_parse_lane_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "adapter":
         return run_adapter(_parse_adapter_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "query":
+        return run_query(_parse_query_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "service":
+        return run_service(_parse_service_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "manifest":
         return run_manifest(_parse_manifest_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "eval":

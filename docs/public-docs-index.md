@@ -21,6 +21,8 @@ Use this page as the public entrypoint for current runtime behavior.
 - `docs/relay-kit-context-governance.md`
 - `docs/relay-kit-lane-audit.md`
 - `docs/relay-kit-adapter-diagnostics.md`
+- `docs/relay-kit-query-search.md`
+- `docs/relay-kit-service-boundaries.md`
 - `docs/relay-kit-context-continuity.md`
 - `docs/relay-kit-context-continuity-design-note.md`
 - `docs/relay-kit-compatibility-cycle.md` (archived checklist with final decision)
