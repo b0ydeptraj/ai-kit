@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Implement Claude-adoption phase 2 slice 2: multi-lane coordination hardening.
+Refresh state after PR #86 multi-lane coordination hardening and prepare the next Claude-adoption phase 2 slice.
 
 ## Active lane
 - Lane id: primary
@@ -10,20 +10,20 @@ Implement Claude-adoption phase 2 slice 2: multi-lane coordination hardening.
 
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: fix-hub
-- Active specialist: developer
+- Layer-2 workflow hub: bootstrap
+- Active specialist: bootstrap
 
 ## Active utility providers
 - Primary utility provider: test-first-development
 - Additional utilities in play: runtime-doctor, context-continuity, evidence-before-completion
 
 ## Active standalone/domain skill
-- Skill: developer
-- Why selected: slice 2 needs a public CLI gate, runtime doctor integration, templates, docs, tests, and state updates.
+- Skill: bootstrap
+- Why selected: PR #86 merged and main CI passed; live state must point to the next implementation lane.
 
 ## Complexity level
 - Level: L2
-- Reasoning: this slice adds deterministic lane coordination checks while staying inside local state/runtime governance.
+- Reasoning: this is a bounded post-merge state refresh after a runtime governance slice.
 
 ## Chosen track
 - Track: product-flow
@@ -52,14 +52,19 @@ Implement Claude-adoption phase 2 slice 2: multi-lane coordination hardening.
 developer
 
 ## Known blockers
-No active blockers. PR #85 state refresh passed main CI; slice 2 is active on a new feature branch.
+No active blockers. PR #86 lane audit passed PR CI, merged into main, and main CI passed; next feature slice is adapter/IDE bridge diagnostics.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Active branch: `codex/lane-coordination-audit`.
-- Current branch objective: add `relay-kit lane audit`, enforce lane-lock/resume/wave/handoff metadata, update templates, and wire live runtime doctor to the lane audit.
+- Active branch: `codex/post-lane-audit-state-refresh`.
+- Current branch objective: refresh live state after PR #86 and point the next implementation lane to adapter/IDE bridge diagnostics.
+- PR #86 merged multi-lane coordination hardening: https://github.com/b0ydeptraj/Relay-kit/pull/86.
+- PR #86 merge commit: `d582a7a9505ffb648f3a830232d6a0c43c3f1c71`.
+- Main CI after PR #86: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25620406371, conclusion `success`.
+- Current main baseline after PR #86: `d582a7a9505ffb648f3a830232d6a0c43c3f1c71`.
+- PR #86 local evidence: `python -m pytest tests -q` passed with 209 tests, live lane audit returned `status: pass`, runtime doctor live returned 0 findings, semantic gauntlet checked 141 skill files and 55 scenario fixtures with 0 findings, enterprise readiness returned `commercial-ready-candidate`, Pulse returned `status: pass`, and signal export emitted 74 signals.
 - PR #83 merged context/memory governance: https://github.com/b0ydeptraj/Relay-kit/pull/83.
 - PR #83 merge commit: `e972ea3d516cb3584e028ff5b82c173009131c9e`.
 - Main CI after PR #83: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25608258138, conclusion `failure` due shallow checkout ancestry being treated as stale.

@@ -53,9 +53,11 @@ Latest verified implementation evidence:
 - PR #52: state/context refresh after PR #51.
 - PR #83: context and memory governance first slice.
 - PR #84: runtime-doctor shallow ancestry guard for context governance.
+- PR #86: multi-lane coordination hardening with `relay-kit lane audit`.
 - Local context-governance slice evidence: `python -m pytest tests -q` passed 200 tests.
 - Local context-governance slice evidence: `python relay_kit_public_cli.py context audit . --strict --json` returned `status: pass`.
 - Local context-governance slice evidence: enterprise readiness returned `commercial-ready-candidate`.
+- Local lane-coordination slice evidence: `python -m pytest tests -q` passed 209 tests, live lane audit returned `status: pass`, and main CI `25620406371` passed.
 
 ## 12-Report Relay-kit Translation Matrix
 
