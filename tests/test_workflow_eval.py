@@ -21,7 +21,7 @@ from scripts.eval_workflows import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_DEFAULT_SCENARIOS = 60
+EXPECTED_DEFAULT_SCENARIOS = 66
 EXPECTED_PROFILED_SUPPORT_SCENARIOS = len(PROFILED_SUPPORT_EVIDENCE_TERMS) * 2
 
 
@@ -113,16 +113,22 @@ def test_workflow_eval_default_suite_covers_production_team_skills() -> None:
     assert "layer-4-specialists-and-standalones" in expected_layers
     for skill in {
         "api-integration",
+        "automation-ops",
         "browser-inspector",
         "data-persistence",
         "dependency-management",
+        "go-service-engineering",
+        "growth-marketing",
         "media-tooling",
+        "market-research",
         "multimodal-evidence",
+        "next-product-frontend",
         "accessibility-review",
         "policy-guard",
         "impact-radar",
         "project-architecture",
         "ux-structure",
+        "vietnamese-product-localization",
         "bootstrap",
         "debug-hub",
         "fix-hub",

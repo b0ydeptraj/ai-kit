@@ -358,5 +358,41 @@
     "prompt": "Use repo-map when service-boundary mapping needs entrypoints, modules, dependency direction, and impact surface for CLI, registry, gates, support, release, publication, and Pulse.",
     "expected_skill": "repo-map",
     "expected_terms": ["entrypoints", "modules", "dependency direction"]
+  },
+  {
+    "id": "go-service-engineering-api-runtime",
+    "prompt": "Use go-service-engineering for a Go API service update with Echo or Gin routing, GORM or sqlc persistence, Redis cache behavior, job workers, middleware, and observability.",
+    "expected_skill": "go-service-engineering",
+    "expected_terms": ["routing", "persistence", "observability"]
+  },
+  {
+    "id": "next-product-frontend-app-router",
+    "prompt": "Use next-product-frontend for a Next.js App Router feature with server and client component boundaries, server actions, shadcn UI, Tailwind styling, cache behavior, and accessibility checks.",
+    "expected_skill": "next-product-frontend",
+    "expected_terms": ["App Router", "server actions", "accessibility"]
+  },
+  {
+    "id": "growth-marketing-launch-funnel",
+    "prompt": "Use growth-marketing to produce positioning, landing page messaging, SEO intent, launch plan, funnel metrics, and campaign QA for a product release.",
+    "expected_skill": "growth-marketing",
+    "expected_terms": ["positioning", "funnel metrics", "campaign QA"]
+  },
+  {
+    "id": "market-research-icp-pricing-scan",
+    "prompt": "Use market-research for competitor scan, ICP validation, pricing signal analysis, source authority ranking, and decision-impact notes.",
+    "expected_skill": "market-research",
+    "expected_terms": ["competitor", "pricing", "source authority"]
+  },
+  {
+    "id": "automation-ops-webhook-runbook",
+    "prompt": "Use automation-ops for scheduler and webhook automation with dry-run support, retry policy, rollback runbook, failure handling, and operations ownership.",
+    "expected_skill": "automation-ops",
+    "expected_terms": ["dry-run", "rollback", "runbook"]
+  },
+  {
+    "id": "vietnamese-product-localization-bilingual-support",
+    "prompt": "Use vietnamese-product-localization for Vietnamese and bilingual product docs, support communication, release notes, terminology consistency, and localization quality checks.",
+    "expected_skill": "vietnamese-product-localization",
+    "expected_terms": ["Vietnamese", "bilingual", "terminology"]
   }
 ]

@@ -62,6 +62,12 @@ LAYER_MODEL: Dict[str, Dict[str, object]] = {
             "scrum-master",
             "developer",
             "qa-governor",
+            "go-service-engineering",
+            "next-product-frontend",
+            "growth-marketing",
+            "market-research",
+            "automation-ops",
+            "vietnamese-product-localization",
             "execution-loop",
             "project-architecture",
             "dependency-management",
@@ -103,7 +109,7 @@ PARALLEL_LANE_RULES = [
 
 
 HUB_SUPPORT_MAP = {
-    "brainstorm-hub": ["analyst", "pm", "research", "ux-structure"],
+    "brainstorm-hub": ["analyst", "pm", "research", "market-research", "growth-marketing", "ux-structure"],
     "scout-hub": [
         "project-architecture",
         "dependency-management",
@@ -118,11 +124,11 @@ HUB_SUPPORT_MAP = {
         "context-continuity",
         "handoff-context",
     ],
-    "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "impact-radar", "context-continuity", "ux-structure", "mermaid-diagrams"],
+    "plan-hub": ["analyst", "pm", "architect", "scrum-master", "research", "market-research", "growth-marketing", "impact-radar", "context-continuity", "ux-structure", "mermaid-diagrams"],
     "debug-hub": ["developer", "testing-patterns", "problem-solving", "sequential-thinking", "browser-inspector", "multimodal-evidence", "memory-search", "runtime-doctor"],
-    "fix-hub": ["developer", "execution-loop", "project-architecture", "api-integration", "data-persistence", "accessibility-review", "handoff-context"],
-    "test-hub": ["qa-governor", "testing-patterns", "execution-loop", "multimodal-evidence", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "media-tooling"],
-    "review-hub": ["qa-governor", "testing-patterns", "project-architecture", "doc-pointers", "memory-search", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "mermaid-diagrams"],
+    "fix-hub": ["developer", "go-service-engineering", "next-product-frontend", "execution-loop", "project-architecture", "api-integration", "data-persistence", "accessibility-review", "handoff-context"],
+    "test-hub": ["qa-governor", "testing-patterns", "automation-ops", "vietnamese-product-localization", "execution-loop", "multimodal-evidence", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "media-tooling"],
+    "review-hub": ["qa-governor", "testing-patterns", "automation-ops", "vietnamese-product-localization", "project-architecture", "doc-pointers", "memory-search", "release-readiness", "accessibility-review", "skill-gauntlet", "impact-radar", "runtime-doctor", "migration-guard", "context-continuity", "mermaid-diagrams"],
 }
 
 
@@ -150,9 +156,11 @@ UTILITY_PROVIDER_RULES = {
 
 
 STANDALONE_TAXONOMY = {
-    "web-and-experience": ["agent-browser", "frontend or UI flows", "threejs", "ui-heavy implementation"],
-    "backend-and-data": ["backend-development", "databases", "API-heavy services", "jobs and queues"],
+    "web-and-experience": ["agent-browser", "frontend or UI flows", "threejs", "ui-heavy implementation", "next-product-frontend"],
+    "backend-and-data": ["backend-development", "databases", "API-heavy services", "jobs and queues", "go-service-engineering"],
     "platform-and-infra": ["devops", "deployment", "CI/CD", "observability"],
+    "growth-and-localization": ["growth-marketing", "market-research", "vietnamese-product-localization"],
+    "automation-and-operations": ["automation-ops", "runbooks", "schedulers", "webhooks"],
     "commerce-and-integrations": ["shopify", "payments", "catalog or checkout flows"],
     "media-and-content": ["media-tooling", "content pipelines", "asset-heavy workflows"],
 }
@@ -492,5 +500,3 @@ def render_review_loop() -> str:
         "",
     ]
     return "\n".join(lines).rstrip() + "\n"
-
-

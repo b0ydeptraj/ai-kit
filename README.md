@@ -62,6 +62,20 @@ Relay-kit gives them a clear operating flow for:
 
 It makes agents behave less like improvising interns and more like engineers working inside a defined system.
 
+## Domain Skill Pack
+
+PR 1 expands the enterprise runtime with Relay-kit-owned domain skills:
+
+- `go-service-engineering`
+- `next-product-frontend`
+- `growth-marketing`
+- `market-research`
+- `automation-ops`
+- `vietnamese-product-localization`
+
+These names and contracts are Relay-kit-owned and are not copied from external kits.
+Vietnamese support remains opt-in/profile-based, not a forced global default.
+
 ## What you get
 
 - a small public skill surface that is easy to remember
@@ -254,7 +268,7 @@ relay-kit eval run /path/to/project --json --output-file workflow-eval.json
 relay-kit eval run /path/to/project --strict --baseline-file previous-workflow-eval.json
 ```
 
-The bundled default eval suite covers 60 production/team scenarios across
+The bundled default eval suite covers 66 production/team scenarios across
 orchestration, hubs, utility providers, specialists, runtime diagnostics,
 context governance, lane audit, adapter diagnostics, query lookup, and
 service-boundary review.

@@ -39,6 +39,7 @@ Include:
 ## Reference skills and rules
 - Mirror the existing codebase before inventing new patterns.
 - Pull in project-architecture, dependency-management, api-integration, data-persistence, security-patterns, performance-optimization, and logging-observability when relevant.
+- When stack-specific delivery is required, coordinate with go-service-engineering or next-product-frontend for implementation-level constraints.
 - Architecture must include a readiness verdict, not just diagrams or aspirations.
 
 ## Likely next step

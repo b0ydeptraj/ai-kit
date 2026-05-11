@@ -549,6 +549,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         references=[
             "Mirror the existing codebase before inventing new patterns.",
             "Pull in project-architecture, dependency-management, api-integration, data-persistence, security-patterns, performance-optimization, and logging-observability when relevant.",
+            "When stack-specific delivery is required, coordinate with go-service-engineering or next-product-frontend for implementation-level constraints.",
             "Architecture must include a readiness verdict, not just diagrams or aspirations.",
         ],
         next_steps=["scrum-master", "review-hub", "plan-hub", "workflow-router"],
@@ -704,6 +705,193 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - Call out missing tests, weak evidence, or unverified assumptions.
             - Bounce work back when story, tech-spec, or architecture is still underspecified.
             - Treat completion claims as invalid until the claim-to-evidence pass has fresh verification evidence.
+            """
+        ).strip(),
+    ),
+    "go-service-engineering": SkillSpec(
+        name="go-service-engineering",
+        description="Use when the request is primarily Go backend service work. Define service boundaries, routing, persistence, middleware, jobs, caching, and test evidence for production-grade Go delivery.",
+        role="go-engineering",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["go service requirements", "existing Go module structure", "architecture or tech-spec when available"],
+        outputs=["Go service implementation plan or code delta with test and runtime evidence"],
+        references=[
+            "Prefer established local service patterns over introducing a new framework by default.",
+            "Cover routing, persistence, middleware, caching, background jobs, and observability in one coherent service contract.",
+            "Include evidence commands for unit tests, integration tests, and migration safety where relevant.",
+        ],
+        next_steps=["developer", "testing-patterns", "qa-governor", "review-hub"],
+        body=dedent(
+            """\
+            # Mission
+            Deliver production-grade Go service work with explicit architecture, persistence, and runtime quality constraints.
+
+            ## Mandatory scope checks
+            - Confirm module boundaries and service ownership before coding.
+            - Define API routing and handler contracts for the target service.
+            - Make persistence strategy explicit: ORM, query builder, or SQL-first path.
+            - Cover cache and background job behavior when state or throughput depends on them.
+            - Require test and observability evidence before claiming completion.
+
+            ## Evidence contract
+            - name the exact test commands used
+            - include failing signal and green signal for changed behavior
+            - record any migration or data-risk notes for rollout
+            """
+        ).strip(),
+    ),
+    "next-product-frontend": SkillSpec(
+        name="next-product-frontend",
+        description="Use when work is primarily Next.js product UI or frontend architecture. Plan and implement App Router flows, server and client boundaries, server actions, data fetching, and quality gates for user-facing delivery.",
+        role="next-frontend",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["frontend request or story", "existing Next.js structure", "design and UX constraints"],
+        outputs=["Next.js implementation plan or code delta with accessibility and performance evidence"],
+        references=[
+            "Prefer App Router and server/client boundary clarity over generic React-only guidance.",
+            "Keep shadcn or existing component-system usage consistent with local patterns.",
+            "Collect accessibility and performance evidence before completion claims.",
+        ],
+        next_steps=["developer", "ux-structure", "accessibility-review", "review-hub"],
+        body=dedent(
+            """\
+            # Mission
+            Build or refactor Next.js product surfaces with explicit server/client architecture and measurable quality.
+
+            ## Mandatory scope checks
+            - identify App Router route ownership and layout boundaries
+            - document server component versus client component decisions
+            - define server actions contracts for mutation-heavy flows
+            - define data fetching and cache behavior for changed screens
+            - enforce accessibility and performance checks for user-facing risk
+
+            ## Evidence contract
+            - include route-level behavior proof
+            - include accessibility findings or gate output
+            - include performance or hydration-risk notes when relevant
+            """
+        ).strip(),
+    ),
+    "growth-marketing": SkillSpec(
+        name="growth-marketing",
+        description="Use when the request is growth or marketing execution. Produce positioning, campaign plans, launch checklist, funnel metrics, and quality checks tied to product goals.",
+        role="growth",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["product context", "target audience or ICP", "launch or campaign objective"],
+        outputs=["growth execution plan with channel strategy, campaign QA, and measurable outcomes"],
+        references=[
+            "Keep messaging claims tied to source evidence and product constraints.",
+            "Define funnel goals and success metrics explicitly, not as generic marketing advice.",
+            "Include campaign QA and post-launch measurement checkpoints.",
+        ],
+        next_steps=["market-research", "pm", "review-hub", "workflow-router"],
+        body=dedent(
+            """\
+            # Mission
+            Turn a growth request into an evidence-backed campaign plan with clear measurement.
+
+            ## Mandatory scope checks
+            - define positioning and audience fit
+            - map campaign channels to funnel stages
+            - set launch checklist and QA checkpoints
+            - set post-launch metrics and review cadence
+
+            ## Evidence contract
+            - include source-backed messaging assumptions
+            - include KPI targets and measurement method
+            - include campaign QA acceptance criteria
+            """
+        ).strip(),
+    ),
+    "market-research": SkillSpec(
+        name="market-research",
+        description="Use when the request needs competitor intelligence, ICP refinement, pricing signal analysis, or market hypothesis validation before execution decisions.",
+        role="market-intelligence",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["research question", "domain context", "decision to support"],
+        outputs=["ranked market findings with source quality and decision-impact summary"],
+        references=[
+            "Separate verified source facts from inference and assumption.",
+            "Score source freshness and authority before using findings in high-impact decisions.",
+            "Connect findings directly to product, pricing, or GTM decisions.",
+        ],
+        next_steps=["growth-marketing", "pm", "architect", "review-hub"],
+        body=dedent(
+            """\
+            # Mission
+            Provide decision-grade market findings with explicit evidence quality.
+
+            ## Mandatory scope checks
+            - define the exact decision question
+            - gather competitor, ICP, and pricing signals
+            - rank findings by source authority and freshness
+            - call out unknowns and unresolved assumptions
+
+            ## Evidence contract
+            - include citation-ready source list
+            - mark each claim as verified, inferred, or unknown
+            - include decision impact for each major finding
+            """
+        ).strip(),
+    ),
+    "automation-ops": SkillSpec(
+        name="automation-ops",
+        description="Use when the request is workflow automation or operational scripting. Define schedulers, webhooks, runbooks, rollback safety, and dry-run discipline for reliable automation.",
+        role="automation",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["automation objective", "runtime constraints", "integration boundaries"],
+        outputs=["automation design or implementation with operational safeguards and run evidence"],
+        references=[
+            "Prefer deterministic runbooks over one-off script behavior.",
+            "Require dry-run, rollback, and failure-handling rules for any risky operation.",
+            "Capture operational observability and handoff expectations for support workflows.",
+        ],
+        next_steps=["developer", "policy-guard", "release-readiness", "qa-governor"],
+        body=dedent(
+            """\
+            # Mission
+            Deliver automation workflows that are reliable, auditable, and reversible.
+
+            ## Mandatory scope checks
+            - define trigger model: schedule, webhook, or manual run
+            - define idempotency and retry behavior
+            - define rollback or compensation path
+            - define runbook and operational ownership
+
+            ## Evidence contract
+            - include dry-run proof when supported
+            - include failure-path handling proof
+            - include rollback or recovery instructions
+            """
+        ).strip(),
+    ),
+    "vietnamese-product-localization": SkillSpec(
+        name="vietnamese-product-localization",
+        description="Use when product output must be localized for Vietnamese users. Produce Vietnamese or bilingual docs, support copy, release notes, and communication artifacts with quality constraints.",
+        role="localization",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["source content or request", "target audience context", "localization policy profile"],
+        outputs=["Vietnamese or bilingual product artifacts with terminology and quality notes"],
+        references=[
+            "Treat Vietnamese support as profile-based policy, not a forced global default.",
+            "Maintain terminology consistency across docs, support, and product messaging.",
+            "Call out any untranslated or uncertain terms explicitly.",
+        ],
+        next_steps=["growth-marketing", "pm", "review-hub", "qa-governor"],
+        body=dedent(
+            """\
+            # Mission
+            Localize product-facing communication for Vietnamese users with consistent terminology and clear quality boundaries.
+
+            ## Mandatory scope checks
+            - confirm whether output should be Vietnamese-only or bilingual
+            - apply terminology consistency across all related artifacts
+            - identify locale-sensitive phrasing that can affect support or release communication
+
+            ## Evidence contract
+            - include glossary or terminology notes for key product terms
+            - mark unresolved translation ambiguities
+            - keep localization policy explicitly opt-in by profile
             """
         ).strip(),
     ),
