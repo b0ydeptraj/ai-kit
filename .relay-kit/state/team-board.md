@@ -9,7 +9,7 @@ Maintain closed status for final differentiation and keep future work in new sco
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | depends_on | wave_id | resume_condition | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|
-| primary | bootstrap | qa-governor | final differentiation state refresh | state, differentiation note, adoption matrix, and upgrade backlog | done | none | wave-1 | closed | state refresh merged | PR #97 merged and main CI passed; PR5 closes final differentiation status tracking. |
+| primary | bootstrap | qa-governor | final differentiation state refresh | state, differentiation note, adoption matrix, and upgrade backlog | done | none | wave-1 | closed | state refresh merged | PR #98 merged and main CI `25685234847` passed; final differentiation tracking is closed. |
 | lane-2 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | No parallel work active. |
 
@@ -85,3 +85,4 @@ Low. This slice changes state and tracking docs only.
 - 2026-05-11: PR #94, #95, #96, and #97 merged (domain skills, lifecycle commands, agent profiles, token economy); main CI after PR #97 `25684183141` passed.
 - 2026-05-11: Start PR5 docs/state refresh on `codex/final-differentiation-state-refresh`.
 - 2026-05-11: PR5 state refresh content finalized; final differentiation status marked complete pending PR CI and merge.
+- 2026-05-11: PR #98 merged final differentiation docs/state closure; main CI `25685234847` passed.

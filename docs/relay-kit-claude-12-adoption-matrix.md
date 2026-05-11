@@ -71,6 +71,7 @@ Latest verified implementation evidence:
 - Main CI after PR #92: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25632979363, conclusion `success`.
 - PR #93: post-dashboard state refresh merged with Claude-adoption phase 2 completion note.
 - PR #94-#97: domain skills, command registry, agent profiles, and token economy shipped in final differentiation phase; main CI after PR #97: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25684183141 (success).
+- PR #98: final differentiation docs/state closure merged; main CI after PR #98: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25685234847 (success).
 
 ## 12-Report Relay-kit Translation Matrix
 
