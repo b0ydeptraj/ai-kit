@@ -1,6 +1,6 @@
 # Relay-kit Final Differentiation Update Plan
 
-Status: in progress (PR 1 domain skill pack).
+Status: in progress (PR 2 slash command lifecycle layer).
 Owner flow: `workflow-router -> plan-hub -> developer -> test-hub -> review-hub`.
 Last planning pass: 2026-05-11.
 
@@ -33,7 +33,7 @@ Relay-kit already has:
   adapter diagnostics, readiness, Pulse, signal export
 - governance commands such as `context audit`, `lane audit`, `adapter diagnose`,
   `query search`, and `service boundaries`
-- workflow eval suite with 60 scenarios
+- workflow eval suite with 66 scenarios
 
 Relay-kit still lacks:
 

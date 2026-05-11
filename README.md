@@ -85,6 +85,8 @@ Vietnamese support remains opt-in/profile-based, not a forced global default.
 - a `context audit` gate for checking source authority, freshness, and missing handoff context
 - a `lane audit` gate for checking lock conflicts, parked-lane resume conditions, and handoff return contracts
 - an `adapter diagnose` gate for checking generated Codex, Claude, and Agent skill parity plus frontmatter drift
+- a lifecycle command registry with deterministic command surfaces for `.claude`, `.codex`, and `.agent`
+- a `command diagnose` gate for strict command parity across adapters
 - a `query search` utility for ranked lookup across state, contracts, docs, evidence, and registry sources
 - a `service boundaries` gate for checking module ownership and static dependency rules
 - a `release-readiness` utility for pre/post deploy smoke gates and rollback signals
@@ -160,6 +162,13 @@ Audit adapter runtime surfaces before trusting editor handoff:
 
 ```bash
 relay-kit adapter diagnose /path/to/project --adapter all --strict --json
+```
+
+Inspect lifecycle command routing and parity:
+
+```bash
+relay-kit command list /path/to/project --json
+relay-kit command diagnose /path/to/project --adapter all --strict --json
 ```
 
 Search Relay-kit sources without broad context dumping:

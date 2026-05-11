@@ -3,6 +3,7 @@
 __all__ = [
     "adapter_diagnostics",
     "adapters",
+    "command_registry",
     "generator",
     "lane_audit",
     "query_search",

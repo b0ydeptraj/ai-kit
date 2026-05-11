@@ -26,6 +26,8 @@ This wrapper exposes a friendlier command surface:
   relay-kit context audit <project_path>
   relay-kit lane audit <project_path>
   relay-kit adapter diagnose <project_path>
+  relay-kit command list <project_path>
+  relay-kit command diagnose <project_path>
   relay-kit query search <project_path> --query "..."
   relay-kit service boundaries <project_path>
 
@@ -80,6 +82,12 @@ from relay_kit_v3.adapter_diagnostics import (
     build_adapter_diagnostics,
     render_adapter_diagnostics,
     write_adapter_diagnostics,
+)
+from relay_kit_v3.command_registry import (
+    build_command_diagnostics,
+    lifecycle_command_records,
+    render_command_diagnostics,
+    write_command_diagnostics,
 )
 from relay_kit_v3.query_search import build_query_search, render_query_search, write_query_search
 from relay_kit_v3.service_boundaries import (
@@ -289,6 +297,30 @@ def _parse_adapter_args(argv: list[str]) -> argparse.Namespace:
     diagnose.add_argument("--output-file", default=None, help="Optional adapter diagnostics JSON output path")
     diagnose.add_argument("--strict", action="store_true", help="Return non-zero unless diagnostics pass")
     diagnose.add_argument("--json", action="store_true", help="Emit machine-readable diagnostics")
+    return parser.parse_args(argv)
+
+
+def _parse_command_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit command",
+        description="List and diagnose Relay-kit lifecycle command surfaces.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    list_cmd = subparsers.add_parser("list", help="List lifecycle commands and route targets")
+    list_cmd.add_argument("project_path", nargs="?", default=".", help="Project root (reserved for CLI symmetry)")
+    list_cmd.add_argument("--json", action="store_true", help="Emit machine-readable lifecycle command list")
+
+    diagnose = subparsers.add_parser("diagnose", help="Check adapter lifecycle command parity")
+    diagnose.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    diagnose.add_argument(
+        "--adapter",
+        choices=["codex", "claude", "agent", "antigravity", "all"],
+        default="all",
+        help="Adapter surface to inspect",
+    )
+    diagnose.add_argument("--output-file", default=None, help="Optional command diagnostics JSON output path")
+    diagnose.add_argument("--strict", action="store_true", help="Return non-zero unless command parity passes")
+    diagnose.add_argument("--json", action="store_true", help="Emit machine-readable command diagnostics")
     return parser.parse_args(argv)
 
 
@@ -1070,6 +1102,41 @@ def run_adapter(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_command_surface(args: argparse.Namespace) -> int:
+    if args.action == "list":
+        payload = {
+            "schema_version": "relay-kit.command-registry.v1",
+            "status": "pass",
+            "project_path": str(Path(args.project_path).resolve()),
+            "summary": {"command_count": len(lifecycle_command_records())},
+            "commands": lifecycle_command_records(),
+        }
+        if args.json:
+            print(json.dumps(payload, ensure_ascii=True, indent=2))
+        else:
+            print("Relay-kit lifecycle commands")
+            print(f"- commands: {payload['summary']['command_count']}")
+            for command in payload["commands"]:
+                print(f"  - {command['slash']} -> {command['route_target']}")
+        return 0
+
+    if args.action != "diagnose":
+        return 2
+
+    report = build_command_diagnostics(args.project_path, adapter=args.adapter)
+    if args.output_file:
+        write_command_diagnostics(args.project_path, report, output_file=args.output_file)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_command_diagnostics(report))
+        if args.output_file:
+            print(f"Wrote {args.output_file}")
+    if args.strict and report["status"] != "pass":
+        return 1
+    return 0
+
+
 def run_query(args: argparse.Namespace) -> int:
     if args.action != "search":
         return 2
@@ -1571,6 +1638,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_lane(_parse_lane_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "adapter":
         return run_adapter(_parse_adapter_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "command":
+        return run_command_surface(_parse_command_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "query":
         return run_query(_parse_query_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "service":

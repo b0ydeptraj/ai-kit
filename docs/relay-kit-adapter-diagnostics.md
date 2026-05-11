@@ -1,6 +1,7 @@
 # Relay-kit Adapter Diagnostics
 
 `relay-kit adapter diagnose` verifies generated runtime skill surfaces across Codex, Claude, and Agent/Antigravity adapters.
+It also verifies lifecycle command parity across adapter command surfaces.
 
 ## Commands
 
@@ -8,6 +9,7 @@
 relay-kit adapter diagnose /path/to/project
 relay-kit adapter diagnose /path/to/project --adapter codex --strict --json
 relay-kit adapter diagnose /path/to/project --adapter all --output-file .relay-kit/adapters/adapter-diagnostics.json
+relay-kit command diagnose /path/to/project --adapter all --strict --json
 ```
 
 Strict mode returns non-zero when an adapter is missing an expected skill, has an unexpected non-allowlisted skill, or has frontmatter drift.
@@ -19,6 +21,8 @@ Strict mode returns non-zero when an adapter is missing an expected skill, has a
 - `name` and `description` frontmatter match the registry
 - `paths`, `context`, `allowed-tools`, and `effort` frontmatter match the registry when present
 - Agent/Antigravity advisory metadata is reported clearly instead of being silently treated as enforced by the IDE
+- expected lifecycle commands exist under `.claude/commands`, `.codex/commands`, and `.agent/commands`
+- unexpected command files are flagged
 
 ## Adapter Metadata Policy
 
