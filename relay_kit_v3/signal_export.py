@@ -150,6 +150,7 @@ def metric_signals(pulse_report: Mapping[str, Any]) -> list[dict[str, Any]]:
     context_health = _mapping(pulse_report.get("context_health"))
     lane_health = _mapping(pulse_report.get("lane_health"))
     adapter_health = _mapping(pulse_report.get("adapter_health"))
+    token_health = _mapping(pulse_report.get("token_health"))
     query_health = _mapping(pulse_report.get("query_health"))
     service_boundary_health = _mapping(pulse_report.get("service_boundary_health"))
     coverage_gaps = _mapping(quality.get("coverage_gaps"))
@@ -189,6 +190,11 @@ def metric_signals(pulse_report: Mapping[str, Any]) -> list[dict[str, Any]]:
         metric("relay.context.stale_sources", _number(context_health.get("stale_sources")), "1", base_attrs),
         metric("relay.lanes.conflicts", _number(lane_health.get("conflicts")), "1", base_attrs),
         metric("relay.adapter.metadata_drift", _number(adapter_health.get("metadata_drift")), "1", base_attrs),
+        metric("relay.context.estimated_tokens", _number(token_health.get("estimated_tokens")), "1", base_attrs),
+        metric("relay.context.compressed_tokens", _number(token_health.get("compressed_tokens")), "1", base_attrs),
+        metric("relay.context.signal_retention", _number(token_health.get("signal_retention")), "1", base_attrs),
+        metric("relay.context.raw_required_blocks", _number(token_health.get("raw_required_blocks")), "1", base_attrs),
+        metric("relay.token.budget_violations", _number(token_health.get("budget_violations")), "1", base_attrs),
         metric("relay.query.authoritative_hits", _number(query_health.get("authoritative_hits")), "1", base_attrs),
         metric("relay.service.boundary_findings", _number(service_boundary_health.get("findings")), "1", base_attrs),
         metric("relay.gates.pass", _number(gate_status_counts.get("pass")), "1", base_attrs),

@@ -201,6 +201,24 @@ def sample_adapter_diagnostics(*, metadata_drift: int = 0) -> dict[str, object]:
     }
 
 
+def sample_token_audit(*, budget_violations: int = 0, signal_retention: float = 1.0) -> dict[str, object]:
+    status = "pass" if budget_violations == 0 and signal_retention >= 1.0 else "hold"
+    return {
+        "schema_version": "relay-kit.token-audit.v1",
+        "status": status,
+        "max_tokens": 8000,
+        "metrics": {
+            "estimated_tokens": 6400,
+            "compressed_tokens": 2200,
+            "signal_retention": signal_retention,
+            "raw_required_blocks": 2,
+            "budget_violations": budget_violations,
+        },
+        "summary": {"source_count": 8, "selected_source_count": 5, "dropped_source_count": 3, "selected_tokens": 2200, "findings": budget_violations},
+        "findings": [] if status == "pass" else [{"id": "token-budget-exceeded"}],
+    }
+
+
 def sample_query_search(*, authoritative_hits: int = 2) -> dict[str, object]:
     return {
         "schema_version": "relay-kit.query-search.v1",
@@ -253,11 +271,13 @@ def test_pulse_report_includes_governance_health_sections(tmp_path: Path) -> Non
         include_context_audit=True,
         include_lane_audit=True,
         include_adapter_diagnostics=True,
+        include_token_audit=True,
         include_query_search=True,
         include_service_boundaries=True,
         context_audit_builder=lambda root: sample_context_audit(stale_sources=0),
         lane_audit_builder=lambda root: sample_lane_audit(conflicts=0),
         adapter_diagnostics_builder=lambda root: sample_adapter_diagnostics(metadata_drift=0),
+        token_audit_builder=lambda root: sample_token_audit(budget_violations=0, signal_retention=1.0),
         query_search_builder=lambda root, query: sample_query_search(authoritative_hits=2),
         service_boundaries_builder=lambda root: sample_service_boundaries(findings=0),
     )
@@ -265,6 +285,8 @@ def test_pulse_report_includes_governance_health_sections(tmp_path: Path) -> Non
     assert report["context_health"]["stale_sources"] == 0
     assert report["lane_health"]["conflicts"] == 0
     assert report["adapter_health"]["metadata_drift"] == 0
+    assert report["token_health"]["budget_violations"] == 0
+    assert report["token_health"]["signal_retention"] == 1.0
     assert report["query_health"]["authoritative_hits"] == 2
     assert report["service_boundary_health"]["findings"] == 0
     assert report["governance_health"]["status"] == "pass"
@@ -277,11 +299,13 @@ def test_pulse_html_renders_governance_sections(tmp_path: Path) -> None:
         include_context_audit=True,
         include_lane_audit=True,
         include_adapter_diagnostics=True,
+        include_token_audit=True,
         include_query_search=True,
         include_service_boundaries=True,
         context_audit_builder=lambda root: sample_context_audit(),
         lane_audit_builder=lambda root: sample_lane_audit(),
         adapter_diagnostics_builder=lambda root: sample_adapter_diagnostics(),
+        token_audit_builder=lambda root: sample_token_audit(),
         query_search_builder=lambda root, query: sample_query_search(),
         service_boundaries_builder=lambda root: sample_service_boundaries(),
     )
@@ -291,6 +315,7 @@ def test_pulse_html_renders_governance_sections(tmp_path: Path) -> None:
     assert "Context Health" in html
     assert "Lane Health" in html
     assert "Adapter Health" in html
+    assert "Token Health" in html
     assert "Service Boundaries" in html
 
 

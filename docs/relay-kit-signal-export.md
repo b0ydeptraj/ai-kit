@@ -39,7 +39,7 @@ Build Pulse first if the report does not exist:
 
 ```bash
 relay-kit pulse build /path/to/project --include-readiness
-relay-kit pulse build /path/to/project --include-context-audit --include-lane-audit --include-adapter-diagnostics --include-query-search --include-service-boundaries
+relay-kit pulse build /path/to/project --include-context-audit --include-lane-audit --include-adapter-diagnostics --include-token-audit --include-query-search --include-service-boundaries
 relay-kit signal export /path/to/project
 ```
 
@@ -70,6 +70,11 @@ Metric signals include:
 - `relay.context.stale_sources`
 - `relay.lanes.conflicts`
 - `relay.adapter.metadata_drift`
+- `relay.context.estimated_tokens`
+- `relay.context.compressed_tokens`
+- `relay.context.signal_retention`
+- `relay.context.raw_required_blocks`
+- `relay.token.budget_violations`
 - `relay.query.authoritative_hits`
 - `relay.service.boundary_findings`
 
@@ -91,7 +96,7 @@ relay-kit publish plan /path/to/project --channel pypi --json > publication-plan
 relay-kit publish index-check /path/to/project --channel pypi --target-version X.Y.Z --package-url https://pypi.org/project/relay-kit/X.Y.Z/ --strict --json > package-index.json
 relay-kit support request /path/to/project --severity P1 --policy-pack enterprise --json > support-request.json
 relay-kit commercial dossier /path/to/project --channel pypi --strict --json > commercial-dossier.json
-relay-kit pulse build /path/to/project --include-readiness --publication-file publication-plan.json --package-index-file package-index.json --support-request-file support-request.json --commercial-dossier-file commercial-dossier.json --include-context-audit --include-lane-audit --include-adapter-diagnostics --include-query-search --include-service-boundaries
+relay-kit pulse build /path/to/project --include-readiness --publication-file publication-plan.json --package-index-file package-index.json --support-request-file support-request.json --commercial-dossier-file commercial-dossier.json --include-context-audit --include-lane-audit --include-adapter-diagnostics --include-token-audit --include-query-search --include-service-boundaries
 relay-kit signal export /path/to/project --otlp
 ```
 

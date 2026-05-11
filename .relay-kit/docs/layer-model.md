@@ -38,6 +38,7 @@ Stateless capabilities and analysis helpers. These should be called by hubs or o
 - impact-radar
 - runtime-doctor
 - migration-guard
+- token-economy
 - context-continuity
 - handoff-context
 - mermaid-diagrams
@@ -53,6 +54,12 @@ Role specialists, native support skills, and domain standalones that actually pr
 - scrum-master
 - developer
 - qa-governor
+- go-service-engineering
+- next-product-frontend
+- growth-marketing
+- market-research
+- automation-ops
+- vietnamese-product-localization
 - execution-loop
 - project-architecture
 - dependency-management

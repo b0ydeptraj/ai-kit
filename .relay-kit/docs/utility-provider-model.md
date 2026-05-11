@@ -51,6 +51,9 @@ Detect adapter parity drift and missing runtime artifacts before they become rel
 ### migration-guard
 Detect stale compatibility tokens and block cutover merges until old runtime aliases are removed or explicitly allowlisted.
 
+### token-economy
+Audit context budget and compression safety while preserving raw-required evidence and signal retention.
+
 ### context-continuity
 Capture and rehydrate durable continuity artifacts so lane state survives chat truncation, thread changes, and AI handoffs.
 

@@ -65,6 +65,14 @@ def write_pulse_report(root: Path) -> Path:
                     "missing_skills": 0,
                     "unexpected_skills": 0,
                 },
+                "token_health": {
+                    "status": "pass",
+                    "estimated_tokens": 5800,
+                    "compressed_tokens": 2100,
+                    "signal_retention": 1.0,
+                    "raw_required_blocks": 2,
+                    "budget_violations": 0,
+                },
                 "query_health": {
                     "status": "pass",
                     "authoritative_hits": 2,
@@ -160,6 +168,11 @@ def test_signal_export_builds_metrics_and_events(tmp_path: Path) -> None:
     assert "relay.context.stale_sources" in metric_names
     assert "relay.lanes.conflicts" in metric_names
     assert "relay.adapter.metadata_drift" in metric_names
+    assert "relay.context.estimated_tokens" in metric_names
+    assert "relay.context.compressed_tokens" in metric_names
+    assert "relay.context.signal_retention" in metric_names
+    assert "relay.context.raw_required_blocks" in metric_names
+    assert "relay.token.budget_violations" in metric_names
     assert "relay.query.authoritative_hits" in metric_names
     assert "relay.service.boundary_findings" in metric_names
     assert "relay.gates.pass" in metric_names

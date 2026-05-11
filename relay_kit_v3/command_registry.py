@@ -119,9 +119,9 @@ LIFECYCLE_COMMANDS: tuple[LifecycleCommandSpec, ...] = (
     LifecycleCommandSpec(
         command_id="relay-token-audit",
         slash="/relay-token-audit",
-        intent="Audit context continuity quality before deeper token-economy rollout.",
-        route_target="context-continuity",
-        expected_evidence="continuity checkpoint with stale or missing context warnings.",
+        intent="Audit token budget, compression safety, and signal retention before execution.",
+        route_target="token-economy",
+        expected_evidence="token audit report with budget violations, raw pointers, and retention metrics.",
     ),
 )
 

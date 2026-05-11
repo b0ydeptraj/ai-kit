@@ -20,6 +20,7 @@ from relay_kit_v3.support_bundle import SCHEMA_VERSION as SUPPORT_SCHEMA_VERSION
 from relay_kit_v3.support_bundle import build_support_bundle
 from relay_kit_v3.support_triage import support_bundle_findings
 from relay_kit_v3.temp_paths import temp_dir
+from relay_kit_v3.token_economy import build_token_audit
 from relay_kit_v3.upgrade import build_upgrade_report
 
 
@@ -71,6 +72,7 @@ def build_readiness_report(
     gates.append(_contract_sync_gate(root, contract_export, contract_import))
     gates.append(_adapter_diagnostics_gate(root))
     gates.append(_agent_profiles_gate(root))
+    gates.append(_token_economy_gate(root))
     gates.append(_signal_export_gate(root, selected_profile))
     gates.append(_release_lane_gate(root))
     gates.append(_commercial_docs_gate(root))
@@ -489,6 +491,32 @@ def _signal_export_gate(root: Path, profile: str) -> dict[str, Any]:
         }
     except Exception as exc:  # pragma: no cover - defensive gate summary
         return _exception_gate("signal-export", "signal export", exc)
+
+
+def _token_economy_gate(root: Path) -> dict[str, Any]:
+    try:
+        report = build_token_audit(root)
+        metrics = report.get("metrics", {})
+        findings = report.get("findings", [])
+        ok = report.get("status") == "pass"
+        return {
+            "id": "token-economy",
+            "label": "token economy",
+            "status": "pass" if ok else "fail",
+            "required": True,
+            "summary": (
+                "token economy audit ok"
+                if ok
+                else f"token economy findings: {len(findings)}"
+            ),
+            "details": {
+                "metrics": metrics,
+                "findings_count": len(findings),
+                "findings": findings[:12],
+            },
+        }
+    except Exception as exc:  # pragma: no cover - defensive gate summary
+        return _exception_gate("token-economy", "token economy", exc)
 
 
 def _agent_profiles_gate(root: Path) -> dict[str, Any]:

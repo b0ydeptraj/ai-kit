@@ -152,6 +152,9 @@ Audit context freshness before continuing a long-running lane:
 
 ```bash
 relay-kit context audit /path/to/project --strict --json
+relay-kit context budget /path/to/project --max-tokens 8000 --strict --json
+relay-kit context pack /path/to/project --task "ship release safely" --max-tokens 8000 --strict --json
+relay-kit token audit /path/to/project --max-tokens 8000 --strict --json
 ```
 
 Audit lane coordination before trusting parallel work:
@@ -235,7 +238,7 @@ relay-kit pulse build /path/to/project
 relay-kit pulse build /path/to/project --include-readiness --json
 relay-kit pulse build /path/to/project --include-package-index --json
 relay-kit pulse build /path/to/project --support-request-file .relay-kit/support/support-request.json
-relay-kit pulse build /path/to/project --include-context-audit --include-lane-audit --include-adapter-diagnostics --include-query-search --include-service-boundaries --json
+relay-kit pulse build /path/to/project --include-context-audit --include-lane-audit --include-adapter-diagnostics --include-token-audit --include-query-search --include-service-boundaries --json
 relay-kit pulse build /path/to/project --history-limit 50
 ```
 
@@ -244,7 +247,7 @@ package-index, support request, and evidence ledger status so dashboard review
 can see which gate is pass, attention, hold, or not-run. The report also includes gate
 details for degraded scenarios, findings, diagnostics, and failed evidence
 events. Governance health sections can also surface stale context sources, lane
-conflicts, adapter metadata drift, authoritative query hits, and
+conflicts, adapter metadata drift, token budget violations, authoritative query hits, and
 service-boundary findings.
 
 Export Pulse and evidence ledger signals:
@@ -286,7 +289,7 @@ relay-kit eval run /path/to/project --json --output-file workflow-eval.json
 relay-kit eval run /path/to/project --strict --baseline-file previous-workflow-eval.json
 ```
 
-The bundled default eval suite covers 66 production/team scenarios across
+The bundled default eval suite covers 70 production/team scenarios across
 orchestration, hubs, utility providers, specialists, runtime diagnostics,
 context governance, lane audit, adapter diagnostics, query lookup, and
 service-boundary review.

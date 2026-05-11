@@ -394,5 +394,29 @@
     "prompt": "Use vietnamese-product-localization for Vietnamese and bilingual product docs, support communication, release notes, terminology consistency, and localization quality checks.",
     "expected_skill": "vietnamese-product-localization",
     "expected_terms": ["Vietnamese", "bilingual", "terminology"]
+  },
+  {
+    "id": "token-economy-budget-overrun-detection",
+    "prompt": "Use token-economy when context is too large and you must estimate tokens, classify raw-required versus compressible blocks, and report budget violations before implementation starts.",
+    "expected_skill": "token-economy",
+    "expected_terms": ["budget violations", "raw-required", "compressible"]
+  },
+  {
+    "id": "token-economy-task-scoped-pack",
+    "prompt": "Use token-economy to build a task-scoped context pack with authority and freshness ranking, selected versus dropped sources, and max-tokens enforcement.",
+    "expected_skill": "token-economy",
+    "expected_terms": ["task-scoped context pack", "authority", "max-tokens"]
+  },
+  {
+    "id": "token-economy-failure-log-preservation",
+    "prompt": "Use token-economy when test output includes traceback and assertion failures so strict mode keeps raw pointers and does not hide critical failure evidence.",
+    "expected_skill": "token-economy",
+    "expected_terms": ["traceback", "assertion", "raw pointers"]
+  },
+  {
+    "id": "token-economy-lifecycle-command-route",
+    "prompt": "A user runs /relay-token-audit and expects token budget, signal retention, raw-required blocks, and context pack safety checks in one report.",
+    "expected_skill": "token-economy",
+    "expected_terms": ["signal retention", "raw-required blocks", "context pack"]
   }
 ]

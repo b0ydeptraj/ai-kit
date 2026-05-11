@@ -23,6 +23,7 @@ def test_command_registry_has_thirteen_commands() -> None:
     assert len(command_ids()) == 13
     assert command_ids()[0] == "relay-start"
     assert command_ids()[-1] == "relay-token-audit"
+    assert commands[-1].route_target == "token-economy"
 
 
 def test_command_surface_renderer_is_deterministic() -> None:
@@ -56,6 +57,7 @@ def test_public_cli_command_list_outputs_contract(tmp_path: Path, capsys) -> Non
     assert payload["summary"]["command_count"] == 13
     assert payload["commands"][0]["id"] == "relay-start"
     assert payload["commands"][-1]["id"] == "relay-token-audit"
+    assert payload["commands"][-1]["route_target"] == "token-economy"
 
 
 def test_public_cli_command_diagnose_strict_passes_generated_surface(tmp_path: Path, capsys) -> None:
