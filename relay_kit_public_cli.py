@@ -24,6 +24,9 @@ This wrapper exposes a friendlier command surface:
   relay-kit signal export <project_path>
   relay-kit contract import <project_path> --contract-file <relay-contract.json>
   relay-kit context audit <project_path>
+  relay-kit context budget <project_path>
+  relay-kit context pack <project_path>
+  relay-kit token audit <project_path>
   relay-kit lane audit <project_path>
   relay-kit adapter diagnose <project_path>
   relay-kit command list <project_path>
@@ -76,6 +79,18 @@ from relay_kit_v3.publication import (
 from relay_kit_v3.release_lane import build_release_lane_report, render_release_lane_report, write_release_lane_report
 from relay_kit_v3.readiness import build_readiness_report, render_readiness_report
 from relay_kit_v3.signal_export import build_signal_export, write_signal_export
+from relay_kit_v3.token_economy import (
+    DEFAULT_MAX_TOKENS,
+    build_context_budget,
+    build_context_pack,
+    build_token_audit,
+    render_context_budget,
+    render_context_pack,
+    render_token_audit,
+    write_context_budget,
+    write_context_pack,
+    write_token_audit,
+)
 from relay_kit_v3.contract_export import write_contract_export
 from relay_kit_v3.contract_import import import_contracts, render_contract_import_report
 from relay_kit_v3.context_governance import build_context_audit, render_context_audit, write_context_audit
@@ -271,6 +286,36 @@ def _parse_context_args(argv: list[str]) -> argparse.Namespace:
     audit.add_argument("--output-file", default=None, help="Optional context audit JSON output path")
     audit.add_argument("--strict", action="store_true", help="Return non-zero unless context audit passes")
     audit.add_argument("--json", action="store_true", help="Emit machine-readable context audit")
+
+    budget = subparsers.add_parser("budget", help="Estimate token budget and compression safety")
+    budget.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    budget.add_argument("--max-tokens", type=int, default=DEFAULT_MAX_TOKENS, help="Token budget ceiling")
+    budget.add_argument("--query", default=None, help="Optional query text to focus context budget sources")
+    budget.add_argument(
+        "--scope",
+        action="append",
+        choices=["state", "contracts", "docs", "evidence", "registry"],
+        help="Limit source scopes; defaults to all scopes",
+    )
+    budget.add_argument("--stale-days", type=int, default=30, help="Age threshold for stale sources")
+    budget.add_argument("--output-file", default=None, help="Optional context budget JSON output path")
+    budget.add_argument("--strict", action="store_true", help="Return non-zero unless budget and retention pass")
+    budget.add_argument("--json", action="store_true", help="Emit machine-readable context budget")
+
+    pack = subparsers.add_parser("pack", help="Build task-scoped context pack within token budget")
+    pack.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    pack.add_argument("--task", required=True, help="Task text used to rank relevant context sources")
+    pack.add_argument("--max-tokens", type=int, default=DEFAULT_MAX_TOKENS, help="Token budget ceiling")
+    pack.add_argument(
+        "--scope",
+        action="append",
+        choices=["state", "contracts", "docs", "evidence", "registry"],
+        help="Limit source scopes; defaults to all scopes",
+    )
+    pack.add_argument("--stale-days", type=int, default=30, help="Age threshold for stale sources")
+    pack.add_argument("--output-file", default=None, help="Optional context pack JSON output path")
+    pack.add_argument("--strict", action="store_true", help="Return non-zero unless budget and retention pass")
+    pack.add_argument("--json", action="store_true", help="Emit machine-readable context pack")
     return parser.parse_args(argv)
 
 
@@ -285,6 +330,28 @@ def _parse_lane_args(argv: list[str]) -> argparse.Namespace:
     audit.add_argument("--output-file", default=None, help="Optional lane audit JSON output path")
     audit.add_argument("--strict", action="store_true", help="Return non-zero unless lane audit passes")
     audit.add_argument("--json", action="store_true", help="Emit machine-readable lane audit")
+    return parser.parse_args(argv)
+
+
+def _parse_token_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit token",
+        description="Audit token-economy metrics for context budget and compression safety.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    audit = subparsers.add_parser("audit", help="Run token-economy audit")
+    audit.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    audit.add_argument("--max-tokens", type=int, default=DEFAULT_MAX_TOKENS, help="Token budget ceiling")
+    audit.add_argument(
+        "--scope",
+        action="append",
+        choices=["state", "contracts", "docs", "evidence", "registry"],
+        help="Limit source scopes; defaults to all scopes",
+    )
+    audit.add_argument("--stale-days", type=int, default=30, help="Age threshold for stale sources")
+    audit.add_argument("--output-file", default=None, help="Optional token audit JSON output path")
+    audit.add_argument("--strict", action="store_true", help="Return non-zero unless budget and retention pass")
+    audit.add_argument("--json", action="store_true", help="Emit machine-readable token audit")
     return parser.parse_args(argv)
 
 
@@ -758,6 +825,7 @@ def _parse_pulse_args(argv: list[str]) -> argparse.Namespace:
     build.add_argument("--include-context-audit", action="store_true", help="Run context audit and include governance health")
     build.add_argument("--include-lane-audit", action="store_true", help="Run lane audit and include lane health")
     build.add_argument("--include-adapter-diagnostics", action="store_true", help="Run adapter diagnostics and include adapter health")
+    build.add_argument("--include-token-audit", action="store_true", help="Run token audit and include token health")
     build.add_argument("--include-query-search", action="store_true", help="Run query search and include query health")
     build.add_argument("--include-service-boundaries", action="store_true", help="Run service-boundary checks and include service health")
     build.add_argument("--readiness-file", default=None, help="Existing readiness JSON report to include")
@@ -768,6 +836,7 @@ def _parse_pulse_args(argv: list[str]) -> argparse.Namespace:
     build.add_argument("--context-audit-file", default=None, help="Existing context audit JSON report to include")
     build.add_argument("--lane-audit-file", default=None, help="Existing lane audit JSON report to include")
     build.add_argument("--adapter-diagnostics-file", default=None, help="Existing adapter diagnostics JSON report to include")
+    build.add_argument("--token-audit-file", default=None, help="Existing token audit JSON report to include")
     build.add_argument("--query-search-file", default=None, help="Existing query search JSON report to include")
     build.add_argument("--service-boundaries-file", default=None, help="Existing service-boundary JSON report to include")
     build.add_argument("--query-search-text", default="relay governance", help="Query text when --include-query-search builds a report")
@@ -1084,20 +1153,57 @@ def run_contract(args: argparse.Namespace) -> int:
 
 
 def run_context(args: argparse.Namespace) -> int:
-    if args.action != "audit":
-        return 2
-    report = build_context_audit(args.project_path, stale_days=args.stale_days)
-    if args.output_file:
-        write_context_audit(args.project_path, report, output_file=args.output_file)
-    if args.json:
-        print(json.dumps(report, ensure_ascii=True, indent=2))
-    else:
-        print(render_context_audit(report))
+    if args.action == "audit":
+        report = build_context_audit(args.project_path, stale_days=args.stale_days)
         if args.output_file:
-            print(f"Wrote {args.output_file}")
-    if args.strict and report["status"] != "pass":
-        return 1
-    return 0
+            write_context_audit(args.project_path, report, output_file=args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_context_audit(report))
+            if args.output_file:
+                print(f"Wrote {args.output_file}")
+        if args.strict and report["status"] != "pass":
+            return 1
+        return 0
+
+    if args.action == "budget":
+        report = build_context_budget(
+            args.project_path,
+            max_tokens=args.max_tokens,
+            query=args.query,
+            scopes=args.scope,
+            stale_days=args.stale_days,
+        )
+        output_path = write_context_budget(args.project_path, report, output_file=args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_context_budget(report))
+            print(f"Wrote {output_path}")
+        if args.strict and report["status"] != "pass":
+            return 1
+        return 0
+
+    if args.action == "pack":
+        report = build_context_pack(
+            args.project_path,
+            task=args.task,
+            max_tokens=args.max_tokens,
+            scopes=args.scope,
+            stale_days=args.stale_days,
+        )
+        output_path = write_context_pack(args.project_path, report, output_file=args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_context_pack(report))
+            print(f"Wrote {output_path}")
+        if args.strict and report["status"] != "pass":
+            return 1
+        return 0
+
+    return 2
 
 
 def run_lane(args: argparse.Namespace) -> int:
@@ -1112,6 +1218,26 @@ def run_lane(args: argparse.Namespace) -> int:
         print(render_lane_audit(report))
         if args.output_file:
             print(f"Wrote {args.output_file}")
+    if args.strict and report["status"] != "pass":
+        return 1
+    return 0
+
+
+def run_token(args: argparse.Namespace) -> int:
+    if args.action != "audit":
+        return 2
+    report = build_token_audit(
+        args.project_path,
+        max_tokens=args.max_tokens,
+        scopes=args.scope,
+        stale_days=args.stale_days,
+    )
+    output_path = write_token_audit(args.project_path, report, output_file=args.output_file)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_token_audit(report))
+        print(f"Wrote {output_path}")
     if args.strict and report["status"] != "pass":
         return 1
     return 0
@@ -1626,6 +1752,7 @@ def run_pulse(args: argparse.Namespace) -> int:
         include_context_audit=args.include_context_audit,
         include_lane_audit=args.include_lane_audit,
         include_adapter_diagnostics=args.include_adapter_diagnostics,
+        include_token_audit=args.include_token_audit,
         include_query_search=args.include_query_search,
         include_service_boundaries=args.include_service_boundaries,
         workflow_eval_file=args.workflow_eval_file,
@@ -1637,6 +1764,7 @@ def run_pulse(args: argparse.Namespace) -> int:
         context_audit_file=args.context_audit_file,
         lane_audit_file=args.lane_audit_file,
         adapter_diagnostics_file=args.adapter_diagnostics_file,
+        token_audit_file=args.token_audit_file,
         query_search_file=args.query_search_file,
         service_boundaries_file=args.service_boundaries_file,
         query_search_text=args.query_search_text,
@@ -1704,6 +1832,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_context(_parse_context_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "lane":
         return run_lane(_parse_lane_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "token":
+        return run_token(_parse_token_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "adapter":
         return run_adapter(_parse_adapter_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "command":

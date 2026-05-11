@@ -8,6 +8,7 @@ Examples or likely members:
 - frontend or UI flows
 - threejs
 - ui-heavy implementation
+- next-product-frontend
 
 ## backend-and-data
 Examples or likely members:
@@ -15,6 +16,7 @@ Examples or likely members:
 - databases
 - API-heavy services
 - jobs and queues
+- go-service-engineering
 
 ## platform-and-infra
 Examples or likely members:
@@ -22,6 +24,19 @@ Examples or likely members:
 - deployment
 - CI/CD
 - observability
+
+## growth-and-localization
+Examples or likely members:
+- growth-marketing
+- market-research
+- vietnamese-product-localization
+
+## automation-and-operations
+Examples or likely members:
+- automation-ops
+- runbooks
+- schedulers
+- webhooks
 
 ## commerce-and-integrations
 Examples or likely members:

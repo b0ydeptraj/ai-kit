@@ -59,6 +59,8 @@ Can hand off to:
 - analyst
 - pm
 - research
+- market-research
+- growth-marketing
 - ux-structure
 
 ### scout-hub
@@ -72,6 +74,7 @@ Can hand off to:
 - memory-search
 - impact-radar
 - runtime-doctor
+- token-economy
 - context-continuity
 - handoff-context
 
@@ -81,7 +84,10 @@ Can hand off to:
 - architect
 - scrum-master
 - research
+- market-research
+- growth-marketing
 - impact-radar
+- token-economy
 - context-continuity
 - ux-structure
 - mermaid-diagrams
@@ -98,16 +104,21 @@ Can hand off to:
 
 ### fix-hub
 - developer
+- go-service-engineering
+- next-product-frontend
 - execution-loop
 - project-architecture
 - api-integration
 - data-persistence
 - accessibility-review
+- token-economy
 - handoff-context
 
 ### test-hub
 - qa-governor
 - testing-patterns
+- automation-ops
+- vietnamese-product-localization
 - execution-loop
 - multimodal-evidence
 - release-readiness
@@ -116,12 +127,15 @@ Can hand off to:
 - impact-radar
 - runtime-doctor
 - migration-guard
+- token-economy
 - context-continuity
 - media-tooling
 
 ### review-hub
 - qa-governor
 - testing-patterns
+- automation-ops
+- vietnamese-product-localization
 - project-architecture
 - doc-pointers
 - memory-search
@@ -131,5 +145,6 @@ Can hand off to:
 - impact-radar
 - runtime-doctor
 - migration-guard
+- token-economy
 - context-continuity
 - mermaid-diagrams

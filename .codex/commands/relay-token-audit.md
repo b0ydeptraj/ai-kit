@@ -2,18 +2,18 @@
 
 - command-id: `relay-token-audit`
 - adapter: `codex`
-- route-target: `context-continuity`
+- route-target: `token-economy`
 
 ## Intent
 
-Audit context continuity quality before deeper token-economy rollout.
+Audit token budget, compression safety, and signal retention before execution.
 
 ## Expected Evidence
 
-continuity checkpoint with stale or missing context warnings.
+token audit report with budget violations, raw pointers, and retention metrics.
 
 ## Routing Contract
 
 - Entry command: `/relay-token-audit`
-- Delegate to: `context-continuity`
+- Delegate to: `token-economy`
 - Keep skills and hubs as authoritative workflow units.

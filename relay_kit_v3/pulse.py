@@ -18,6 +18,7 @@ from relay_kit_v3.query_search import build_query_search
 from relay_kit_v3.readiness import build_readiness_report
 from relay_kit_v3.service_boundaries import build_service_boundary_report
 from relay_kit_v3.support_request import DEFAULT_OUTPUT as DEFAULT_SUPPORT_REQUEST_OUTPUT
+from relay_kit_v3.token_economy import build_token_audit
 from scripts import eval_workflows
 
 
@@ -38,6 +39,7 @@ LaneAuditBuilder = Callable[[Path], Mapping[str, Any]]
 AdapterDiagnosticsBuilder = Callable[[Path], Mapping[str, Any]]
 QuerySearchBuilder = Callable[[Path, str], Mapping[str, Any]]
 ServiceBoundariesBuilder = Callable[[Path], Mapping[str, Any]]
+TokenAuditBuilder = Callable[[Path], Mapping[str, Any]]
 EvidenceSummarizer = Callable[[Path, int], LedgerSummary]
 
 
@@ -59,6 +61,7 @@ def build_pulse_report(
     adapter_diagnostics_file: Path | str | None = None,
     query_search_file: Path | str | None = None,
     service_boundaries_file: Path | str | None = None,
+    token_audit_file: Path | str | None = None,
     include_publication: bool = False,
     include_package_index: bool = False,
     include_support_request: bool = False,
@@ -66,6 +69,7 @@ def build_pulse_report(
     include_context_audit: bool = False,
     include_lane_audit: bool = False,
     include_adapter_diagnostics: bool = False,
+    include_token_audit: bool = False,
     include_query_search: bool = False,
     include_service_boundaries: bool = False,
     query_search_text: str = "relay governance",
@@ -82,6 +86,7 @@ def build_pulse_report(
     adapter_diagnostics_builder: AdapterDiagnosticsBuilder | None = None,
     query_search_builder: QuerySearchBuilder | None = None,
     service_boundaries_builder: ServiceBoundariesBuilder | None = None,
+    token_audit_builder: TokenAuditBuilder | None = None,
     evidence_summarizer: EvidenceSummarizer | None = None,
 ) -> dict[str, Any]:
     root = Path(project_root).resolve()
@@ -149,15 +154,23 @@ def build_pulse_report(
         service_boundaries_file=service_boundaries_file,
         service_boundaries_builder=service_boundaries_builder,
     )
+    token_audit = _load_or_build_token_audit(
+        root,
+        include_token_audit=include_token_audit,
+        token_audit_file=token_audit_file,
+        token_audit_builder=token_audit_builder,
+    )
     context_health = build_context_health(context_audit)
     lane_health = build_lane_health(lane_audit)
     adapter_health = build_adapter_health(adapter_diagnostics)
+    token_health = build_token_health(token_audit)
     query_health = build_query_health(query_search)
     service_boundary_health = build_service_boundary_health(service_boundaries)
     governance_health = build_governance_health(
         context_health,
         lane_health,
         adapter_health,
+        token_health,
         query_health,
         service_boundary_health,
     )
@@ -199,11 +212,13 @@ def build_pulse_report(
         "context_audit": context_audit,
         "lane_audit": lane_audit,
         "adapter_diagnostics": adapter_diagnostics,
+        "token_audit": token_audit,
         "query_search": query_search,
         "service_boundaries": service_boundaries,
         "context_health": context_health,
         "lane_health": lane_health,
         "adapter_health": adapter_health,
+        "token_health": token_health,
         "query_health": query_health,
         "service_boundary_health": service_boundary_health,
         "governance_health": governance_health,
@@ -249,6 +264,7 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
     context_health = _mapping(report.get("context_health"))
     lane_health = _mapping(report.get("lane_health"))
     adapter_health = _mapping(report.get("adapter_health"))
+    token_health = _mapping(report.get("token_health"))
     query_health = _mapping(report.get("query_health"))
     service_boundary_health = _mapping(report.get("service_boundary_health"))
     gate_summary = _mapping(report.get("gate_summary"))
@@ -278,6 +294,8 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
         ("Context stale", str(context_health.get("stale_sources", 0))),
         ("Lane conflicts", str(lane_health.get("conflicts", 0))),
         ("Adapter drift", str(adapter_health.get("metadata_drift", 0))),
+        ("Token budget violations", str(token_health.get("budget_violations", 0))),
+        ("Token retention", _percent(token_health.get("signal_retention"))),
         ("Boundary findings", str(service_boundary_health.get("findings", 0))),
         ("Score delta", _signed(trend.get("pulse_score_delta"))),
         ("Ledger events", str(evidence.get("total_events", 0))),
@@ -310,6 +328,10 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
     adapter_health_rows = _health_rows(
         adapter_health,
         ("status", "adapter_count", "missing_skills", "unexpected_skills", "metadata_drift"),
+    )
+    token_health_rows = _health_rows(
+        token_health,
+        ("status", "estimated_tokens", "compressed_tokens", "signal_retention", "raw_required_blocks", "budget_violations"),
     )
     query_health_rows = _health_rows(
         query_health,
@@ -517,6 +539,13 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
       <table>
         <tr><th>Signal</th><th>Value</th></tr>
         {adapter_health_rows}
+      </table>
+    </section>
+    <section class="panel">
+      <h2>Token Health</h2>
+      <table>
+        <tr><th>Signal</th><th>Value</th></tr>
+        {token_health_rows}
       </table>
     </section>
     <section class="panel">
@@ -778,6 +807,30 @@ def build_adapter_health(adapter_diagnostics: Mapping[str, Any] | None) -> dict[
         "unexpected_skills": int(summary.get("unexpected_skills", 0) or 0),
         "metadata_drift": int(summary.get("metadata_drift", 0) or 0),
         "findings": int(summary.get("findings", 0) or 0),
+    }
+
+
+def build_token_health(token_audit: Mapping[str, Any] | None) -> dict[str, Any]:
+    if token_audit is None:
+        return {
+            "status": "not-run",
+            "estimated_tokens": 0,
+            "compressed_tokens": 0,
+            "signal_retention": 1.0,
+            "raw_required_blocks": 0,
+            "budget_violations": 0,
+            "findings": 0,
+        }
+    metrics = _mapping(token_audit.get("metrics"))
+    summary = _mapping(token_audit.get("summary"))
+    return {
+        "status": str(token_audit.get("status", "not-run")),
+        "estimated_tokens": int(metrics.get("estimated_tokens", 0) or 0),
+        "compressed_tokens": int(metrics.get("compressed_tokens", 0) or 0),
+        "signal_retention": _float(metrics.get("signal_retention"), default=1.0),
+        "raw_required_blocks": int(metrics.get("raw_required_blocks", 0) or 0),
+        "budget_violations": int(metrics.get("budget_violations", 0) or 0),
+        "findings": int(summary.get("findings", len(_list(token_audit.get("findings")))) or 0),
     }
 
 
@@ -1480,6 +1533,21 @@ def _load_or_build_adapter_diagnostics(
     if not include_adapter_diagnostics:
         return None
     builder = adapter_diagnostics_builder or (lambda project_root: build_adapter_diagnostics(project_root, adapter="all"))
+    return builder(root)
+
+
+def _load_or_build_token_audit(
+    root: Path,
+    *,
+    include_token_audit: bool,
+    token_audit_file: Path | str | None,
+    token_audit_builder: TokenAuditBuilder | None,
+) -> Mapping[str, Any] | None:
+    if token_audit_file is not None:
+        return _read_json(root, token_audit_file)
+    if not include_token_audit:
+        return None
+    builder = token_audit_builder or (lambda project_root: build_token_audit(project_root))
     return builder(root)
 
 

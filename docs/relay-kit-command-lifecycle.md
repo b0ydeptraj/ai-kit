@@ -26,7 +26,7 @@ relay-kit command diagnose /path/to/project --adapter all --strict --json
 - `/relay-research` -> `research`
 - `/relay-grow` -> `growth-marketing`
 - `/relay-automate` -> `automation-ops`
-- `/relay-token-audit` -> `context-continuity`
+- `/relay-token-audit` -> `token-economy`
 
 ## Generated Adapter Surfaces
 

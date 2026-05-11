@@ -47,6 +47,11 @@ DEFAULT_EXCLUDED_FILES = {
     "scripts/migration_guard_allowlist.txt",
 }
 
+DEFAULT_EXCLUDED_PREFIXES = (
+    ".relay-kit/context/",
+    ".relay-kit/token/",
+)
+
 ALLOWLIST_DATE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
@@ -176,6 +181,8 @@ def candidate_files(base: Path) -> Iterable[Path]:
             continue
         rel_path = rel_path_obj.as_posix()
         if rel_path in DEFAULT_EXCLUDED_FILES:
+            continue
+        if rel_path.startswith(DEFAULT_EXCLUDED_PREFIXES):
             continue
         if path.suffix.lower() not in DEFAULT_FILE_SUFFIXES:
             continue

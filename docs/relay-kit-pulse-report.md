@@ -18,8 +18,8 @@ relay-kit pulse build /path/to/project --include-support-request
 relay-kit pulse build /path/to/project --support-request-file .relay-kit/support/support-request.json
 relay-kit pulse build /path/to/project --include-commercial-dossier
 relay-kit pulse build /path/to/project --commercial-dossier-file .relay-kit/commercial/commercial-dossier.json
-relay-kit pulse build /path/to/project --include-context-audit --include-lane-audit --include-adapter-diagnostics --include-query-search --query-search-text "dashboard eval polish" --include-service-boundaries
-relay-kit pulse build /path/to/project --context-audit-file context-audit.json --lane-audit-file lane-audit.json --adapter-diagnostics-file adapter-diagnostics.json --query-search-file query-search.json --service-boundaries-file service-boundaries.json
+relay-kit pulse build /path/to/project --include-context-audit --include-lane-audit --include-adapter-diagnostics --include-token-audit --include-query-search --query-search-text "dashboard eval polish" --include-service-boundaries
+relay-kit pulse build /path/to/project --context-audit-file context-audit.json --lane-audit-file lane-audit.json --adapter-diagnostics-file adapter-diagnostics.json --token-audit-file token-audit.json --query-search-file query-search.json --service-boundaries-file service-boundaries.json
 relay-kit pulse build /path/to/project --history-limit 50
 relay-kit pulse build /path/to/project --no-history
 ```
@@ -46,6 +46,7 @@ Pulse combines:
 - context health from `relay-kit context audit`, including stale and missing source counts
 - lane health from `relay-kit lane audit`, including conflicts, broad locks, and incomplete handoffs
 - adapter health from `relay-kit adapter diagnose`, including missing skills and metadata drift
+- token health from `relay-kit token audit`, including estimated tokens, compressed tokens, raw-required blocks, signal retention, and budget violations
 - query health from `relay-kit query search`, including authoritative hit count
 - service-boundary health from `relay-kit service boundaries`, including boundary findings
 - gate summary status for workflow eval, readiness, publication, package index, support request, commercial dossier, and evidence ledger
@@ -98,11 +99,12 @@ The JSON report includes these additive top-level summaries when the matching ar
 - `context_health`: source count, authoritative source count, stale sources, and missing sources
 - `lane_health`: active lanes, parked lanes, conflicts, broad locks, and incomplete handoffs
 - `adapter_health`: adapter count, missing skills, unexpected skills, and metadata drift
+- `token_health`: estimated tokens, compressed tokens, signal retention, raw-required blocks, and budget violations
 - `query_health`: query text, total hits, returned hits, and authoritative hits
 - `service_boundary_health`: boundary count, module count, and finding count
-- `governance_health`: combined status across the five governance sections
+- `governance_health`: combined status across the six governance sections
 
-The HTML report renders Context Health, Lane Health, Adapter Health, Query Health, and Service Boundaries as separate sections.
+The HTML report renders Context Health, Lane Health, Adapter Health, Token Health, Query Health, and Service Boundaries as separate sections.
 
 ## History
 
@@ -148,6 +150,9 @@ Signal export includes `relay.gates.pass`, `relay.gates.attention`,
 `relay.workflow.support_evidence_gap_count`,
 `relay.workflow.support_fixture_depth_gap_count`, `relay.context.stale_sources`,
 `relay.lanes.conflicts`, `relay.adapter.metadata_drift`,
+`relay.context.estimated_tokens`, `relay.context.compressed_tokens`,
+`relay.context.signal_retention`, `relay.context.raw_required_blocks`,
+`relay.token.budget_violations`,
 `relay.query.authoritative_hits`, `relay.service.boundary_findings`,
 `relay.publication.ready`, `relay.package_index.published`,
 `relay.support_request.ready`, and `relay.commercial_dossier.ready` when a

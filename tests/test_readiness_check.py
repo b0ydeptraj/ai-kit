@@ -190,6 +190,7 @@ def test_readiness_report_returns_candidate_when_required_gates_pass(tmp_path: P
         "commercial-docs",
         "adapter-diagnostics",
         "agent-profiles",
+        "token-economy",
     }
     signal_gate = next(gate for gate in report["gates"] if gate["id"] == "signal-export")
     assert signal_gate["status"] == "pass"

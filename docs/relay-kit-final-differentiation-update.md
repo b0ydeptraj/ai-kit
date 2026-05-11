@@ -209,6 +209,7 @@ Acceptance:
 ## PR 4: Token Economy Pack
 
 Branch: `codex/token-economy-pack`
+Status: in progress (implementation branch active; mark done after PR merge + CI green)
 
 Add `token-economy` skill and context-budget commands.
 

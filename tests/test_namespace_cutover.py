@@ -95,3 +95,25 @@ def test_migration_guard_accepts_exact_allowlist_with_metadata(tmp_path: Path) -
     assert [(finding.path, finding.line, finding.token) for finding in token_findings] == [
         ("docs/blocked.md", 1, ".ai-kit")
     ]
+
+
+def test_migration_guard_ignores_generated_context_and_token_artifacts(tmp_path: Path) -> None:
+    context_file = tmp_path / ".relay-kit" / "context" / "context-budget.json"
+    token_file = tmp_path / ".relay-kit" / "token" / "token-audit.json"
+    context_file.parent.mkdir(parents=True, exist_ok=True)
+    token_file.parent.mkdir(parents=True, exist_ok=True)
+    context_token = ".ai" "-kit"
+    legacy_namespace_token = "ai_" "kit_v3"
+    context_file.write_text(f'{{"snippet": "legacy token {context_token}"}}\n', encoding="utf-8")
+    token_file.write_text(
+        f'{{"snippet": "legacy token {legacy_namespace_token}"}}\n',
+        encoding="utf-8",
+    )
+
+    findings = migration_guard.collect_findings(
+        tmp_path,
+        migration_guard.DEFAULT_TOKENS,
+        [],
+    )
+
+    assert findings == []

@@ -21,7 +21,7 @@ from scripts.eval_workflows import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_DEFAULT_SCENARIOS = 66
+EXPECTED_DEFAULT_SCENARIOS = 70
 EXPECTED_PROFILED_SUPPORT_SCENARIOS = len(PROFILED_SUPPORT_EVIDENCE_TERMS) * 2
 
 
@@ -123,6 +123,7 @@ def test_workflow_eval_default_suite_covers_production_team_skills() -> None:
         "market-research",
         "multimodal-evidence",
         "next-product-frontend",
+        "token-economy",
         "accessibility-review",
         "policy-guard",
         "impact-radar",
