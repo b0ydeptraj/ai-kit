@@ -101,7 +101,7 @@ Progress snapshot, updated 2026-05-11:
 - Commercial hardening roadmap: 100% for repo-owned proof tooling, visibility surfaces, internal-channel external proof, and PyPI package-index proof.
 - Claude-adoption phase 2: 100% after context/memory governance, multi-lane coordination, adapter diagnostics, query/service boundaries, and dashboard/eval governance surfacing.
 - Overall tracked progress in this file: 100% for repo-owned backlog, package-index publication proof, and Claude-adoption phase 2. This percentage excludes star/community/popularity and external customer contracts.
-- Final differentiation phase: 100% complete after PR #94-#97 feature delivery and PR5 docs/state closure.
+- Final differentiation phase: 100% complete after PR #94-#97 feature delivery and PR #98 docs/state closure, with latest main CI `25685234847` passing.
 
 ## Priority Backlog
 

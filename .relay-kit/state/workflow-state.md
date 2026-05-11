@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Finalize state coherence after PR #97 token economy pack merge and main CI green.
+Refresh latest source-of-truth pointers after PR #98 final differentiation state merge and main CI green.
 
 ## Active lane
 - Lane id: primary
@@ -19,7 +19,7 @@ Finalize state coherence after PR #97 token economy pack merge and main CI green
 
 ## Active standalone/domain skill
 - Skill: bootstrap
-- Why selected: PR #97 merged and final differentiation state/docs must be refreshed before phase-close claims.
+- Why selected: PR #98 merged and latest state/docs pointers must be aligned to the newest main CI.
 
 ## Complexity level
 - Level: L1
@@ -52,20 +52,22 @@ Finalize state coherence after PR #97 token economy pack merge and main CI green
 qa-governor
 
 ## Known blockers
-No active blockers. PR #97 token economy pack merged and main CI passed; final differentiation state refresh is being closed in this lane.
+No active blockers. PR #98 final differentiation state refresh merged and main CI passed; only pointer-hygiene updates are active.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Active branch: `codex/final-differentiation-state-refresh`.
-- Current branch objective: record PR5 docs/live-state closure after PR #94-#97 and main CI `25684183141` success.
+- Active branch: `codex/post-pr5-final-state-refresh`.
+- Current branch objective: refresh stale pointers to PR #98 merge commit and main CI `25685234847`.
 - PR #94 merged domain skill pack: https://github.com/b0ydeptraj/Relay-kit/pull/94 (`9dc2bab9cb79990922f25f4af67bef4f75377309`).
 - PR #95 merged lifecycle command registry: https://github.com/b0ydeptraj/Relay-kit/pull/95 (`b79680cfb6472116cfafff349f79399c302e1add`).
 - PR #96 merged agent profile pack: https://github.com/b0ydeptraj/Relay-kit/pull/96 (`608e27867884249819eed5c471eef00cdae068e7`).
 - PR #97 merged token economy pack: https://github.com/b0ydeptraj/Relay-kit/pull/97 (`b45a8e537b00747b53b15e4d6ce52dec26257f34`).
+- PR #98 merged final differentiation docs/state closure: https://github.com/b0ydeptraj/Relay-kit/pull/98 (`bc5975d86b869fc7cbd38eca206b85b438512f3e`).
 - Main CI after PR #97: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25684183141, conclusion `success`.
-- Current main baseline after PR #97: `b45a8e537b00747b53b15e4d6ce52dec26257f34`.
+- Main CI after PR #98: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25685234847, conclusion `success`.
+- Current main baseline after PR #98: `bc5975d86b869fc7cbd38eca206b85b438512f3e`.
 - PR #97 local gate evidence: `python -m pytest tests -q` passed with 249 tests; validate runtime passed; runtime doctor live returned 0 findings; semantic gauntlet checked 162 skills with 70 scenario fixtures and 0 findings; workflow eval strict passed 70/70; enterprise readiness returned `commercial-ready-candidate`.
 - PR #90 merged query search and service-boundary mapping: https://github.com/b0ydeptraj/Relay-kit/pull/90.
 - PR #90 merge commit: `91dec7608101269c7dd9bffb524b0b8a088ca1b8`.
@@ -114,7 +116,7 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Published PyPI package: https://pypi.org/project/relay-kit/3.4.1/.
 - Published tag commit: `30b34bb0361723dc65a1001f9c72ba216624c881`.
 - Current package version: `3.4.1`.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25684183141, conclusion `success`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25685234847, conclusion `success`.
 - PyPI index proof: `python -m pip --no-cache-dir index versions relay-kit` reported `relay-kit (3.4.1)` with available versions `3.4.1, 3.4.0`.
 - Package-index command proof: `python relay_kit_public_cli.py publish index-check . --channel pypi --target-version 3.4.1 --package-url https://pypi.org/project/relay-kit/3.4.1/ --strict --json` returned `status: published`, HTTP `200`, latest version `3.4.1`, and target file count `2`.
 - Commercial dossier now includes the package-index metadata gate for PyPI/TestPyPI channels.

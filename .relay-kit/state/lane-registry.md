@@ -44,6 +44,7 @@
 | primary | `.relay-kit/contracts/project-context.md`, `.relay-kit/state/*.md`, `docs/relay-kit-claude-12-adoption-matrix.md` | post-query/service state refresh | PR #91 merged and main CI `25621324662` passed |
 | primary | `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, `relay_kit_public_cli.py`, workflow eval fixtures, Pulse/signal/eval docs/tests/state | dashboard/eval polish advanced | PR #92 merged and main CI `25632979363` passed |
 | primary | `relay_kit_v3/registry/skills.py`, `relay_kit_v3/command_registry.py`, `relay_kit_v3/agent_profiles.py`, `relay_kit_v3/token_economy.py`, `relay_kit_public_cli.py`, docs/tests/state | final differentiation PR1-PR4 feature delivery | PR #94-#97 merged and main CI `25684183141` passed |
+| primary | `.relay-kit/contracts/project-context.md`, `.relay-kit/state/*.md`, `docs/relay-kit-final-differentiation-update.md`, `docs/relay-kit-upgrade-backlog.md` | final differentiation docs/state closure | PR #98 merged and main CI `25685234847` passed |
 | primary | `scripts/eval_workflows.py`, `relay_kit_v3/pulse.py`, `relay_kit_v3/signal_export.py`, Pulse/signal docs/tests | workflow focus dashboard | PR #37 merged and CI passed |
 | primary | `relay_kit_v3/support_triage.py`, `relay_kit_v3/readiness.py`, `relay_kit_public_cli.py`, support docs/tests | support operations soak | PR #35 merged and CI passed |
 | primary | `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, temp path helpers, workflow eval docs/tests | workflow eval scenario expansion | PR #33 merged and CI passed |

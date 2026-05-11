@@ -121,6 +121,7 @@
 - PR #95 merged lifecycle command registry: https://github.com/b0ydeptraj/Relay-kit/pull/95, merge commit `b79680cfb6472116cfafff349f79399c302e1add`.
 - PR #96 merged agent profile pack: https://github.com/b0ydeptraj/Relay-kit/pull/96, merge commit `608e27867884249819eed5c471eef00cdae068e7`.
 - PR #97 merged token economy pack: https://github.com/b0ydeptraj/Relay-kit/pull/97, merge commit `b45a8e537b00747b53b15e4d6ce52dec26257f34`.
+- PR #98 merged final differentiation docs/state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/98, merge commit `bc5975d86b869fc7cbd38eca206b85b438512f3e`.
 - GitHub release `v3.4.0.dev0` pre-release published with wheel and sdist assets: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.dev0.
 - GitHub release `v3.4.0.dev0` package assets were refreshed after PR #45; a fresh venv install from the wheel URL proved `relay-kit . --codex` generates the enterprise bundle by default.
 - GitHub release `v3.4.0` published: https://github.com/b0ydeptraj/Relay-kit/releases/tag/v3.4.0.
@@ -133,7 +134,7 @@
 - Publication evidence is complete for `3.4.1`: `python relay_kit_public_cli.py publish status . --strict --json` returned `status: complete`.
 - Commercial dossier is ready for PyPI: `python relay_kit_public_cli.py commercial dossier . --channel pypi ... --strict --json` returned `status: ready`.
 - Package-index Pulse/signal proof: focused Pulse/signal tests passed with 26 tests; live `publish index-check` returned `status: published`; Pulse build included package-index `pass`; signal export emitted `relay.package_index.published=1`.
-- Latest confirmed main CI after PR #97: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25684183141, conclusion `success`.
+- Latest confirmed main CI after PR #98: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25685234847, conclusion `success`.
 
 ## Known sharp edges
 

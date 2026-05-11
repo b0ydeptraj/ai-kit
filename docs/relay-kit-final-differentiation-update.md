@@ -1,6 +1,6 @@
 # Relay-kit Final Differentiation Update Plan
 
-Status: complete (PR 1-PR 5 merged with CI evidence).
+Status: complete (PR #94-#98 merged; latest main CI green).
 Owner flow: `workflow-router -> plan-hub -> developer -> test-hub -> review-hub`.
 Last planning pass: 2026-05-11.
 
@@ -262,7 +262,7 @@ Acceptance:
 ## PR 5: Competitive Matrix And State Refresh
 
 Branch: `codex/final-differentiation-state-refresh`
-Status: done (docs/state refreshed after PR #97 and verified through PR/main CI)
+Status: done (PR #98 merged; main CI https://github.com/b0ydeptraj/Relay-kit/actions/runs/25685234847 passed)
 
 Update docs and live state only after PRs 1-4 merge and main CI is green.
 
