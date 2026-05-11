@@ -47,7 +47,8 @@ Already implemented:
 - Adapter/IDE bridge diagnostics first slice with `relay-kit adapter diagnose`, generated skill parity checks, metadata drift checks, and explicit advisory metadata reporting for Agent/Antigravity.
 - Query/service boundary first slice with `relay-kit query search`, ranked source lookup, and `relay-kit service boundaries` static dependency checks.
 - Dashboard/eval polish final slice with Pulse governance health, five governance signal metrics, and 60 workflow eval scenarios.
-- Claude-adoption phase 2 status: 100% after PR #92 and final state refresh.
+- Claude-adoption phase 2 status: 100% after PR #92 and PR #93 state refresh.
+- PR #94-#97 are tracked under the separate final differentiation phase, not Claude-adoption phase 2.
 
 Latest verified implementation evidence:
 
@@ -68,6 +69,8 @@ Latest verified implementation evidence:
 - PR #92: dashboard/eval polish advanced with Pulse governance health, governance signal metrics, and 60 workflow eval scenarios.
 - Local dashboard/eval slice evidence: focused Pulse/signal/eval tests passed; full pytest passed with 223 tests; runtime doctor live returned 0 findings; semantic gauntlet checked 60 scenario fixtures; enterprise readiness returned `commercial-ready-candidate`; live Pulse returned `governance_health.status: pass`; workflow eval returned 60/60 scenarios; signal export emitted the five governance metrics.
 - Main CI after PR #92: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25632979363, conclusion `success`.
+- PR #93: post-dashboard state refresh merged with Claude-adoption phase 2 completion note.
+- PR #94-#97: domain skills, command registry, agent profiles, and token economy shipped in final differentiation phase; main CI after PR #97: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25684183141 (success).
 
 ## 12-Report Relay-kit Translation Matrix
 
@@ -257,7 +260,7 @@ These ideas are deliberately not adopted as-is:
 
 Recommended next slice:
 
-No remaining Claude-adoption phase 2 implementation slice. Future work should be explicitly scoped as a new phase.
+No remaining Claude-adoption phase 2 implementation slice. Final differentiation phase is now closed in `docs/relay-kit-final-differentiation-update.md`; new work should start as a separately scoped phase.
 
 Acceptance criteria:
 

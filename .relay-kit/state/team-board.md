@@ -1,7 +1,7 @@
 # team-board
 
 ## Shared objective
-Complete Claude-adoption phase 2 without mixing it into the already-complete core commercial backlog.
+Maintain closed status for final differentiation and keep future work in new scoped lanes.
 
 ## Active orchestrator
 - workflow-router
@@ -9,7 +9,7 @@ Complete Claude-adoption phase 2 without mixing it into the already-complete cor
 ## Lanes
 | Lane | Owner skill | Current hub | Current artifact | Lock scope | Status | depends_on | wave_id | resume_condition | Handoff status | Notes |
 |---|---|---|---|---|---|---|---|---|---|---|
-| primary | bootstrap | qa-governor | post-dashboard/eval state refresh | state, adoption matrix, and upgrade backlog | active | none | wave-1 | active | state refresh gates next | PR #92 merged and main CI passed; marking Claude-adoption phase 2 complete. |
+| primary | bootstrap | qa-governor | final differentiation state refresh | state, differentiation note, adoption matrix, and upgrade backlog | done | none | wave-1 | closed | state refresh merged | PR #97 merged and main CI passed; PR5 closes final differentiation status tracking. |
 | lane-2 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | No parallel work active. |
 | lane-3 | unassigned | none | none | none | parked | primary | wave-2 | explicitly routed by team | none | No parallel work active. |
 
@@ -82,3 +82,6 @@ Low. This slice changes state and tracking docs only.
 - 2026-05-10: Start dashboard/eval polish advanced on `codex/dashboard-eval-polish-advanced`; focused Pulse/signal/eval tests pass and live Pulse/signal proof shows governance health plus 79 exported signals.
 - 2026-05-10: Dashboard/eval polish advanced full local gates pass: 223 pytest tests, validate runtime, runtime doctor live, semantic gauntlet with 60 fixtures, enterprise doctor, readiness enterprise, Pulse governance, signal export, and diff hygiene.
 - 2026-05-10: PR #92 merged dashboard/eval polish advanced and main CI `25632979363` passed; start final state refresh on `codex/post-dashboard-eval-state-refresh`.
+- 2026-05-11: PR #94, #95, #96, and #97 merged (domain skills, lifecycle commands, agent profiles, token economy); main CI after PR #97 `25684183141` passed.
+- 2026-05-11: Start PR5 docs/state refresh on `codex/final-differentiation-state-refresh`.
+- 2026-05-11: PR5 state refresh content finalized; final differentiation status marked complete pending PR CI and merge.

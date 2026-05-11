@@ -50,6 +50,8 @@ DEFAULT_EXCLUDED_FILES = {
 DEFAULT_EXCLUDED_PREFIXES = (
     ".relay-kit/context/",
     ".relay-kit/token/",
+    ".relay-kit/pulse/",
+    ".relay-kit/signals/",
 )
 
 ALLOWLIST_DATE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")

@@ -1,6 +1,6 @@
 # Relay-kit Final Differentiation Update Plan
 
-Status: in progress (PR 3 agent profile pack).
+Status: complete (PR 1-PR 5 merged with CI evidence).
 Owner flow: `workflow-router -> plan-hub -> developer -> test-hub -> review-hub`.
 Last planning pass: 2026-05-11.
 
@@ -25,7 +25,7 @@ The phase adds four missing first-class surfaces:
 
 Relay-kit already has:
 
-- 47 canonical skills generated into `.codex/skills`, `.claude/skills`, and
+- 54 canonical skills generated into `.codex/skills`, `.claude/skills`, and
   `.agent/skills`
 - 4-layer topology: orchestrators, workflow hubs, utility providers,
   specialists/standalones
@@ -33,18 +33,18 @@ Relay-kit already has:
   adapter diagnostics, readiness, Pulse, signal export
 - governance commands such as `context audit`, `lane audit`, `adapter diagnose`,
   `query search`, and `service boundaries`
-- workflow eval suite with 66 scenarios
+- workflow eval suite with 70 scenarios
 
-Relay-kit still lacks:
+Relay-kit delivered in PR 1-PR 4:
 
 - dedicated marketing/growth skill
 - dedicated automation operations skill
 - first-class Go backend skill
 - first-class Next.js/shadcn skill
-- enforceable Vietnamese language profile
+- profile-based Vietnamese localization skill
 - slash-command lifecycle layer
-- explicit Engineer and Marketing agent profiles
-- token-budget/context-pack commands
+- explicit Engineer and Growth agent profiles
+- token-budget/context-pack/token-audit commands
 
 ## Competitive Gap Matrix
 
@@ -209,7 +209,7 @@ Acceptance:
 ## PR 4: Token Economy Pack
 
 Branch: `codex/token-economy-pack`
-Status: in progress (implementation branch active; mark done after PR merge + CI green)
+Status: done (PR #97 merged, main CI green)
 
 Add `token-economy` skill and context-budget commands.
 
@@ -256,10 +256,13 @@ Acceptance:
 - context pack returns a task-scoped source pack with authority/freshness
 - failing command fixture keeps raw-output pointer
 - Pulse and signal export include the five token economy metrics
+- merge evidence: PR #97 https://github.com/b0ydeptraj/Relay-kit/pull/97
+- main CI evidence: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25684183141 (success)
 
 ## PR 5: Competitive Matrix And State Refresh
 
 Branch: `codex/final-differentiation-state-refresh`
+Status: done (docs/state refreshed after PR #97 and verified through PR/main CI)
 
 Update docs and live state only after PRs 1-4 merge and main CI is green.
 

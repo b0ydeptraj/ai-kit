@@ -97,11 +97,15 @@ def test_migration_guard_accepts_exact_allowlist_with_metadata(tmp_path: Path) -
     ]
 
 
-def test_migration_guard_ignores_generated_context_and_token_artifacts(tmp_path: Path) -> None:
+def test_migration_guard_ignores_generated_runtime_artifacts(tmp_path: Path) -> None:
     context_file = tmp_path / ".relay-kit" / "context" / "context-budget.json"
     token_file = tmp_path / ".relay-kit" / "token" / "token-audit.json"
+    pulse_file = tmp_path / ".relay-kit" / "pulse" / "pulse-report.json"
+    signal_file = tmp_path / ".relay-kit" / "signals" / "latest.json"
     context_file.parent.mkdir(parents=True, exist_ok=True)
     token_file.parent.mkdir(parents=True, exist_ok=True)
+    pulse_file.parent.mkdir(parents=True, exist_ok=True)
+    signal_file.parent.mkdir(parents=True, exist_ok=True)
     context_token = ".ai" "-kit"
     legacy_namespace_token = "ai_" "kit_v3"
     context_file.write_text(f'{{"snippet": "legacy token {context_token}"}}\n', encoding="utf-8")
@@ -109,6 +113,8 @@ def test_migration_guard_ignores_generated_context_and_token_artifacts(tmp_path:
         f'{{"snippet": "legacy token {legacy_namespace_token}"}}\n',
         encoding="utf-8",
     )
+    pulse_file.write_text(f'{{"snippet": "legacy token {context_token}"}}\n', encoding="utf-8")
+    signal_file.write_text(f'{{"snippet": "legacy token {legacy_namespace_token}"}}\n', encoding="utf-8")
 
     findings = migration_guard.collect_findings(
         tmp_path,

@@ -1,7 +1,7 @@
 # workflow-state
 
 ## Current request
-Refresh state after PR #92 dashboard/eval polish advanced.
+Finalize state coherence after PR #97 token economy pack merge and main CI green.
 
 ## Active lane
 - Lane id: primary
@@ -19,7 +19,7 @@ Refresh state after PR #92 dashboard/eval polish advanced.
 
 ## Active standalone/domain skill
 - Skill: bootstrap
-- Why selected: PR #92 merged and live state/adoption tracking must be refreshed before declaring phase 2 complete.
+- Why selected: PR #97 merged and final differentiation state/docs must be refreshed before phase-close claims.
 
 ## Complexity level
 - Level: L1
@@ -52,25 +52,21 @@ Refresh state after PR #92 dashboard/eval polish advanced.
 qa-governor
 
 ## Known blockers
-No active blockers. PR #92 dashboard/eval polish advanced merged and main CI passed; post-merge state refresh is active.
+No active blockers. PR #97 token economy pack merged and main CI passed; final differentiation state refresh is being closed in this lane.
 
 ## Escalation triggers noticed
 Future work that changes package metadata, release artifacts, trusted manifest data, readiness gates, CI gates, or support diagnostics should remain on an enterprise-flow path.
 
 ## Current source of truth
-- Active branch: `codex/post-dashboard-eval-state-refresh`.
-- Current branch objective: mark Claude-adoption phase 2 complete after PR #92 and final main CI.
-- PR #92 merged dashboard/eval polish advanced: https://github.com/b0ydeptraj/Relay-kit/pull/92.
-- PR #92 merge commit: `1653696009b3b3bda8d457b162e01e7d3ff6eda7`.
-- Main CI after PR #92: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25632979363, conclusion `success`.
-- Current main baseline after PR #92: `1653696009b3b3bda8d457b162e01e7d3ff6eda7`.
-- PR #91 merged post-query/service state refresh: https://github.com/b0ydeptraj/Relay-kit/pull/91.
-- PR #91 merge commit: `429604ba8607581b71899459b1e79e9c0c5b1cf6`.
-- Main CI after PR #91: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25621324662, conclusion `success`.
-- Current main baseline after PR #91: `429604ba8607581b71899459b1e79e9c0c5b1cf6`.
-- Dashboard/eval red/green evidence so far: focused tests first failed because Pulse had no governance artifact inputs, signal export lacked governance metrics, and workflow eval still had 55 scenarios; after implementation governance Pulse tests, signal metric test, and workflow eval focused test passed.
-- Dashboard/eval live evidence so far: `relay-kit pulse build . --include-context-audit --include-lane-audit --include-adapter-diagnostics --include-query-search --query-search-text "dashboard eval polish" --include-service-boundaries --json --no-history` returned `status: pass`, score 93, `governance_health.status: pass`; `python scripts\eval_workflows.py . --strict --json` returned 60/60 scenarios; `relay-kit signal export . --otlp --json` emitted 79 signals including `relay.context.stale_sources`, `relay.lanes.conflicts`, `relay.adapter.metadata_drift`, `relay.query.authoritative_hits`, and `relay.service.boundary_findings`.
-- Dashboard/eval full local gate evidence: `python -m pytest tests -q` passed with 223 tests; validate runtime passed; runtime doctor live returned 0 findings; semantic gauntlet checked 141 skill files and 60 scenario fixtures with 0 findings; enterprise doctor passed; readiness enterprise returned `commercial-ready-candidate`; `git diff --check` passed.
+- Active branch: `codex/final-differentiation-state-refresh`.
+- Current branch objective: record PR5 docs/live-state closure after PR #94-#97 and main CI `25684183141` success.
+- PR #94 merged domain skill pack: https://github.com/b0ydeptraj/Relay-kit/pull/94 (`9dc2bab9cb79990922f25f4af67bef4f75377309`).
+- PR #95 merged lifecycle command registry: https://github.com/b0ydeptraj/Relay-kit/pull/95 (`b79680cfb6472116cfafff349f79399c302e1add`).
+- PR #96 merged agent profile pack: https://github.com/b0ydeptraj/Relay-kit/pull/96 (`608e27867884249819eed5c471eef00cdae068e7`).
+- PR #97 merged token economy pack: https://github.com/b0ydeptraj/Relay-kit/pull/97 (`b45a8e537b00747b53b15e4d6ce52dec26257f34`).
+- Main CI after PR #97: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25684183141, conclusion `success`.
+- Current main baseline after PR #97: `b45a8e537b00747b53b15e4d6ce52dec26257f34`.
+- PR #97 local gate evidence: `python -m pytest tests -q` passed with 249 tests; validate runtime passed; runtime doctor live returned 0 findings; semantic gauntlet checked 162 skills with 70 scenario fixtures and 0 findings; workflow eval strict passed 70/70; enterprise readiness returned `commercial-ready-candidate`.
 - PR #90 merged query search and service-boundary mapping: https://github.com/b0ydeptraj/Relay-kit/pull/90.
 - PR #90 merge commit: `91dec7608101269c7dd9bffb524b0b8a088ca1b8`.
 - Main CI after PR #90: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25621218408, conclusion `success`.
@@ -118,7 +114,7 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Published PyPI package: https://pypi.org/project/relay-kit/3.4.1/.
 - Published tag commit: `30b34bb0361723dc65a1001f9c72ba216624c881`.
 - Current package version: `3.4.1`.
-- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25564536474, conclusion `success`.
+- Latest confirmed main CI: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25684183141, conclusion `success`.
 - PyPI index proof: `python -m pip --no-cache-dir index versions relay-kit` reported `relay-kit (3.4.1)` with available versions `3.4.1, 3.4.0`.
 - Package-index command proof: `python relay_kit_public_cli.py publish index-check . --channel pypi --target-version 3.4.1 --package-url https://pypi.org/project/relay-kit/3.4.1/ --strict --json` returned `status: published`, HTTP `200`, latest version `3.4.1`, and target file count `2`.
 - Commercial dossier now includes the package-index metadata gate for PyPI/TestPyPI channels.
@@ -217,4 +213,4 @@ Future work that changes package metadata, release artifacts, trusted manifest d
 - Readiness route-quality gate verification: PR #73 added readiness parsing for workflow-eval route quality; local `python -m pytest tests -q` passed with 184 tests, workflow eval reported 55/55 scenarios with `weak_route_count=0` and `min_route_margin=5`, enterprise readiness returned `commercial-ready-candidate` with workflow details, PR CI `25537068673` passed, and main CI `25537111543` passed.
 
 ## Recommended next lane
-Finish dashboard/eval polish advanced through full pytest, validate runtime, runtime doctor live, semantic gauntlet, enterprise doctor, readiness, Pulse/signal proof, PR CI, merge, and state refresh. After this slice, Claude-adoption phase 2 should be marked complete.
+No mandatory next lane. Core backlog, package proof, Claude-adoption phase 2, and final differentiation are all closed; open a new lane only for newly scoped work.

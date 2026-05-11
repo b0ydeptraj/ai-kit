@@ -57,7 +57,7 @@ Source audit status:
 - Fixed in lane coordination audit pass: `relay-kit lane audit` checks lock conflicts, broad scopes, parked-lane resume conditions, wave/dependency metadata, and handoff return conditions; live runtime doctor calls the lane audit.
 - Fixed in adapter diagnostics pass: `relay-kit adapter diagnose` checks Codex/Claude/Agent generated skill parity, non-allowlisted extras, frontmatter metadata drift, and adapter metadata stance; enterprise readiness includes it as a required gate.
 - Fixed in query/service boundary pass: `relay-kit query search` ranks state/contracts/docs/evidence/registry hits with authority and freshness metadata, and `relay-kit service boundaries` checks the service-boundary map plus static dependency rules.
-- Fixed in governance Pulse/signal/eval pass: Pulse surfaces context, lane, adapter, query, and service-boundary health; signal export emits the five governance metrics; bundled workflow eval grows from 55 to 60 scenarios.
+- Fixed in governance Pulse/signal/eval pass: Pulse surfaces context, lane, adapter, query, and service-boundary health; signal export emits the five governance metrics; bundled workflow eval now reaches 70 scenarios after the governance and final-differentiation slices.
 - Fixed in next-dev version hygiene pass: `main` now uses PEP 440 package version `3.4.0.dev0` after the published `v3.3.0` tag, with runtime version marker and trusted manifest regenerated for the next-dev channel.
 - Fixed in support request Pulse pass: `relay-kit pulse build` can include support-request readiness in JSON/HTML, and signal export emits `relay.support_request.ready`.
 - Fixed in support bundle request summary pass: support bundles include a redacted support-request summary when `.relay-kit/support/support-request.json` exists.
@@ -81,9 +81,13 @@ Source audit status:
 - Fixed in support route noise review pass: `relay-kit eval run` now reports profiled support-skill coverage, weak profiled support routes, and nearby support-skill competitors within the route-margin threshold.
 - Fixed in support evidence-contract check pass: `relay-kit eval run` now strict-fails profiled support scenarios whose prompt or expected terms omit required evidence-contract terms, and Pulse/signal export surface the support evidence gap count.
 - Fixed in workflow eval role coverage pass: bundled workflow scenarios increased from 37 to 43, covering all registry roles and adding analyst, brainstorm-hub, scout-hub, team, execution-loop, and testing-patterns routes.
-- Fixed in workflow eval utility coverage pass: bundled workflow scenarios increased from 43 to 55, covering all 47 current registry skills and adding doc-pointers, handoff-context, memory-search, mermaid-diagrams, problem-solving, repo-map, research, root-cause-debugging, sequential-thinking, skill-evolution, skill-gauntlet, and test-first-development routes.
+- Fixed in workflow eval utility coverage pass: bundled workflow scenarios increased from 43 to 55, covering all then-current 47 registry skills and adding doc-pointers, handoff-context, memory-search, mermaid-diagrams, problem-solving, repo-map, research, root-cause-debugging, sequential-thinking, skill-evolution, skill-gauntlet, and test-first-development routes.
 - Fixed in workflow route-quality tightening pass: the default 55-scenario workflow eval suite now reports `weak_route_count=0` and `min_route_margin=5` by clarifying the developer and test-hub routing fixtures.
 - Fixed in readiness route-quality gate pass: `relay-kit readiness check` now fails enterprise readiness when `workflow-eval` JSON reports weak routes or `min_route_margin < 4`, even if the eval command exits `0`.
+- Fixed in final differentiation PR1 pass: six Relay-owned domain skills (`go-service-engineering`, `next-product-frontend`, `growth-marketing`, `market-research`, `automation-ops`, `vietnamese-product-localization`) were added with semantic and workflow-eval coverage.
+- Fixed in final differentiation PR2 pass: lifecycle command registry and adapter command parity diagnostics are now generated and enforced across Codex, Claude, and Agent surfaces.
+- Fixed in final differentiation PR3 pass: `relay-engineer` and `relay-growth` agent profiles are generated with strict adapter/profile diagnostics and readiness gating.
+- Fixed in final differentiation PR4 pass: `token-economy` plus `context budget`, `context pack`, and `token audit` were added and wired into Pulse, signal export, readiness, and workflow-eval with 70 scenarios.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -92,11 +96,12 @@ Current verdict:
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
 
-Progress snapshot, updated 2026-05-10:
+Progress snapshot, updated 2026-05-11:
 - Repo-executable repair backlog: 100% for the original P0/P1/P2/P3 audit items, 7-day quick wins, and Skill and Rule Gap Matrix first production slices.
 - Commercial hardening roadmap: 100% for repo-owned proof tooling, visibility surfaces, internal-channel external proof, and PyPI package-index proof.
 - Claude-adoption phase 2: 100% after context/memory governance, multi-lane coordination, adapter diagnostics, query/service boundaries, and dashboard/eval governance surfacing.
 - Overall tracked progress in this file: 100% for repo-owned backlog, package-index publication proof, and Claude-adoption phase 2. This percentage excludes star/community/popularity and external customer contracts.
+- Final differentiation phase: 100% complete after PR #94-#97 feature delivery and PR5 docs/state closure.
 
 ## Priority Backlog
 
@@ -430,10 +435,10 @@ Status:
 - Fixed on 2026-04-24 for the first measurable routing suite.
 - Done: `relay-kit eval run <project> --strict` reports pass rate, top routes, predicted skill, and per-scenario findings.
 - Done: default fixtures are bundled under `relay_kit_v3/eval_fixtures/workflow_scenarios.json`, so installed CLI runs do not depend on repo test files.
-- Done: default fixture coverage expanded to 60 scenarios, including production support lanes for API integration, data persistence, dependency management, browser inspection, media tooling, multimodal evidence, accessibility, policy, impact, project architecture, UX structure, bootstrap, debug/fix/review hubs, analyst, brainstorm-hub, scout-hub, team, execution-loop, testing-patterns, PM, architect, scrum-master, runtime-doctor, context governance, lane audit, adapter diagnostics, query lookup, service-boundary review, and all remaining utility-provider routes.
+- Done: default fixture coverage expanded to 70 scenarios, including production support lanes for API integration, data persistence, dependency management, browser inspection, media tooling, multimodal evidence, accessibility, policy, impact, project architecture, UX structure, bootstrap, debug/fix/review hubs, analyst, brainstorm-hub, scout-hub, team, execution-loop, testing-patterns, PM, architect, scrum-master, runtime-doctor, context governance, lane audit, adapter diagnostics, query lookup, service-boundary review, domain-skill routes, lifecycle command routes, agent profile routes, and token-economy routes.
 - Done: profiled support evidence-contract coverage now includes at least two realistic fixtures per profiled support skill.
 - Done: `relay-kit doctor` and CI run `scripts/eval_workflows.py . --strict`.
-- Verification: `python scripts/eval_workflows.py . --strict --json` reports 60/60 scenarios, no missing roles, and no missing registry skills; `python -m pytest tests/test_workflow_eval.py -q` passes in CI-compatible temp environments.
+- Verification: `python scripts/eval_workflows.py . --strict --json` reports 70/70 scenarios, no missing roles, and no missing registry skills; `python -m pytest tests/test_workflow_eval.py -q` passes in CI-compatible temp environments.
 
 Problem:
 - Semantic gauntlet proved static contract drift, but commercial quality needs a reportable scenario pass-rate signal.
@@ -692,10 +697,10 @@ Acceptance criteria:
 | Workflow eval layer coverage | Done | P2 | Eval reports layer/role coverage, Pulse shows layer coverage, and signal export emits `relay.workflow.expected_layer_count`. |
 | Pulse gate summary | Done | P2 | Pulse JSON/HTML shows workflow eval, readiness, publication, support request, and evidence gate status; signal export emits `relay.gates.*` counts. |
 | Pulse gate drilldowns | Done | P2 | Degraded Pulse gates now expose concrete scenario, finding, diagnostic, and evidence-event rows; signal export emits `relay.gates.drilldown_items`. |
-| Workflow eval scenario expansion | Done | P2 | Default eval suite now covers 60 production/team scenarios, including all registry roles, all 47 current registry skills, profiled support evidence routing, and governance routes for context, lanes, adapters, query, and service boundaries. |
+| Workflow eval scenario expansion | Done | P2 | Default eval suite now covers 70 production/team scenarios, including all registry roles, all 54 current registry skills, profiled support evidence routing, governance routes for context, lanes, adapters, query, and service boundaries, plus final-differentiation command/agent/token routes. |
 | Workflow focus dashboard | Done | P2 | Eval reports weak routes and coverage gaps; Pulse renders Workflow focus; signal export emits `relay.workflow.weak_route_count` and `relay.workflow.coverage_gap_count`. |
 | Support fixture depth review | Done | P2 | Workflow eval strict-fails shallow profiled support fixture suites; Pulse and signal export surface `relay.workflow.support_fixture_depth_gap_count`. |
-| Governance Pulse/signal/eval | Done | P2 | Pulse renders context/lane/adapter/query/service-boundary health, signal export emits the five governance metrics, and workflow eval covers 60 scenarios. |
+| Governance Pulse/signal/eval | Done | P2 | Pulse renders context/lane/adapter/query/service-boundary health, signal export emits the five governance metrics, and workflow eval coverage is now 70 scenarios in the merged suite. |
 | Pytest temp hardening | Done | P2 | `tests/conftest.py`, `relay_kit_v3/temp_paths.py`, readiness/support/validate helpers, and pytest config avoid Windows temp-root/cache permission failures. |
 | Commercial proof dossier | Done | P2 | `relay-kit commercial dossier` writes `.relay-kit/commercial/commercial-dossier.json` and strict-fails unless local readiness, publication status, support triage/soak, and external CI/release/package/SLA/support ownership proof are present. |
 | Commercial dossier Pulse/signal | Done | P3 | `relay-kit pulse build` accepts commercial dossier artifacts and `relay-kit signal export` emits `relay.commercial_dossier.ready` for support/release dashboards. |
@@ -784,7 +789,7 @@ Expected gain:
 - Done Pulse gate summary slice: dashboard inputs now include per-gate pass, attention, hold, and not-run counts plus next actions.
 - Done Pulse gate drilldown slice: dashboard inputs now include concrete degraded gate rows for failed scenarios, readiness gates, publication findings, support diagnostics, and failed evidence events.
 - Done workflow eval scenario expansion slice: default scenario fixtures now cover 55 production/team routes, including bootstrap, debug/fix/review hubs, analyst, brainstorm-hub, scout-hub, team, execution-loop, testing-patterns, PM, architect, scrum-master, runtime-doctor, profiled support evidence routes, and all remaining utility-provider routes.
-- Done governance Pulse/signal/eval slice: Pulse and signal export now surface context, lane, adapter, query, and service-boundary health, and workflow eval now covers 60 production/team routes.
+- Done governance Pulse/signal/eval slice: Pulse and signal export now surface context, lane, adapter, query, and service-boundary health, and workflow eval now covers 70 production/team routes in the merged default suite.
 - Done publication trail status slice: local publish progress is now inspectable with `relay-kit publish status --strict --json` before or after package-index upload.
 - Done workflow focus dashboard slice: Pulse now shows low-margin route candidates and coverage gaps from workflow eval, and signal export exposes those counts.
 - Done support fixture depth review slice: workflow eval, Pulse, and signal export now surface shallow or duplicate profiled support fixture coverage.
@@ -828,7 +833,7 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - Pulse and signal export surface per-gate pass, attention, hold, and not-run counts so dashboard review can target the exact degraded gate.
 - Pulse and signal export surface gate drilldown item counts and rows so a reviewer can inspect the first concrete failure without parsing raw reports.
 - Pulse and signal export surface weak route count, eval coverage gap count, support evidence gap count, and support fixture depth gap count so dashboard review can catch route fragility before a scenario fails.
-- Workflow eval default suite covers 60 production/team scenarios across orchestration, hubs, utility providers, specialists, runtime diagnostics, all registry roles, all 47 current registry skills, profiled support evidence routes, and governance routes for context, lanes, adapters, query, and service boundaries.
+- Workflow eval default suite now covers 70 production/team scenarios across orchestration, hubs, utility providers, specialists, runtime diagnostics, all registry roles, all 54 current registry skills, profiled support evidence routes, governance routes for context/lanes/adapters/query/service boundaries, and final-differentiation routes for commands, agent profiles, and token economy.
 - Pulse and signal export surface context stale sources, lane conflicts, adapter metadata drift, authoritative query hits, and service-boundary findings so governance regressions are visible without parsing raw reports.
 - Enterprise readiness fails on weak workflow routes or route margins below `4`, so route-quality regressions cannot pass as commercial-ready dashboard noise.
 
