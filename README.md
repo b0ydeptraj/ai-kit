@@ -87,6 +87,8 @@ Vietnamese support remains opt-in/profile-based, not a forced global default.
 - an `adapter diagnose` gate for checking generated Codex, Claude, and Agent skill parity plus frontmatter drift
 - a lifecycle command registry with deterministic command surfaces for `.claude`, `.codex`, and `.agent`
 - a `command diagnose` gate for strict command parity across adapters
+- explicit `relay-engineer` and `relay-growth` agent profiles with deterministic surfaces for `.relay-kit`, `.claude`, `.codex`, and `.agent`
+- an `agent diagnose` gate for strict profile parity and profile-contract drift
 - a `query search` utility for ranked lookup across state, contracts, docs, evidence, and registry sources
 - a `service boundaries` gate for checking module ownership and static dependency rules
 - a `release-readiness` utility for pre/post deploy smoke gates and rollback signals
@@ -169,6 +171,13 @@ Inspect lifecycle command routing and parity:
 ```bash
 relay-kit command list /path/to/project --json
 relay-kit command diagnose /path/to/project --adapter all --strict --json
+```
+
+Inspect agent profile routing contracts and parity:
+
+```bash
+relay-kit agent list /path/to/project --json
+relay-kit agent diagnose /path/to/project --adapter all --strict --json
 ```
 
 Search Relay-kit sources without broad context dumping:

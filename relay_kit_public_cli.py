@@ -28,6 +28,8 @@ This wrapper exposes a friendlier command surface:
   relay-kit adapter diagnose <project_path>
   relay-kit command list <project_path>
   relay-kit command diagnose <project_path>
+  relay-kit agent list <project_path>
+  relay-kit agent diagnose <project_path>
   relay-kit query search <project_path> --query "..."
   relay-kit service boundaries <project_path>
 
@@ -82,6 +84,12 @@ from relay_kit_v3.adapter_diagnostics import (
     build_adapter_diagnostics,
     render_adapter_diagnostics,
     write_adapter_diagnostics,
+)
+from relay_kit_v3.agent_profiles import (
+    agent_profile_records,
+    build_agent_diagnostics,
+    render_agent_diagnostics,
+    write_agent_diagnostics,
 )
 from relay_kit_v3.command_registry import (
     build_command_diagnostics,
@@ -321,6 +329,30 @@ def _parse_command_args(argv: list[str]) -> argparse.Namespace:
     diagnose.add_argument("--output-file", default=None, help="Optional command diagnostics JSON output path")
     diagnose.add_argument("--strict", action="store_true", help="Return non-zero unless command parity passes")
     diagnose.add_argument("--json", action="store_true", help="Emit machine-readable command diagnostics")
+    return parser.parse_args(argv)
+
+
+def _parse_agent_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit agent",
+        description="List and diagnose Relay-kit role-based agent profiles.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    list_cmd = subparsers.add_parser("list", help="List Relay-kit agent profiles and route contracts")
+    list_cmd.add_argument("project_path", nargs="?", default=".", help="Project root (reserved for CLI symmetry)")
+    list_cmd.add_argument("--json", action="store_true", help="Emit machine-readable agent profile list")
+
+    diagnose = subparsers.add_parser("diagnose", help="Check adapter agent profile parity and contract integrity")
+    diagnose.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    diagnose.add_argument(
+        "--adapter",
+        choices=["codex", "claude", "agent", "antigravity", "all"],
+        default="all",
+        help="Adapter surface to inspect",
+    )
+    diagnose.add_argument("--output-file", default=None, help="Optional agent diagnostics JSON output path")
+    diagnose.add_argument("--strict", action="store_true", help="Return non-zero unless agent diagnostics pass")
+    diagnose.add_argument("--json", action="store_true", help="Emit machine-readable agent diagnostics")
     return parser.parse_args(argv)
 
 
@@ -1137,6 +1169,42 @@ def run_command_surface(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_agent_surface(args: argparse.Namespace) -> int:
+    if args.action == "list":
+        payload = {
+            "schema_version": "relay-kit.agent-registry.v1",
+            "status": "pass",
+            "project_path": str(Path(args.project_path).resolve()),
+            "summary": {"profile_count": len(agent_profile_records())},
+            "profiles": agent_profile_records(),
+        }
+        if args.json:
+            print(json.dumps(payload, ensure_ascii=True, indent=2))
+        else:
+            print("Relay-kit agent profiles")
+            print(f"- profiles: {payload['summary']['profile_count']}")
+            for profile in payload["profiles"]:
+                route = " -> ".join(profile["route_contract"])
+                print(f"  - {profile['id']}: {route}")
+        return 0
+
+    if args.action != "diagnose":
+        return 2
+
+    report = build_agent_diagnostics(args.project_path, adapter=args.adapter)
+    if args.output_file:
+        write_agent_diagnostics(args.project_path, report, output_file=args.output_file)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_agent_diagnostics(report))
+        if args.output_file:
+            print(f"Wrote {args.output_file}")
+    if args.strict and report["status"] != "pass":
+        return 1
+    return 0
+
+
 def run_query(args: argparse.Namespace) -> int:
     if args.action != "search":
         return 2
@@ -1640,6 +1708,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_adapter(_parse_adapter_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "command":
         return run_command_surface(_parse_command_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "agent":
+        return run_agent_surface(_parse_agent_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "query":
         return run_query(_parse_query_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "service":

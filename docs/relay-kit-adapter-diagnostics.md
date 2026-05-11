@@ -10,9 +10,10 @@ relay-kit adapter diagnose /path/to/project
 relay-kit adapter diagnose /path/to/project --adapter codex --strict --json
 relay-kit adapter diagnose /path/to/project --adapter all --output-file .relay-kit/adapters/adapter-diagnostics.json
 relay-kit command diagnose /path/to/project --adapter all --strict --json
+relay-kit agent diagnose /path/to/project --adapter all --strict --json
 ```
 
-Strict mode returns non-zero when an adapter is missing an expected skill, has an unexpected non-allowlisted skill, or has frontmatter drift.
+Strict mode returns non-zero when an adapter is missing an expected skill/profile/command, has an unexpected non-allowlisted surface, or has frontmatter drift.
 
 ## Checks
 
@@ -23,6 +24,8 @@ Strict mode returns non-zero when an adapter is missing an expected skill, has a
 - Agent/Antigravity advisory metadata is reported clearly instead of being silently treated as enforced by the IDE
 - expected lifecycle commands exist under `.claude/commands`, `.codex/commands`, and `.agent/commands`
 - unexpected command files are flagged
+- expected agent profile surfaces exist under `.claude/agents`, `.codex/agents`, and `.agent/agents`
+- unexpected agent profile files are flagged
 
 ## Adapter Metadata Policy
 

@@ -1,6 +1,6 @@
 # Relay-kit Final Differentiation Update Plan
 
-Status: in progress (PR 2 slash command lifecycle layer).
+Status: in progress (PR 3 agent profile pack).
 Owner flow: `workflow-router -> plan-hub -> developer -> test-hub -> review-hub`.
 Last planning pass: 2026-05-11.
 

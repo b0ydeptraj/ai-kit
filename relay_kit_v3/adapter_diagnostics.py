@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from typing import Any, Mapping
 
+from relay_kit_v3.agent_profiles import build_agent_diagnostics
 from relay_kit_v3.command_registry import build_command_diagnostics
 from relay_kit_v3.generator import BUNDLES
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS, SkillSpec
@@ -71,11 +72,17 @@ def build_adapter_diagnostics(root: Path | str, *, adapter: str = "all") -> dict
     expected = list(BUNDLES["enterprise"])
     expected_set = set(expected)
     command_report = build_command_diagnostics(project, adapter=adapter)
+    profile_report = build_agent_diagnostics(project, adapter=adapter)
     command_adapter_reports = {
         str(item.get("adapter")): item for item in command_report.get("adapters", [])
     }
+    profile_adapter_reports = {
+        str(item.get("adapter")): item for item in profile_report.get("adapters", [])
+    }
     command_findings = list(command_report.get("findings", []))
+    profile_findings = list(profile_report.get("findings", []))
     command_summary = command_report.get("summary", {})
+    profile_summary = profile_report.get("summary", {})
     findings: list[dict[str, Any]] = []
     adapter_reports: list[dict[str, Any]] = []
 
@@ -192,10 +199,23 @@ def build_adapter_diagnostics(root: Path | str, *, adapter: str = "all") -> dict
                 "unexpected_command_count": int(
                     command_adapter_reports.get(adapter_name, {}).get("unexpected_command_count", 0)
                 ),
+                "expected_profile_count": int(
+                    profile_adapter_reports.get(adapter_name, {}).get("expected_profile_count", 0)
+                ),
+                "generated_profile_count": int(
+                    profile_adapter_reports.get(adapter_name, {}).get("generated_profile_count", 0)
+                ),
+                "missing_profile_count": int(
+                    profile_adapter_reports.get(adapter_name, {}).get("missing_profile_count", 0)
+                ),
+                "unexpected_profile_count": int(
+                    profile_adapter_reports.get(adapter_name, {}).get("unexpected_profile_count", 0)
+                ),
             }
         )
 
     findings.extend(command_findings)
+    findings.extend(profile_findings)
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -211,6 +231,9 @@ def build_adapter_diagnostics(root: Path | str, *, adapter: str = "all") -> dict
             "expected_command_count": int(command_summary.get("expected_command_count", 0)),
             "missing_commands": int(command_summary.get("missing_commands", 0)),
             "unexpected_commands": int(command_summary.get("unexpected_commands", 0)),
+            "expected_profile_count": int(profile_summary.get("expected_profile_count", 0)),
+            "missing_profiles": int(profile_summary.get("missing_profiles", 0)),
+            "unexpected_profiles": int(profile_summary.get("unexpected_profiles", 0)),
             "findings": len(findings),
         },
         "adapters": adapter_reports,
@@ -228,12 +251,15 @@ def render_adapter_diagnostics(report: Mapping[str, Any]) -> str:
         f"- unexpected skills: {summary.get('unexpected_skills', 0)}",
         f"- missing commands: {summary.get('missing_commands', 0)}",
         f"- unexpected commands: {summary.get('unexpected_commands', 0)}",
+        f"- missing profiles: {summary.get('missing_profiles', 0)}",
+        f"- unexpected profiles: {summary.get('unexpected_profiles', 0)}",
         f"- metadata drift: {summary.get('metadata_drift', 0)}",
     ]
     for adapter in report.get("adapters", []):
         lines.append(
             f"  - {adapter.get('adapter')}: generated={adapter.get('generated_skill_count')} "
             f"commands={adapter.get('generated_command_count')} "
+            f"profiles={adapter.get('generated_profile_count')} "
             f"optional={adapter.get('allowed_optional_skill_count')} "
             f"metadata_drift={adapter.get('metadata_drift_count')}"
         )
