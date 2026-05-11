@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 from .adapters import ensure_dirs, targets_for
+from .agent_profiles import emit_agent_surfaces
 from .command_registry import emit_command_surfaces
 from .registry import (
     ALL_V3_SKILLS,
@@ -135,6 +136,7 @@ def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
             write_text(output, render_skill(spec))
             written.append(output)
     written.extend(emit_command_surfaces(project_path, ai))
+    written.extend(emit_agent_surfaces(project_path, ai))
     return written
 
 

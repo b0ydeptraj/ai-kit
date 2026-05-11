@@ -189,6 +189,7 @@ def test_readiness_report_returns_candidate_when_required_gates_pass(tmp_path: P
         "release-lane",
         "commercial-docs",
         "adapter-diagnostics",
+        "agent-profiles",
     }
     signal_gate = next(gate for gate in report["gates"] if gate["id"] == "signal-export")
     assert signal_gate["status"] == "pass"
@@ -326,6 +327,32 @@ def test_readiness_report_holds_when_adapter_diagnostics_findings_exist(tmp_path
     assert gate["status"] == "fail"
     assert gate["details"]["findings_count"] == 1
     assert "adapter diagnostics findings: 1" in gate["summary"]
+
+
+def test_readiness_report_holds_when_agent_profile_diagnostics_findings_exist(tmp_path: Path) -> None:
+    write_required_docs(tmp_path)
+    (tmp_path / ".claude" / "agents" / "relay-growth.md").unlink()
+
+    report = readiness.build_readiness_report(
+        tmp_path,
+        profile="enterprise",
+        command_runner=passing_command_runner,
+        support_builder=lambda root, policy_pack: healthy_support_bundle_payload(),
+        upgrade_builder=lambda root: {"status": "pass", "findings_count": 0},
+        contract_exporter=lambda root: {"schema_version": CONTRACT_EXPORT_SCHEMA_VERSION},
+        contract_importer=lambda root, payload: {
+            "schema_version": CONTRACT_IMPORT_SCHEMA_VERSION,
+            "status": "pass",
+            "findings": [],
+        },
+    )
+
+    gate = next(gate for gate in report["gates"] if gate["id"] == "agent-profiles")
+
+    assert report["status"] == "hold"
+    assert gate["status"] == "fail"
+    assert gate["details"]["findings_count"] == 1
+    assert "agent profile diagnostics findings: 1" in gate["summary"]
 
 
 def test_readiness_report_is_limited_beta_when_tests_are_skipped(tmp_path: Path) -> None:
