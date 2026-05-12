@@ -57,4 +57,7 @@ none recorded
 none observed
 
 ## Notes
-Empty live state initialized. Replace these values when a request is active.
+- Last completed request: Relay-kit-only naming hard-cut (`v4.0.0`) merged via PR #100.
+- Merge commit on `main`: `a55fed3df8b5bdde307697f0d05a67ec307bb807`.
+- Latest main CI after merge: `Validate Runtime` run `25729643395` (success).
+- Live state is intentionally idle after merge; route next request from `workflow-router`.

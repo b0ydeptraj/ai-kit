@@ -88,6 +88,7 @@ Source audit status:
 - Fixed in final differentiation PR2 pass: lifecycle command registry and adapter command parity diagnostics are now generated and enforced across Codex, Claude, and Agent surfaces.
 - Fixed in final differentiation PR3 pass: `relay-engineer` and `relay-growth` agent profiles are generated with strict adapter/profile diagnostics and readiness gating.
 - Fixed in final differentiation PR4 pass: `token-economy` plus `context budget`, `context pack`, and `token audit` were added and wired into Pulse, signal export, readiness, and workflow-eval with 70 scenarios.
+- Fixed in Relay-kit-only naming hard-cut pass: version `4.0.0` removes legacy naming paths from active runtime/CLI flows and enforces fail-closed `naming_guard` coverage for retired tokens.
 - External runtime suites for benchmark projects were not fully executed. Their code/docs/scripts were cloned and inspected directly, but full runtime is not verified.
 
 Current verdict:
@@ -96,12 +97,12 @@ Current verdict:
 - Working score: 6.2/10.
 - Target product position after fixes: agent workflow governance kit for teams using Codex, Claude, Cursor/Roo/OpenCode-style agents, not a full replacement for CrewAI or n8n.
 
-Progress snapshot, updated 2026-05-11:
+Progress snapshot, updated 2026-05-12:
 - Repo-executable repair backlog: 100% for the original P0/P1/P2/P3 audit items, 7-day quick wins, and Skill and Rule Gap Matrix first production slices.
 - Commercial hardening roadmap: 100% for repo-owned proof tooling, visibility surfaces, internal-channel external proof, and PyPI package-index proof.
 - Claude-adoption phase 2: 100% after context/memory governance, multi-lane coordination, adapter diagnostics, query/service boundaries, and dashboard/eval governance surfacing.
 - Overall tracked progress in this file: 100% for repo-owned backlog, package-index publication proof, and Claude-adoption phase 2. This percentage excludes star/community/popularity and external customer contracts.
-- Final differentiation phase: 100% complete after PR #94-#97 feature delivery and PR #98 docs/state closure, with latest main CI `25685234847` passing.
+- Final differentiation phase: 100% complete after PR #94-#97 feature delivery and PR #98 docs/state closure, then locked by Relay-kit-only naming hard-cut PR #100, with latest main CI `25729643395` passing.
 
 ## Priority Backlog
 
