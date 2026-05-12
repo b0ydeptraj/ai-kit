@@ -14,25 +14,26 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from relay_kit_v3.localized_metadata import expected_trigger_prefixes, resolve_metadata_locale
 from relay_kit_v3.adapters import ADAPTER_TARGETS
 from relay_kit_v3.generator import BUNDLES
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
+from relay_kit_v3.runtime_locale import load_runtime_locale
 from relay_kit_v3.temp_paths import stable_temp_dir
 from relay_kit_compat import (
     CANONICAL_ARTIFACT_ROOT,
     CANONICAL_ENTRYPOINT,
-    CANONICAL_LEGACY_ENTRYPOINT,
     GENERIC_CANONICAL_DIR,
 )
 
 ALL_TARGETS = [".claude/skills", ".agent/skills", ".codex/skills"]
 EXPECTED_RUNTIME_SKILLS = set(ALL_V3_SKILLS.keys())
-ROUND4_DISCIPLINE_SKILLS = {
+RUNTIME_DISCIPLINE_SKILLS = {
     "root-cause-debugging",
     "evidence-before-completion",
     "test-first-development",
 }
-BASELINE_NEXT_APPROVED = {
+BASELINE_APPROVED = {
     "root-cause-debugging",
     "evidence-before-completion",
 }
@@ -104,6 +105,10 @@ def assert_contains(path: Path, required_tokens: list[str]) -> None:
 
 
 def assert_skill_descriptions_trigger_first() -> None:
+    locale_policy = load_runtime_locale(REPO_ROOT)
+    locale_profile = resolve_metadata_locale(locale_policy)
+    fallback_locale = str(locale_policy.get("fallback_locale", "en"))
+    trigger_prefixes = expected_trigger_prefixes(locale_profile, fallback_locale)
     skill_roots = [
         REPO_ROOT / ".claude" / "skills",
         REPO_ROOT / ".agent" / "skills",
@@ -118,13 +123,14 @@ def assert_skill_descriptions_trigger_first() -> None:
                 bad_descriptions.append(f"{skill_file}: missing description")
                 continue
             description = match.group(1).strip()
-            if not description.startswith("Use when "):
+            if not any(description.startswith(prefix) for prefix in trigger_prefixes):
                 bad_descriptions.append(f"{skill_file}: {description}")
     if bad_descriptions:
         preview = "\n".join(bad_descriptions[:10])
+        prefixes_text = ", ".join(repr(prefix) for prefix in trigger_prefixes)
         fail(
             "Skill descriptions must use trigger-first wording that starts with "
-            "`Use when ...`.\n"
+            f"one of {prefixes_text}.\n"
             f"Examples of drift:\n{preview}"
         )
 
@@ -141,15 +147,15 @@ def validate_skill_gauntlet() -> None:
     )
 
 
-def validate_migration_guard() -> None:
+def validate_naming_guard() -> None:
     run_command(
         [
             sys.executable,
-            str(REPO_ROOT / "scripts" / "migration_guard.py"),
+            str(REPO_ROOT / "scripts" / "naming_guard.py"),
             str(REPO_ROOT),
             "--strict",
         ],
-        "migration_guard",
+        "naming_guard",
     )
 
 
@@ -227,7 +233,7 @@ def validate_adapter_targets() -> None:
 
 def validate_list_output() -> None:
     output = run_cli(CANONICAL_ENTRYPOINT, "--list-skills")
-    for bundle in ("round4", "discipline-utilities", "baseline", "baseline-next"):
+    for bundle in ("core", "orchestration", "runtime", "discipline-utilities", "baseline", "enterprise"):
         if bundle not in output:
             fail(f"{CANONICAL_ENTRYPOINT} --list-skills output is missing bundle: {bundle}")
 
@@ -242,7 +248,6 @@ def validate_checked_in_docs() -> None:
             ".agent/skills",
             ".codex/skills",
             "baseline",
-            "baseline-next",
             "relay_kit.py",
             ".relay-kit-prompts",
             ".relay-kit/",
@@ -254,16 +259,17 @@ def validate_checked_in_docs() -> None:
             ".claude/skills",
             ".agent/skills",
             ".codex/skills",
-            "discipline-utilities",
+            "core",
+            "orchestration",
+            "runtime",
             "baseline",
-            "baseline-next",
             "enterprise",
             ".relay-kit/state/workflow-state.md",
         ],
     )
     assert_contains(
         REPO_ROOT / ".relay-kit" / "docs" / "bundle-gating.md",
-        ["discipline-utilities", "baseline", "baseline-next", "enterprise"],
+        ["core", "orchestration", "runtime", "baseline", "enterprise"],
     )
 
 
@@ -287,14 +293,14 @@ def validate_generated_bundle(bundle: str) -> None:
         for target, current_set in generated_sets.items():
             assert_set(f"{bundle} generated skills for {target}", current_set, expected_skills)
 
-        if bundle == "round4":
-            leaked = generated_sets[ALL_TARGETS[0]] & ROUND4_DISCIPLINE_SKILLS
+        if bundle == "runtime":
+            leaked = generated_sets[ALL_TARGETS[0]] & RUNTIME_DISCIPLINE_SKILLS
             if leaked:
-                fail(f"round4 leaked discipline skills: {sorted(leaked)}")
+                fail(f"runtime leaked discipline skills: {sorted(leaked)}")
 
-        if bundle in {"baseline", "baseline-next"}:
+        if bundle == "baseline":
             current = generated_sets[ALL_TARGETS[0]]
-            missing = BASELINE_NEXT_APPROVED - current
+            missing = BASELINE_APPROVED - current
             unexpected = current & {"test-first-development"}
             if missing or unexpected:
                 fail(
@@ -324,7 +330,7 @@ def validate_generated_bundle(bundle: str) -> None:
 
         bundle_gating_doc = temp_dir / CANONICAL_ARTIFACT_ROOT / "docs" / "bundle-gating.md"
         if bundle_gating_doc.exists():
-            assert_contains(bundle_gating_doc, ["discipline-utilities", "baseline", "baseline-next", "enterprise"])
+            assert_contains(bundle_gating_doc, ["core", "orchestration", "runtime", "baseline", "enterprise"])
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 
@@ -346,30 +352,6 @@ def validate_generated_generic_bundle(bundle: str) -> None:
             missing = sorted(expected_files - set(canonical))
             extra = sorted(set(canonical) - expected_files)
             fail(f"{bundle} generic prompt set mismatch. Missing: {missing or '-'} Extra: {extra or '-'}")
-    finally:
-        shutil.rmtree(temp_dir, ignore_errors=True)
-
-
-def validate_legacy_generation() -> None:
-    temp_dir = stable_temp_dir(REPO_ROOT, "legacy-generic")
-    try:
-        run_cli(
-            CANONICAL_LEGACY_ENTRYPOINT,
-            str(temp_dir),
-            "--kit",
-            "python",
-            "--skills",
-            "project-architecture",
-            "--ai",
-            "generic",
-        )
-        canonical = prompt_files(temp_dir, GENERIC_CANONICAL_DIR)
-        expected = {"project-architecture.md"}
-        if set(canonical) != expected:
-            fail(
-                f"{CANONICAL_LEGACY_ENTRYPOINT} legacy generic output mismatch. "
-                f"Expected {sorted(expected)}, got {sorted(canonical)}"
-            )
     finally:
         shutil.rmtree(temp_dir, ignore_errors=True)
 
@@ -399,12 +381,21 @@ def main() -> int:
     assert_skill_descriptions_trigger_first()
     validate_skill_gauntlet()
     validate_context_continuity_utility()
-    validate_migration_guard()
+    validate_naming_guard()
     validate_checked_in_docs()
-    for bundle in ("round4", "discipline-utilities", "baseline", "baseline-next", "enterprise"):
+    for bundle in (
+        "core",
+        "orchestration-core",
+        "orchestration",
+        "runtime-core",
+        "runtime",
+        "utility-providers",
+        "discipline-utilities",
+        "baseline",
+        "enterprise",
+    ):
         validate_generated_bundle(bundle)
         validate_generated_generic_bundle(bundle)
-    validate_legacy_generation()
     validate_public_wrapper_surface()
     print("Runtime validation passed.")
     return 0

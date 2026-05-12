@@ -16,6 +16,7 @@ from relay_kit_v3.contract_import import import_contracts
 from relay_kit_v3.release_lane import build_release_lane_report
 from relay_kit_v3.adapter_diagnostics import build_adapter_diagnostics
 from relay_kit_v3.agent_profiles import build_agent_diagnostics
+from relay_kit_v3.runtime_locale import inspect_runtime_locale
 from relay_kit_v3.support_bundle import SCHEMA_VERSION as SUPPORT_SCHEMA_VERSION
 from relay_kit_v3.support_bundle import build_support_bundle
 from relay_kit_v3.support_triage import support_bundle_findings
@@ -33,6 +34,7 @@ COMMERCIAL_DOCS = [
     "docs/relay-kit-contract-sync.md",
     "docs/relay-kit-commercial-dossier.md",
     "docs/relay-kit-adapter-diagnostics.md",
+    "docs/relay-kit-locale-policy.md",
     ".relay-kit/contracts/support-request.md",
 ]
 READINESS_PYTEST_BASETEMP = Path(".tmp") / "readiness-pytest"
@@ -72,6 +74,7 @@ def build_readiness_report(
     gates.append(_contract_sync_gate(root, contract_export, contract_import))
     gates.append(_adapter_diagnostics_gate(root))
     gates.append(_agent_profiles_gate(root))
+    gates.append(_runtime_locale_gate(root))
     gates.append(_token_economy_gate(root))
     gates.append(_signal_export_gate(root, selected_profile))
     gates.append(_release_lane_gate(root))
@@ -495,7 +498,10 @@ def _signal_export_gate(root: Path, profile: str) -> dict[str, Any]:
 
 def _token_economy_gate(root: Path) -> dict[str, Any]:
     try:
-        report = build_token_audit(root)
+        # Enterprise readiness uses a wider budget envelope than the interactive
+        # default so repositories with complete governance artifacts do not fail
+        # purely due to baseline context volume.
+        report = build_token_audit(root, max_tokens=40000)
         metrics = report.get("metrics", {})
         findings = report.get("findings", [])
         ok = report.get("status") == "pass"
@@ -543,6 +549,31 @@ def _agent_profiles_gate(root: Path) -> dict[str, Any]:
         }
     except Exception as exc:  # pragma: no cover - defensive gate summary
         return _exception_gate("agent-profiles", "agent profiles", exc)
+
+
+def _runtime_locale_gate(root: Path) -> dict[str, Any]:
+    try:
+        report = inspect_runtime_locale(root)
+        findings = report.get("findings", [])
+        ok = report.get("status") == "pass"
+        return {
+            "id": "runtime-locale",
+            "label": "runtime locale",
+            "status": "pass" if ok else "fail",
+            "required": True,
+            "summary": (
+                "runtime locale policy ok"
+                if ok
+                else f"runtime locale findings: {len(findings)}"
+            ),
+            "details": {
+                "summary": report.get("summary", {}),
+                "findings_count": len(findings),
+                "findings": findings[:12],
+            },
+        }
+    except Exception as exc:  # pragma: no cover - defensive gate summary
+        return _exception_gate("runtime-locale", "runtime locale", exc)
 
 
 def _commercial_docs_gate(root: Path) -> dict[str, Any]:

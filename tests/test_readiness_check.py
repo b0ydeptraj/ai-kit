@@ -8,6 +8,7 @@ from pathlib import Path
 import relay_kit_public_cli
 from relay_kit_v3 import readiness
 from relay_kit_v3.generator import emit_core_skills
+from relay_kit_v3.runtime_locale import write_runtime_locale
 from relay_kit_v3.support_bundle import SCHEMA_VERSION as SUPPORT_SCHEMA_VERSION
 from relay_kit_v3.contract_export import SCHEMA_VERSION as CONTRACT_EXPORT_SCHEMA_VERSION
 from relay_kit_v3.contract_import import IMPORT_SCHEMA_VERSION as CONTRACT_IMPORT_SCHEMA_VERSION
@@ -80,6 +81,7 @@ def write_required_docs(root: Path) -> None:
     (root / "docs" / "relay-kit-publication-plan.md").write_text("# Publication Plan\n", encoding="utf-8")
     (root / "docs" / "relay-kit-commercial-dossier.md").write_text("# Commercial Dossier\n", encoding="utf-8")
     (root / "docs" / "relay-kit-adapter-diagnostics.md").write_text("# Adapter Diagnostics\n", encoding="utf-8")
+    (root / "docs" / "relay-kit-locale-policy.md").write_text("# Locale Policy\n", encoding="utf-8")
     (root / ".relay-kit" / "contracts").mkdir(parents=True, exist_ok=True)
     (root / ".relay-kit" / "contracts" / "support-request.md").write_text("# Support Request\n", encoding="utf-8")
     (root / "pyproject.toml").write_text(
@@ -105,7 +107,7 @@ include = ["relay_kit_v3*", "scripts*"]
                 "python scripts/validate_runtime.py",
                 "python scripts/runtime_doctor.py . --strict",
                 "python scripts/runtime_doctor.py . --strict --state-mode live",
-                "python scripts/migration_guard.py . --strict",
+                "python scripts/naming_guard.py . --strict",
                 "python scripts/policy_guard.py . --strict",
                 "python scripts/skill_gauntlet.py . --strict --semantic",
                 "python scripts/eval_workflows.py . --strict",
@@ -123,6 +125,7 @@ include = ["relay_kit_v3*", "scripts*"]
     (manifest / "bundles.json").write_text("{}\n", encoding="utf-8")
     (manifest / "trust.json").write_text("{}\n", encoding="utf-8")
     (root / ".relay-kit" / "version.json").write_text("{}\n", encoding="utf-8")
+    write_runtime_locale(root, locale="en")
     support = root / ".relay-kit" / "support"
     support.mkdir(parents=True, exist_ok=True)
     (support / ".gitignore").write_text("support-bundle.json\nsupport-request.json\n", encoding="utf-8")
@@ -190,6 +193,7 @@ def test_readiness_report_returns_candidate_when_required_gates_pass(tmp_path: P
         "commercial-docs",
         "adapter-diagnostics",
         "agent-profiles",
+        "runtime-locale",
         "token-economy",
     }
     signal_gate = next(gate for gate in report["gates"] if gate["id"] == "signal-export")

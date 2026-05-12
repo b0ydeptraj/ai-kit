@@ -30,8 +30,8 @@ jobs:
       - name: Run runtime doctor live mode
         run: python scripts/runtime_doctor.py . --strict --state-mode live
 
-      - name: Run migration guard
-        run: python scripts/migration_guard.py . --strict
+      - name: Run naming guard
+        run: python scripts/naming_guard.py . --strict
 
       - name: Run policy guard
         run: python scripts/policy_guard.py . --strict

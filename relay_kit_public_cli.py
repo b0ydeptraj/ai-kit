@@ -27,6 +27,8 @@ This wrapper exposes a friendlier command surface:
   relay-kit context budget <project_path>
   relay-kit context pack <project_path>
   relay-kit token audit <project_path>
+  relay-kit locale show <project_path>
+  relay-kit locale set <project_path> --locale <code>
   relay-kit lane audit <project_path>
   relay-kit adapter diagnose <project_path>
   relay-kit command list <project_path>
@@ -113,6 +115,11 @@ from relay_kit_v3.command_registry import (
     write_command_diagnostics,
 )
 from relay_kit_v3.query_search import build_query_search, render_query_search, write_query_search
+from relay_kit_v3.runtime_locale import (
+    inspect_runtime_locale,
+    load_runtime_locale,
+    write_runtime_locale,
+)
 from relay_kit_v3.service_boundaries import (
     build_service_boundary_report,
     render_service_boundary_report,
@@ -206,11 +213,10 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--srs-gate", choices=["off", "warn", "hard"], help="SRS policy gate mode")
     parser.add_argument("--srs-scope", choices=["product-enterprise", "all"], help="SRS policy scope")
     parser.add_argument("--srs-risk", choices=["normal", "high"], help="SRS policy risk profile")
+    parser.add_argument("--locale", help="Set runtime locale profile during init/install (allowed: vi, en)")
+    parser.add_argument("--fallback-locale", help="Set runtime fallback locale during init/install (default: en)")
 
-    parser.add_argument("--legacy-kit", help="Optional preserved legacy kit")
-    parser.add_argument("--skills", nargs="+", metavar="SKILL", help="Optional legacy skills")
-    parser.add_argument("--list-skills", action="store_true", help="List bundles and legacy kits")
-    parser.add_argument("--show-legacy", action="store_true", help="Show preserved legacy kits in --list-skills output")
+    parser.add_argument("--list-skills", action="store_true", help="List active runtime bundles")
     parser.add_argument("-v", "--verbose", action="store_true")
 
     return parser.parse_args(argv)
@@ -330,6 +336,38 @@ def _parse_lane_args(argv: list[str]) -> argparse.Namespace:
     audit.add_argument("--output-file", default=None, help="Optional lane audit JSON output path")
     audit.add_argument("--strict", action="store_true", help="Return non-zero unless lane audit passes")
     audit.add_argument("--json", action="store_true", help="Emit machine-readable lane audit")
+    return parser.parse_args(argv)
+
+
+def _parse_locale_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit locale",
+        description="Read or update Relay-kit global runtime locale policy.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+
+    show = subparsers.add_parser("show", help="Show the current runtime locale policy")
+    show.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    show.add_argument("--json", action="store_true", help="Emit machine-readable locale policy")
+
+    set_cmd = subparsers.add_parser("set", help="Set runtime locale policy with one global switch")
+    set_cmd.add_argument("project_path", nargs="?", default=".", help="Project root to update")
+    set_cmd.add_argument("--locale", required=True, help="Primary locale profile (allowed: vi, en)")
+    set_cmd.add_argument("--fallback-locale", default=None, help="Fallback locale profile (default unchanged)")
+    set_cmd.add_argument(
+        "--enforce-output-language",
+        dest="enforce_output_language",
+        action="store_true",
+        help="Enforce output language according to locale profile (default on).",
+    )
+    set_cmd.add_argument(
+        "--no-enforce-output-language",
+        dest="enforce_output_language",
+        action="store_false",
+        help="Allow mixed-language output when explicitly needed.",
+    )
+    set_cmd.set_defaults(enforce_output_language=None)
+    set_cmd.add_argument("--json", action="store_true", help="Emit machine-readable locale policy")
     return parser.parse_args(argv)
 
 
@@ -883,8 +921,6 @@ def _build_relay_argv(args: argparse.Namespace) -> list[str]:
 
     if args.list_skills:
         relay_argv.append("--list-skills")
-        if args.show_legacy:
-            relay_argv.append("--show-legacy")
         return relay_argv
 
     relay_argv.append(args.project_path)
@@ -910,12 +946,11 @@ def _build_relay_argv(args: argparse.Namespace) -> list[str]:
         relay_argv.extend(["--srs-scope", args.srs_scope])
     if args.srs_risk:
         relay_argv.extend(["--srs-risk", args.srs_risk])
+    if args.locale:
+        relay_argv.extend(["--locale", args.locale])
+    if args.fallback_locale:
+        relay_argv.extend(["--fallback-locale", args.fallback_locale])
 
-    if args.legacy_kit:
-        relay_argv.extend(["--legacy-kit", args.legacy_kit])
-    if args.skills:
-        relay_argv.append("--skills")
-        relay_argv.extend(args.skills)
     if args.verbose:
         relay_argv.append("--verbose")
 
@@ -957,8 +992,8 @@ def _doctor_commands(project_path: str, skip_tests: bool, policy_pack: str = DEF
                 ],
             ),
             (
-                "migration guard",
-                [sys.executable, str(REPO_ROOT / "scripts" / "migration_guard.py"), project_path, "--strict"],
+                "naming guard",
+                [sys.executable, str(REPO_ROOT / "scripts" / "naming_guard.py"), project_path, "--strict"],
             ),
             (
                 "policy guard",
@@ -1220,6 +1255,47 @@ def run_lane(args: argparse.Namespace) -> int:
             print(f"Wrote {args.output_file}")
     if args.strict and report["status"] != "pass":
         return 1
+    return 0
+
+
+def run_locale(args: argparse.Namespace) -> int:
+    if args.action == "show":
+        report = inspect_runtime_locale(args.project_path)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+            return 0 if report["status"] == "pass" else 2
+        locale = load_runtime_locale(Path(args.project_path).resolve())
+        print("Relay-kit runtime locale")
+        print(f"- locale profile: {locale.get('locale_profile', 'en')}")
+        print(f"- fallback locale: {locale.get('fallback_locale', 'en')}")
+        print(f"- enforce output language: {locale.get('enforce_output_language', True)}")
+        if report["status"] != "pass":
+            for finding in report.get("findings", []):
+                print(f"  - {finding.get('summary', finding.get('id', 'finding'))}")
+            return 2
+        return 0
+
+    if args.action != "set":
+        return 2
+
+    try:
+        updated = write_runtime_locale(
+            Path(args.project_path).resolve(),
+            locale=args.locale,
+            fallback_locale=args.fallback_locale,
+            enforce_output_language=args.enforce_output_language,
+        )
+    except ValueError as exc:
+        print(f"Locale update failed: {exc}")
+        return 2
+
+    if args.json:
+        print(json.dumps(updated, ensure_ascii=True, indent=2))
+    else:
+        print("Updated runtime locale policy")
+        print(f"- locale profile: {updated.get('locale_profile')}")
+        print(f"- fallback locale: {updated.get('fallback_locale')}")
+        print(f"- enforce output language: {updated.get('enforce_output_language')}")
     return 0
 
 
@@ -1788,7 +1864,8 @@ def run_pulse(args: argparse.Namespace) -> int:
         print(f"Wrote {outputs['html']}")
         print(f"Pulse status: {report['status']}")
         print(f"Pulse score: {report['pulse_score']}")
-    return 0 if report["status"] in {"pass", "attention"} else 2
+    # Pulse build is a reporting command; it should emit artifacts even when status is hold.
+    return 0
 
 
 def run_signal(args: argparse.Namespace) -> int:
@@ -1832,6 +1909,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_context(_parse_context_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "lane":
         return run_lane(_parse_lane_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "locale":
+        return run_locale(_parse_locale_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "token":
         return run_token(_parse_token_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "adapter":

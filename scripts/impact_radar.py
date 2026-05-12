@@ -72,7 +72,7 @@ def suggested_gates(areas: set[str]) -> list[str]:
         "py -3.12 scripts/skill_gauntlet.py . --strict",
     ]
     if {"runtime-core", "scripts-gates", "adapter-surface", "artifacts-state"} & areas:
-        gates.append("py -3.12 scripts/migration_guard.py . --strict")
+        gates.append("py -3.12 scripts/naming_guard.py . --strict")
     if {"adapter-surface", "templates", "packaging-cli"} & areas:
         gates.extend(
             [

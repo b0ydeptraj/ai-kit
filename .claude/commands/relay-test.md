@@ -4,6 +4,9 @@
 - adapter: `claude`
 - route-target: `test-hub`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Run verification and route-quality checks for the active change.

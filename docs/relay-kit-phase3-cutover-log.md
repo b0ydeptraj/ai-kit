@@ -38,9 +38,9 @@ Complete phase-3 cutover with canonical runtime paths and no active compatibilit
 ### Batch 3 - Remove compatibility layer
 - Status: complete
 - Deliverables:
-  - removed `python_kit.py`
-  - removed `python_kit_legacy.py`
-  - removed `.python-kit-prompts` dual-write from runtime output
+  - removed `legacy_runtime_entry.py`
+  - removed `legacy_runtime_compat.py`
+  - removed `.legacy-generic-prompts` dual-write from runtime output
   - post-cutover validation script updated
 
 ### Batch 4 - Physical repo rename

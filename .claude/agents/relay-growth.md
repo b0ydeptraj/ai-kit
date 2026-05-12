@@ -2,6 +2,8 @@
 
 - display-name: `Relay Growth`
 - adapter: `claude`
+- locale-profile: `en`
+- enforce-output-language: `True`
 - intent: Drive research-backed growth execution with measurable launch and support artifacts.
 
 ## Route Contract

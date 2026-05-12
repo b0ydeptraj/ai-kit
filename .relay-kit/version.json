@@ -1,9 +1,9 @@
 {
   "schema_version": "relay-kit.runtime-version.v1",
-  "generated_at": "2026-05-11T16:36:30Z",
+  "generated_at": "2026-05-12T10:33:04Z",
   "package": {
     "name": "relay-kit",
-    "version": "3.4.1"
+    "version": "4.0.0"
   },
   "runtime": {
     "bundle": "enterprise",
@@ -14,6 +14,6 @@
   "manifest": {
     "path": ".relay-kit/manifest/bundles.json",
     "status": "valid",
-    "hash": "6f011407c5e2045c95e444fca7c2c4e5f9e48a52ddd646201018f338efd593fd"
+    "hash": "85ae5a280223be193bcaca8b4979fec8336e8fe41a61c13652a1a0c76ac9cf2a"
   }
 }

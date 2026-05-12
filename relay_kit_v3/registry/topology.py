@@ -169,13 +169,12 @@ STANDALONE_TAXONOMY = {
 }
 
 
-ROUND2_CHANGELOG = dedent(
-    """    # round2-changelog
+CORE_CHANGELOG = dedent(
+    """    # core-changelog
 
-    Round 2 introduced the v3 base:
+    Core runtime introduced the v3 base:
 
     - Relay-kit v3 entrypoint in `relay_kit.py`
-    - preserved legacy generator in `relay_kit_legacy.py`
     - role-based core skills
     - cleaned `execution-loop`
     - shared contracts, workflow-state, and living support references
@@ -249,25 +248,24 @@ def render_orchestrator_rules() -> str:
 
 
 
-def render_round3_changelog() -> str:
+def render_orchestration_changelog() -> str:
     return dedent(
-        """        # round3-changelog
+        """        # orchestration-changelog
 
-        Round 3 tightened orchestration around the 4-layer model:
+        Orchestration phase tightened coordination around the 4-layer model:
 
         - added layer-1 orchestrators: `bootstrap`, `team`, `cook`
         - added layer-2 workflow hubs: `brainstorm-hub`, `scout-hub`, `plan-hub`, `debug-hub`, `fix-hub`, `test-hub`, `review-hub`
         - added an explicit `developer` specialist so execution has a first-class handoff target
         - upgraded workflow-state to record orchestrator, hub, lane, and active specialist
         - added `team-board.md` and `investigation-notes.md` so multi-lane and debugging work have stable artifacts
-        - kept round2 bundle behavior available while adding new round3 bundles
+        - established the orchestration bundle family for stable rollout
         """
     )
 
 
-
-def render_round2_changelog() -> str:
-    return ROUND2_CHANGELOG
+def render_core_changelog() -> str:
+    return CORE_CHANGELOG
 
 
 
@@ -275,7 +273,7 @@ def render_utility_provider_model() -> str:
     lines = [
         "# utility-provider-model",
         "",
-        "Round 4 promotes layer-3 utility providers to first-class registry entries while keeping them stateless.",
+        "Runtime phase promotes layer-3 utility providers to first-class registry entries while keeping them stateless.",
         "",
         "## Rules",
         "- Utility providers do not own the lane.",
@@ -316,7 +314,7 @@ def render_parallelism_rules() -> str:
     lines = [
         "# parallelism-rules",
         "",
-        "Round 4 hardens team parallelism so `team` behaves like a real meta-orchestrator instead of a loose wrapper.",
+        "Runtime phase hardens team parallelism so `team` behaves like a real meta-orchestrator instead of a loose wrapper.",
         "",
         "## Lane discipline",
     ]
@@ -347,37 +345,35 @@ def render_bundle_gating() -> str:
     return dedent(
         """        # bundle-gating
 
-        Round 4 tightens bundle gating so lower bundles do not spray higher-level artifacts by accident.
+        Runtime gating keeps lower bundles from spraying higher-level artifacts by accident.
 
         | Bundle | Contracts emitted | Docs emitted | References emitted |
         |---|---|---|---|
-        | round2 | round2 base only | round2 docs only | support references |
-        | round3 | round2 base + round3 extras | round2 + round3 docs | support references |
+        | core | core base only | core docs only | support references |
+        | orchestration | core base + orchestration extras | core + orchestration docs | support references |
         | utility-providers | none by default | utility and topology docs | none |
         | discipline-utilities | none by default | discipline docs only | none |
-        | round4 | round2 base + round3 extras + round4 extras | round2 + round3 + round4 docs | support references |
-        | baseline | round4 scope + approved discipline utilities | round4 docs | support references |
-        | baseline-next | compatibility alias for `baseline` during the promotion cycle | round4 docs | support references |
-        | enterprise | baseline scope + full discipline utilities | round4 + discipline + enterprise docs | support references |
+        | runtime | core base + orchestration extras + runtime extras | core + orchestration + runtime docs | support references |
+        | baseline | runtime scope + approved discipline utilities | runtime docs | support references |
+        | enterprise | baseline scope + full discipline utilities | runtime + discipline + enterprise docs | support references |
 
         Use temporary output directories when you need to prove gating behavior without contamination from prior generated files.
         """
     )
 
 
-
-def render_round4_changelog() -> str:
+def render_runtime_changelog() -> str:
     return dedent(
-        """        # round4-changelog
+        """        # runtime-changelog
 
-        Round 4 hardens the topology rather than adding random new prompts:
+        Runtime phase hardens topology rather than adding random prompts:
 
-        - fixes bundle gating so `round2`, `round3`, and `round4` emit the right contract/doc scopes
+        - fixes bundle gating so `core`, `orchestration`, and `runtime` emit the right contract/doc scopes
         - promotes layer-3 utility providers to first-class registry skills
         - adds `lane-registry.md` and `handoff-log.md` for safer multi-lane work
         - upgrades workflow-state and team-board with utility-provider and lock tracking
         - adds docs for utility providers, standalone taxonomy, bundle gating, and parallelism rules
-        - keeps round2 and round3 compatibility available while adding new round4 bundles
+        - establishes the runtime bundle family as canonical
         """
     )
 

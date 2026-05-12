@@ -7,7 +7,9 @@ __all__ = [
     "command_registry",
     "generator",
     "lane_audit",
+    "localized_metadata",
     "query_search",
     "registry",
+    "runtime_locale",
     "service_boundaries",
 ]

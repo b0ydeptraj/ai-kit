@@ -239,7 +239,7 @@ SECTION_HINTS = {
 }
 
 
-ROUND2_BASE_CONTRACTS = [
+CORE_BASE_CONTRACTS = [
     "product-brief",
     "prd",
     "architecture",
@@ -251,12 +251,12 @@ ROUND2_BASE_CONTRACTS = [
     "workflow-state",
 ]
 
-ROUND3_EXTRA_CONTRACTS = [
+ORCHESTRATION_EXTRA_CONTRACTS = [
     "investigation-notes",
     "team-board",
 ]
 
-ROUND4_EXTRA_CONTRACTS = [
+RUNTIME_EXTRA_CONTRACTS = [
     "lane-registry",
     "handoff-log",
 ]

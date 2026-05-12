@@ -43,9 +43,9 @@
   },
   {
     "id": "migration-guard-cutover",
-    "prompt": "A naming cutover might leave stale compatibility tokens behind. Scan source and runtime files with an allowlist gate.",
+    "prompt": "A naming cutover might leave stale compatibility tokens behind. Scan source and runtime files with a strict fail-closed naming gate.",
     "expected_skill": "migration-guard",
-    "expected_terms": ["compatibility tokens", "allowlist", "cutover"]
+    "expected_terms": ["compatibility tokens", "fail-closed", "cutover"]
   },
   {
     "id": "context-continuity-new-thread",
@@ -151,9 +151,9 @@
   },
   {
     "id": "policy-guard-high-risk-operation",
-    "prompt": "Use policy-guard for high-risk agent operations. Scan shell commands, path traversal, hard-coded secrets, prompt-injection phrases, broad allowlists, and fail closed.",
+    "prompt": "Use policy-guard for high-risk agent operations. Scan shell commands, path traversal, hard-coded secrets, prompt-injection phrases, and enforce fail-closed handling.",
     "expected_skill": "policy-guard",
-    "expected_terms": ["path traversal", "hard-coded secrets", "allowlists"]
+    "expected_terms": ["path traversal", "hard-coded secrets", "fail-closed"]
   },
   {
     "id": "impact-radar-runtime-blast-radius",

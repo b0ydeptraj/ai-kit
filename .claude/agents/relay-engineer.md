@@ -2,6 +2,8 @@
 
 - display-name: `Relay Engineer`
 - adapter: `claude`
+- locale-profile: `en`
+- enforce-output-language: `True`
 - intent: Deliver implementation work with strict planning, verification, and readiness gates.
 
 ## Route Contract

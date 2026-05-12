@@ -4,6 +4,9 @@
 - adapter: `claude`
 - route-target: `token-economy`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Audit token budget, compression safety, and signal retention before execution.

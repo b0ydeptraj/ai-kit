@@ -4,6 +4,9 @@
 - adapter: `claude`
 - route-target: `release-readiness`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Prepare release-readiness and deployment safety checks.

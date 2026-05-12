@@ -27,7 +27,7 @@ def test_public_cli_doctor_runs_core_gates(monkeypatch, capsys) -> None:
     assert script_names == {
         "validate_runtime.py",
         "runtime_doctor.py",
-        "migration_guard.py",
+        "naming_guard.py",
         "policy_guard.py",
         "srs_guard.py",
         "skill_gauntlet.py",
@@ -104,7 +104,7 @@ def test_public_cli_doctor_enterprise_fails_without_trusted_manifest(monkeypatch
 
 def test_public_cli_doctor_returns_failure_when_a_gate_fails(monkeypatch) -> None:
     def fake_run(command, cwd, text, capture_output, check):  # noqa: ANN001
-        exit_code = 1 if Path(command[1]).name == "migration_guard.py" else 0
+        exit_code = 1 if Path(command[1]).name == "naming_guard.py" else 0
         return subprocess.CompletedProcess(command, exit_code, stdout="", stderr="failed\n")
 
     monkeypatch.setattr(relay_kit_public_cli.subprocess, "run", fake_run)
@@ -123,6 +123,17 @@ def test_public_cli_forwards_srs_policy_flags() -> None:
     assert "--enable-srs-first" in relay_argv
     assert relay_argv[relay_argv.index("--srs-gate") + 1] == "hard"
     assert relay_argv[relay_argv.index("--srs-scope") + 1] == "all"
+
+
+def test_public_cli_forwards_locale_flags() -> None:
+    args = relay_kit_public_cli._parse_args(
+        ["C:/tmp/project", "--codex", "--locale", "vi", "--fallback-locale", "en"]
+    )
+
+    relay_argv = relay_kit_public_cli._build_relay_argv(args)
+
+    assert relay_argv[relay_argv.index("--locale") + 1] == "vi"
+    assert relay_argv[relay_argv.index("--fallback-locale") + 1] == "en"
 
 
 def test_public_cli_init_alias_defaults_to_enterprise_bundle(monkeypatch) -> None:

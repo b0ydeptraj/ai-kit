@@ -28,7 +28,7 @@ This gauntlet is designed to avoid three failure modes:
 2. Do not swap out tasks because a task looks too easy or too hard.
 3. Log evidence per task, not only per repo.
 4. Do not fold a skill because it "feels right".
-5. Treat `round4` as the baseline control and `discipline-utilities` as the treatment.
+5. Treat `runtime` as the baseline control and `discipline-utilities` as the treatment.
 6. A skill may be folded only if it clears the thresholds in this document and still satisfies `docs/discipline-utilities-baseline-proposal.md`.
 
 ## Gauntlet shape

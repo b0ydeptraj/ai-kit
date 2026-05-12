@@ -4,6 +4,9 @@
 - adapter: `codex`
 - route-target: `developer`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Execute implementation changes in the active lane.

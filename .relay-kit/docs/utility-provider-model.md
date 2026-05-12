@@ -1,6 +1,6 @@
 # utility-provider-model
 
-Round 4 promotes layer-3 utility providers to first-class registry entries while keeping them stateless.
+Runtime phase promotes layer-3 utility providers to first-class registry entries while keeping them stateless.
 
 ## Rules
 - Utility providers do not own the lane.

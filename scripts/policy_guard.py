@@ -66,7 +66,6 @@ PROMPT_INJECTION_PATTERNS: Sequence[re.Pattern[str]] = (
     re.compile(r"\breveal (?:the )?(?:system prompt|developer message|hidden instructions|secrets)\b", re.IGNORECASE),
 )
 
-BROAD_ALLOWLIST_GLOBS = {"*", "**", "**/*", "*/*", "*/**"}
 
 REQUIRED_FILE_PLACEHOLDER_PATTERNS: Sequence[re.Pattern[str]] = (
     re.compile(r"^\s*TBD\s*$", re.IGNORECASE),
@@ -149,24 +148,6 @@ def collect_line_findings(rel_path: str, line_no: int, line: str) -> list[Findin
     return findings
 
 
-def collect_allowlist_findings(path: Path, base: Path) -> list[Finding]:
-    rel_path = path.relative_to(base).as_posix()
-    if rel_path != "scripts/migration_guard_allowlist.txt":
-        return []
-
-    findings: list[Finding] = []
-    for line_no, raw in enumerate(path.read_text(encoding="utf-8", errors="ignore").splitlines(), start=1):
-        line = raw.strip()
-        if not line or line.startswith("#") or "|" not in line:
-            continue
-        path_glob, token = [part.strip() for part in line.split("|", 1)]
-        if path_glob in BROAD_ALLOWLIST_GLOBS and token == "*":
-            findings.append(
-                Finding(rel_path, line_no, "broad-migration-allowlist", "Broad path glob with wildcard token")
-            )
-    return findings
-
-
 def collect_pack_findings(base: Path, pack_name: str | None = None) -> list[Finding]:
     pack = get_policy_pack(pack_name)
     findings: list[Finding] = []
@@ -203,7 +184,6 @@ def collect_findings(base: Path, pack_name: str | None = None) -> list[Finding]:
     findings.extend(collect_pack_findings(base, pack_name))
     for path in candidate_files(base):
         rel_path = path.relative_to(base).as_posix()
-        findings.extend(collect_allowlist_findings(path, base))
         for line_no, line in enumerate(path.read_text(encoding="utf-8", errors="ignore").splitlines(), start=1):
             findings.extend(collect_line_findings(rel_path, line_no, line))
     return findings

@@ -1,8 +1,8 @@
 ﻿version: 0.2
 philosophy: hub-and-spoke-runtime
 objective: >-
-  Keep the active relay-kit runtime adapter-neutral at the skill layer while preserving
-  legacy migration suites without exposing them as active v3 runtime primitives.
+  Keep the active relay-kit runtime adapter-neutral at the skill layer with Relay-kit-only
+  naming and strict runtime bundle contracts.
 
 conventions:
   handoff_contract_required:
@@ -22,10 +22,9 @@ conventions:
     handoff_log: .relay-kit/state/handoff-log.md
   execution_rules:
     - Treat `.claude/skills`, `.agent/skills`, and `.codex/skills` as the active runtime surfaces.
-    - Treat preserved legacy command and workflow assets as migration-only support, not active v3 runtime primitives.
     - Utility providers are stateless and should not own project strategy or lane state.
     - Route through layer-1 orchestrators and layer-2 hubs before invoking specialists directly.
-    - For v3 bundles, `--ai all` targets `.claude/skills`, `.agent/skills`, and `.codex/skills`; legacy kits keep their own compatibility behavior.
+    - For v4 bundles, `--ai all` targets `.claude/skills`, `.agent/skills`, and `.codex/skills`.
 
 layers:
   layer_1_orchestrators:
@@ -82,19 +81,18 @@ layers:
 
 bundles:
   active_baselines:
-    - round2
-    - round3
-    - round4
+    - core
+    - orchestration
+    - runtime
     - baseline
-    - baseline-next
     - enterprise
   additive_overlays:
     - utility-providers
     - discipline-utilities
   notes:
     - baseline is the current baseline.
-    - round4 remains available as the previous compatibility baseline.
-    - baseline-next is a compatibility alias for baseline during the promotion cycle.
+    - runtime is the full non-enterprise runtime bundle.
+    - core and orchestration remain available as narrower deterministic runtime slices.
     - enterprise is the paid/team governance bundle with the full discipline utility set.
     - discipline-utilities remains optional until a future baseline absorbs approved skills.
 
@@ -111,20 +109,8 @@ adapter_runtime:
     model: runtime-skills-only
     note: keep Codex as a skill surface, not a legacy command or workflow surface
 
-legacy_compatibility:
-  generator: relay_kit_legacy.py
-  template_roots:
-    - templates/agent
-    - templates/claude
-  preserved_kits:
-    - python
-    - mobile-analysis
-    - expert-suite
-    - tooling-suite
-    - design-suite
-    - full
+runtime_policy:
+  naming_mode: relay-kit-only
   notes:
-    - Compatibility aliases were retired in phase-3 cutover; legacy generation is canonical through `relay_kit_legacy.py`.
-    - Legacy workflow, rules, and shared assets belong to migration support only.
-    - Legacy command and agent surfaces belong to migration support only.
-    - Codex support assets may be materialized by the legacy generator under `.codex/support`, but they are not part of the active v3 runtime taxonomy.
+    - Compatibility aliases and legacy bundle labels are hard-blocked by naming guard.
+    - Runtime generation and diagnostics must use canonical Relay-kit bundle names only.

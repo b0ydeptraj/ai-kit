@@ -4,6 +4,9 @@
 - adapter: `agent`
 - route-target: `qa-governor`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Prepare support-ready triage and completion confidence signals.

@@ -4,6 +4,9 @@
 - adapter: `claude`
 - route-target: `brainstorm-hub`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Turn a rough ask into a brief before planning depth increases.

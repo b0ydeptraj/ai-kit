@@ -26,7 +26,7 @@ def test_evidence_ledger_appends_and_summarizes_events(tmp_path: Path) -> None:
         {
             "run_id": "run-1",
             "command": "doctor",
-            "gate": "migration guard",
+            "gate": "naming guard",
             "status": "fail",
             "elapsed_ms": 4,
             "findings_count": 2,
@@ -37,8 +37,8 @@ def test_evidence_ledger_appends_and_summarizes_events(tmp_path: Path) -> None:
 
     assert summary.total_events == 2
     assert summary.status_counts == {"fail": 1, "pass": 1}
-    assert summary.gate_counts["migration guard"] == 1
-    assert summary.recent_events[0]["gate"] == "migration guard"
+    assert summary.gate_counts["naming guard"] == 1
+    assert summary.recent_events[0]["gate"] == "naming guard"
 
 
 def test_doctor_records_gate_events(monkeypatch) -> None:
@@ -61,7 +61,7 @@ def test_doctor_records_gate_events(monkeypatch) -> None:
         "validate runtime",
         "runtime doctor template",
         "runtime doctor live",
-        "migration guard",
+        "naming guard",
         "policy guard",
         "srs guard",
         "skill gauntlet",

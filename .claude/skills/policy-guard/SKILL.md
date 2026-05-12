@@ -1,6 +1,6 @@
 ---
 name: policy-guard
-description: Use when high-risk agent operations need deterministic policy checks before trusting shell, path, secret, prompt, or allowlist changes.
+description: Use when high-risk agent operations need deterministic policy checks before trusting shell, path, secret, prompt, or allowlist changes, with a strict fail-closed posture.
 allowed-tools: ["Read", "Grep", "Glob", "Bash"]
 ---
 
@@ -12,9 +12,10 @@ Fail closed on deterministic high-risk agent operation patterns before they reac
 - explicit pass or hold verdict for high-risk runtime operations
 
 ## Typical tasks
-- Scan runtime and source surfaces for path traversal, destructive shell commands, hard-coded secrets, prompt-injection phrases, and broad migration allowlists.
+- Scan runtime and source surfaces for path traversal, destructive shell commands, hard-coded secrets, and prompt-injection phrases.
 - Report exact file, line, and check names so the owning hub can fix or explicitly escalate.
 - Rerun the strict policy gate after any remediation before claiming the lane is safe.
+- Apply fail-closed handling whenever risk classification is uncertain.
 
 ## Working rules
 - Do not treat policy findings as cosmetic lint.

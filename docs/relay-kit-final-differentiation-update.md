@@ -42,6 +42,7 @@ Relay-kit delivered in PR 1-PR 4:
 - first-class Go backend skill
 - first-class Next.js/shadcn skill
 - profile-based Vietnamese localization skill
+- global runtime locale switch (`relay-kit locale set ... --locale <code>`) with readiness/runtime-doctor coverage
 - slash-command lifecycle layer
 - explicit Engineer and Growth agent profiles
 - token-budget/context-pack/token-audit commands
@@ -50,7 +51,7 @@ Relay-kit delivered in PR 1-PR 4:
 
 | Area | Relay-kit now | Benchmark gap | Upgrade target |
 |---|---|---|---|
-| Vietnamese support | README has Vietnamese link, but runtime language policy is not first-class | User-supplied Claudex benchmark has hard Vietnamese rule | Add profile-based Vietnamese runtime policy, not global default |
+| Vietnamese support | Vietnamese localization skill + global runtime locale switch (default `en`, one-switch override) | User-supplied Claudex benchmark has hard Vietnamese rule | Keep Relay-owned global locale policy with explicit fallback and gates |
 | Go backend | Generic developer/API/data skills | User-supplied Claudex benchmark treats Go as first-class | Add `go-service-engineering` |
 | Next.js | UI skills mention React/shadcn patterns, but no Next.js specialist | User-supplied Claudex/Claude-kit benchmark compares Next stack depth | Add `next-product-frontend` |
 | Marketing | No canonical marketing skill | Product lifecycle is incomplete for launch/growth users | Add `growth-marketing` and campaign evidence contracts |

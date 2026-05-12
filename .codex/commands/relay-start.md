@@ -4,6 +4,9 @@
 - adapter: `codex`
 - route-target: `workflow-router`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Start a request with explicit routing and lane mode.

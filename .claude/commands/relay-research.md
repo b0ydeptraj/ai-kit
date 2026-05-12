@@ -4,6 +4,9 @@
 - adapter: `claude`
 - route-target: `research`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Collect focused evidence for product or technical uncertainty.

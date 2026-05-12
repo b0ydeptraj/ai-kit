@@ -5,7 +5,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping
 
+from relay_kit_v3.localized_metadata import (
+    localized_agent_display_name,
+    localized_agent_evidence,
+    localized_agent_intent,
+    resolve_metadata_locale,
+)
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
+from relay_kit_v3.runtime_locale import load_runtime_locale
 
 
 SCHEMA_VERSION = "relay-kit.agent-diagnostics.v1"
@@ -120,16 +127,45 @@ def agent_profile_records() -> list[dict[str, Any]]:
     return [_profile_record(profile) for profile in AGENT_PROFILES]
 
 
-def render_agent_surface(profile: AgentProfileSpec, *, adapter: str) -> str:
+def render_agent_surface(
+    profile: AgentProfileSpec,
+    *,
+    adapter: str,
+    locale_profile: str = "en",
+    fallback_locale: str = "en",
+    localization_locale: str | None = None,
+    enforce_output_language: bool = True,
+) -> str:
+    resolved_locale = localization_locale or locale_profile
+    display_name = localized_agent_display_name(
+        profile.profile_id,
+        profile.display_name,
+        locale=resolved_locale,
+        fallback_locale=fallback_locale,
+    )
+    intent = localized_agent_intent(
+        profile.profile_id,
+        profile.intent,
+        locale=resolved_locale,
+        fallback_locale=fallback_locale,
+    )
+    expected_evidence = localized_agent_evidence(
+        profile.profile_id,
+        list(profile.expected_evidence),
+        locale=resolved_locale,
+        fallback_locale=fallback_locale,
+    )
     route_text = " -> ".join(profile.route_contract)
     required = ", ".join(f"`{name}`" for name in profile.required_skills)
     optional = ", ".join(f"`{name}`" for name in profile.optional_skills) or "-"
-    evidence = "\n".join(f"- {item}" for item in profile.expected_evidence)
+    evidence = "\n".join(f"- {item}" for item in expected_evidence)
     return (
         f"# {profile.profile_id}\n\n"
-        f"- display-name: `{profile.display_name}`\n"
+        f"- display-name: `{display_name}`\n"
         f"- adapter: `{adapter}`\n"
-        f"- intent: {profile.intent}\n\n"
+        f"- locale-profile: `{locale_profile}`\n"
+        f"- enforce-output-language: `{enforce_output_language}`\n"
+        f"- intent: {intent}\n\n"
         "## Route Contract\n\n"
         f"`{route_text}`\n\n"
         "## Required Skills\n\n"
@@ -145,6 +181,11 @@ def emit_agent_surfaces(project_path: Path | str, ai: str) -> list[Path]:
     project = Path(project_path).resolve()
     if ai not in GENERATION_TARGETS:
         return []
+    locale_policy = load_runtime_locale(project)
+    locale_profile = str(locale_policy.get("locale_profile", "en"))
+    resolved_locale = resolve_metadata_locale(locale_policy)
+    fallback_locale = str(locale_policy.get("fallback_locale", "en"))
+    enforce_output_language = bool(locale_policy.get("enforce_output_language", True))
     written: list[Path] = []
     canonical_root = project / ".relay-kit" / "agents"
     canonical_root.mkdir(parents=True, exist_ok=True)
@@ -162,7 +203,17 @@ def emit_agent_surfaces(project_path: Path | str, ai: str) -> list[Path]:
         adapter_root.mkdir(parents=True, exist_ok=True)
         for profile in AGENT_PROFILES:
             output = adapter_root / f"{profile.profile_id}.md"
-            output.write_text(render_agent_surface(profile, adapter=adapter), encoding="utf-8")
+            output.write_text(
+                render_agent_surface(
+                    profile,
+                    adapter=adapter,
+                    locale_profile=locale_profile,
+                    fallback_locale=fallback_locale,
+                    localization_locale=resolved_locale,
+                    enforce_output_language=enforce_output_language,
+                ),
+                encoding="utf-8",
+            )
             written.append(output)
     return written
 

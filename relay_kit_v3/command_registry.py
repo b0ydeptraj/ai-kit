@@ -5,6 +5,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping
 
+from relay_kit_v3.localized_metadata import localized_command_evidence, localized_command_intent, resolve_metadata_locale
+from relay_kit_v3.runtime_locale import load_runtime_locale
+
 
 SCHEMA_VERSION = "relay-kit.command-diagnostics.v1"
 
@@ -147,16 +150,39 @@ def command_ids() -> list[str]:
     return [command.command_id for command in LIFECYCLE_COMMANDS]
 
 
-def render_command_surface(command: LifecycleCommandSpec, *, adapter: str) -> str:
+def render_command_surface(
+    command: LifecycleCommandSpec,
+    *,
+    adapter: str,
+    locale_profile: str = "en",
+    fallback_locale: str = "en",
+    localization_locale: str | None = None,
+    enforce_output_language: bool = True,
+) -> str:
+    resolved_locale = localization_locale or locale_profile
+    localized_intent = localized_command_intent(
+        command.command_id,
+        command.intent,
+        locale=resolved_locale,
+        fallback_locale=fallback_locale,
+    )
+    localized_evidence = localized_command_evidence(
+        command.command_id,
+        command.expected_evidence,
+        locale=resolved_locale,
+        fallback_locale=fallback_locale,
+    )
     return (
         f"# {command.slash}\n\n"
         f"- command-id: `{command.command_id}`\n"
         f"- adapter: `{adapter}`\n"
         f"- route-target: `{command.route_target}`\n\n"
+        f"- locale-profile: `{locale_profile}`\n"
+        f"- enforce-output-language: `{enforce_output_language}`\n\n"
         "## Intent\n\n"
-        f"{command.intent}\n\n"
+        f"{localized_intent}\n\n"
         "## Expected Evidence\n\n"
-        f"{command.expected_evidence}\n\n"
+        f"{localized_evidence}\n\n"
         "## Routing Contract\n\n"
         f"- Entry command: `{command.slash}`\n"
         f"- Delegate to: `{command.route_target}`\n"
@@ -168,13 +194,28 @@ def emit_command_surfaces(project_path: Path | str, ai: str) -> list[Path]:
     project = Path(project_path).resolve()
     if ai not in GENERATION_TARGETS:
         return []
+    locale_policy = load_runtime_locale(project)
+    locale_profile = str(locale_policy.get("locale_profile", "en"))
+    resolved_locale = resolve_metadata_locale(locale_policy)
+    fallback_locale = str(locale_policy.get("fallback_locale", "en"))
+    enforce_output_language = bool(locale_policy.get("enforce_output_language", True))
     written: list[Path] = []
     for adapter in GENERATION_TARGETS[ai]:
         adapter_root = project / ADAPTER_COMMAND_ROOTS[adapter]["path"]
         adapter_root.mkdir(parents=True, exist_ok=True)
         for command in LIFECYCLE_COMMANDS:
             output = adapter_root / f"{command.command_id}.md"
-            output.write_text(render_command_surface(command, adapter=adapter), encoding="utf-8")
+            output.write_text(
+                render_command_surface(
+                    command,
+                    adapter=adapter,
+                    locale_profile=locale_profile,
+                    fallback_locale=fallback_locale,
+                    localization_locale=resolved_locale,
+                    enforce_output_language=enforce_output_language,
+                ),
+                encoding="utf-8",
+            )
             written.append(output)
     return written
 

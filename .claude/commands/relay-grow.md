@@ -4,6 +4,9 @@
 - adapter: `claude`
 - route-target: `growth-marketing`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Drive growth and launch execution for product adoption work.

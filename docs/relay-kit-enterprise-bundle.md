@@ -8,7 +8,7 @@ It is not a popularity tier. It changes the installed runtime surface:
 - adds the full discipline utility set, including `test-first-development`
 - emits baseline contracts
 - emits all support reference templates
-- emits round4 topology docs plus discipline docs
+- emits runtime topology docs plus discipline docs
 - emits `enterprise-bundle.md` inside `.relay-kit/docs/`
 
 ## Install
