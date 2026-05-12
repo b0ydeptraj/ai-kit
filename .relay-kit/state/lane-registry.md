@@ -15,4 +15,4 @@
 ## Released locks
 | Lane | Artifact | Previous scope | Released because |
 |---|---|---|---|
-| none | none | none | none |
+| primary | runtime/docs/tests naming surfaces | relay-only hard-cut scope | PR #100 merged; lane returned to idle baseline |

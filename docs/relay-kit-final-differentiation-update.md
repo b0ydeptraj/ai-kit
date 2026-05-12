@@ -1,8 +1,8 @@
 # Relay-kit Final Differentiation Update Plan
 
-Status: complete (PR #94-#98 merged; latest main CI green).
+Status: complete (PR #94-#98 merged; post-phase Relay-kit-only naming hard-cut PR #100 merged; latest main CI green).
 Owner flow: `workflow-router -> plan-hub -> developer -> test-hub -> review-hub`.
-Last planning pass: 2026-05-11.
+Last planning pass: 2026-05-12.
 
 This file records the next differentiation phase after the core backlog,
 package proof, support proof, Claude-adoption governance, and PyPI/publication
@@ -284,6 +284,23 @@ Acceptance:
 - note says this final differentiation phase is complete only after PR 5
 - competitor claims are marked with evidence status
 - live state points to the latest merged main CI, not stale branches
+
+## Post-Phase: Relay-kit-Only Naming Hard-Cut (v4.0.0)
+
+Branch: `codex/relay-only-naming-hardcut-v4`
+Status: done (PR #100 merged; main CI https://github.com/b0ydeptraj/Relay-kit/actions/runs/25729643395 passed)
+
+Scope:
+
+- remove runtime/CLI legacy bundle aliases from active surfaces
+- enforce fail-closed naming guard for retired legacy tokens
+- keep Relay-kit-only naming contract in runtime/docs/tests for active workflows
+
+Acceptance:
+
+- PR #100 merged into `main`
+- merge commit: `a55fed3df8b5bdde307697f0d05a67ec307bb807`
+- latest main CI green after merge
 
 ## Required Gates Per PR
 

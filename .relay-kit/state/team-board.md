@@ -31,4 +31,4 @@ Passing gates, no active lock conflicts, handoff evidence linked, and lane audit
 none recorded
 
 ## Decision log
-no decisions recorded
+- 2026-05-12: Closed Relay-kit-only naming hard-cut in PR #100 and returned board to idle baseline.
