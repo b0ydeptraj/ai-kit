@@ -4,6 +4,9 @@
 - adapter: `codex`
 - route-target: `automation-ops`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Design safe workflow automation and operations runbooks.

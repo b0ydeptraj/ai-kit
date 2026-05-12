@@ -22,6 +22,7 @@ Use `--profile team` for non-enterprise projects. Use `--skip-tests` only after 
 - `support-bundle`: builds the redacted support diagnostic payload.
 - `upgrade-check`: verifies the installed runtime version marker and bundle manifest.
 - `contract-sync`: exports Relay contracts and dry-runs import validation.
+- `runtime-locale`: validates `.relay-kit/state/runtime-locale.json` and enforces one global locale policy switch for this project.
 - `signal-export`: builds a local Pulse source and verifies Relay signal JSON, JSONL, and OTLP artifacts.
 - `release-lane`: verifies local package, CI workflow, docs, manifest/trust/version, and artifact-ignore prerequisites.
 - `commercial-docs`: checks SLA, enterprise bundle, contract sync, commercial dossier, and support request docs.

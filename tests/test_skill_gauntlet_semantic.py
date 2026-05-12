@@ -4,6 +4,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+from relay_kit_v3.localized_metadata import expected_trigger_prefixes
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS, render_skill
 from scripts.skill_gauntlet import (
     DEFAULT_SCENARIO_FIXTURE,
@@ -48,7 +49,14 @@ def test_semantic_skill_gauntlet_flags_unknown_next_step(tmp_path: Path) -> None
         encoding="utf-8",
     )
 
-    findings = check_semantic_skill_file(skill_path, tmp_path, spec, set(ALL_V3_SKILLS))
+    findings = check_semantic_skill_file(
+        skill_path,
+        tmp_path,
+        spec,
+        set(ALL_V3_SKILLS),
+        locale_profile="en",
+        fallback_locale="en",
+    )
 
     assert any(finding.check == "unknown-next-step" for finding in findings)
 
@@ -216,6 +224,6 @@ def test_semantic_skill_gauntlet_flags_optional_alias_contract_drift(tmp_path: P
         encoding="utf-8",
     )
 
-    findings = collect_optional_alias_findings(tmp_path)
+    findings = collect_optional_alias_findings(tmp_path, expected_trigger_prefixes("en", "en"))
 
     assert any(finding.check == "optional-alias-contract" for finding in findings)

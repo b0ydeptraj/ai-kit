@@ -44,5 +44,5 @@ Goal: identify equivalent flows already present in Relay-kit and tighten them wi
 
 - No new skills created.
 - No topology or bundle rename.
-- No `.ai-kit` -> `.relay-kit` physical rename in this phase.
+- No `.legacy-runtime` -> `.relay-kit` physical rename in this phase.
 

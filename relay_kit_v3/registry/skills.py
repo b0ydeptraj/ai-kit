@@ -1503,26 +1503,25 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
     ),
     "migration-guard": utility_provider_spec(
         name="migration-guard",
-        description="Use when a migration or naming cutover might leave stale compatibility tokens behind. Enforce token-level cutover policy with an explicit allowlist gate.",
+        description="Use when a naming cutover might leave stale compatibility tokens behind. Enforce token-level cutover policy with a strict fail-closed gate.",
         outputs=[
             "cutover token drift findings appended to qa-report or workflow-state",
             "explicit pass or hold verdict for migration safety before merge",
         ],
         references=[
-            "Use `python scripts/migration_guard.py <project> --strict` as the canonical migration gate.",
-            "Only historical records and approved compatibility notes should be allowlisted.",
+            "Use `python scripts/naming_guard.py <project> --strict` as the canonical naming gate.",
+            "Guard verdict is fail-closed: findings require cleanup before merge.",
         ],
         next_steps=["test-hub", "review-hub", "qa-governor", "fix-hub"],
         mission="Block high-risk migration drift by proving old compatibility markers are gone from active runtime surfaces.",
         tasks=[
             "Scan source and runtime files for blocked compatibility tokens.",
-            "Flag every non-allowlisted occurrence with file, line, and token evidence.",
+            "Flag every occurrence with file, line, and token evidence.",
             "Hold the lane when findings exist in active runtime or gate paths.",
             "Hand actionable findings back to fix-hub with exact cleanup targets.",
         ],
         rules=[
-            "Do not hide active runtime drift behind broad allowlist rules.",
-            "Treat allowlist as historical exception management, not a bypass for unfinished migration work.",
+            "Do not suppress active runtime drift through exceptions or soft bypasses.",
             "Run migration-guard before merge on every cutover batch touching runtime names or paths.",
             "Keep findings deterministic so repeated runs produce stable verdicts.",
         ],
@@ -1530,7 +1529,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
     ),
     "policy-guard": utility_provider_spec(
         name="policy-guard",
-        description="Use when high-risk agent operations need deterministic policy checks before trusting shell, path, secret, prompt, or allowlist changes.",
+        description="Use when high-risk agent operations need deterministic policy checks before trusting shell, path, secret, prompt, or allowlist changes, with a strict fail-closed posture.",
         outputs=[
             "policy risk findings appended to qa-report or workflow-state",
             "explicit pass or hold verdict for high-risk runtime operations",
@@ -1542,9 +1541,10 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         next_steps=["qa-governor", "review-hub", "fix-hub"],
         mission="Fail closed on deterministic high-risk agent operation patterns before they reach release or handoff.",
         tasks=[
-            "Scan runtime and source surfaces for path traversal, destructive shell commands, hard-coded secrets, prompt-injection phrases, and broad migration allowlists.",
+            "Scan runtime and source surfaces for path traversal, destructive shell commands, hard-coded secrets, and prompt-injection phrases.",
             "Report exact file, line, and check names so the owning hub can fix or explicitly escalate.",
             "Rerun the strict policy gate after any remediation before claiming the lane is safe.",
+            "Apply fail-closed handling whenever risk classification is uncertain.",
         ],
         rules=[
             "Do not treat policy findings as cosmetic lint.",
@@ -1794,7 +1794,7 @@ DISCIPLINE_UTILITY_SKILLS: Dict[str, SkillSpec] = {
     ),
 }
 
-BASELINE_NEXT_DISCIPLINE_SKILLS: Dict[str, SkillSpec] = {
+BASELINE_APPROVED_DISCIPLINE_SKILLS: Dict[str, SkillSpec] = {
     "root-cause-debugging": DISCIPLINE_UTILITY_SKILLS["root-cause-debugging"],
     "evidence-before-completion": DISCIPLINE_UTILITY_SKILLS["evidence-before-completion"],
 }
@@ -1823,11 +1823,12 @@ ALL_V3_SKILLS.update(CLEANUP_SKILLS)
 ALL_V3_SKILLS.update(NATIVE_SUPPORT_SKILLS)
 
 
-def render_skill(spec: SkillSpec) -> str:
+def render_skill(spec: SkillSpec, *, description_override: str | None = None) -> str:
+    description = description_override if description_override is not None else spec.description
     parts = [
         "---",
         f"name: {spec.name}",
-        f"description: {spec.description}",
+        f"description: {description}",
     ]
     if spec.paths:
         parts.append(f"paths: {_render_yaml_inline_list(spec.paths)}")

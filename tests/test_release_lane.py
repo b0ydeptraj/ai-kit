@@ -31,7 +31,7 @@ include = ["relay_kit_v3*", "scripts*"]
                 "python scripts/validate_runtime.py",
                 "python scripts/runtime_doctor.py . --strict",
                 "python scripts/runtime_doctor.py . --strict --state-mode live",
-                "python scripts/migration_guard.py . --strict",
+                "python scripts/naming_guard.py . --strict",
                 "python scripts/policy_guard.py . --strict",
                 "python scripts/skill_gauntlet.py . --strict --semantic",
                 "python scripts/eval_workflows.py . --strict",

@@ -15,7 +15,13 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from relay_kit_v3.localized_metadata import (
+    expected_trigger_prefixes,
+    localized_skill_description,
+    resolve_metadata_locale,
+)
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
+from relay_kit_v3.runtime_locale import load_runtime_locale
 
 
 RUNTIME_ROOTS = [".claude/skills", ".agent/skills", ".codex/skills"]
@@ -119,7 +125,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def check_skill_file(path: Path, base: Path) -> List[Finding]:
+def check_skill_file(path: Path, base: Path, trigger_prefixes: Sequence[str]) -> List[Finding]:
     findings: List[Finding] = []
     content = path.read_text(encoding="utf-8")
     rel_path = path.relative_to(base).as_posix()
@@ -143,12 +149,13 @@ def check_skill_file(path: Path, base: Path) -> List[Finding]:
                 f"Frontmatter name {name!r} does not match folder name {expected_name!r}",
             )
         )
-    if not description.startswith("Use when "):
+    if not any(description.startswith(prefix) for prefix in trigger_prefixes):
+        prefixes_text = ", ".join(repr(prefix) for prefix in trigger_prefixes)
         findings.append(
             Finding(
                 rel_path,
                 "trigger-description",
-                "Description must start with 'Use when '",
+                f"Description must start with one of {prefixes_text}",
             )
         )
 
@@ -263,7 +270,15 @@ def check_expected_bullets(
         )
 
 
-def check_semantic_skill_file(path: Path, base: Path, spec, known_skill_names: set[str]) -> List[Finding]:
+def check_semantic_skill_file(
+    path: Path,
+    base: Path,
+    spec,
+    known_skill_names: set[str],
+    *,
+    locale_profile: str,
+    fallback_locale: str,
+) -> List[Finding]:
     findings: List[Finding] = []
     content = path.read_text(encoding="utf-8")
     rel_path = path.relative_to(base).as_posix()
@@ -272,12 +287,18 @@ def check_semantic_skill_file(path: Path, base: Path, spec, known_skill_names: s
         return [Finding(rel_path, "frontmatter", "Missing or malformed frontmatter")]
 
     description = frontmatter.get("description", "").strip()
-    if description != spec.description:
+    expected_description = localized_skill_description(
+        spec.name,
+        spec.description,
+        locale=locale_profile,
+        fallback_locale=fallback_locale,
+    )
+    if description != expected_description:
         findings.append(
             Finding(
                 rel_path,
                 "registry-description-drift",
-                f"Expected registry description {spec.description!r}, found {description!r}",
+                f"Expected registry description {expected_description!r}, found {description!r}",
             )
         )
 
@@ -382,7 +403,13 @@ def collect_tool_profile_findings(
     return findings
 
 
-def collect_semantic_findings(base: Path, skill_files: Sequence[Path]) -> List[Finding]:
+def collect_semantic_findings(
+    base: Path,
+    skill_files: Sequence[Path],
+    *,
+    locale_profile: str,
+    fallback_locale: str,
+) -> List[Finding]:
     findings: List[Finding] = []
     known_skill_names = set(ALL_V3_SKILLS)
     description_paths: Dict[tuple[str, str], List[str]] = {}
@@ -404,7 +431,16 @@ def collect_semantic_findings(base: Path, skill_files: Sequence[Path]) -> List[F
             adapter = "/".join(parts[:2]) if len(parts) >= 2 else "unknown"
             description_paths.setdefault((adapter, description), []).append(rel_path)
 
-        findings.extend(check_semantic_skill_file(path, base, spec, known_skill_names))
+        findings.extend(
+            check_semantic_skill_file(
+                path,
+                base,
+                spec,
+                known_skill_names,
+                locale_profile=locale_profile,
+                fallback_locale=fallback_locale,
+            )
+        )
 
     for (_adapter, description), paths in sorted(description_paths.items()):
         if len(paths) > 1:
@@ -419,7 +455,7 @@ def collect_semantic_findings(base: Path, skill_files: Sequence[Path]) -> List[F
     return findings
 
 
-def collect_optional_alias_findings(base: Path) -> List[Finding]:
+def collect_optional_alias_findings(base: Path, trigger_prefixes: Sequence[str]) -> List[Finding]:
     findings: List[Finding] = []
     for root in RUNTIME_ROOTS:
         for alias_name, required_terms in OPTIONAL_ALIAS_CONTRACTS.items():
@@ -433,9 +469,14 @@ def collect_optional_alias_findings(base: Path) -> List[Finding]:
                 findings.append(Finding(rel_path, "optional-alias-contract", "Missing or malformed alias frontmatter"))
                 continue
             description = frontmatter.get("description", "").strip()
-            if not description.startswith("Use when "):
+            if not any(description.startswith(prefix) for prefix in trigger_prefixes):
+                prefixes_text = ", ".join(repr(prefix) for prefix in trigger_prefixes)
                 findings.append(
-                    Finding(rel_path, "optional-alias-contract", "Alias description must start with 'Use when '")
+                    Finding(
+                        rel_path,
+                        "optional-alias-contract",
+                        f"Alias description must start with one of {prefixes_text}",
+                    )
                 )
             for term in required_terms:
                 if term not in content:
@@ -658,6 +699,10 @@ def render_text(findings: List[Finding], checked_files: int, semantic: bool, sce
 def main() -> int:
     args = parse_args()
     base = Path(args.project_path).resolve()
+    locale_policy = load_runtime_locale(base)
+    locale_profile = resolve_metadata_locale(locale_policy)
+    fallback_locale = str(locale_policy.get("fallback_locale", "en"))
+    trigger_prefixes = expected_trigger_prefixes(locale_profile, fallback_locale)
     skill_files = collect_skills(base)
     findings: List[Finding] = []
     for path in skill_files:
@@ -670,11 +715,18 @@ def main() -> int:
                 )
             )
             continue
-        findings.extend(check_skill_file(path, base))
+        findings.extend(check_skill_file(path, base, trigger_prefixes))
     if args.semantic:
-        findings.extend(collect_semantic_findings(base, skill_files))
+        findings.extend(
+            collect_semantic_findings(
+                base,
+                skill_files,
+                locale_profile=locale_profile,
+                fallback_locale=fallback_locale,
+            )
+        )
         findings.extend(collect_tool_profile_findings(base, skill_files, ALL_V3_SKILLS))
-        findings.extend(collect_optional_alias_findings(base))
+        findings.extend(collect_optional_alias_findings(base, trigger_prefixes))
         scenario_findings, scenario_count = collect_scenario_findings(
             base,
             ALL_V3_SKILLS,

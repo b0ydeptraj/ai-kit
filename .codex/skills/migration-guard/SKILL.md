@@ -1,6 +1,6 @@
 ---
 name: migration-guard
-description: Use when a migration or naming cutover might leave stale compatibility tokens behind. Enforce token-level cutover policy with an explicit allowlist gate.
+description: Use when a naming cutover might leave stale compatibility tokens behind. Enforce token-level cutover policy with a strict fail-closed gate.
 allowed-tools: ["Read", "Grep", "Glob", "Bash"]
 ---
 
@@ -13,13 +13,12 @@ Block high-risk migration drift by proving old compatibility markers are gone fr
 
 ## Typical tasks
 - Scan source and runtime files for blocked compatibility tokens.
-- Flag every non-allowlisted occurrence with file, line, and token evidence.
+- Flag every occurrence with file, line, and token evidence.
 - Hold the lane when findings exist in active runtime or gate paths.
 - Hand actionable findings back to fix-hub with exact cleanup targets.
 
 ## Working rules
-- Do not hide active runtime drift behind broad allowlist rules.
-- Treat allowlist as historical exception management, not a bypass for unfinished migration work.
+- Do not suppress active runtime drift through exceptions or soft bypasses.
 - Run migration-guard before merge on every cutover batch touching runtime names or paths.
 - Keep findings deterministic so repeated runs produce stable verdicts.
 
@@ -39,8 +38,8 @@ Block high-risk migration drift by proving old compatibility markers are gone fr
 - explicit pass or hold verdict for migration safety before merge
 
 ## Reference skills and rules
-- Use `python scripts/migration_guard.py <project> --strict` as the canonical migration gate.
-- Only historical records and approved compatibility notes should be allowlisted.
+- Use `python scripts/naming_guard.py <project> --strict` as the canonical naming gate.
+- Guard verdict is fail-closed: findings require cleanup before merge.
 
 ## Likely next step
 - test-hub

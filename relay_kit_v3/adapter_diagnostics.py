@@ -7,7 +7,9 @@ from typing import Any, Mapping
 from relay_kit_v3.agent_profiles import build_agent_diagnostics
 from relay_kit_v3.command_registry import build_command_diagnostics
 from relay_kit_v3.generator import BUNDLES
+from relay_kit_v3.localized_metadata import localized_skill_description, resolve_metadata_locale
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS, SkillSpec
+from relay_kit_v3.runtime_locale import load_runtime_locale
 
 
 SCHEMA_VERSION = "relay-kit.adapter-diagnostics.v1"
@@ -69,6 +71,9 @@ ALLOWED_OPTIONAL_SKILLS = {
 def build_adapter_diagnostics(root: Path | str, *, adapter: str = "all") -> dict[str, Any]:
     project = Path(root).resolve()
     selected = _selected_adapters(adapter)
+    locale_policy = load_runtime_locale(project)
+    locale_profile = resolve_metadata_locale(locale_policy)
+    fallback_locale = str(locale_policy.get("fallback_locale", "en"))
     expected = list(BUNDLES["enterprise"])
     expected_set = set(expected)
     command_report = build_command_diagnostics(project, adapter=adapter)
@@ -137,7 +142,11 @@ def build_adapter_diagnostics(root: Path | str, *, adapter: str = "all") -> dict
                 )
                 continue
 
-            expected_frontmatter = _expected_frontmatter(spec)
+            expected_frontmatter = _expected_frontmatter(
+                spec,
+                locale_profile=locale_profile,
+                fallback_locale=fallback_locale,
+            )
             metadata_policy = config["metadata_policy"]
             for field, expected_value in expected_frontmatter.items():
                 actual_value = frontmatter.get(field)
@@ -321,10 +330,21 @@ def _parse_frontmatter(path: Path) -> dict[str, str] | None:
     return fields
 
 
-def _expected_frontmatter(spec: SkillSpec) -> dict[str, str]:
+def _expected_frontmatter(
+    spec: SkillSpec,
+    *,
+    locale_profile: str,
+    fallback_locale: str,
+) -> dict[str, str]:
+    expected_description = localized_skill_description(
+        spec.name,
+        spec.description,
+        locale=locale_profile,
+        fallback_locale=fallback_locale,
+    )
     expected = {
         "name": spec.name,
-        "description": spec.description,
+        "description": expected_description,
     }
     if spec.paths:
         expected["paths"] = _inline_list(spec.paths)

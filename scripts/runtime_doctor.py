@@ -15,6 +15,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
 from relay_kit_v3.lane_audit import build_lane_audit
+from relay_kit_v3.runtime_locale import inspect_runtime_locale
 
 
 REQUIRED_DOCS = [
@@ -233,6 +234,17 @@ def check_lane_audit(root: Path, findings: list[str], mode: str) -> None:
         findings.append(f"Lane audit {finding.get('id', 'finding')}: {finding.get('summary', finding)}")
 
 
+def check_runtime_locale(root: Path, findings: list[str], mode: str) -> None:
+    if mode != "live":
+        return
+    report = inspect_runtime_locale(root)
+    if report.get("status") == "pass":
+        return
+    for finding in report.get("findings", []):
+        if isinstance(finding, dict):
+            findings.append(f"Runtime locale {finding.get('id', 'finding')}: {finding.get('summary', finding)}")
+
+
 def main() -> int:
     args = parse_args()
     root = Path(args.project).resolve()
@@ -245,6 +257,7 @@ def main() -> int:
     check_contract_placeholders(root, findings, args.state_mode)
     check_stale_main_pointer(root, findings, mode=args.state_mode)
     check_lane_audit(root, findings, args.state_mode)
+    check_runtime_locale(root, findings, args.state_mode)
 
     print("Runtime doctor report")
     print(f"- state mode: {args.state_mode}")

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "relay-kit"
-version = "3.4.1"
+version = "4.0.0"
 description = "Relay-kit public installer CLI for coding-agent runtime generation."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -19,16 +19,14 @@ include-package-data = true
 py-modules = [
   "relay_kit",
   "relay_kit_public_cli",
-  "relay_kit_legacy",
   "relay_kit_compat",
   "relay_kit_cycle_log",
 ]
 
 [tool.setuptools.packages.find]
-include = ["relay_kit_v3*", "ai_kit_v3", "scripts*"]
+include = ["relay_kit_v3*", "scripts*"]
 
 [tool.setuptools.package-data]
-scripts = ["migration_guard_allowlist.txt"]
 relay_kit_v3 = ["eval_fixtures/*.json"]
 
 [tool.pytest.ini_options]

@@ -4,6 +4,9 @@
 - adapter: `agent`
 - route-target: `review-hub`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Run coherence and readiness review before completion claims.

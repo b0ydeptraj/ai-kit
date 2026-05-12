@@ -1,6 +1,6 @@
 # native-support-skills
 
-Round 4 keeps the round 2 support skills as living reference skills.
+Runtime keeps core support skills as living reference skills.
 
 | Skill | Writes to | Primary consumers |
 |---|---|---|

@@ -21,6 +21,7 @@ Use this page as the public entrypoint for current runtime behavior.
 - `docs/relay-kit-context-governance.md`
 - `docs/relay-kit-lane-audit.md`
 - `docs/relay-kit-adapter-diagnostics.md`
+- `docs/relay-kit-locale-policy.md`
 - `docs/relay-kit-query-search.md`
 - `docs/relay-kit-service-boundaries.md`
 - `docs/relay-kit-context-continuity.md`
@@ -39,12 +40,12 @@ Canonical runtime naming:
 These files are preserved for traceability and older migration context. They are not the primary docs for new users:
 
 - `docs/codex-merge-prompt.md`
-- `docs/codex-round3-merge-prompt.md`
-- `docs/codex-round4-merge-prompt.md`
+- `docs/codex-orchestration-merge-prompt.md`
+- `docs/codex-runtime-merge-prompt.md`
 - `docs/migration-order.md`
-- `docs/round2-changelog.md`
-- `docs/round3-design.md`
-- `docs/round4-design.md`
+- `docs/core-changelog.md`
+- `docs/orchestration-design.md`
+- `docs/runtime-design.md`
 - `docs/gap-matrix.md`
 - `docs/relay-kit-ai-kit-migration-matrix.md`
 - `docs/discipline-utilities-baseline-proposal.md`

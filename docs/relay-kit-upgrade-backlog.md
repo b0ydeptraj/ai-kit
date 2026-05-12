@@ -13,7 +13,7 @@ Source audit status:
 - Fixed in CI baseline pass: `.github/workflows/validate-runtime.yml` now runs pytest, runtime doctor template/live mode, migration guard, and skill gauntlet.
 - Fixed in README encoding pass: `README.md` language switcher is valid UTF-8 without BOM or mojibake.
 - Fixed in doctor CLI pass: `relay-kit doctor` runs the core runtime gates and `scripts/` is packaged so the console command can find them.
-- Fixed in namespace cutover pass: active runtime imports now use `relay_kit_v3`; `ai_kit_v3` remains only as a one-cycle compatibility shim and allowlisted migration token.
+- Fixed in namespace cutover pass: active runtime imports now use `relay_kit_v3`; `legacy_runtime_v3_namespace` remains only as a one-cycle compatibility shim and allowlisted migration token.
 - Fixed in semantic gauntlet baseline pass: `skill_gauntlet --semantic` checks registry parity, unknown next-step references, empty I/O contracts, and duplicate trigger descriptions within each adapter.
 - Fixed in semantic scenario pass: `skill_gauntlet --semantic` now runs 12 route/evidence scenario fixtures from `tests/fixtures/skill_gauntlet/scenarios.json`.
 - Fixed in SRS opt-in pass: policy-driven `srs_guard` runs from doctor/CI, defaults to off, and hard-fails only when SRS policy is enabled.
@@ -173,21 +173,21 @@ Status:
 - Verification: `python -m pytest tests/test_namespace_cutover.py -q` passes; `python scripts/migration_guard.py . --strict` reports 0 findings.
 
 Problem:
-- The repo still exposes legacy `ai_kit_v3` namespace in runtime/package surfaces.
+- The repo still exposes legacy `legacy_runtime_v3_namespace` namespace in runtime/package surfaces.
 
 Evidence:
-- `pyproject.toml:28` includes `ai_kit_v3*`.
-- `scripts/validate_runtime.py:18-20` imports from `ai_kit_v3`.
-- `scripts/migration_guard.py:16-21` blocks the old dot-ai-kit artifact token but does not block `ai_kit_v3`.
+- `pyproject.toml:28` includes `legacy_runtime_v3_namespace*`.
+- `scripts/validate_runtime.py:18-20` imports from `legacy_runtime_v3_namespace`.
+- `scripts/migration_guard.py:16-21` blocks the old dot-ai-kit artifact token but does not block `legacy_runtime_v3_namespace`.
 
 Fix:
 - Move internal package imports to `relay_kit_v3` or `relay_kit`.
 - Keep a compatibility shim for one release cycle if needed.
-- Add `ai_kit_v3`, `ai-kit`, and stale public entrypoint names to migration guard blocked tokens.
+- Add `legacy_runtime_v3_namespace`, `ai-kit`, and stale public entrypoint names to migration guard blocked tokens.
 - Narrow the migration allowlist to explicit generated or historical docs only.
 
 Acceptance criteria:
-- `python scripts/migration_guard.py . --strict` fails on new `ai_kit_v3` references.
+- `python scripts/migration_guard.py . --strict` fails on new `legacy_runtime_v3_namespace` references.
 - Public docs and CLI help use Relay-kit naming by default.
 - Legacy references are documented as compatibility-only.
 
@@ -484,7 +484,7 @@ Acceptance criteria:
 Status:
 - Fixed on 2026-04-24 for the first enterprise packaging slice.
 - Done: `relay-kit init <project> --codex` now installs the default enterprise bundle, including `test-first-development`, without requiring `--bundle enterprise`.
-- Done: enterprise generation emits baseline contracts, all support references, round4 docs, discipline docs, and `.relay-kit/docs/enterprise-bundle.md`.
+- Done: enterprise generation emits baseline contracts, all support references, runtime docs, discipline docs, and `.relay-kit/docs/enterprise-bundle.md`.
 - Done: bundle manifest includes `enterprise` and verifies hashes.
 - Verification: `python -m pytest tests/test_enterprise_bundle.py -q` passes.
 
@@ -727,7 +727,7 @@ Do not copy popularity. Copy the technical mechanics:
 3. Done: lazy import or optional-extra guard `google-genai`.
 4. Done: add smoke tests for runtime validation, runtime doctor, migration guard, skill gauntlet, and public CLI.
 5. Done: update CI to run `python -m pytest tests -q` and the core runtime gates.
-6. Done: add migration guard tests for `ai_kit_v3`.
+6. Done: add migration guard tests for `legacy_runtime_v3_namespace`.
 7. Done: clean `.relay-kit/state/*.md` so live doctor can pass.
 8. Done: make developer skill test-first instruction conditional.
 9. Done: add `relay-kit doctor` as a single support entrypoint.
@@ -807,7 +807,7 @@ Relay-kit should not be called commercial-ready until all of these are true:
 
 - Root tests run in CI and cover the runtime gates.
 - Live runtime doctor passes on a bootstrapped fixture.
-- Migration guard blocks stale `ai-kit` and `ai_kit_v3` drift by default.
+- Migration guard blocks stale `ai-kit` and `legacy_runtime_v3_namespace` drift by default.
 - Semantic skill gauntlet covers critical workflows.
 - Strict release/a11y gates fail without evidence files.
 - `relay-kit doctor` gives one supportable command for users and maintainers.

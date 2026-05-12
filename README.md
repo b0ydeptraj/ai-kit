@@ -22,6 +22,7 @@ For users who just want to install Relay-kit and generate one runtime:
 ```bash
 pipx install "git+https://github.com/b0ydeptraj/Relay-kit.git"
 relay-kit init "C:\\path\\to\\my-app" --codex
+relay-kit locale set "C:\\path\\to\\my-app" --locale vi
 relay-kit doctor "C:\\path\\to\\my-app"
 ```
 
@@ -74,7 +75,27 @@ PR 1 expands the enterprise runtime with Relay-kit-owned domain skills:
 - `vietnamese-product-localization`
 
 These names and contracts are Relay-kit-owned and are not copied from external kits.
-Vietnamese support remains opt-in/profile-based, not a forced global default.
+Vietnamese support remains explicit/opt-in; use one global locale switch when you want runtime-wide language enforcement.
+
+## Global Locale Switch
+
+Relay-kit now supports one global runtime locale switch for all adapters:
+
+- default locale profile: `en`
+- set once per project: `relay-kit locale set <project> --locale <code>`
+- locale packs v1: `en`, `vi` only
+- runtime policy accepts only `en` or `vi`; unsupported values are rejected by `relay-kit locale set`
+- applies metadata localization only (skill descriptions, command/agent surface intent/evidence) after normal generation flow
+- canonical routing IDs/contracts stay in English and stable
+- `relay-kit command list` and `relay-kit agent list` stay English by default for stable machine parsing
+
+Examples:
+
+```bash
+relay-kit locale show /path/to/project --json
+relay-kit locale set /path/to/project --locale vi --json
+relay-kit init /path/to/project --codex --locale vi
+```
 
 ## What you get
 
@@ -102,16 +123,10 @@ Vietnamese support remains opt-in/profile-based, not a forced global default.
 
 ## Useful commands
 
-List active bundles without legacy migration-only noise:
+List active runtime bundles:
 
 ```bash
 relay-kit --list-skills
-```
-
-Show preserved legacy suites only when you need migration/debug detail:
-
-```bash
-relay-kit --list-skills --show-legacy
 ```
 
 Generate all active adapters:
@@ -373,12 +388,11 @@ Under the hood, the system uses runtime skills plus shared state, contracts, ref
 Main entrypoints:
 
 - `relay_kit.py`
-- `relay_kit_legacy.py`
 
 Current active baseline:
 
 - `baseline`
-- compatibility alias: `baseline-next`
+- runtime family: `core`, `orchestration`, `runtime`
 
 Generated output includes:
 
@@ -396,17 +410,15 @@ Generate all active adapter runtimes together with `--ai all`:
 python relay_kit.py . --bundle baseline --ai all
 ```
 
-## Migration status
+## Naming status
 
-Phase 3 cutover is active and canonical runtime paths are now:
+Relay-kit v4 uses Relay-kit-only naming across runtime bundles and guards.
+
+Canonical runtime paths:
 
 - `relay_kit.py`
-- `relay_kit_legacy.py`
 - `.relay-kit/`
 - `.relay-kit-prompts/`
-
-Historical compatibility timeline and removal log:
-- [`docs/relay-kit-compatibility-cycle.md`](docs/relay-kit-compatibility-cycle.md)
 
 ## Public docs index
 

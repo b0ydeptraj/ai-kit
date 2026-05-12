@@ -58,8 +58,8 @@ def test_runtime_doctor_can_scope_to_single_adapter(tmp_path: Path) -> None:
     assert "- findings: 0" in result.stdout
 
 
-def test_migration_guard_strict_passes() -> None:
-    result = run_command("scripts/migration_guard.py", ".", "--strict")
+def test_naming_guard_strict_passes() -> None:
+    result = run_command("scripts/naming_guard.py", ".", "--strict")
 
     assert_success(result)
     assert "- findings: 0" in result.stdout

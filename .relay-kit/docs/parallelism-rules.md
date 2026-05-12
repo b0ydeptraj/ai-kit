@@ -1,6 +1,6 @@
 # parallelism-rules
 
-Round 4 hardens team parallelism so `team` behaves like a real meta-orchestrator instead of a loose wrapper.
+Runtime phase hardens team parallelism so `team` behaves like a real meta-orchestrator instead of a loose wrapper.
 
 ## Lane discipline
 - Never let two lanes edit the same artifact section without an explicit merge order.

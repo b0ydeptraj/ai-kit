@@ -4,6 +4,9 @@
 - adapter: `agent`
 - route-target: `plan-hub`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Build implementation-ready plan artifacts and slice sequence.

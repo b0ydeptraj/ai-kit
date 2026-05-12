@@ -4,6 +4,9 @@
 - adapter: `agent`
 - route-target: `architect`
 
+- locale-profile: `en`
+- enforce-output-language: `True`
+
 ## Intent
 
 Resolve architecture-level decisions for the selected slice.

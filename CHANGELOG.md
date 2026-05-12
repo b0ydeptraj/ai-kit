@@ -69,7 +69,7 @@ All notable changes to `Relay-kit` are documented here.
 
 ### Changed
 
-- Switched canonical runtime artifact root from `.ai-kit/` to `.relay-kit/`.
+- Switched canonical runtime artifact root from `.legacy-runtime/` to `.relay-kit/`.
 - Switched generic prompt output to canonical `.relay-kit-prompts/` only
   (dual-write removed).
 - Updated generator, registry, runtime docs, and validation gates to post-cutover
@@ -79,8 +79,8 @@ All notable changes to `Relay-kit` are documented here.
 
 ### Removed
 
-- Removed compatibility entrypoints `python_kit.py` and `python_kit_legacy.py`.
-- Removed compatibility generic path `.python-kit-prompts/` from runtime output.
+- Removed compatibility entrypoints `legacy_runtime_entry.py` and `legacy_runtime_compat.py`.
+- Removed compatibility generic path `.legacy-generic-prompts/` from runtime output.
 
 ## v3.2.4 - 2026-03-17
 
@@ -92,9 +92,9 @@ All notable changes to `Relay-kit` are documented here.
 ### Changed
 
 - Defined the deprecation/removal gate for:
-  - `python_kit.py`
-  - `python_kit_legacy.py`
-  - `.python-kit-prompts`
+  - `legacy_runtime_entry.py`
+  - `legacy_runtime_compat.py`
+  - `.legacy-generic-prompts`
 - Documented that the physical repo-folder rename remains deferred until the
   compatibility cycle is complete.
 
@@ -105,13 +105,13 @@ All notable changes to `Relay-kit` are documented here.
 - Added `relay_kit.py` as the preferred Relay-kit v3 entrypoint.
 - Added `relay_kit_legacy.py` as the preferred preserved legacy generator.
 - Added a compatibility-safe dual-write path for generic output:
-  `.relay-kit-prompts/` plus mirrored `.python-kit-prompts/`.
+  `.relay-kit-prompts/` plus mirrored `.legacy-generic-prompts/`.
 
 ### Changed
 
 - Switched docs, help text, and validation to present `relay_kit.py` and
   `relay_kit_legacy.py` as the preferred commands.
-- Kept `python_kit.py`, `python_kit_legacy.py`, and `.python-kit-prompts/`
+- Kept `legacy_runtime_entry.py`, `legacy_runtime_compat.py`, and `.legacy-generic-prompts/`
   as compatibility aliases for one migration cycle.
 
 ### Fixed
@@ -119,33 +119,33 @@ All notable changes to `Relay-kit` are documented here.
 - Extended runtime validation to assert both canonical and compatibility
   entrypoints still work.
 - Added generic output validation so `.relay-kit-prompts/` and
-  `.python-kit-prompts/` stay equivalent during the migration cycle.
+  `.legacy-generic-prompts/` stay equivalent during the migration cycle.
 
 ## v3.2.2 - 2026-03-15
 
 ### Added
 
 - Added the official `baseline` bundle as the promoted active baseline.
-- Retained `baseline-next` as a compatibility alias during the promotion cycle.
+- Retained `baseline-approved` as a compatibility alias during the promotion cycle.
 
 ### Changed
 
-- Switched the public baseline status from `round4` / `baseline-next candidate` to
-  `baseline` plus `round4` compatibility support.
+- Switched the public baseline status from `runtime` / `baseline-approved candidate` to
+  `baseline` plus `runtime` compatibility support.
 - Updated the baseline proposal, README, manifest, and bundle-gating docs to
   reflect the completed promotion.
 
 ### Fixed
 
 - Extended runtime validation so CI now checks both the official `baseline`
-  bundle and the `baseline-next` compatibility alias.
+  bundle and the `baseline-approved` compatibility alias.
 
 ## v3.2.1 - 2026-03-15
 
 ### Added
 
-- Added the `baseline-next` bundle as the smallest future-baseline candidate:
-  `round4` plus `root-cause-debugging` and `evidence-before-completion`.
+- Added the `baseline-approved` bundle as the smallest future-baseline candidate:
+  `runtime` plus `root-cause-debugging` and `evidence-before-completion`.
 - Added the `discipline-utilities` gauntlet records under
   `docs/gauntlet-runs/discipline-utilities-v1/`, including scorecards,
   pressure-round notes, and the final decision memo.
@@ -169,26 +169,26 @@ All notable changes to `Relay-kit` are documented here.
 - Fixed the remaining public docs drift around `.agent` compatibility wording,
   `bundle-gating`, and Codex adapter expectations.
 - Added CI coverage for runtime parity and bundle gating so drift is caught
-  before `round4`, `baseline-next`, or adapter outputs silently diverge.
+  before `runtime`, `baseline-approved`, or adapter outputs silently diverge.
 
 ## v3.2.0 - 2026-03-13
 
 ### Added
 
-- Added round 4 bundles: `utility-providers`, `round4-core`, and `round4`.
+- Added round 4 bundles: `utility-providers`, `runtime-core`, and `runtime`.
 - Added first-class layer-3 utility providers to the registry and runtime generation:
   `research`, `doc-pointers`, `sequential-thinking`, `problem-solving`,
   `multimodal-evidence`, `browser-inspector`, `repo-map`, `handoff-context`,
   `mermaid-diagrams`, `ux-structure`, and `media-tooling`.
 - Added durable multi-lane state files:
-  `.ai-kit/state/lane-registry.md` and `.ai-kit/state/handoff-log.md`.
+  `.legacy-runtime/state/lane-registry.md` and `.legacy-runtime/state/handoff-log.md`.
 - Added round 4 runtime docs:
-  `.ai-kit/docs/utility-provider-model.md`,
-  `.ai-kit/docs/standalone-taxonomy.md`,
-  `.ai-kit/docs/parallelism-rules.md`,
-  `.ai-kit/docs/bundle-gating.md`,
-  `.ai-kit/docs/round4-changelog.md`.
-- Added `ai_kit_v3/registry/gating.py` to centralize bundle-aware contract, doc,
+  `.legacy-runtime/docs/utility-provider-model.md`,
+  `.legacy-runtime/docs/standalone-taxonomy.md`,
+  `.legacy-runtime/docs/parallelism-rules.md`,
+  `.legacy-runtime/docs/bundle-gating.md`,
+  `.legacy-runtime/docs/runtime-changelog.md`.
+- Added `legacy_runtime_v3_namespace/registry/gating.py` to centralize bundle-aware contract, doc,
   and reference emission rules.
 
 ### Changed
@@ -196,8 +196,8 @@ All notable changes to `Relay-kit` are documented here.
 - Hardened the 4-layer topology so orchestrators, workflow hubs, utility
   providers, and specialists are represented explicitly in the generator and
   runtime outputs.
-- Kept `python_kit.py` as the active registry-driven v3 entrypoint and
-  preserved `python_kit_legacy.py` unchanged for legacy kits.
+- Kept `legacy_runtime_entry.py` as the active registry-driven v3 entrypoint and
+  preserved `legacy_runtime_compat.py` unchanged for legacy kits.
 - Updated `workflow-state.md` and `team-board.md` to support lane ownership,
   handoffs, lock scopes, and active utility-provider tracking.
 - Refreshed the public README to present the repository as `Relay-kit v3.2`
@@ -205,9 +205,9 @@ All notable changes to `Relay-kit` are documented here.
 
 ### Fixed
 
-- Fixed bundle gating so clean `round2` outputs no longer emit round3 or round4
+- Fixed bundle gating so clean `core` outputs no longer emit orchestration or runtime
   contracts and docs.
-- Fixed bundle gating so clean `round3` outputs include round3 extras but not
-  round4-only state or docs.
+- Fixed bundle gating so clean `orchestration` outputs include orchestration extras but not
+  runtime-only state or docs.
 - Cleaned up public documentation drift between the repo landing page and the
   actual round 4 implementation.
