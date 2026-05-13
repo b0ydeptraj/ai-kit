@@ -895,6 +895,254 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             """
         ).strip(),
     ),
+    "mmo-reup-automation": SkillSpec(
+        name="mmo-reup-automation",
+        description="Use when controlled MMO reup workflows need scheduling, deduplication, attribution tracking, and policy-safe publishing controls.",
+        role="mmo-reup",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["content source inventory", "rights and attribution constraints", "target channel policy limits"],
+        outputs=["reup workflow design with dedupe, rate controls, and rollback plan"],
+        references=[
+            "Require explicit rights and attribution constraints before any automated repost flow.",
+            "Use deterministic dedup keys and publish windows to avoid accidental spam bursts.",
+            "Block flows that depend on policy evasion, account abuse, or non-consensual content reuse.",
+        ],
+        next_steps=["automation-ops", "policy-guard", "qa-governor", "review-hub"],
+        body=dedent(
+            """\
+            # Mission
+            Build safe, measurable content reup automation for MMO operations without violating platform rules.
+
+            ## Mandatory scope checks
+            - define content ownership and permitted reuse policy
+            - define dedupe key strategy and repost frequency caps
+            - define channel-specific posting windows and rate limits
+            - define emergency stop, rollback, and operator ownership
+
+            ## Evidence contract
+            - include dry-run output with dedupe and throttle decisions
+            - include sample publish and reject logs with reason codes
+            - include rollback and disable-runbook instructions
+            """
+        ).strip(),
+    ),
+    "mmo-account-operations": SkillSpec(
+        name="mmo-account-operations",
+        description="Use when MMO account operations need lifecycle automation for onboarding, health checks, risk segmentation, and recovery runbooks.",
+        role="mmo-account-ops",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["account inventory and ownership", "security and compliance policy", "platform limits and escalation paths"],
+        outputs=["account operations workflow with risk controls, observability, and recovery plan"],
+        references=[
+            "Account automation must use authorized credentials, clear ownership, and auditable actions.",
+            "Never design flows for CAPTCHA bypass, identity spoofing, or policy circumvention.",
+            "Separate routine lifecycle automation from high-risk actions that require manual approval.",
+        ],
+        next_steps=["automation-ops", "policy-guard", "release-readiness", "qa-governor"],
+        body=dedent(
+            """\
+            # Mission
+            Operate MMO account fleets with deterministic controls, safety gates, and clear audit trails.
+
+            ## Mandatory scope checks
+            - classify account states: onboarding, active, limited, suspended, retired
+            - enforce credential storage and rotation controls
+            - define per-account and per-platform action budgets
+            - define incident response and suspension recovery path
+
+            ## Evidence contract
+            - include account-state transition logs
+            - include budget and limit guard outputs
+            - include escalation checklist for enforcement events
+            """
+        ).strip(),
+    ),
+    "mmo-browser-fleet-automation": SkillSpec(
+        name="mmo-browser-fleet-automation",
+        description="Use when MMO browser-based operations need profile isolation, session orchestration, deterministic waits, and anti-flake reliability controls.",
+        role="mmo-browser-automation",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["browser workflow map", "profile/session constraints", "target platform policy and limits"],
+        outputs=["browser fleet automation design with stable selectors, session controls, and run evidence"],
+        references=[
+            "Prefer official API paths when available; use browser automation for allowed UI workflows only.",
+            "Use explicit waits, resilient locators, and deterministic retry policy instead of blind sleeps.",
+            "Forbid automation patterns that rely on stealth evasion or non-API scraping prohibited by policy.",
+        ],
+        next_steps=["automation-ops", "browser-inspector", "policy-guard", "qa-governor"],
+        body=dedent(
+            """\
+            # Mission
+            Run browser MMO operations with high reliability, clear limits, and policy-safe automation behavior.
+
+            ## Mandatory scope checks
+            - define profile isolation and session lease strategy
+            - define selector contract and wait strategy per critical action
+            - define retry and backoff rules for transient UI/network failures
+            - define runbook for stuck session, timeout, and rate-limit events
+
+            ## Evidence contract
+            - include run traces for one success path and one controlled failure path
+            - include selector drift and timeout diagnostics
+            - include policy and rate-limit guard decisions per run
+            """
+        ).strip(),
+    ),
+    "mmo-social-marketing-automation": SkillSpec(
+        name="mmo-social-marketing-automation",
+        description="Use when MMO social media or marketing automation needs official API routing, campaign scheduling, moderation safeguards, and quota-aware execution.",
+        role="mmo-social-automation",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["campaign objective", "platform API capabilities", "content and moderation policy"],
+        outputs=["social automation plan with quota controls, content QA, and policy-safe execution"],
+        references=[
+            "Use official platform APIs and published quota/automation rules as the default path.",
+            "Prevent duplicate or spam-like content bursts across accounts and channels.",
+            "Keep consent, data-use transparency, and account-safety requirements explicit.",
+        ],
+        next_steps=["growth-marketing", "automation-ops", "market-research", "review-hub"],
+        body=dedent(
+            """\
+            # Mission
+            Execute social MMO automation that can scale marketing outcomes without crossing platform enforcement lines.
+
+            ## Mandatory scope checks
+            - map each action to official API endpoint and permission scope
+            - define per-platform quota budget and reset handling
+            - define content duplication and frequency guardrails
+            - define moderation and incident escalation path
+
+            ## Evidence contract
+            - include API quota budget report and throttling behavior
+            - include campaign QA checks and reject reasons
+            - include compliance checklist for each target platform
+            """
+        ).strip(),
+    ),
+    "mmo-lowcode-automation": SkillSpec(
+        name="mmo-lowcode-automation",
+        description="Use when MMO operations rely on no-code or low-code orchestration stacks and need modular flows, error handlers, and safe deployment controls.",
+        role="mmo-lowcode-ops",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["workflow platform capabilities", "trigger and dependency graph", "operational SLA and rollback constraints"],
+        outputs=["low-code automation blueprint with module contracts, retries, and observability hooks"],
+        references=[
+            "Treat visual workflow nodes as production logic: define contracts and failure semantics explicitly.",
+            "Enforce per-scenario run limits and queue controls to prevent request storms.",
+            "Separate draft/test workflows from published production workflows.",
+        ],
+        next_steps=["automation-ops", "release-readiness", "qa-governor", "review-hub"],
+        body=dedent(
+            """\
+            # Mission
+            Build robust MMO low-code automation that stays debuggable, recoverable, and cost-aware under load.
+
+            ## Mandatory scope checks
+            - define trigger, schedule, and dependency graph ownership
+            - define error handler and retry/backoff strategy per critical module
+            - define rate-limit controls and queue behavior
+            - define publish, rollback, and incident-response procedure
+
+            ## Evidence contract
+            - include module-level success and failure traces
+            - include throttling and queue-pressure evidence
+            - include publish-versus-draft workflow control proof
+            """
+        ).strip(),
+    ),
+    "mmo-mobile-app-automation": SkillSpec(
+        name="mmo-mobile-app-automation",
+        description="Use when MMO mobile workflows need emulator or device automation with stable selectors, app-state control, and repeatable run evidence.",
+        role="mmo-mobile-automation",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["mobile workflow journeys", "device or emulator matrix", "toolchain constraints and policy rules"],
+        outputs=["mobile automation plan with environment matrix, reliability controls, and evidence artifacts"],
+        references=[
+            "Prefer supported frameworks and official automation drivers for device control.",
+            "Define deterministic app-state setup and teardown to reduce flake.",
+            "Do not design rooted, tampered, or policy-evasion mobile automation paths.",
+        ],
+        next_steps=["automation-ops", "testing-patterns", "qa-governor", "review-hub"],
+        body=dedent(
+            """\
+            # Mission
+            Deliver stable mobile MMO automation for repetitive app workflows with measurable reliability.
+
+            ## Mandatory scope checks
+            - define emulator or device matrix and startup method
+            - define app-state preconditions for each critical user journey
+            - define selector strategy and wait/retry policy
+            - define failure triage for crash, ANR, and timeout signals
+
+            ## Evidence contract
+            - include one full green run on target matrix
+            - include one failure-path reproduction with root-cause notes
+            - include run artifacts (logs, screenshots, or trace pointers)
+            """
+        ).strip(),
+    ),
+    "mmo-cloud-operations-automation": SkillSpec(
+        name="mmo-cloud-operations-automation",
+        description="Use when MMO automation runs in cloud infrastructure and needs scheduler, queue, retry, idempotency, and cost-guarded operations.",
+        role="mmo-cloud-automation",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["cloud runtime topology", "job and queue model", "SLA, cost, and security constraints"],
+        outputs=["cloud MMO automation architecture with idempotent jobs, backoff policies, and observability"],
+        references=[
+            "Use idempotent job contracts and dead-letter handling for failure isolation.",
+            "Use exponential backoff with jitter for transient failures and throttling events.",
+            "Include cost and quota safeguards before scaling concurrency.",
+        ],
+        next_steps=["automation-ops", "release-readiness", "policy-guard", "qa-governor"],
+        body=dedent(
+            """\
+            # Mission
+            Run MMO cloud automation at scale with resilient retries, safe concurrency, and controlled operational cost.
+
+            ## Mandatory scope checks
+            - define scheduler and queue boundaries
+            - define retry policy, jitter, and max-attempt semantics
+            - define idempotency keys and dedupe strategy for side effects
+            - define cost ceilings and emergency scale-down controls
+
+            ## Evidence contract
+            - include retry/backoff test evidence on throttling scenarios
+            - include idempotency and duplicate-prevention evidence
+            - include alerts and SLO signal mapping for operations
+            """
+        ).strip(),
+    ),
+    "mmo-http-api-automation": SkillSpec(
+        name="mmo-http-api-automation",
+        description="Use when MMO workloads are primarily HTTP/API-driven and need contract-safe request orchestration, quota handling, and replay-safe execution.",
+        role="mmo-api-automation",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["endpoint catalog", "auth and scope model", "rate-limit and retry constraints"],
+        outputs=["HTTP automation plan with contract validation, idempotent retry logic, and audit-ready logs"],
+        references=[
+            "Define request contracts from official API documentation before implementation.",
+            "Handle 429 and transient 5xx paths with bounded retries and reset-aware backoff.",
+            "Use idempotency keys and raw request/response evidence for write operations.",
+        ],
+        next_steps=["api-integration", "automation-ops", "policy-guard", "qa-governor"],
+        body=dedent(
+            """\
+            # Mission
+            Execute MMO API automation with strict contract handling, safe retries, and full operational traceability.
+
+            ## Mandatory scope checks
+            - define endpoint groups by risk and side-effect level
+            - define authentication scope and token lifecycle
+            - define rate-limit parsing and retry-backoff behavior
+            - define idempotency, dedupe, and replay-safety policy
+
+            ## Evidence contract
+            - include request/response samples for success and throttled paths
+            - include idempotency replay proof for write endpoints
+            - include contract drift checks against API schema or docs
+            """
+        ).strip(),
+    ),
 }
 
 
