@@ -13,6 +13,14 @@ DOMAIN_SKILLS = {
     "market-research",
     "automation-ops",
     "vietnamese-product-localization",
+    "mmo-reup-automation",
+    "mmo-account-operations",
+    "mmo-browser-fleet-automation",
+    "mmo-social-marketing-automation",
+    "mmo-lowcode-automation",
+    "mmo-mobile-app-automation",
+    "mmo-cloud-operations-automation",
+    "mmo-http-api-automation",
 }
 
 

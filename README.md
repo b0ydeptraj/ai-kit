@@ -73,9 +73,19 @@ PR 1 expands the enterprise runtime with Relay-kit-owned domain skills:
 - `market-research`
 - `automation-ops`
 - `vietnamese-product-localization`
+- `mmo-reup-automation`
+- `mmo-account-operations`
+- `mmo-browser-fleet-automation`
+- `mmo-social-marketing-automation`
+- `mmo-lowcode-automation`
+- `mmo-mobile-app-automation`
+- `mmo-cloud-operations-automation`
+- `mmo-http-api-automation`
 
 These names and contracts are Relay-kit-owned and are not copied from external kits.
 Vietnamese support remains explicit/opt-in; use one global locale switch when you want runtime-wide language enforcement.
+Reference note for MMO automation sources:
+- [`docs/relay-kit-mmo-automation-references.md`](docs/relay-kit-mmo-automation-references.md)
 
 ## Global Locale Switch
 
@@ -304,7 +314,7 @@ relay-kit eval run /path/to/project --json --output-file workflow-eval.json
 relay-kit eval run /path/to/project --strict --baseline-file previous-workflow-eval.json
 ```
 
-The bundled default eval suite covers 70 production/team scenarios across
+The bundled default eval suite covers 78 production/team scenarios across
 orchestration, hubs, utility providers, specialists, runtime diagnostics,
 context governance, lane audit, adapter diagnostics, query lookup, and
 service-boundary review.

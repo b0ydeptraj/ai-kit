@@ -418,5 +418,53 @@
     "prompt": "A user runs /relay-token-audit and expects token budget, signal retention, raw-required blocks, and context pack safety checks in one report.",
     "expected_skill": "token-economy",
     "expected_terms": ["signal retention", "raw-required blocks", "context pack"]
+  },
+  {
+    "id": "mmo-reup-automation-dedupe-throttle",
+    "prompt": "Use mmo-reup-automation to design a reup flow with attribution checks, deterministic dedupe keys, posting windows, and frequency controls before publish.",
+    "expected_skill": "mmo-reup-automation",
+    "expected_terms": ["dedupe", "posting windows", "frequency"]
+  },
+  {
+    "id": "mmo-account-operations-lifecycle-budget",
+    "prompt": "Use mmo-account-operations for multi-account lifecycle control with onboarding, active and suspended states, credential rotation, per-account action budgets, and escalation runbooks.",
+    "expected_skill": "mmo-account-operations",
+    "expected_terms": ["credential", "action budgets", "escalation"]
+  },
+  {
+    "id": "mmo-browser-fleet-automation-session-isolation",
+    "prompt": "Use mmo-browser-fleet-automation when profile isolation, session lease controls, stable selectors, explicit waits, and retry backoff are required for browser fleet reliability.",
+    "expected_skill": "mmo-browser-fleet-automation",
+    "expected_terms": ["profile isolation", "selectors", "retry"]
+  },
+  {
+    "id": "mmo-social-marketing-automation-quota-compliance",
+    "prompt": "Use mmo-social-marketing-automation for campaign scheduling through official APIs with quota budgets, duplicate-content guardrails, moderation checks, and policy-safe execution.",
+    "expected_skill": "mmo-social-marketing-automation",
+    "expected_terms": ["quota", "duplicate", "moderation"]
+  },
+  {
+    "id": "mmo-lowcode-automation-scenario-controls",
+    "prompt": "Use mmo-lowcode-automation for no-code and low-code workflows with trigger ownership, queue pressure controls, module-level retries, and publish-versus-draft safeguards.",
+    "expected_skill": "mmo-lowcode-automation",
+    "expected_terms": ["trigger", "queue", "publish-versus-draft"]
+  },
+  {
+    "id": "mmo-mobile-app-automation-matrix-evidence",
+    "prompt": "Use mmo-mobile-app-automation for emulator and device matrix execution with app-state preconditions, selector strategy, wait policy, and failure triage evidence.",
+    "expected_skill": "mmo-mobile-app-automation",
+    "expected_terms": ["emulator", "app-state", "failure triage"]
+  },
+  {
+    "id": "mmo-cloud-operations-automation-idempotent-jobs",
+    "prompt": "Use mmo-cloud-operations-automation to run scheduled jobs with queue boundaries, retry jitter, idempotency keys, duplicate prevention, and cost ceiling controls.",
+    "expected_skill": "mmo-cloud-operations-automation",
+    "expected_terms": ["idempotency keys", "retry", "cost"]
+  },
+  {
+    "id": "mmo-http-api-automation-replay-safety",
+    "prompt": "Use mmo-http-api-automation for contract-safe endpoint orchestration with auth scope checks, 429 handling, backoff, idempotent writes, and replay safety logs.",
+    "expected_skill": "mmo-http-api-automation",
+    "expected_terms": ["auth", "429", "idempotency"]
   }
 ]
