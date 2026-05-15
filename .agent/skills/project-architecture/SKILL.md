@@ -9,8 +9,10 @@ Build and maintain an accurate map of the current architecture so downstream rol
 ## Produce `.relay-kit/references/project-architecture.md`
 Cover:
 - entry points and execution flow
+- entrypoint-to-call graph notes for the changed path
 - layer or package structure
 - module responsibilities
+- ownership and boundary table for the modules under review
 - dependency direction and boundaries
 - architecture drift and hotspots
 - files to mirror when adding new work
@@ -20,6 +22,7 @@ Cover:
 - Name boundaries explicitly: controllers, services, repositories, adapters, domain logic, jobs, or scripts.
 - Flag any mismatch between the intended architecture and what the code actually does.
 - Add file paths whenever the reference names a pattern or module.
+- Mark hotspot files where unrelated features repeatedly collide.
 
 ## Role
 - architecture-support
@@ -37,7 +40,7 @@ Cover:
 
 ## Reference skills and rules
 - Document what the codebase actually does today, not what the team intended six months ago.
-- Include concrete file paths, entrypoints, and dependency direction.
+- Include concrete file paths, entrypoint mapping, call graph notes, ownership, dependency direction, and a boundary table.
 
 ## Likely next step
 - architect

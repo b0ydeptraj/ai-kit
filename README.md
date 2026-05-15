@@ -190,6 +190,8 @@ relay-kit eval real-world /path/to/project --strict --json
 relay-kit proof audit /path/to/project --strict --json
 ```
 
+`eval real-world` requires practical fixture coverage for every registered skill. It is not a field-tested deployment claim; `proof audit` keeps `field-tested` at zero until explicit field evidence is recorded.
+
 Audit lane coordination before trusting parallel work:
 
 ```bash

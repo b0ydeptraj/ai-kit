@@ -24,7 +24,7 @@ Use `--profile team` for non-enterprise projects. Use `--skip-tests` only after 
 - `contract-sync`: exports Relay contracts and dry-runs import validation.
 - `runtime-locale`: validates `.relay-kit/state/runtime-locale.json` and enforces one global locale policy switch for this project.
 - `token-economy`: verifies token budget, raw-required evidence retention, and token-economy metrics.
-- `real-world-skill-eval`: verifies production-shaped skill cases for Go, Next.js, growth, market research, MMO automation, and token-economy contracts.
+- `real-world-skill-eval`: verifies production-shaped cases for every registered skill and fails when any skill has no practical contract fixture.
 - `skill-proof-audit`: classifies every canonical skill as theoretical, validated, or field-tested, and fails when any production skill remains theoretical.
 - `signal-export`: builds a local Pulse source and verifies Relay signal JSON, JSONL, and OTLP artifacts.
 - `release-lane`: verifies local package, CI workflow, docs, manifest/trust/version, and artifact-ignore prerequisites.

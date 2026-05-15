@@ -4,7 +4,7 @@ Skill proof audit classifies every canonical skill into one of three statuses:
 
 - `theoretical`: registered skill with no workflow scenario, real-world case, or explicit field evidence.
 - `validated`: covered by synthetic workflow eval or real-world skill eval cases.
-- `field-tested`: backed by explicit field evidence metadata under `.relay-kit/evidence/field-tested-skills.json`.
+- `field-tested`: backed by explicit field evidence metadata under `.relay-kit/evidence/skill-field-evidence.json`.
 
 Run:
 

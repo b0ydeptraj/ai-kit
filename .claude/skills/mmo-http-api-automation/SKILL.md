@@ -4,17 +4,18 @@ description: Use when MMO workloads are primarily HTTP/API-driven and need contr
 ---
 
 # Mission
-Execute MMO API automation with strict contract handling, safe retries, and full operational traceability.
+Execute MMO API automation with contract handling that a backend reviewer can replay and debug.
 
 ## Mandatory scope checks
 - define endpoint groups by risk and side-effect level
 - define authentication scope and token lifecycle
+- propagate request id or correlation id through logs
 - define rate-limit parsing and retry-backoff behavior
-- define idempotency, dedupe, and replay-safety policy
+- define idempotency key, dedupe, redacted logging, and replay-safety policy
 
 ## Evidence contract
-- include request/response samples for success and throttled paths
-- include idempotency replay proof for write endpoints
+- include redacted request/response samples for success and 429 throttled paths
+- include idempotency key replay proof for write endpoints
 - include contract drift checks against API schema or docs
 
 ## Role
@@ -34,7 +35,7 @@ Execute MMO API automation with strict contract handling, safe retries, and full
 ## Reference skills and rules
 - Define request contracts from official API documentation before implementation.
 - Handle 429 and transient 5xx paths with bounded retries and reset-aware backoff.
-- Use idempotency keys and raw request/response evidence for write operations.
+- Use idempotency key, request id, redacted raw request/response evidence, and replay checks for write operations.
 
 ## Likely next step
 - api-integration

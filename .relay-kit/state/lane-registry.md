@@ -8,7 +8,7 @@
 ## Active lanes
 | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | depends_on | wave_id | resume_condition | Merge prerequisite | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| primary | unassigned | workflow-router | none | none | none | none | wave-1 | active | none | active |
+| primary | developer | workflow-router | test-hub | registry and generated skill surfaces | backend realism and skill proof eval scope | none | wave-1 | active | PR merge and main CI green | active |
 | lane-2 | unassigned | team | none | none | none | primary | wave-2 | explicitly routed by team | none | parked |
 | lane-3 | unassigned | team | none | none | none | primary | wave-2 | explicitly routed by team | none | parked |
 

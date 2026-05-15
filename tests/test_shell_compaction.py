@@ -70,6 +70,32 @@ def test_marker_lines_are_raw_required_on_success(tmp_path: Path) -> None:
     assert "stdout: error: dry-run found one issue" in result["compact_output"]
 
 
+def test_long_failing_output_keeps_error_signal_without_retaining_progress_noise(tmp_path: Path) -> None:
+    command = [
+        sys.executable,
+        "-c",
+        (
+            "import sys; "
+            "[print(f'progress line {i:03d} ok details details details') for i in range(250)]; "
+            "print('AssertionError: final important failure', file=sys.stderr); "
+            "print('Traceback (most recent call last):', file=sys.stderr); "
+            "sys.exit(2)"
+        ),
+    ]
+
+    result = run_compacted_command(command, project_root=tmp_path, cwd=tmp_path, strict=True)
+
+    assert result["returncode"] == 2
+    assert result["signal_retention"] == 1.0
+    assert result["raw_required_line_count"] == 2
+    assert result["retained_raw_required_line_count"] == 2
+    assert result["saved_tokens"] > 0
+    assert result["savings_ratio"] > 0.5
+    assert "stderr: AssertionError: final important failure" in result["compact_output"]
+    assert "stderr: Traceback (most recent call last):" in result["compact_output"]
+    assert "progress line 001" not in result["compact_output"]
+
+
 def test_strict_mode_fails_when_required_signal_is_dropped() -> None:
     with pytest.raises(ShellCompactionError):
         compact_shell_output(
