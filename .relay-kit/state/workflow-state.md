@@ -1,33 +1,33 @@
 # workflow-state
 
 ## Current request
-Full real-world skill eval hardening and backend realism guard.
+No active request recorded.
 
 ## Active lane
 - Lane id: primary
 - Mode: serial
-- Lane owner: developer
+- Lane owner: unassigned
 
 ## Active orchestration
 - Layer-1 orchestrator: workflow-router
-- Layer-2 workflow hub: test-hub
-- Active specialist: developer
+- Layer-2 workflow hub: none selected
+- Active specialist: none
 
 ## Active utility providers
-- Primary utility provider: skill-evolution
-- Additional utilities in play: testing-patterns, token-economy
+- Primary utility provider: none
+- Additional utilities in play: none
 
 ## Active standalone/domain skill
-- Skill: skill-evolution
-- Why selected: skill contract quality and generated adapter surfaces are being hardened.
+- Skill: none selected
+- Why selected: no standalone or domain skill selected
 
 ## Complexity level
-- Level: focused implementation
-- Reasoning: existing proof surfaces needed broader skill coverage and backend realism checks.
+- Level: unclassified
+- Reasoning: no active request classified
 
 ## Chosen track
-- Track: quick-flow
-- Why this track fits: the change is scoped to registry contracts, generated skill surfaces, eval fixtures, and proof tests.
+- Track: unselected
+- Why this track fits: no active track selected
 
 ## Completed artifacts
 - [ ] product-brief
@@ -37,18 +37,18 @@ Full real-world skill eval hardening and backend realism guard.
 - [ ] story
 - [ ] tech-spec
 - [ ] investigation-notes
-- [x] qa-report
-- [x] team-board
-- [x] lane-registry
-- [x] handoff-log
+- [ ] qa-report
+- [ ] team-board
+- [ ] lane-registry
+- [ ] handoff-log
 
 ## Ownership locks
 | Artifact | Owner lane | Lock scope | Status |
 |---|---|---|---|
-| registry and generated skill surfaces | primary | backend realism and skill proof eval scope | active |
+| none | none | none | none |
 
 ## Next skill
-review-hub
+workflow-router
 
 ## Known blockers
 none recorded
@@ -57,10 +57,10 @@ none recorded
 none observed
 
 ## Notes
-- Last completed request: shell compaction, real-world skill eval, and skill proof audit merged via PR #103.
-- Merge commit on `main`: `8e5586df2569d5ef0961b1105306132931ac21dc`.
-- Latest main CI after merge: `Validate Runtime` run `25922588929` (success).
-- Current branch proof snapshot: real-world skill eval 62/62, skill proof audit 62 validated / 0 theoretical / 0 field-tested, enterprise readiness `commercial-ready-candidate`.
+- Last completed request: full real-world skill eval hardening and backend realism guard merged via PR #105.
+- Merge commit on `main`: `22a9ab21bebbe1a3298e886422f6c47311f22a3b`.
+- Latest main CI after merge: `Validate Runtime` run `25925848766` (success).
+- Proof snapshot: real-world skill eval 62/62, skill proof audit 62 validated / 0 theoretical / 0 field-tested, enterprise readiness `commercial-ready-candidate`.
 - Backend realism guard added to catch generic AI-smell phrases and require concrete backend/operator terms before a skill can pass.
 - Shell/token compaction keeps raw-required failure evidence by raw path and requires signal retention `1.0` in strict gates.
-- After PR merge and main CI, refresh this lane back to idle.
+- Live state is intentionally idle after merge; route next request from `workflow-router`.
