@@ -57,7 +57,8 @@ none recorded
 none observed
 
 ## Notes
-- Last completed request: Relay-kit-only naming hard-cut (`v4.0.0`) merged via PR #100.
-- Merge commit on `main`: `a55fed3df8b5bdde307697f0d05a67ec307bb807`.
-- Latest main CI after merge: `Validate Runtime` run `25729643395` (success).
+- Last completed request: shell compaction, real-world skill eval, and skill proof audit merged via PR #103.
+- Merge commit on `main`: `8e5586df2569d5ef0961b1105306132931ac21dc`.
+- Latest main CI after merge: `Validate Runtime` run `25922588929` (success).
+- Proof snapshot: real-world eval 8/8, skill proof audit 62 validated / 0 theoretical / 0 field-tested, enterprise readiness `commercial-ready-candidate`.
 - Live state is intentionally idle after merge; route next request from `workflow-router`.

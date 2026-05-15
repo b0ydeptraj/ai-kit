@@ -365,7 +365,7 @@ Relay-kit final differentiation phase is complete only when:
 
 Branch: `codex/real-world-token-proof`
 
-Status: in progress.
+Status: done via PR #103.
 
 Purpose:
 
@@ -383,9 +383,9 @@ relay-kit proof audit . --strict --json
 
 Done criteria:
 
-- `relay-kit eval real-world` passes all bundled real-world cases
-- `relay-kit proof audit --strict` reports zero theoretical skills
-- `field-tested` remains zero unless explicit field evidence exists; Relay-kit must not invent deployment proof
-- enterprise readiness includes `real-world-skill-eval` and `skill-proof-audit` required gates
-- docs and live state are refreshed after final merge
-- main CI is green after the state refresh
+- `relay-kit eval real-world` passes all bundled real-world cases: done, 8/8.
+- `relay-kit proof audit --strict` reports zero theoretical skills: done, 62 validated / 0 theoretical / 0 field-tested.
+- `field-tested` remains zero unless explicit field evidence exists: done; no deployment proof was invented.
+- enterprise readiness includes `real-world-skill-eval` and `skill-proof-audit` required gates: done.
+- PR #103 merged to `main` at `8e5586df2569d5ef0961b1105306132931ac21dc`.
+- Main CI `Validate Runtime` run `25922588929` is green after merge.

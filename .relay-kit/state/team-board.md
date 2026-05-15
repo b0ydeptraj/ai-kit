@@ -32,3 +32,4 @@ none recorded
 
 ## Decision log
 - 2026-05-12: Closed Relay-kit-only naming hard-cut in PR #100 and returned board to idle baseline.
+- 2026-05-15: Closed proof-hardening lane in PR #103; shell compaction, real-world skill eval, and skill proof audit are merged with main CI green.

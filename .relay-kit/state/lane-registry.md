@@ -16,3 +16,4 @@
 | Lane | Artifact | Previous scope | Released because |
 |---|---|---|---|
 | primary | runtime/docs/tests naming surfaces | relay-only hard-cut scope | PR #100 merged; lane returned to idle baseline |
+| primary | shell compaction and skill proof surfaces | real-world-token-proof scope | PR #103 merged; main CI `25922588929` green |
