@@ -2,6 +2,8 @@
 
 `relay-kit eval run` turns bundled workflow scenarios into a machine-readable quality signal.
 
+`relay-kit eval real-world` is the companion production-shaped skill eval. It checks whether selected high-value skills have concrete artifact/evidence/rubric contracts instead of only matching synthetic route prompts.
+
 It is intentionally separate from `skill-gauntlet`:
 
 - `skill-gauntlet --semantic` protects the runtime skill files from drift.
@@ -17,6 +19,8 @@ relay-kit eval run /path/to/project --strict
 relay-kit eval run /path/to/project --json --output-file workflow-eval.json
 relay-kit eval run /path/to/project --strict --min-route-margin 2
 relay-kit eval run /path/to/project --baseline-file previous-workflow-eval.json --strict
+relay-kit eval real-world /path/to/project --strict --json
+relay-kit proof audit /path/to/project --strict --json
 python scripts/eval_workflows.py . --strict
 ```
 

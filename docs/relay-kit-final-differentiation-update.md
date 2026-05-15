@@ -360,5 +360,32 @@ Relay-kit final differentiation phase is complete only when:
 - token economy commands preserve signal and expose metrics
 - workflow eval covers domain, commands, agents, and token economy
 - enterprise readiness includes the new gates
+
+## Post-phase Proof Hardening: Shell Compaction, Real-World Eval, Skill Proof
+
+Branch: `codex/real-world-token-proof`
+
+Status: in progress.
+
+Purpose:
+
+- add Relay-owned shell compaction that keeps raw command logs under `.relay-kit/evidence/raw` and only compresses presentation output
+- add production-shaped real-world skill cases so domain/MMO/token skills are not evaluated only by route prompts
+- add skill proof audit so every skill is labeled `theoretical`, `validated`, or `field-tested`
+
+Commands:
+
+```bash
+relay-kit shell compact . --json -- python -m pytest tests -q
+relay-kit eval real-world . --strict --json
+relay-kit proof audit . --strict --json
+```
+
+Done criteria:
+
+- `relay-kit eval real-world` passes all bundled real-world cases
+- `relay-kit proof audit --strict` reports zero theoretical skills
+- `field-tested` remains zero unless explicit field evidence exists; Relay-kit must not invent deployment proof
+- enterprise readiness includes `real-world-skill-eval` and `skill-proof-audit` required gates
 - docs and live state are refreshed after final merge
 - main CI is green after the state refresh

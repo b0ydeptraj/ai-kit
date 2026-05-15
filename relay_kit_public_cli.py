@@ -27,6 +27,9 @@ This wrapper exposes a friendlier command surface:
   relay-kit context budget <project_path>
   relay-kit context pack <project_path>
   relay-kit token audit <project_path>
+  relay-kit shell compact <project_path> -- <command...>
+  relay-kit eval real-world <project_path>
+  relay-kit proof audit <project_path>
   relay-kit locale show <project_path>
   relay-kit locale set <project_path> --locale <code>
   relay-kit lane audit <project_path>
@@ -92,6 +95,17 @@ from relay_kit_v3.token_economy import (
     write_context_budget,
     write_context_pack,
     write_token_audit,
+)
+from relay_kit_v3.shell_compaction import ShellCompactionError, run_compacted_command
+from relay_kit_v3.real_world_eval import (
+    build_report as build_real_world_eval_report,
+    render_report as render_real_world_eval_report,
+    write_report as write_real_world_eval_report,
+)
+from relay_kit_v3.skill_proof import (
+    build_report as build_skill_proof_report,
+    render_report as render_skill_proof_report,
+    write_report as write_skill_proof_report,
 )
 from relay_kit_v3.contract_export import write_contract_export
 from relay_kit_v3.contract_import import import_contracts, render_contract_import_report
@@ -393,6 +407,29 @@ def _parse_token_args(argv: list[str]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def _parse_shell_args(argv: list[str]) -> argparse.Namespace:
+    command: list[str] = []
+    parse_argv = list(argv)
+    if "--" in parse_argv:
+        separator = parse_argv.index("--")
+        command = parse_argv[separator + 1 :]
+        parse_argv = parse_argv[:separator]
+    parser = argparse.ArgumentParser(
+        prog="relay-kit shell",
+        description="Run shell commands through Relay-kit raw-log preserving compaction.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    compact = subparsers.add_parser("compact", help="Run a command and compact its shell output")
+    compact.add_argument("project_path", nargs="?", default=".", help="Project root used for raw evidence logs")
+    compact.add_argument("--cwd", default=None, help="Working directory for the command; defaults to project root")
+    compact.add_argument("--timeout", type=float, default=None, help="Optional command timeout in seconds")
+    compact.add_argument("--strict", action="store_true", help="Fail if compaction drops required signal")
+    compact.add_argument("--json", action="store_true", help="Emit machine-readable compact shell report")
+    parsed = parser.parse_args(parse_argv)
+    parsed.command = command
+    return parsed
+
+
 def _parse_adapter_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="relay-kit adapter",
@@ -561,6 +598,29 @@ def _parse_eval_args(argv: list[str]) -> argparse.Namespace:
     run.add_argument("--min-scenarios", type=int, default=None, help="Minimum scenario count")
     run.add_argument("--json", action="store_true", help="Emit JSON report")
     run.add_argument("--strict", action="store_true", help="Return non-zero when any scenario fails")
+
+    real_world = subparsers.add_parser("real-world", help="Run production-shaped skill contract cases")
+    real_world.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    real_world.add_argument("--cases-file", default=None, help="Optional real-world case fixture JSON")
+    real_world.add_argument("--output-file", default=None, help="Optional JSON report output path")
+    real_world.add_argument("--json", action="store_true", help="Emit JSON report")
+    real_world.add_argument("--strict", action="store_true", help="Return non-zero unless all cases pass")
+    return parser.parse_args(argv)
+
+
+def _parse_proof_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit proof",
+        description="Audit skill proof status across theoretical, validated, and field-tested levels.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    audit = subparsers.add_parser("audit", help="Classify canonical skills by proof level")
+    audit.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    audit.add_argument("--workflow-fixture", default=None, help="Optional workflow scenario fixture JSON")
+    audit.add_argument("--real-world-cases-file", default=None, help="Optional real-world skill case fixture JSON")
+    audit.add_argument("--output-file", default=None, help="Optional JSON report output path")
+    audit.add_argument("--strict", action="store_true", help="Return non-zero if any skill is theoretical")
+    audit.add_argument("--json", action="store_true", help="Emit JSON report")
     return parser.parse_args(argv)
 
 
@@ -1319,6 +1379,40 @@ def run_token(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_shell(args: argparse.Namespace) -> int:
+    if args.action != "compact":
+        return 2
+    command = list(args.command or [])
+    if command and command[0] == "--":
+        command = command[1:]
+    if not command:
+        print("Missing command. Use: relay-kit shell compact <project> -- <command...>", file=sys.stderr)
+        return 2
+    try:
+        report = run_compacted_command(
+            command,
+            project_root=args.project_path,
+            cwd=args.cwd or args.project_path,
+            strict=args.strict,
+            timeout=args.timeout,
+        )
+    except ShellCompactionError as exc:
+        print(f"Shell compaction failed: {exc}", file=sys.stderr)
+        return 2
+    except FileNotFoundError as exc:
+        executable = command[0] if command else "<missing>"
+        print(f"Shell compaction failed: executable not found: {executable} ({exc})", file=sys.stderr)
+        return 2
+    except OSError as exc:
+        print(f"Shell compaction failed: {exc}", file=sys.stderr)
+        return 2
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(report["compact_output"], end="")
+    return int(report.get("returncode", 0) or 0)
+
+
 def run_adapter(args: argparse.Namespace) -> int:
     if args.action != "diagnose":
         return 2
@@ -1482,6 +1576,21 @@ def run_manifest(args: argparse.Namespace) -> int:
 
 
 def run_eval(args: argparse.Namespace) -> int:
+    if args.action == "real-world":
+        report = build_real_world_eval_report(
+            args.project_path,
+            cases_file=args.cases_file,
+        )
+        if args.output_file:
+            write_real_world_eval_report(args.project_path, report, args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_real_world_eval_report(report))
+        if args.strict and report["status"] != "pass":
+            return 2
+        return 0
+
     if args.action != "run":
         return 2
     from scripts import eval_workflows
@@ -1506,6 +1615,26 @@ def run_eval(args: argparse.Namespace) -> int:
     if args.strict:
         eval_argv.append("--strict")
     return eval_workflows.main(eval_argv)
+
+
+def run_proof(args: argparse.Namespace) -> int:
+    if args.action != "audit":
+        return 2
+    report = build_skill_proof_report(
+        args.project_path,
+        workflow_fixture=args.workflow_fixture,
+        real_world_cases_file=args.real_world_cases_file,
+        strict=args.strict,
+    )
+    if args.output_file:
+        write_skill_proof_report(args.project_path, report, args.output_file)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_skill_proof_report(report))
+    if args.strict and report["status"] != "pass":
+        return 2
+    return 0
 
 
 def run_upgrade(args: argparse.Namespace) -> int:
@@ -1913,6 +2042,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_locale(_parse_locale_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "token":
         return run_token(_parse_token_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "shell":
+        return run_shell(_parse_shell_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "adapter":
         return run_adapter(_parse_adapter_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "command":
@@ -1927,6 +2058,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_manifest(_parse_manifest_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "eval":
         return run_eval(_parse_eval_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "proof":
+        return run_proof(_parse_proof_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "upgrade":
         return run_upgrade(_parse_upgrade_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "policy":

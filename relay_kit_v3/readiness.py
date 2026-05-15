@@ -17,6 +17,8 @@ from relay_kit_v3.release_lane import build_release_lane_report
 from relay_kit_v3.adapter_diagnostics import build_adapter_diagnostics
 from relay_kit_v3.agent_profiles import build_agent_diagnostics
 from relay_kit_v3.runtime_locale import inspect_runtime_locale
+from relay_kit_v3.real_world_eval import build_report as build_real_world_eval_report
+from relay_kit_v3.skill_proof import build_report as build_skill_proof_report
 from relay_kit_v3.support_bundle import SCHEMA_VERSION as SUPPORT_SCHEMA_VERSION
 from relay_kit_v3.support_bundle import build_support_bundle
 from relay_kit_v3.support_triage import support_bundle_findings
@@ -76,6 +78,8 @@ def build_readiness_report(
     gates.append(_agent_profiles_gate(root))
     gates.append(_runtime_locale_gate(root))
     gates.append(_token_economy_gate(root))
+    gates.append(_real_world_skill_eval_gate(root))
+    gates.append(_skill_proof_audit_gate(root))
     gates.append(_signal_export_gate(root, selected_profile))
     gates.append(_release_lane_gate(root))
     gates.append(_commercial_docs_gate(root))
@@ -523,6 +527,59 @@ def _token_economy_gate(root: Path) -> dict[str, Any]:
         }
     except Exception as exc:  # pragma: no cover - defensive gate summary
         return _exception_gate("token-economy", "token economy", exc)
+
+
+def _real_world_skill_eval_gate(root: Path) -> dict[str, Any]:
+    try:
+        report = build_real_world_eval_report(root)
+        findings = report.get("findings", [])
+        ok = report.get("status") == "pass"
+        return {
+            "id": "real-world-skill-eval",
+            "label": "real-world skill eval",
+            "status": "pass" if ok else "fail",
+            "required": True,
+            "summary": (
+                f"real-world skill cases passed: {report.get('passed', 0)}/{report.get('case_count', 0)}"
+                if ok
+                else f"real-world skill eval findings: {len(findings)}"
+            ),
+            "details": {
+                "case_count": report.get("case_count", 0),
+                "passed": report.get("passed", 0),
+                "failed": report.get("failed", 0),
+                "findings_count": len(findings),
+                "findings": findings[:12],
+            },
+        }
+    except Exception as exc:  # pragma: no cover - defensive gate summary
+        return _exception_gate("real-world-skill-eval", "real-world skill eval", exc)
+
+
+def _skill_proof_audit_gate(root: Path) -> dict[str, Any]:
+    try:
+        report = build_skill_proof_report(root, strict=True)
+        findings = report.get("findings", [])
+        summary = report.get("summary", {})
+        ok = report.get("status") == "pass"
+        return {
+            "id": "skill-proof-audit",
+            "label": "skill proof audit",
+            "status": "pass" if ok else "fail",
+            "required": True,
+            "summary": (
+                "skill proof audit ok"
+                if ok
+                else f"theoretical skills: {summary.get('theoretical', 0)}"
+            ),
+            "details": {
+                "summary": summary,
+                "findings_count": len(findings),
+                "findings": findings[:12],
+            },
+        }
+    except Exception as exc:  # pragma: no cover - defensive gate summary
+        return _exception_gate("skill-proof-audit", "skill proof audit", exc)
 
 
 def _agent_profiles_gate(root: Path) -> dict[str, Any]:
