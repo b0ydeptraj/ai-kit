@@ -6,10 +6,11 @@ import sys
 from pathlib import Path
 
 from relay_kit_v3 import real_world_eval
+from relay_kit_v3.registry.skills import ALL_V3_SKILLS
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_REAL_WORLD_CASES = 8
+EXPECTED_REAL_WORLD_CASES = len(ALL_V3_SKILLS)
 
 
 def run_command(*args: str) -> subprocess.CompletedProcess[str]:
@@ -30,17 +31,11 @@ def test_real_world_skill_eval_reports_pass_schema() -> None:
     assert report["case_count"] == EXPECTED_REAL_WORLD_CASES
     assert report["passed"] == EXPECTED_REAL_WORLD_CASES
     assert report["failed"] == 0
+    assert report["coverage"]["expected_skill_count"] == len(ALL_V3_SKILLS)
+    assert report["coverage"]["covered_skill_count"] == len(ALL_V3_SKILLS)
+    assert report["coverage"]["missing_skills"] == []
     assert report["findings"] == []
-    assert {case["skill"] for case in report["results"]} >= {
-        "go-service-engineering",
-        "next-product-frontend",
-        "growth-marketing",
-        "market-research",
-        "mmo-browser-fleet-automation",
-        "mmo-http-api-automation",
-        "mmo-cloud-operations-automation",
-        "token-economy",
-    }
+    assert {case["skill"] for case in report["results"]} == set(ALL_V3_SKILLS)
 
 
 def test_real_world_skill_eval_flags_unknown_skill_and_missing_terms() -> None:
@@ -64,6 +59,7 @@ def test_real_world_skill_eval_flags_unknown_skill_and_missing_terms() -> None:
                 "pass_rubric": ["observability", "made up rubric term"],
             },
         ],
+        require_all_registered_skills=False,
     )
 
     assert report["status"] == "fail"
@@ -73,6 +69,27 @@ def test_real_world_skill_eval_flags_unknown_skill_and_missing_terms() -> None:
     assert {finding["case_id"] for finding in report["findings"]} == {"bad-skill", "thin-go"}
     assert any(finding["check"] == "skill-exists" for finding in report["findings"])
     assert any(finding["check"] == "contract-terms" for finding in report["findings"])
+
+
+def test_real_world_skill_eval_fails_when_registered_skill_has_no_case() -> None:
+    report = real_world_eval.build_report(
+        ROOT,
+        cases=[
+            {
+                "id": "developer-only",
+                "skill": "developer",
+                "task": "Implement one production change with evidence.",
+                "required_artifacts": ["working code"],
+                "required_evidence": ["test evidence"],
+                "pass_rubric": ["execution-loop"],
+            }
+        ],
+    )
+
+    assert report["status"] == "fail"
+    assert report["coverage"]["covered_skill_count"] == 1
+    assert "workflow-router" in report["coverage"]["missing_skills"]
+    assert any(finding["check"] == "skill-coverage" for finding in report["findings"])
 
 
 def test_real_world_skill_eval_cli_emits_json() -> None:

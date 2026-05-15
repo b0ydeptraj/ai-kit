@@ -370,7 +370,7 @@ Status: done via PR #103.
 Purpose:
 
 - add Relay-owned shell compaction that keeps raw command logs under `.relay-kit/evidence/raw` and only compresses presentation output
-- add production-shaped real-world skill cases so domain/MMO/token skills are not evaluated only by route prompts
+- add production-shaped real-world skill cases so every registered skill is not evaluated only by route prompts
 - add skill proof audit so every skill is labeled `theoretical`, `validated`, or `field-tested`
 
 Commands:
@@ -383,7 +383,7 @@ relay-kit proof audit . --strict --json
 
 Done criteria:
 
-- `relay-kit eval real-world` passes all bundled real-world cases: done, 8/8.
+- `relay-kit eval real-world` passes all bundled real-world cases: done, 62/62 with full registered-skill coverage.
 - `relay-kit proof audit --strict` reports zero theoretical skills: done, 62 validated / 0 theoretical / 0 field-tested.
 - `field-tested` remains zero unless explicit field evidence exists: done; no deployment proof was invented.
 - enterprise readiness includes `real-world-skill-eval` and `skill-proof-audit` required gates: done.

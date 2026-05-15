@@ -2,13 +2,14 @@
 
 `relay-kit eval run` turns bundled workflow scenarios into a machine-readable quality signal.
 
-`relay-kit eval real-world` is the companion production-shaped skill eval. It checks whether selected high-value skills have concrete artifact/evidence/rubric contracts instead of only matching synthetic route prompts.
+`relay-kit eval real-world` is the companion production-shaped skill eval. It checks whether every registered skill has concrete artifact/evidence/rubric contracts instead of only matching synthetic route prompts.
 
 It is intentionally separate from `skill-gauntlet`:
 
 - `skill-gauntlet --semantic` protects the runtime skill files from drift.
 - `workflow eval` reports scenario pass rate, predicted skill, top routes, layer/role coverage, and missing evidence terms.
 - The bundled default suite covers 78 scenarios across routing, implementation, QA, release, policy, architecture, UX, dependency, API, data, media, browser evidence, multimodal evidence, bootstrap, debug/fix/review hubs, analyst, brainstorm-hub, scout-hub, team, execution-loop, testing-patterns, PM, scrum, runtime diagnostics, context governance, lane audit, adapter diagnostics, token economy, query lookup, service-boundary review, MMO multi-account automation specialists, and the remaining utility workflows such as doc-pointers, repo-map, memory-search, handoff-context, research, problem-solving, root-cause-debugging, sequential-thinking, mermaid-diagrams, skill-evolution, skill-gauntlet, and test-first-development.
+- The real-world skill fixture covers all 62 registered skills, one production-shaped case per skill. It is contract-level practical coverage, not a field-tested deployment claim.
 - The quality block also reviews profiled support-skill routing noise, evidence-contract coverage, and report-level fixture depth across API, data, dependency, media, browser, and multimodal evidence utilities. The default suite includes at least two evidence-contract fixtures for each profiled support skill.
 - The default suite currently has no weak route candidates: `weak_route_count=0` and `min_route_margin=5` after tightening the developer and test-hub routing fixtures.
 

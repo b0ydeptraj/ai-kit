@@ -1,21 +1,23 @@
 ---
 name: go-service-engineering
-description: Use when the request is primarily Go backend service work. Define service boundaries, routing, persistence, middleware, jobs, caching, and test evidence for production-grade Go delivery.
+description: Use when the request is primarily Go backend service work. Define handler boundary, transaction boundary, persistence, middleware, jobs, caching, and test evidence for Go service delivery.
 ---
 
 # Mission
-Deliver production-grade Go service work with explicit architecture, persistence, and runtime quality constraints.
+Deliver Go service work the way a backend owner would review it: boundaries first, failure modes named, evidence attached.
 
 ## Mandatory scope checks
-- Confirm module boundaries and service ownership before coding.
-- Define API routing and handler contracts for the target service.
-- Make persistence strategy explicit: ORM, query builder, or SQL-first path.
-- Cover cache and background job behavior when state or throughput depends on them.
-- Require test and observability evidence before claiming completion.
+- Confirm module boundaries, routing table ownership, and service ownership before coding.
+- Define handler boundary, request validation, response shape, and error mapping for the target service.
+- Make persistence strategy explicit: ORM, sqlc, query builder, or SQL-first path.
+- Name transaction boundary, repository interface, cache invalidation, and background job behavior when state or throughput depends on them.
+- Handle context cancellation and timeout propagation on IO-heavy paths.
+- Require unit, httptest, integration, migration rollback, and observability evidence before claiming completion.
 
 ## Evidence contract
 - name the exact test commands used
 - include failing signal and green signal for changed behavior
+- include one table-driven edge case or explicit reason it does not apply
 - record any migration or data-risk notes for rollout
 
 ## Role
@@ -34,8 +36,8 @@ Deliver production-grade Go service work with explicit architecture, persistence
 
 ## Reference skills and rules
 - Prefer established local service patterns over introducing a new framework by default.
-- Cover routing, persistence, middleware, caching, background jobs, and observability in one coherent service contract.
-- Include evidence commands for unit tests, integration tests, and migration safety where relevant.
+- Cover routing table, handler boundary, repository interface, transaction boundary, cache ownership, background jobs, and observability in one coherent service contract.
+- Include evidence commands for unit tests, httptest or handler tests, integration tests, context cancellation, and migration rollback safety where relevant.
 
 ## Likely next step
 - developer

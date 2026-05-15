@@ -12,8 +12,9 @@ Cover:
 - stores and connection points
 - schemas, models, and repositories
 - migrations and schema evolution
-- transactions and consistency
+- transaction boundary and isolation assumptions
 - caching and invalidation
+- backfill and rollback plan
 - data risks and rollback notes
 
 ## Working rules
@@ -39,7 +40,7 @@ Cover:
 
 ## Reference skills and rules
 - Cover both primary storage and auxiliary state like caches, queues, or object stores when relevant.
-- Document rollback and migration risks, not only happy-path structure.
+- Document transaction boundary, isolation assumptions, rollback, backfill, and migration risks, not only happy-path structure.
 
 ## Likely next step
 - architect

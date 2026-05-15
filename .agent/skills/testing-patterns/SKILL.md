@@ -11,13 +11,15 @@ Cover:
 - frameworks and folder rules
 - fixture and factory patterns
 - mocking and dependency isolation
+- fake versus mock choice and integration boundary rules
 - async or integration testing rules
 - commands for local evidence
-- coverage gaps and brittle areas
+- flake history, coverage gaps, and brittle areas
 
 ## Working rules
 - Name the real commands contributors should run for fast confidence versus deeper verification.
 - Show where fixtures, factories, and mocks live and when each should be preferred.
+- Mark the integration boundary where a fake stops being enough and a real service or contract test is required.
 - Call out unstable tests, heavy integration paths, and areas with weak coverage.
 - Tie recommendations back to risk, not just test quantity.
 

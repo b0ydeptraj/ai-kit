@@ -36,6 +36,7 @@ def build_report(
     cases_file: Path | str | None = None,
     cases: Sequence[Mapping[str, object]] | None = None,
     min_term_coverage: float = 1.0,
+    require_all_registered_skills: bool = True,
 ) -> dict[str, object]:
     root = Path(project_path)
     selected_fixture = fixture_path if fixture_path is not None else cases_file
@@ -56,6 +57,30 @@ def build_report(
         for finding in result["findings"]
         if isinstance(finding, Mapping)
     ]
+    coverage = registry_coverage(case_rows, ALL_V3_SKILLS)
+    coverage_findings = []
+    if coverage["duplicate_case_ids"]:
+        coverage_findings.append(
+            {
+                "case_id": "<fixture>",
+                "skill": "",
+                "check": "duplicate-case-id",
+                "detail": f"Duplicate real-world case ids: {', '.join(coverage['duplicate_case_ids'])}",
+            }
+        )
+    if require_all_registered_skills and coverage["missing_skills"]:
+        coverage_findings.append(
+            {
+                "case_id": "<fixture>",
+                "skill": "",
+                "check": "skill-coverage",
+                "detail": (
+                    f"Missing real-world cases for {len(coverage['missing_skills'])} registered skills: "
+                    f"{', '.join(coverage['missing_skills'])}"
+                ),
+            }
+        )
+    findings.extend(coverage_findings)
     passed = sum(1 for result in results if result["passed"])
     failed = len(results) - passed
     return {
@@ -67,6 +92,7 @@ def build_report(
         "passed": passed,
         "failed": failed,
         "min_term_coverage": min_term_coverage,
+        "coverage": coverage,
         "findings_count": len(findings),
         "findings": findings,
         "results": results,
@@ -144,6 +170,9 @@ def evaluate_case(
 
 
 def render_text(report: Mapping[str, object]) -> str:
+    coverage = report.get("coverage", {})
+    if not isinstance(coverage, Mapping):
+        coverage = {}
     lines = [
         "Relay-kit real-world skill eval",
         f"- project: {report['project_path']}",
@@ -151,6 +180,10 @@ def render_text(report: Mapping[str, object]) -> str:
         f"- cases: {report['case_count']}",
         f"- passed: {report['passed']}",
         f"- failed: {report['failed']}",
+        (
+            "- skill coverage: "
+            f"{coverage.get('covered_skill_count', '-')}/{coverage.get('expected_skill_count', '-')}"
+        ),
         f"- status: {report['status']}",
     ]
     findings = list(report.get("findings", []))
@@ -255,6 +288,45 @@ def _coverage(matched: int, total: int) -> float:
     if total == 0:
         return 0.0
     return round(matched / total, 4)
+
+
+def registry_coverage(
+    cases: Sequence[Mapping[str, object]],
+    registry: Mapping[str, object],
+) -> dict[str, object]:
+    expected_skills = set(registry)
+    covered_skills = {
+        str(case.get("skill", "")).strip()
+        for case in cases
+        if str(case.get("skill", "")).strip() in expected_skills
+    }
+    seen_case_ids: set[str] = set()
+    duplicate_case_ids: set[str] = set()
+    for case in cases:
+        case_id = str(case.get("id", "")).strip()
+        if not case_id:
+            continue
+        if case_id in seen_case_ids:
+            duplicate_case_ids.add(case_id)
+        seen_case_ids.add(case_id)
+    missing_skills = sorted(expected_skills - covered_skills)
+    unexpected_skills = sorted(
+        {
+            str(case.get("skill", "")).strip()
+            for case in cases
+            if str(case.get("skill", "")).strip()
+            and str(case.get("skill", "")).strip() not in expected_skills
+        }
+    )
+    return {
+        "expected_skill_count": len(expected_skills),
+        "covered_skill_count": len(covered_skills),
+        "missing_skill_count": len(missing_skills),
+        "unexpected_skill_count": len(unexpected_skills),
+        "missing_skills": missing_skills,
+        "unexpected_skills": unexpected_skills,
+        "duplicate_case_ids": sorted(duplicate_case_ids),
+    }
 
 
 if __name__ == "__main__":

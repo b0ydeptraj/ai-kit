@@ -13,11 +13,13 @@ Turn an approved story or tech-spec into code and evidence without reopening sol
 3. Use `test-first-development` when it is installed, selected, or provided by the active bundle; otherwise run the test-first loop directly inside this skill.
 4. Capture the failing test or failing reproduction signal before the main implementation pass.
 5. If a test-first loop is not practical, say why and name the fallback evidence path before editing code.
-6. Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data. Do not add decorative icons, emojis, or unusual Unicode characters unless the existing repo or product content explicitly requires them.
-7. Execute through `execution-loop` rather than piling unrelated changes into one pass.
-8. Keep one behavior or fix slice per red-green cycle instead of widening scope during the green phase.
-9. Preserve the active acceptance criteria and note any hidden scope discovered during implementation.
-10. Hand off to `test-hub` or `qa-governor` with the evidence actually collected.
+6. Keep the smallest diff that explains the change; avoid rewriting adjacent code to make it look cleaner.
+7. Name one edge case and rollback note when the change touches backend behavior, persistence, APIs, queues, auth, or billing.
+8. Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data. Do not add decorative icons, emojis, or unusual Unicode characters unless the existing repo or product content explicitly requires them.
+9. Execute through `execution-loop` rather than piling unrelated changes into one pass.
+10. Keep one behavior or fix slice per red-green cycle instead of widening scope during the green phase.
+11. Preserve the active acceptance criteria and note any hidden scope discovered during implementation.
+12. Hand off to `test-hub` or `qa-governor` with the test evidence actually collected.
 
 ## Escalation
 If implementation reveals missing architecture, unclear acceptance criteria, a bigger-than-expected change surface, or the need for parallel sub-work, stop and route back through `review-hub` or `workflow-router`.
@@ -45,6 +47,7 @@ If implementation reveals missing architecture, unclear acceptance criteria, a b
 - Hand off to test-hub or qa-governor; do not self-certify completion without evidence.
 - Use `test-first-development` when it is installed, selected, or provided by the active bundle; otherwise run the test-first loop directly inside this skill and name the fallback evidence path.
 - If a test-first loop is not practical, say why before coding and name the alternative failing signal you will use.
+- Prefer the smallest diff that fixes the failing reproduction; name rollback notes and one edge case before completion.
 - Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data unless the repo or product explicitly requires non-ASCII content.
 - If tasks are truly independent and the platform supports collaboration, follow `.relay-kit/docs/parallel-execution.md` before using subagent-style execution.
 

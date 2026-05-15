@@ -638,6 +638,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Hand off to test-hub or qa-governor; do not self-certify completion without evidence.",
             "Use `test-first-development` when it is installed, selected, or provided by the active bundle; otherwise run the test-first loop directly inside this skill and name the fallback evidence path.",
             "If a test-first loop is not practical, say why before coding and name the alternative failing signal you will use.",
+            "Prefer the smallest diff that fixes the failing reproduction; name rollback notes and one edge case before completion.",
             "Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data unless the repo or product explicitly requires non-ASCII content.",
             "If tasks are truly independent and the platform supports collaboration, follow `.relay-kit/docs/parallel-execution.md` before using subagent-style execution.",
         ],
@@ -654,11 +655,13 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             3. Use `test-first-development` when it is installed, selected, or provided by the active bundle; otherwise run the test-first loop directly inside this skill.
             4. Capture the failing test or failing reproduction signal before the main implementation pass.
             5. If a test-first loop is not practical, say why and name the fallback evidence path before editing code.
-            6. Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data. Do not add decorative icons, emojis, or unusual Unicode characters unless the existing repo or product content explicitly requires them.
-            7. Execute through `execution-loop` rather than piling unrelated changes into one pass.
-            8. Keep one behavior or fix slice per red-green cycle instead of widening scope during the green phase.
-            9. Preserve the active acceptance criteria and note any hidden scope discovered during implementation.
-            10. Hand off to `test-hub` or `qa-governor` with the evidence actually collected.
+            6. Keep the smallest diff that explains the change; avoid rewriting adjacent code to make it look cleaner.
+            7. Name one edge case and rollback note when the change touches backend behavior, persistence, APIs, queues, auth, or billing.
+            8. Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data. Do not add decorative icons, emojis, or unusual Unicode characters unless the existing repo or product content explicitly requires them.
+            9. Execute through `execution-loop` rather than piling unrelated changes into one pass.
+            10. Keep one behavior or fix slice per red-green cycle instead of widening scope during the green phase.
+            11. Preserve the active acceptance criteria and note any hidden scope discovered during implementation.
+            12. Hand off to `test-hub` or `qa-governor` with the test evidence actually collected.
 
             ## Escalation
             If implementation reveals missing architecture, unclear acceptance criteria, a bigger-than-expected change surface, or the need for parallel sub-work, stop and route back through `review-hub` or `workflow-router`.
@@ -710,32 +713,34 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
     ),
     "go-service-engineering": SkillSpec(
         name="go-service-engineering",
-        description="Use when the request is primarily Go backend service work. Define service boundaries, routing, persistence, middleware, jobs, caching, and test evidence for production-grade Go delivery.",
+        description="Use when the request is primarily Go backend service work. Define handler boundary, transaction boundary, persistence, middleware, jobs, caching, and test evidence for Go service delivery.",
         role="go-engineering",
         layer="layer-4-specialists-and-standalones",
         inputs=["go service requirements", "existing Go module structure", "architecture or tech-spec when available"],
         outputs=["Go service implementation plan or code delta with test and runtime evidence"],
         references=[
             "Prefer established local service patterns over introducing a new framework by default.",
-            "Cover routing, persistence, middleware, caching, background jobs, and observability in one coherent service contract.",
-            "Include evidence commands for unit tests, integration tests, and migration safety where relevant.",
+            "Cover routing table, handler boundary, repository interface, transaction boundary, cache ownership, background jobs, and observability in one coherent service contract.",
+            "Include evidence commands for unit tests, httptest or handler tests, integration tests, context cancellation, and migration rollback safety where relevant.",
         ],
         next_steps=["developer", "testing-patterns", "qa-governor", "review-hub"],
         body=dedent(
             """\
             # Mission
-            Deliver production-grade Go service work with explicit architecture, persistence, and runtime quality constraints.
+            Deliver Go service work the way a backend owner would review it: boundaries first, failure modes named, evidence attached.
 
             ## Mandatory scope checks
-            - Confirm module boundaries and service ownership before coding.
-            - Define API routing and handler contracts for the target service.
-            - Make persistence strategy explicit: ORM, query builder, or SQL-first path.
-            - Cover cache and background job behavior when state or throughput depends on them.
-            - Require test and observability evidence before claiming completion.
+            - Confirm module boundaries, routing table ownership, and service ownership before coding.
+            - Define handler boundary, request validation, response shape, and error mapping for the target service.
+            - Make persistence strategy explicit: ORM, sqlc, query builder, or SQL-first path.
+            - Name transaction boundary, repository interface, cache invalidation, and background job behavior when state or throughput depends on them.
+            - Handle context cancellation and timeout propagation on IO-heavy paths.
+            - Require unit, httptest, integration, migration rollback, and observability evidence before claiming completion.
 
             ## Evidence contract
             - name the exact test commands used
             - include failing signal and green signal for changed behavior
+            - include one table-driven edge case or explicit reason it does not apply
             - record any migration or data-risk notes for rollout
             """
         ).strip(),
@@ -1089,9 +1094,9 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         inputs=["cloud runtime topology", "job and queue model", "SLA, cost, and security constraints"],
         outputs=["cloud MMO automation architecture with idempotent jobs, backoff policies, and observability"],
         references=[
-            "Use idempotent job contracts and dead-letter handling for failure isolation.",
+            "Use idempotent job contracts, idempotency keys, and dead-letter handling for failure isolation.",
             "Use exponential backoff with jitter for transient failures and throttling events.",
-            "Include cost and quota safeguards before scaling concurrency.",
+            "Include queue depth, cost ceiling, and quota safeguards before scaling concurrency.",
         ],
         next_steps=["automation-ops", "release-readiness", "policy-guard", "qa-governor"],
         body=dedent(
@@ -1101,13 +1106,14 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
 
             ## Mandatory scope checks
             - define scheduler and queue boundaries
+            - define queue depth thresholds, dead-letter policy, and poison-message handling
             - define retry policy, jitter, and max-attempt semantics
             - define idempotency keys and dedupe strategy for side effects
-            - define cost ceilings and emergency scale-down controls
+            - define cost ceiling and emergency scale-down controls
 
             ## Evidence contract
             - include retry/backoff test evidence on throttling scenarios
-            - include idempotency and duplicate-prevention evidence
+            - include idempotency key and duplicate-prevention evidence
             - include alerts and SLO signal mapping for operations
             """
         ).strip(),
@@ -1122,23 +1128,24 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
         references=[
             "Define request contracts from official API documentation before implementation.",
             "Handle 429 and transient 5xx paths with bounded retries and reset-aware backoff.",
-            "Use idempotency keys and raw request/response evidence for write operations.",
+            "Use idempotency key, request id, redacted raw request/response evidence, and replay checks for write operations.",
         ],
         next_steps=["api-integration", "automation-ops", "policy-guard", "qa-governor"],
         body=dedent(
             """\
             # Mission
-            Execute MMO API automation with strict contract handling, safe retries, and full operational traceability.
+            Execute MMO API automation with contract handling that a backend reviewer can replay and debug.
 
             ## Mandatory scope checks
             - define endpoint groups by risk and side-effect level
             - define authentication scope and token lifecycle
+            - propagate request id or correlation id through logs
             - define rate-limit parsing and retry-backoff behavior
-            - define idempotency, dedupe, and replay-safety policy
+            - define idempotency key, dedupe, redacted logging, and replay-safety policy
 
             ## Evidence contract
-            - include request/response samples for success and throttled paths
-            - include idempotency replay proof for write endpoints
+            - include redacted request/response samples for success and 429 throttled paths
+            - include idempotency key replay proof for write endpoints
             - include contract drift checks against API schema or docs
             """
         ).strip(),
@@ -1201,7 +1208,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
         outputs=[".relay-kit/references/project-architecture.md"],
         references=[
             "Document what the codebase actually does today, not what the team intended six months ago.",
-            "Include concrete file paths, entrypoints, and dependency direction.",
+            "Include concrete file paths, entrypoint mapping, call graph notes, ownership, dependency direction, and a boundary table.",
         ],
         next_steps=["architect", "developer", "review-hub"],
         body=dedent(
@@ -1212,8 +1219,10 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             ## Produce `.relay-kit/references/project-architecture.md`
             Cover:
             - entry points and execution flow
+            - entrypoint-to-call graph notes for the changed path
             - layer or package structure
             - module responsibilities
+            - ownership and boundary table for the modules under review
             - dependency direction and boundaries
             - architecture drift and hotspots
             - files to mirror when adding new work
@@ -1223,6 +1232,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             - Name boundaries explicitly: controllers, services, repositories, adapters, domain logic, jobs, or scripts.
             - Flag any mismatch between the intended architecture and what the code actually does.
             - Add file paths whenever the reference names a pattern or module.
+            - Mark hotspot files where unrelated features repeatedly collide.
             """
         ).strip(),
     ),
@@ -1270,7 +1280,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
         outputs=[".relay-kit/references/api-integration.md"],
         references=[
             "Prefer concrete service names, client classes, and endpoint groups over generic summaries.",
-            "Make retries, timeouts, idempotency, and error translation explicit.",
+            "Make request id propagation, timeout budget, retries, 429 handling, idempotency, redacted logs, and error translation explicit.",
         ],
         next_steps=["architect", "developer", "qa-governor", "review-hub"],
         allowed_tools=EDIT_AND_TEST_TOOLS,
@@ -1283,7 +1293,8 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             Cover:
             - clients, transports, and endpoints
             - authentication and secret handling
-            - retry, timeout, and idempotency rules
+            - request id or correlation id propagation
+            - retry, timeout budget, 429, and idempotency rules
             - request and response patterns
             - error mapping and recovery
             - testing and mocking approach
@@ -1291,6 +1302,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             ## Working rules
             - Name client wrappers, service classes, or endpoint modules directly.
             - Include where auth is injected and how secrets are sourced.
+            - Require redacted sample payloads when evidence includes tokens, cookies, emails, phone numbers, or account identifiers.
             - Explain how the code handles network failures, partial failures, and upstream rate limits.
             - Note what should be mocked versus tested against a real service.
             """
@@ -1305,7 +1317,7 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
         outputs=[".relay-kit/references/data-persistence.md"],
         references=[
             "Cover both primary storage and auxiliary state like caches, queues, or object stores when relevant.",
-            "Document rollback and migration risks, not only happy-path structure.",
+            "Document transaction boundary, isolation assumptions, rollback, backfill, and migration risks, not only happy-path structure.",
         ],
         next_steps=["architect", "developer", "qa-governor", "review-hub"],
         allowed_tools=EDIT_AND_TEST_TOOLS,
@@ -1319,8 +1331,9 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             - stores and connection points
             - schemas, models, and repositories
             - migrations and schema evolution
-            - transactions and consistency
+            - transaction boundary and isolation assumptions
             - caching and invalidation
+            - backfill and rollback plan
             - data risks and rollback notes
 
             ## Working rules
@@ -1353,13 +1366,15 @@ NATIVE_SUPPORT_SKILLS: Dict[str, SkillSpec] = {
             - frameworks and folder rules
             - fixture and factory patterns
             - mocking and dependency isolation
+            - fake versus mock choice and integration boundary rules
             - async or integration testing rules
             - commands for local evidence
-            - coverage gaps and brittle areas
+            - flake history, coverage gaps, and brittle areas
 
             ## Working rules
             - Name the real commands contributors should run for fast confidence versus deeper verification.
             - Show where fixtures, factories, and mocks live and when each should be preferred.
+            - Mark the integration boundary where a fake stops being enough and a real service or contract test is required.
             - Call out unstable tests, heavy integration paths, and areas with weak coverage.
             - Tie recommendations back to risk, not just test quantity.
             """

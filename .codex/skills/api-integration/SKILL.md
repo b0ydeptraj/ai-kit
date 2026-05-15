@@ -11,7 +11,8 @@ Make network-facing behavior predictable so changes to API code do not become re
 Cover:
 - clients, transports, and endpoints
 - authentication and secret handling
-- retry, timeout, and idempotency rules
+- request id or correlation id propagation
+- retry, timeout budget, 429, and idempotency rules
 - request and response patterns
 - error mapping and recovery
 - testing and mocking approach
@@ -19,6 +20,7 @@ Cover:
 ## Working rules
 - Name client wrappers, service classes, or endpoint modules directly.
 - Include where auth is injected and how secrets are sourced.
+- Require redacted sample payloads when evidence includes tokens, cookies, emails, phone numbers, or account identifiers.
 - Explain how the code handles network failures, partial failures, and upstream rate limits.
 - Note what should be mocked versus tested against a real service.
 
@@ -38,7 +40,7 @@ Cover:
 
 ## Reference skills and rules
 - Prefer concrete service names, client classes, and endpoint groups over generic summaries.
-- Make retries, timeouts, idempotency, and error translation explicit.
+- Make request id propagation, timeout budget, retries, 429 handling, idempotency, redacted logs, and error translation explicit.
 
 ## Likely next step
 - architect

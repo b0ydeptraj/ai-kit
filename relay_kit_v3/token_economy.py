@@ -22,14 +22,12 @@ MAX_FILE_BYTES = 256 * 1024
 CRITICAL_MARKERS = ("fail", "error", "traceback", "exception", "assert", "exit code")
 STRICT_FAILURE_MARKERS = (
     "traceback (most recent call last)",
-    "traceback",
     "assertionerror",
-    "assert ",
-    "exit code",
     "runtimeerror",
     "valueerror",
     "typeerror",
 )
+EXIT_CODE_PATTERN = re.compile(r"\bexit\s+code\s+[1-9]\d*\b", re.IGNORECASE)
 PATH_SIGNAL_PATTERN = re.compile(r"[A-Za-z0-9_./\\-]+\.[A-Za-z0-9_]{1,8}")
 LINE_SIGNAL_PATTERN = re.compile(r"line\s+\d+", re.IGNORECASE)
 COMMAND_SIGNAL_PATTERN = re.compile(r"`([^`\n]{3,})`")
@@ -613,7 +611,9 @@ def _is_raw_required_text(lowered_text: str) -> bool:
         return True
     if "error collecting" in lowered_text or "\ne   " in lowered_text:
         return True
-    if "exit code" in lowered_text and any(hint in lowered_text for hint in ("command", "pytest", "stderr", "stdout", "returncode")):
+    if EXIT_CODE_PATTERN.search(lowered_text) and any(
+        hint in lowered_text for hint in ("command failed", "pytest", "stderr:", "stdout:", "returncode")
+    ):
         return True
     if ("stderr:" in lowered_text or "stdout:" in lowered_text) and any(token in lowered_text for token in ("error", "failed", "failure")):
         return True

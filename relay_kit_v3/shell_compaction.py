@@ -24,6 +24,7 @@ RAW_REQUIRED_MARKERS = (
     "exception",
 )
 MAX_PREVIEW_LINES = 12
+MAX_FAILURE_CONTEXT_LINES = 12
 
 
 class ShellCompactionError(RuntimeError):
@@ -163,9 +164,18 @@ def _raw_required_lines(*, stdout: str, stderr: str, returncode: int) -> list[st
     for stream_name, text in (("stdout", stdout), ("stderr", stderr)):
         for line in text.splitlines():
             lowered = line.lower()
-            if returncode != 0 or any(marker in lowered for marker in RAW_REQUIRED_MARKERS):
+            if any(marker in lowered for marker in RAW_REQUIRED_MARKERS):
                 lines.append(f"{stream_name}: {line}")
+    if returncode != 0 and not lines:
+        lines.extend(_failure_tail_context(stdout=stdout, stderr=stderr))
     return lines
+
+
+def _failure_tail_context(*, stdout: str, stderr: str) -> list[str]:
+    combined: list[str] = []
+    for stream_name, text in (("stdout", stdout), ("stderr", stderr)):
+        combined.extend(f"{stream_name}: {line}" for line in text.splitlines())
+    return combined[-MAX_FAILURE_CONTEXT_LINES:]
 
 
 def _raw_text(*, stdout: str, stderr: str) -> str:
