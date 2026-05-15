@@ -365,7 +365,7 @@ Relay-kit final differentiation phase is complete only when:
 
 Branch: `codex/real-world-token-proof`
 
-Status: done via PR #103.
+Status: done via PR #103 and hardened via PR #105.
 
 Purpose:
 
@@ -389,3 +389,5 @@ Done criteria:
 - enterprise readiness includes `real-world-skill-eval` and `skill-proof-audit` required gates: done.
 - PR #103 merged to `main` at `8e5586df2569d5ef0961b1105306132931ac21dc`.
 - Main CI `Validate Runtime` run `25922588929` is green after merge.
+- PR #105 merged follow-up full-skill coverage and backend realism guard to `main` at `22a9ab21bebbe1a3298e886422f6c47311f22a3b`.
+- Main CI `Validate Runtime` run `25925848766` is green after PR #105.

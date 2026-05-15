@@ -8,7 +8,7 @@
 Fill in only with evidence, decisions, or open questions relevant to this artifact.
 
 - Decision (2026-05-12): `relay_kit_v3` is the canonical runtime namespace after the Relay-kit-only naming hard-cut (`v4.0.0`, PR #100).
-- Decision (2026-05-15): shell output compaction, real-world skill eval, and skill proof audit are first-class runtime proof surfaces after PR #103.
+- Decision (2026-05-15): shell output compaction, real-world skill eval, and skill proof audit are first-class runtime proof surfaces after PR #103; PR #105 hardens that proof with 62/62 full skill coverage and backend realism checks.
 
 ## Coding conventions
 Fill in only with evidence, decisions, or open questions relevant to this artifact.

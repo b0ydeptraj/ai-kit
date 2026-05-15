@@ -8,7 +8,7 @@
 ## Active lanes
 | Lane | Owner skill | Source orchestrator | Target hub | Primary artifact | Lock scope | depends_on | wave_id | resume_condition | Merge prerequisite | Status |
 |---|---|---|---|---|---|---|---|---|---|---|
-| primary | developer | workflow-router | test-hub | registry and generated skill surfaces | backend realism and skill proof eval scope | none | wave-1 | active | PR merge and main CI green | active |
+| primary | unassigned | workflow-router | none | none | none | none | wave-1 | active | none | active |
 | lane-2 | unassigned | team | none | none | none | primary | wave-2 | explicitly routed by team | none | parked |
 | lane-3 | unassigned | team | none | none | none | primary | wave-2 | explicitly routed by team | none | parked |
 
@@ -17,3 +17,4 @@
 |---|---|---|---|
 | primary | runtime/docs/tests naming surfaces | relay-only hard-cut scope | PR #100 merged; lane returned to idle baseline |
 | primary | shell compaction and skill proof surfaces | real-world-token-proof scope | PR #103 merged; main CI `25922588929` green |
+| primary | registry and generated skill surfaces | backend realism and skill proof eval scope | PR #105 merged; main CI `25925848766` green |
