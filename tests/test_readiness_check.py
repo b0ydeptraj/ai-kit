@@ -195,6 +195,8 @@ def test_readiness_report_returns_candidate_when_required_gates_pass(tmp_path: P
         "agent-profiles",
         "runtime-locale",
         "token-economy",
+        "real-world-skill-eval",
+        "skill-proof-audit",
     }
     signal_gate = next(gate for gate in report["gates"] if gate["id"] == "signal-export")
     assert signal_gate["status"] == "pass"
@@ -358,6 +360,78 @@ def test_readiness_report_holds_when_agent_profile_diagnostics_findings_exist(tm
     assert gate["status"] == "fail"
     assert gate["details"]["findings_count"] == 1
     assert "agent profile diagnostics findings: 1" in gate["summary"]
+
+
+def test_readiness_report_holds_when_real_world_skill_eval_fails(tmp_path: Path, monkeypatch) -> None:
+    write_required_docs(tmp_path)
+
+    monkeypatch.setattr(
+        readiness,
+        "build_real_world_eval_report",
+        lambda root: {
+            "schema_version": "relay-kit.real-world-skill-eval.v1",
+            "status": "fail",
+            "case_count": 1,
+            "passed": 0,
+            "failed": 1,
+            "findings": [{"case_id": "thin-case", "detail": "missing evidence terms"}],
+        },
+    )
+
+    report = readiness.build_readiness_report(
+        tmp_path,
+        profile="enterprise",
+        command_runner=passing_command_runner,
+        support_builder=lambda root, policy_pack: healthy_support_bundle_payload(),
+        upgrade_builder=lambda root: {"status": "pass", "findings_count": 0},
+        contract_exporter=lambda root: {"schema_version": CONTRACT_EXPORT_SCHEMA_VERSION},
+        contract_importer=lambda root, payload: {
+            "schema_version": CONTRACT_IMPORT_SCHEMA_VERSION,
+            "status": "pass",
+            "findings": [],
+        },
+    )
+
+    gate = next(gate for gate in report["gates"] if gate["id"] == "real-world-skill-eval")
+
+    assert report["status"] == "hold"
+    assert gate["status"] == "fail"
+    assert gate["details"]["failed"] == 1
+
+
+def test_readiness_report_holds_when_skill_proof_audit_finds_theoretical_skill(tmp_path: Path, monkeypatch) -> None:
+    write_required_docs(tmp_path)
+
+    monkeypatch.setattr(
+        readiness,
+        "build_skill_proof_report",
+        lambda root, strict=False: {
+            "schema_version": "relay-kit.skill-proof-audit.v1",
+            "status": "fail",
+            "summary": {"skill_count": 1, "theoretical": 1, "validated": 0, "field_tested": 0},
+            "findings": [{"skill": "thin-skill", "summary": "no validation or field evidence found"}],
+        },
+    )
+
+    report = readiness.build_readiness_report(
+        tmp_path,
+        profile="enterprise",
+        command_runner=passing_command_runner,
+        support_builder=lambda root, policy_pack: healthy_support_bundle_payload(),
+        upgrade_builder=lambda root: {"status": "pass", "findings_count": 0},
+        contract_exporter=lambda root: {"schema_version": CONTRACT_EXPORT_SCHEMA_VERSION},
+        contract_importer=lambda root, payload: {
+            "schema_version": CONTRACT_IMPORT_SCHEMA_VERSION,
+            "status": "pass",
+            "findings": [],
+        },
+    )
+
+    gate = next(gate for gate in report["gates"] if gate["id"] == "skill-proof-audit")
+
+    assert report["status"] == "hold"
+    assert gate["status"] == "fail"
+    assert gate["details"]["summary"]["theoretical"] == 1
 
 
 def test_readiness_report_is_limited_beta_when_tests_are_skipped(tmp_path: Path) -> None:

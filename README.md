@@ -180,6 +180,14 @@ relay-kit context audit /path/to/project --strict --json
 relay-kit context budget /path/to/project --max-tokens 8000 --strict --json
 relay-kit context pack /path/to/project --task "ship release safely" --max-tokens 8000 --strict --json
 relay-kit token audit /path/to/project --max-tokens 8000 --strict --json
+relay-kit shell compact /path/to/project --json -- python -m pytest tests -q
+```
+
+Prove skill behavior beyond routing claims:
+
+```bash
+relay-kit eval real-world /path/to/project --strict --json
+relay-kit proof audit /path/to/project --strict --json
 ```
 
 Audit lane coordination before trusting parallel work:

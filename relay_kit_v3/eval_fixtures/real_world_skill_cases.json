@@ -1,0 +1,66 @@
+[
+  {
+    "id": "go-service-runtime-contract",
+    "skill": "go-service-engineering",
+    "task": "Design a Go service slice with API routing, persistence, cache, background jobs, unit tests, integration tests, and observability proof.",
+    "required_artifacts": ["Go service implementation plan", "service ownership"],
+    "required_evidence": ["unit tests", "integration tests", "observability"],
+    "pass_rubric": ["routing", "persistence", "runtime evidence"]
+  },
+  {
+    "id": "next-product-app-router-shadcn",
+    "skill": "next-product-frontend",
+    "task": "Implement a Next.js App Router product screen using existing shadcn/Tailwind patterns with server actions, cache behavior, accessibility, and performance evidence.",
+    "required_artifacts": ["Next.js implementation plan", "route-level behavior proof"],
+    "required_evidence": ["accessibility", "performance", "hydration-risk"],
+    "pass_rubric": ["App Router", "server component", "client component"]
+  },
+  {
+    "id": "growth-launch-campaign",
+    "skill": "growth-marketing",
+    "task": "Create a launch campaign with positioning, channel strategy, funnel metrics, campaign QA, and post-launch measurement tied to product constraints.",
+    "required_artifacts": ["growth execution plan", "campaign QA"],
+    "required_evidence": ["source-backed messaging", "KPI targets", "measurement method"],
+    "pass_rubric": ["positioning", "funnel", "post-launch"]
+  },
+  {
+    "id": "market-research-competitor-pricing",
+    "skill": "market-research",
+    "task": "Compare competitors, refine ICP, collect pricing signals, and label each claim as verified, inferred, or unknown before a GTM decision.",
+    "required_artifacts": ["ranked market findings", "decision-impact summary"],
+    "required_evidence": ["source authority", "freshness", "pricing signals"],
+    "pass_rubric": ["competitor", "ICP", "decision impact"]
+  },
+  {
+    "id": "mmo-browser-fleet-session-reliability",
+    "skill": "mmo-browser-fleet-automation",
+    "task": "Run a policy-safe browser fleet workflow with profile isolation, session lease strategy, explicit waits, selector drift diagnostics, and one controlled failure path.",
+    "required_artifacts": ["browser fleet automation design", "run traces"],
+    "required_evidence": ["profile isolation", "selector drift", "rate-limit guard"],
+    "pass_rubric": ["session lease", "deterministic retry", "controlled failure"]
+  },
+  {
+    "id": "mmo-api-quota-replay-safe",
+    "skill": "mmo-http-api-automation",
+    "task": "Build HTTP/API automation with official endpoint contracts, quota handling, 429 retry-backoff behavior, idempotency keys, and replay-safe evidence.",
+    "required_artifacts": ["HTTP automation plan", "audit-ready logs"],
+    "required_evidence": ["request/response samples", "idempotency replay proof", "contract drift checks"],
+    "pass_rubric": ["rate-limit", "retry-backoff", "replay-safety"]
+  },
+  {
+    "id": "mmo-cloud-queue-cost-guard",
+    "skill": "mmo-cloud-operations-automation",
+    "task": "Operate cloud MMO automation with scheduler and queue boundaries, retry jitter, idempotent jobs, dead-letter handling, cost ceilings, and SLO signal mapping.",
+    "required_artifacts": ["cloud MMO automation architecture", "alerts"],
+    "required_evidence": ["retry/backoff test evidence", "idempotency", "cost ceilings"],
+    "pass_rubric": ["scheduler", "queue", "emergency scale-down"]
+  },
+  {
+    "id": "token-economy-failure-log-retention",
+    "skill": "token-economy",
+    "task": "Compact a large failing command log while preserving raw-required traceback and assertion lines, raw path pointers, budget violations, and signal retention metrics.",
+    "required_artifacts": ["token audit report", "task-scoped context pack"],
+    "required_evidence": ["raw-required blocks", "raw pointers", "signal retention"],
+    "pass_rubric": ["budget violations", "retention metrics", "raw path"]
+  }
+]
