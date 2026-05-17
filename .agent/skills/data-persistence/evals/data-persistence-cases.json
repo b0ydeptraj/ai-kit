@@ -1,23 +1,41 @@
 [
   {
-    "id": "data-persistence-context-anchored-output",
+    "id": "data-persistence-battle-read-first",
     "skill": "data-persistence",
-    "task": "Handle a compact data persistence request and anchor the answer in model files.",
+    "repo_profile": "public Python service repo with serializer, retry, cache, and session tests",
+    "task": "trace a backend behavior bug from source file to test anchor without guessing from filenames only Use `data-persistence` and cite the first files before advice.",
+    "expected_files": [
+      "src/service/session.py",
+      "src/service/retry.py",
+      "tests/test_session.py"
+    ],
+    "expected_symbols": [
+      "SessionManager",
+      "retry_request"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "session",
+      "retry",
       "verified",
-      "data-persistence"
+      "residual risk"
     ]
   },
   {
-    "id": "data-persistence-handoff-and-risk-control",
+    "id": "data-persistence-public-repo-benchmark-anchor",
     "skill": "data-persistence",
-    "task": "Review a data persistence lane before producing .relay-kit/references/data-persistence.md.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `data-persistence` and explain what evidence is still missing.",
+    "expected_files": [
+      "src/service/session.py",
+      "tests/test_session.py"
+    ],
+    "expected_symbols": [
+      "SessionManager"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "cache",
+      "transaction boundary",
+      "read-only",
       "unverified"
     ]
   }

@@ -8,6 +8,7 @@ Start here:
 - [Skill catalog](skill-catalog.md)
 - [Local context graph](context-graph.md)
 - [Prompt enhancement](prompt-enhance.md)
+- [Battle benchmark](battle-benchmark.md)
 - [Readiness](readiness.md)
 
-Relay-kit is a runtime skill and governance bundle. It does not claim to be an IDE, hosted marketplace, cloud semantic indexing system, or expert guarantee. The value is portable skill routing, adapter generation, local evidence gates, and inspectable resources.
+Relay-kit is a runtime skill and governance bundle. It does not claim to be an IDE, hosted marketplace, cloud semantic indexing system, or guarantee of expertise. The value is portable skill routing, adapter generation, local evidence gates, and inspectable resources.

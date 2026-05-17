@@ -1,11 +1,25 @@
-# growth-marketing Good Output
+# growth-marketing Battle-Calibrated Output
 
-Good output is measurable and proof-bounded.
+Request: separate verified market evidence from inference before recommending product direction
 
-Example summary:
+Recommended skill: `growth-marketing` because the request matches `growth` work and has concrete repo anchors.
 
-- Audience: small teams using coding agents on real repos.
-- Positioning: local governance layer for repeatable agent work.
-- Proof boundary: local gates pass; external field validation pending.
-- Channels: README, launch thread, docs page.
-- KPIs: install conversion, doctor success rate, support issue rate.
+Read first:
+
+- `README.md`
+- `docs/site/skill-catalog.md`
+- `CHANGELOG.md`
+
+Evidence gathered:
+
+- Confirmed `pricing` or nearby ownership before recommending changes.
+- Checked `source freshness` and `competitor claim` against the relevant source path.
+- Identified `unknown` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `decision impact` remains unverified until the focused gate or benchmark hit is captured.

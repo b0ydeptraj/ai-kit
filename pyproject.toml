@@ -14,6 +14,11 @@ authors = [{ name = "Relay-kit" }]
 [project.scripts]
 relay-kit = "relay_kit_public_cli:main"
 
+[project.optional-dependencies]
+context = [
+  "fastembed>=0.6,<1",
+]
+
 [tool.setuptools]
 include-package-data = true
 py-modules = [

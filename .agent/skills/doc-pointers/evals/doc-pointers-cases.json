@@ -1,23 +1,41 @@
 [
   {
-    "id": "doc-pointers-context-anchored-output",
+    "id": "doc-pointers-battle-read-first",
     "skill": "doc-pointers",
-    "task": "Handle a compact doc pointers request and anchor the answer in active hub or orchestrator request.",
+    "repo_profile": "public docs repo with README, localized docs, static GitHub catalog, and encoding tests",
+    "task": "review public docs for overclaim, broken localization, and missing evidence labels Use `doc-pointers` and cite the first files before advice.",
+    "expected_files": [
+      "README.md",
+      "README.vi.md",
+      "docs/site/index.md"
+    ],
+    "expected_symbols": [
+      "test_readme_files_are_utf8_without_mojibake",
+      "render_battle_audit"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "utf-8",
+      "public copy",
       "verified",
-      "doc-pointers"
+      "residual risk"
     ]
   },
   {
-    "id": "doc-pointers-handoff-and-risk-control",
+    "id": "doc-pointers-public-repo-benchmark-anchor",
     "skill": "doc-pointers",
-    "task": "Review a doc pointers lane before producing doc pointers, file paths, or citations appended to the active artifact.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `doc-pointers` and explain what evidence is still missing.",
+    "expected_files": [
+      "README.md",
+      "tests/test_readme_encoding.py"
+    ],
+    "expected_symbols": [
+      "test_readme_files_are_utf8_without_mojibake"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "overclaim",
+      "evidence label",
+      "read-only",
       "unverified"
     ]
   }

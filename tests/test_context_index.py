@@ -47,6 +47,10 @@ def test_context_index_search_and_related_use_real_files(tmp_path: Path) -> None
     related = build_context_related(tmp_path, path="src/auth/LoginForm.tsx")
 
     assert index["schema_version"] == "relay-kit.context-index.v1"
+    assert index["engine_version"] == "hybrid-local-v2"
+    assert index["summary"]["chunk_count"] >= 3
+    assert index["summary"]["call_hint_count"] >= 1
+    assert index["capabilities"]["call_graph_hints"] is True
     assert output_path == tmp_path / ".relay-kit" / "context" / "index.json"
     assert search["schema_version"] == "relay-kit.context-search.v1"
     assert search["index_status"] == "available"
@@ -56,6 +60,7 @@ def test_context_index_search_and_related_use_real_files(tmp_path: Path) -> None
     assert "src/auth/login.test.ts" in result_paths
     assert related["schema_version"] == "relay-kit.context-related.v1"
     assert "src/auth/login.test.ts" in {result["path"] for result in related["results"]}
+    assert any(result["call_hints"] for result in search["results"])
 
 
 def test_context_search_missing_index_is_empty_not_failure(tmp_path: Path) -> None:
@@ -84,3 +89,16 @@ def test_public_cli_context_commands(capsys, tmp_path: Path) -> None:
     assert index_payload["schema_version"] == "relay-kit.context-index.v1"
     assert search_payload["results"]
     assert related_payload["source"]["path"] == "src/auth/LoginForm.tsx"
+
+
+def test_public_cli_context_watch_once(capsys, tmp_path: Path) -> None:
+    write_fixture(tmp_path)
+
+    code = relay_kit_public_cli.main(["context", "watch", str(tmp_path), "--once", "--json"])
+    payload = json.loads(capsys.readouterr().out)
+
+    assert code == 0
+    assert payload["schema_version"] == "relay-kit.context-index.v1"
+    assert payload["engine_version"] == "hybrid-local-v2"
+    assert payload["iterations"] == 1
+    assert (tmp_path / ".relay-kit" / "context" / "index.json").exists()

@@ -1,11 +1,25 @@
-# market-research Good Output
+# market-research Battle-Calibrated Output
 
-Good output separates facts from inference and ties every finding to a decision.
+Request: separate verified market evidence from inference before recommending product direction
 
-Example summary:
+Recommended skill: `market-research` because the request matches `market-intelligence` work and has concrete repo anchors.
 
-- Decision: whether to position the product as a governance layer or a skill marketplace.
-- Verified: competitor docs list packaged skills and resources.
-- Inferred: buyer pain is repeatability and proof, not only prompt reuse.
-- Unknown: field adoption without customer interviews.
-- Recommendation: validate with three target users before changing public pricing copy.
+Read first:
+
+- `README.md`
+- `docs/site/skill-catalog.md`
+- `CHANGELOG.md`
+
+Evidence gathered:
+
+- Confirmed `pricing` or nearby ownership before recommending changes.
+- Checked `source freshness` and `competitor claim` against the relevant source path.
+- Identified `unknown` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `decision impact` remains unverified until the focused gate or benchmark hit is captured.

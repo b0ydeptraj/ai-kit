@@ -1,14 +1,42 @@
 [
   {
-    "id": "growth-marketing-proof-bounded-launch",
+    "id": "growth-marketing-battle-read-first",
     "skill": "growth-marketing",
-    "task": "Prepare launch copy for a governance bundle with only local evidence.",
-    "expected_evidence_terms": ["proof boundary", "ICP", "KPI", "campaign QA"]
+    "repo_profile": "public product repo with README, pricing notes, competitor docs, and changelog",
+    "task": "separate verified market evidence from inference before recommending product direction Use `growth-marketing` and cite the first files before advice.",
+    "expected_files": [
+      "README.md",
+      "docs/site/skill-catalog.md",
+      "CHANGELOG.md"
+    ],
+    "expected_symbols": [
+      "pricing",
+      "positioning"
+    ],
+    "expected_evidence_terms": [
+      "source freshness",
+      "competitor claim",
+      "verified",
+      "residual risk"
+    ]
   },
   {
-    "id": "growth-marketing-funnel-plan",
+    "id": "growth-marketing-public-repo-benchmark-anchor",
     "skill": "growth-marketing",
-    "task": "Build a funnel plan for converting README visitors to successful installs.",
-    "expected_evidence_terms": ["channel", "funnel", "measurement", "review cadence"]
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `growth-marketing` and explain what evidence is still missing.",
+    "expected_files": [
+      "README.md",
+      "CHANGELOG.md"
+    ],
+    "expected_symbols": [
+      "pricing"
+    ],
+    "expected_evidence_terms": [
+      "unknown",
+      "decision impact",
+      "read-only",
+      "unverified"
+    ]
   }
 ]

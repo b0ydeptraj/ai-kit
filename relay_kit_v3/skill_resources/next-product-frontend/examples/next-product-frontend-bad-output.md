@@ -1,11 +1,18 @@
-# next-product-frontend Bad Output
+# next-product-frontend Weak Output Anti-Example
 
-Bad output focuses on component appearance while skipping delivery risk.
+Request: review a login UI change, name files first, and identify the test evidence before editing
 
-Red flags:
+Weak answer:
 
-- No route or layout boundary.
-- Client component used for everything without reason.
-- Mutation has no error state.
-- Loading and empty states are missing.
-- No accessibility or browser evidence.
+This looks like `next-product-frontend`, so follow the usual checklist and it should be fine.
+
+Why this fails:
+
+- No file path from `public Next.js product repo with app router, login UI, and Playwright smoke tests` was inspected.
+- No symbol such as `LoginForm` was confirmed.
+- No proof surface was named for `login flow`.
+- It blurs verified evidence and inference, which is exactly how overclaim slips back into Relay-kit.
+
+Correction:
+
+Name the concrete path, inspect or search it, state what is verified, and leave unverified claims labeled until a gate proves them.

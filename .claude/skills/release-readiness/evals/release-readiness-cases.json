@@ -1,23 +1,41 @@
 [
   {
-    "id": "release-readiness-context-anchored-output",
+    "id": "release-readiness-battle-read-first",
     "skill": "release-readiness",
-    "task": "Handle a compact release readiness request and anchor the answer in active hub or orchestrator request.",
+    "repo_profile": "public automation repo with GitHub Actions, scheduled jobs, rollback docs, and dry-run mode",
+    "task": "plan an operational automation change with rollback and dry-run evidence before enabling it Use `release-readiness` and cite the first files before advice.",
+    "expected_files": [
+      ".github/workflows/validate-runtime.yml",
+      "scripts/runtime_doctor.py",
+      "docs/site/readiness.md"
+    ],
+    "expected_symbols": [
+      "main",
+      "build_report"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "dry run",
+      "rollback",
       "verified",
-      "release-readiness"
+      "residual risk"
     ]
   },
   {
-    "id": "release-readiness-handoff-and-risk-control",
+    "id": "release-readiness-public-repo-benchmark-anchor",
     "skill": "release-readiness",
-    "task": "Review a release readiness lane before producing release-readiness checklist notes appended to qa-report or workflow-state.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `release-readiness` and explain what evidence is still missing.",
+    "expected_files": [
+      ".github/workflows/validate-runtime.yml",
+      "docs/site/readiness.md"
+    ],
+    "expected_symbols": [
+      "main"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "workflow log",
+      "idempotency",
+      "read-only",
       "unverified"
     ]
   }

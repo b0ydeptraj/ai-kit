@@ -113,6 +113,8 @@ from relay_kit_v3.real_world_eval import (
     render_report as render_real_world_eval_report,
     write_report as write_real_world_eval_report,
 )
+from relay_kit_v3.battle_audit import build_battle_audit, render_battle_audit, write_battle_audit
+from relay_kit_v3.battle_benchmark import build_battle_benchmark, render_battle_benchmark, write_battle_benchmark
 from relay_kit_v3.skill_proof import (
     build_report as build_skill_proof_report,
     render_report as render_skill_proof_report,
@@ -128,6 +130,8 @@ from relay_kit_v3.context_index import (
     render_context_index,
     render_context_related,
     render_context_search,
+    render_context_watch,
+    watch_context_index,
     write_context_index,
 )
 from relay_kit_v3.lane_audit import build_lane_audit, render_lane_audit, write_lane_audit
@@ -354,6 +358,14 @@ def _parse_context_args(argv: list[str]) -> argparse.Namespace:
     related.add_argument("--limit", type=int, default=10, help="Maximum related file count")
     related.add_argument("--index-file", default=None, help="Optional context index JSON path")
     related.add_argument("--json", action="store_true", help="Emit machine-readable related-file results")
+
+    watch = subparsers.add_parser("watch", help="Refresh the local context index when indexed files change")
+    watch.add_argument("project_path", nargs="?", default=".", help="Project root to watch")
+    watch.add_argument("--output-file", default=None, help="Optional index JSON output path")
+    watch.add_argument("--once", action="store_true", help="Build once and exit")
+    watch.add_argument("--interval", type=float, default=2.0, help="Polling interval in seconds")
+    watch.add_argument("--max-iterations", type=int, default=None, help="Stop after N polling iterations")
+    watch.add_argument("--json", action="store_true", help="Emit machine-readable watch summary")
 
     budget = subparsers.add_parser("budget", help="Estimate token budget and compression safety")
     budget.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
@@ -727,6 +739,21 @@ def _parse_eval_args(argv: list[str]) -> argparse.Namespace:
     real_world.add_argument("--output-file", default=None, help="Optional JSON report output path")
     real_world.add_argument("--json", action="store_true", help="Emit JSON report")
     real_world.add_argument("--strict", action="store_true", help="Return non-zero unless all cases pass")
+
+    battle_audit = subparsers.add_parser("battle-audit", help="Audit skill resources and public surfaces for battle readiness")
+    battle_audit.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    battle_audit.add_argument("--output-file", default=None, help="Optional JSON report output path")
+    battle_audit.add_argument("--json", action="store_true", help="Emit JSON report")
+    battle_audit.add_argument("--strict", action="store_true", help="Return non-zero when high-severity findings exist")
+
+    battle_benchmark = subparsers.add_parser("battle-benchmark", help="Run safe read-only public repo benchmark cases")
+    battle_benchmark.add_argument("project_path", nargs="?", default=".", help="Project root that owns the temp benchmark folder")
+    battle_benchmark.add_argument("--suite", default="curated", choices=["curated"], help="Benchmark suite to run")
+    battle_benchmark.add_argument("--cleanup", action="store_true", help="Delete temporary cloned repos after the run")
+    battle_benchmark.add_argument("--repo-limit", type=int, default=None, help="Limit the number of repos from the suite")
+    battle_benchmark.add_argument("--output-file", default=None, help="Optional JSON report output path")
+    battle_benchmark.add_argument("--json", action="store_true", help="Emit JSON report")
+    battle_benchmark.add_argument("--strict", action="store_true", help="Return non-zero unless benchmark cases pass")
     return parser.parse_args(argv)
 
 
@@ -1473,6 +1500,20 @@ def run_context(args: argparse.Namespace) -> int:
             print(render_context_related(report))
         return 0 if report["status"] in {"pass", "empty"} else 2
 
+    if args.action == "watch":
+        report = watch_context_index(
+            args.project_path,
+            output_file=args.output_file,
+            once=args.once,
+            interval_seconds=args.interval,
+            max_iterations=args.max_iterations,
+        )
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_context_watch(report))
+        return 0 if report["status"] == "pass" else 2
+
     if args.action == "budget":
         report = build_context_budget(
             args.project_path,
@@ -1903,6 +1944,35 @@ def run_manifest(args: argparse.Namespace) -> int:
 
 
 def run_eval(args: argparse.Namespace) -> int:
+    if args.action == "battle-audit":
+        report = build_battle_audit(args.project_path)
+        if args.output_file:
+            write_battle_audit(args.project_path, report, args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_battle_audit(report))
+        if args.strict and report["status"] != "pass":
+            return 2
+        return 0
+
+    if args.action == "battle-benchmark":
+        report = build_battle_benchmark(
+            args.project_path,
+            suite=args.suite,
+            cleanup=args.cleanup,
+            repo_limit=args.repo_limit,
+        )
+        if args.output_file:
+            write_battle_benchmark(args.project_path, report, args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_battle_benchmark(report))
+        if args.strict and report["status"] != "pass":
+            return 2
+        return 0
+
     if args.action == "real-world":
         report = build_real_world_eval_report(
             args.project_path,

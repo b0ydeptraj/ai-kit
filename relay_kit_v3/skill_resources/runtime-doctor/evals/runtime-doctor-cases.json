@@ -1,23 +1,41 @@
 [
   {
-    "id": "runtime-doctor-context-anchored-output",
+    "id": "runtime-doctor-battle-read-first",
     "skill": "runtime-doctor",
-    "task": "Handle a compact runtime doctor request and anchor the answer in active hub or orchestrator request.",
+    "repo_profile": "public automation repo with GitHub Actions, scheduled jobs, rollback docs, and dry-run mode",
+    "task": "plan an operational automation change with rollback and dry-run evidence before enabling it Use `runtime-doctor` and cite the first files before advice.",
+    "expected_files": [
+      ".github/workflows/validate-runtime.yml",
+      "scripts/runtime_doctor.py",
+      "docs/site/readiness.md"
+    ],
+    "expected_symbols": [
+      "main",
+      "build_report"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "dry run",
+      "rollback",
       "verified",
-      "runtime-doctor"
+      "residual risk"
     ]
   },
   {
-    "id": "runtime-doctor-handoff-and-risk-control",
+    "id": "runtime-doctor-public-repo-benchmark-anchor",
     "skill": "runtime-doctor",
-    "task": "Review a runtime doctor lane before producing runtime drift findings with exact surface references appended to qa-report or workflow-state.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `runtime-doctor` and explain what evidence is still missing.",
+    "expected_files": [
+      ".github/workflows/validate-runtime.yml",
+      "docs/site/readiness.md"
+    ],
+    "expected_symbols": [
+      "main"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "workflow log",
+      "idempotency",
+      "read-only",
       "unverified"
     ]
   }

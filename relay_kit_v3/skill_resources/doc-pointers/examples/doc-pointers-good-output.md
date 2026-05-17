@@ -1,14 +1,25 @@
-# doc-pointers Good Output Example
+# doc-pointers Battle-Calibrated Output
 
-Request: Use `doc-pointers` for a doc pointers lane where the user gave a compact request.
+Request: review public docs for overclaim, broken localization, and missing evidence labels
 
-Good response shape:
+Recommended skill: `doc-pointers` because the request matches `utility-provider` work and has concrete repo anchors.
 
-- Recommended skill: `doc-pointers` because the request matches `utility-provider` work.
-- Read first: active hub or orchestrator request, current authoritative artifact, only the evidence relevant to this pass.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: doc pointers, file paths, or citations appended to the active artifact, a short conflict note when documentation and implementation disagree.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: scout-hub.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `README.md`
+- `README.vi.md`
+- `tests/test_readme_encoding.py`
+
+Evidence gathered:
+
+- Confirmed `test_readme_files_are_utf8_without_mojibake` or nearby ownership before recommending changes.
+- Checked `utf-8` and `public copy` against the relevant source path.
+- Identified `overclaim` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `evidence label` remains unverified until the focused gate or benchmark hit is captured.

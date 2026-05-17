@@ -1,14 +1,25 @@
-# analyst Good Output Example
+# analyst Battle-Calibrated Output
 
-Request: Use `analyst` for a analyst lane where the user gave a compact request.
+Request: separate verified market evidence from inference before recommending product direction
 
-Good response shape:
+Recommended skill: `analyst` because the request matches `analysis` work and has concrete repo anchors.
 
-- Recommended skill: `analyst` because the request matches `analysis` work.
-- Read first: user request, .relay-kit/contracts/project-context.md, .relay-kit/state/workflow-state.md.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: .relay-kit/contracts/product-brief.md.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: pm.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `README.md`
+- `docs/site/skill-catalog.md`
+- `CHANGELOG.md`
+
+Evidence gathered:
+
+- Confirmed `pricing` or nearby ownership before recommending changes.
+- Checked `source freshness` and `competitor claim` against the relevant source path.
+- Identified `unknown` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `decision impact` remains unverified until the focused gate or benchmark hit is captured.

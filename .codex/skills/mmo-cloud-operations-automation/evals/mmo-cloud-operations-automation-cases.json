@@ -1,14 +1,42 @@
 [
   {
-    "id": "mmo-cloud-queue-retry",
+    "id": "mmo-cloud-operations-automation-battle-read-first",
     "skill": "mmo-cloud-operations-automation",
-    "task": "Design worker queue retries for throttled jobs.",
-    "expected_evidence_terms": ["queue depth", "backoff", "dead-letter", "idempotency key"]
+    "repo_profile": "operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails",
+    "task": "review an operator-owned MMO automation lane for safety, repeatability, and evidence logging Use `mmo-cloud-operations-automation` and cite the first files before advice.",
+    "expected_files": [
+      "ops/accounts.csv",
+      "workers/session_runner.ts",
+      "logs/run-2026-05-17.json"
+    ],
+    "expected_symbols": [
+      "SessionRunner",
+      "AccountHealth"
+    ],
+    "expected_evidence_terms": [
+      "operator queue",
+      "quota",
+      "verified",
+      "residual risk"
+    ]
   },
   {
-    "id": "mmo-cloud-cost-guard",
+    "id": "mmo-cloud-operations-automation-public-repo-benchmark-anchor",
     "skill": "mmo-cloud-operations-automation",
-    "task": "Review cloud automation scale-up risk.",
-    "expected_evidence_terms": ["cost ceiling", "quota", "scale-down", "worker health"]
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `mmo-cloud-operations-automation` and explain what evidence is still missing.",
+    "expected_files": [
+      "ops/accounts.csv",
+      "logs/run-2026-05-17.json"
+    ],
+    "expected_symbols": [
+      "SessionRunner"
+    ],
+    "expected_evidence_terms": [
+      "dedupe",
+      "recovery runbook",
+      "read-only",
+      "unverified"
+    ]
   }
 ]

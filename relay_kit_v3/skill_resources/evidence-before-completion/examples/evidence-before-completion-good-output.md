@@ -1,14 +1,25 @@
-# evidence-before-completion Good Output Example
+# evidence-before-completion Battle-Calibrated Output
 
-Request: Use `evidence-before-completion` for a evidence before completion lane where the user gave a compact request.
+Request: audit a Relay-kit runtime change and prove the generated surfaces are still synchronized
 
-Good response shape:
+Recommended skill: `evidence-before-completion` because the request matches `utility-provider` work and has concrete repo anchors.
 
-- Recommended skill: `evidence-before-completion` because the request matches `utility-provider` work.
-- Read first: active hub or orchestrator request, current authoritative artifact, only the evidence relevant to this pass.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: fresh claim-to-evidence checks and proof output appended to workflow-state or the active artifact.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: test-hub.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `relay_kit_public_cli.py`
+- `relay_kit_v3/registry/skills.py`
+- `tests/test_skill_resources.py`
+
+Evidence gathered:
+
+- Confirmed `main` or nearby ownership before recommending changes.
+- Checked `adapter surface` and `readiness gate` against the relevant source path.
+- Identified `generated skill` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `strict evidence` remains unverified until the focused gate or benchmark hit is captured.

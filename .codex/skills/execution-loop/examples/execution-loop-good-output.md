@@ -1,14 +1,25 @@
-# execution-loop Good Output Example
+# execution-loop Battle-Calibrated Output
 
-Request: Use `execution-loop` for a execution loop lane where the user gave a compact request.
+Request: audit a Relay-kit runtime change and prove the generated surfaces are still synchronized
 
-Good response shape:
+Recommended skill: `execution-loop` because the request matches `developer-support` work and has concrete repo anchors.
 
-- Recommended skill: `execution-loop` because the request matches `developer-support` work.
-- Read first: story or tech-spec, project-context, relevant support skills.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: working code plus test evidence.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: test-hub.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `relay_kit_public_cli.py`
+- `relay_kit_v3/registry/skills.py`
+- `tests/test_skill_resources.py`
+
+Evidence gathered:
+
+- Confirmed `main` or nearby ownership before recommending changes.
+- Checked `adapter surface` and `readiness gate` against the relevant source path.
+- Identified `generated skill` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `strict evidence` remains unverified until the focused gate or benchmark hit is captured.

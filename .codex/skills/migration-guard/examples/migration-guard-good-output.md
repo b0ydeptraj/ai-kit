@@ -1,14 +1,25 @@
-# migration-guard Good Output Example
+# migration-guard Battle-Calibrated Output
 
-Request: Use `migration-guard` for a migration guard lane where the user gave a compact request.
+Request: plan an operational automation change with rollback and dry-run evidence before enabling it
 
-Good response shape:
+Recommended skill: `migration-guard` because the request matches `utility-provider` work and has concrete repo anchors.
 
-- Recommended skill: `migration-guard` because the request matches `utility-provider` work.
-- Read first: active hub or orchestrator request, current authoritative artifact, only the evidence relevant to this pass.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: cutover token drift findings appended to qa-report or workflow-state, explicit pass or hold verdict for migration safety before merge.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: test-hub.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `.github/workflows/validate-runtime.yml`
+- `scripts/runtime_doctor.py`
+- `docs/site/readiness.md`
+
+Evidence gathered:
+
+- Confirmed `main` or nearby ownership before recommending changes.
+- Checked `dry run` and `rollback` against the relevant source path.
+- Identified `workflow log` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `idempotency` remains unverified until the focused gate or benchmark hit is captured.

@@ -1,14 +1,25 @@
-# vietnamese-product-localization Good Output Example
+# vietnamese-product-localization Battle-Calibrated Output
 
-Request: Use `vietnamese-product-localization` for a vietnamese product localization lane where the user gave a compact request.
+Request: review public docs for overclaim, broken localization, and missing evidence labels
 
-Good response shape:
+Recommended skill: `vietnamese-product-localization` because the request matches `localization` work and has concrete repo anchors.
 
-- Recommended skill: `vietnamese-product-localization` because the request matches `localization` work.
-- Read first: source content or request, target audience context, localization policy profile.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: Vietnamese or bilingual product artifacts with terminology and quality notes.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: growth-marketing.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `README.md`
+- `README.vi.md`
+- `tests/test_readme_encoding.py`
+
+Evidence gathered:
+
+- Confirmed `test_readme_files_are_utf8_without_mojibake` or nearby ownership before recommending changes.
+- Checked `utf-8` and `public copy` against the relevant source path.
+- Identified `overclaim` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `evidence label` remains unverified until the focused gate or benchmark hit is captured.

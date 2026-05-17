@@ -1,23 +1,41 @@
 [
   {
-    "id": "accessibility-review-context-anchored-output",
+    "id": "accessibility-review-battle-read-first",
     "skill": "accessibility-review",
-    "task": "Handle a compact accessibility review request and anchor the answer in active hub or orchestrator request.",
+    "repo_profile": "public Next.js product repo with app router, login UI, and Playwright smoke tests",
+    "task": "review a login UI change, name files first, and identify the test evidence before editing Use `accessibility-review` and cite the first files before advice.",
+    "expected_files": [
+      "src/app/login/page.tsx",
+      "src/components/LoginForm.tsx",
+      "tests/login.spec.ts"
+    ],
+    "expected_symbols": [
+      "LoginForm",
+      "submitLogin"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "login flow",
+      "component boundary",
       "verified",
-      "accessibility-review"
+      "residual risk"
     ]
   },
   {
-    "id": "accessibility-review-handoff-and-risk-control",
+    "id": "accessibility-review-public-repo-benchmark-anchor",
     "skill": "accessibility-review",
-    "task": "Review a accessibility review lane before producing accessibility gate findings appended to qa-report or review notes.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `accessibility-review` and explain what evidence is still missing.",
+    "expected_files": [
+      "src/app/login/page.tsx",
+      "tests/login.spec.ts"
+    ],
+    "expected_symbols": [
+      "LoginForm"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "accessibility state",
+      "visual regression",
+      "read-only",
       "unverified"
     ]
   }

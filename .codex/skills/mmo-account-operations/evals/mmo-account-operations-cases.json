@@ -1,14 +1,42 @@
 [
   {
-    "id": "mmo-account-health-inventory",
+    "id": "mmo-account-operations-battle-read-first",
     "skill": "mmo-account-operations",
-    "task": "Design an account inventory with health scoring and cooldown controls.",
-    "expected_evidence_terms": ["health score", "cooldown", "proxy binding", "audit"]
+    "repo_profile": "operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails",
+    "task": "review an operator-owned MMO automation lane for safety, repeatability, and evidence logging Use `mmo-account-operations` and cite the first files before advice.",
+    "expected_files": [
+      "ops/accounts.csv",
+      "workers/session_runner.ts",
+      "logs/run-2026-05-17.json"
+    ],
+    "expected_symbols": [
+      "SessionRunner",
+      "AccountHealth"
+    ],
+    "expected_evidence_terms": [
+      "operator queue",
+      "quota",
+      "verified",
+      "residual risk"
+    ]
   },
   {
-    "id": "mmo-account-bulk-approval",
+    "id": "mmo-account-operations-public-repo-benchmark-anchor",
     "skill": "mmo-account-operations",
-    "task": "Review a bulk account action before execution.",
-    "expected_evidence_terms": ["dry-run", "approval", "budget", "quarantine"]
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `mmo-account-operations` and explain what evidence is still missing.",
+    "expected_files": [
+      "ops/accounts.csv",
+      "logs/run-2026-05-17.json"
+    ],
+    "expected_symbols": [
+      "SessionRunner"
+    ],
+    "expected_evidence_terms": [
+      "dedupe",
+      "recovery runbook",
+      "read-only",
+      "unverified"
+    ]
   }
 ]

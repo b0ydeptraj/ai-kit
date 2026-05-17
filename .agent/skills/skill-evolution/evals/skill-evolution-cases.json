@@ -1,23 +1,41 @@
 [
   {
-    "id": "skill-evolution-context-anchored-output",
+    "id": "skill-evolution-battle-read-first",
     "skill": "skill-evolution",
-    "task": "Handle a compact skill evolution request and anchor the answer in active hub or orchestrator request.",
+    "repo_profile": "Relay-kit public repo with generated adapters, readiness gates, docs, and runtime tests",
+    "task": "audit a Relay-kit runtime change and prove the generated surfaces are still synchronized Use `skill-evolution` and cite the first files before advice.",
+    "expected_files": [
+      "relay_kit_public_cli.py",
+      "relay_kit_v3/registry/skills.py",
+      "tests/test_skill_resources.py"
+    ],
+    "expected_symbols": [
+      "main",
+      "SkillSpec"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "adapter surface",
+      "readiness gate",
       "verified",
-      "skill-evolution"
+      "residual risk"
     ]
   },
   {
-    "id": "skill-evolution-handoff-and-risk-control",
+    "id": "skill-evolution-public-repo-benchmark-anchor",
     "skill": "skill-evolution",
-    "task": "Review a skill evolution lane before producing skill delta notes appended to tech-spec, qa-report, or the active artifact.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `skill-evolution` and explain what evidence is still missing.",
+    "expected_files": [
+      "relay_kit_public_cli.py",
+      "tests/test_skill_resources.py"
+    ],
+    "expected_symbols": [
+      "main"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "generated skill",
+      "strict evidence",
+      "read-only",
       "unverified"
     ]
   }

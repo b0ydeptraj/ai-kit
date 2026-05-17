@@ -1,14 +1,25 @@
-# dependency-management Good Output Example
+# dependency-management Battle-Calibrated Output
 
-Request: Use `dependency-management` for a dependency management lane where the user gave a compact request.
+Request: trace a backend behavior bug from source file to test anchor without guessing from filenames only
 
-Good response shape:
+Recommended skill: `dependency-management` because the request matches `build-support` work and has concrete repo anchors.
 
-- Recommended skill: `dependency-management` because the request matches `build-support` work.
-- Read first: package metadata files, lockfiles, toolchain config.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: .relay-kit/references/dependency-management.md.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: architect.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `src/service/session.py`
+- `src/service/retry.py`
+- `tests/test_session.py`
+
+Evidence gathered:
+
+- Confirmed `SessionManager` or nearby ownership before recommending changes.
+- Checked `session` and `retry` against the relevant source path.
+- Identified `cache` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `transaction boundary` remains unverified until the focused gate or benchmark hit is captured.

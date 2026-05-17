@@ -37,6 +37,8 @@ Relay-kit chặn các điểm đó bằng routing, skill contracts, state chung,
 - `memory-search` để tìm lại quyết định và handoff cũ
 - `context audit`, `lane audit`, `adapter diagnose`, `command diagnose`, và `agent diagnose`
 - `release-readiness`, `accessibility-review`, `skill-gauntlet`, và `context-continuity`
+- local context graph cho path, symbol, import, test, docs, chunk, call hint, và git history hint mà không cần API key
+- `battle-audit` và `battle-benchmark` để bắt resource còn generic và đo chất lượng tìm context trên repo public ở chế độ chỉ đọc
 - `readiness check` cho local governance proof
 - Pulse report và signal export để review chất lượng
 
@@ -80,7 +82,11 @@ Prove skill behavior:
 ```bash
 relay-kit eval real-world /path/to/project --strict --json
 relay-kit proof audit /path/to/project --strict --json
+relay-kit eval battle-audit /path/to/project --strict --json
+relay-kit eval battle-benchmark /path/to/project --suite curated --cleanup --json
 ```
+
+`battle-benchmark` tạo public-repo benchmark evidence bằng clone tạm an toàn: không install, không build, không test, không chạy script của repo ngoài. Đây không phải user proof, field validation proof, hoặc claim ngang context engine thương mại.
 
 Runtime utility wrappers:
 

@@ -14,6 +14,7 @@ REQUIRED_PAGES = {
     "prompt-enhance.md",
     "install.md",
     "readiness.md",
+    "battle-benchmark.md",
 }
 FORBIDDEN_OVERCLAIMS = {
     "replaces augment",
@@ -36,7 +37,7 @@ def test_skill_catalog_lists_every_canonical_skill() -> None:
     for skill_name in ALL_V3_SKILLS:
         assert f"`{skill_name}`" in catalog
     assert catalog.count("| `") == len(ALL_V3_SKILLS)
-    assert "| public-ready | complete | 2+ cases |" in catalog
+    assert "| public-ready | resource-complete | battle-audited | public-repo-benchmark-tested |" in catalog
 
 
 def test_docs_site_avoids_market_or_context_overclaim() -> None:
@@ -47,6 +48,7 @@ def test_docs_site_avoids_market_or_context_overclaim() -> None:
     assert "no cloud embeddings" in text
     assert "not a semantic codebase engine" in text
     assert "not proof of external commercial adoption" in text
+    assert "public-repo benchmark evidence" in text
 
 
 def test_readme_points_to_docs_site() -> None:

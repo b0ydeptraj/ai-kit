@@ -1,23 +1,41 @@
 [
   {
-    "id": "impact-radar-context-anchored-output",
+    "id": "impact-radar-battle-read-first",
     "skill": "impact-radar",
-    "task": "Handle a compact impact radar request and anchor the answer in active hub or orchestrator request.",
+    "repo_profile": "public automation repo with GitHub Actions, scheduled jobs, rollback docs, and dry-run mode",
+    "task": "plan an operational automation change with rollback and dry-run evidence before enabling it Use `impact-radar` and cite the first files before advice.",
+    "expected_files": [
+      ".github/workflows/validate-runtime.yml",
+      "scripts/runtime_doctor.py",
+      "docs/site/readiness.md"
+    ],
+    "expected_symbols": [
+      "main",
+      "build_report"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "dry run",
+      "rollback",
       "verified",
-      "impact-radar"
+      "residual risk"
     ]
   },
   {
-    "id": "impact-radar-handoff-and-risk-control",
+    "id": "impact-radar-public-repo-benchmark-anchor",
     "skill": "impact-radar",
-    "task": "Review a impact radar lane before producing impact-area and changed-file breakdown appended to workflow-state or review notes.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `impact-radar` and explain what evidence is still missing.",
+    "expected_files": [
+      ".github/workflows/validate-runtime.yml",
+      "docs/site/readiness.md"
+    ],
+    "expected_symbols": [
+      "main"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "workflow log",
+      "idempotency",
+      "read-only",
       "unverified"
     ]
   }

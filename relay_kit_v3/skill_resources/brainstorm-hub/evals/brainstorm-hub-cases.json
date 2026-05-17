@@ -1,23 +1,41 @@
 [
   {
-    "id": "brainstorm-hub-context-anchored-output",
+    "id": "brainstorm-hub-battle-read-first",
     "skill": "brainstorm-hub",
-    "task": "Handle a compact brainstorm hub request and anchor the answer in user idea or opportunity.",
+    "repo_profile": "public product repo with README, pricing notes, competitor docs, and changelog",
+    "task": "separate verified market evidence from inference before recommending product direction Use `brainstorm-hub` and cite the first files before advice.",
+    "expected_files": [
+      "README.md",
+      "docs/site/skill-catalog.md",
+      "CHANGELOG.md"
+    ],
+    "expected_symbols": [
+      "pricing",
+      "positioning"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "source freshness",
+      "competitor claim",
       "verified",
-      "brainstorm-hub"
+      "residual risk"
     ]
   },
   {
-    "id": "brainstorm-hub-handoff-and-risk-control",
+    "id": "brainstorm-hub-public-repo-benchmark-anchor",
     "skill": "brainstorm-hub",
-    "task": "Review a brainstorm hub lane before producing .relay-kit/contracts/product-brief.md or a decision not to proceed.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `brainstorm-hub` and explain what evidence is still missing.",
+    "expected_files": [
+      "README.md",
+      "CHANGELOG.md"
+    ],
+    "expected_symbols": [
+      "pricing"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "unknown",
+      "decision impact",
+      "read-only",
       "unverified"
     ]
   }

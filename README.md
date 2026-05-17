@@ -124,7 +124,9 @@ relay-kit init /path/to/project --codex --locale vi
 - an `agent diagnose` gate for strict profile parity and profile-contract drift
 - a `query search` utility for ranked lookup across state, contracts, docs, evidence, and registry sources
 - a local `context index/search/related` graph for file, symbol, import, docs, config, and nearby-test hints without API keys
+- hybrid local context hints for chunks, call graph hints, and git history hints, with optional local embedding support via `relay-kit[context]`
 - a `prompt enhance` utility that turns short or vague user requests into skill-aware working guidance and uses the local context graph when it exists
+- `battle-audit` and `battle-benchmark` gates for finding generic skill resources and testing read-only public repo retrieval quality
 - a `service boundaries` gate for checking module ownership and static dependency rules
 - a `release-readiness` utility for pre/post deploy smoke gates and rollback signals
 - an `accessibility-review` gate so frontend quality is not only visual
@@ -194,9 +196,12 @@ Prove skill behavior beyond routing claims:
 ```bash
 relay-kit eval real-world /path/to/project --strict --json
 relay-kit proof audit /path/to/project --strict --json
+relay-kit eval battle-audit /path/to/project --strict --json
+relay-kit eval battle-benchmark /path/to/project --suite curated --cleanup --json
 ```
 
 `eval real-world` requires practical fixture coverage for every registered skill. It is not a field-tested deployment claim; `proof audit` keeps `field-tested` at zero until explicit field evidence is recorded.
+`battle-benchmark` adds public-repo benchmark evidence from safe read-only clones. It does not install dependencies, build, test, run foreign scripts, claim field-tested/user proof, or claim parity with Augment-style hosted context engines.
 
 MMO/API skills are guarded by public ecosystem realism checks. They must model dense operator workflows such as profile inventories, bulk actions, session/proxy affinity, run queues, redacted request ledgers, queue health, live debug evidence, and manual review gates; see `docs/relay-kit-mmo-api-realism-research.md`.
 

@@ -1,14 +1,25 @@
-# accessibility-review Good Output Example
+# accessibility-review Battle-Calibrated Output
 
-Request: Use `accessibility-review` for a accessibility review lane where the user gave a compact request.
+Request: review a login UI change, name files first, and identify the test evidence before editing
 
-Good response shape:
+Recommended skill: `accessibility-review` because the request matches `utility-provider` work and has concrete repo anchors.
 
-- Recommended skill: `accessibility-review` because the request matches `utility-provider` work.
-- Read first: active hub or orchestrator request, current authoritative artifact, only the evidence relevant to this pass.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: accessibility gate findings appended to qa-report or review notes, pass or hold verdict tied to keyboard, semantics, focus, and contrast evidence.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: test-hub.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `src/app/login/page.tsx`
+- `src/components/LoginForm.tsx`
+- `tests/login.spec.ts`
+
+Evidence gathered:
+
+- Confirmed `LoginForm` or nearby ownership before recommending changes.
+- Checked `login flow` and `component boundary` against the relevant source path.
+- Identified `accessibility state` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `visual regression` remains unverified until the focused gate or benchmark hit is captured.

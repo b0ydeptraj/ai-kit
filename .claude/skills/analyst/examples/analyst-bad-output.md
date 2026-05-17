@@ -1,11 +1,18 @@
-# analyst Bad Output Example
+# analyst Weak Output Anti-Example
 
-Bad response shape:
+Request: separate verified market evidence from inference before recommending product direction
 
-- Announces `analyst` as an expert solution without reading project context.
-- Gives broad best-practice advice with no file paths, command evidence, state artifact, or user-specific constraint.
-- Treats missing evidence as success and uses readiness language before verification.
-- Creates a fake script, fake benchmark, or fake operational proof just to look complete.
-- Leaves no clear handoff, test, rollback, or residual-risk note.
+Weak answer:
 
-This is bad because it overclaims capability and does not reduce ambiguity for the next agent or human reviewer.
+This looks like `analyst`, so follow the usual checklist and it should be fine.
+
+Why this fails:
+
+- No file path from `public product repo with README, pricing notes, competitor docs, and changelog` was inspected.
+- No symbol such as `pricing` was confirmed.
+- No proof surface was named for `source freshness`.
+- It blurs verified evidence and inference, which is exactly how overclaim slips back into Relay-kit.
+
+Correction:
+
+Name the concrete path, inspect or search it, state what is verified, and leave unverified claims labeled until a gate proves them.

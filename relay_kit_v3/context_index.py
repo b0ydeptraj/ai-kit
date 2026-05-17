@@ -2,13 +2,17 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
+import time
 import unicodedata
 from datetime import datetime, timezone
+from importlib.util import find_spec
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
 
 INDEX_SCHEMA_VERSION = "relay-kit.context-index.v1"
+INDEX_ENGINE_VERSION = "hybrid-local-v2"
 SEARCH_SCHEMA_VERSION = "relay-kit.context-search.v1"
 RELATED_SCHEMA_VERSION = "relay-kit.context-related.v1"
 
@@ -69,17 +73,43 @@ def build_context_index(root: Path | str) -> dict[str, Any]:
     files = [item for item in files if item is not None]
     files.sort(key=lambda item: item["path"])
     related_tests = _nearby_tests(files)
+    git_history = _git_history_counts(project)
+    symbol_index = _build_symbol_index(files)
     for item in files:
         item["nearby_tests"] = related_tests.get(item["path"], [])
+        item["git_history"] = {
+            "recent_change_count": git_history.get(item["path"], 0),
+        }
+        item["call_targets"] = _resolve_call_targets(item, symbol_index)
     return {
         "schema_version": INDEX_SCHEMA_VERSION,
+        "engine_version": INDEX_ENGINE_VERSION,
         "status": "pass",
         "project_path": str(project),
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "capabilities": {
+            "path_name": True,
+            "symbols": True,
+            "imports": True,
+            "nearby_tests": True,
+            "docs_config": True,
+            "local_chunks": True,
+            "call_graph_hints": True,
+            "git_history_hints": bool(git_history),
+            "optional_local_embeddings": find_spec("fastembed") is not None,
+        },
+        "semantic": {
+            "provider": "fastembed",
+            "status": "available" if find_spec("fastembed") is not None else "unavailable",
+            "used": False,
+            "note": "Install relay-kit[context] to enable local embedding experiments; lexical and graph search work without it.",
+        },
         "summary": {
             "file_count": len(files),
             "symbol_count": sum(len(item["symbols"]) for item in files),
             "import_count": sum(len(item["imports"]) for item in files),
+            "chunk_count": sum(len(item.get("chunks", [])) for item in files),
+            "call_hint_count": sum(len(item.get("call_hints", [])) for item in files),
             "test_file_count": sum(1 for item in files if item["kind"] == "test"),
             "doc_file_count": sum(1 for item in files if item["kind"] == "doc"),
             "config_file_count": sum(1 for item in files if item["kind"] == "config"),
@@ -170,6 +200,11 @@ def build_context_related(
     source_terms = set(source.get("path_terms", [])) | set(source.get("symbols", []))
     source_imports = set(source.get("imports", []))
     source_tests = set(source.get("nearby_tests", []))
+    source_call_paths = {
+        path
+        for target in source.get("call_targets", [])
+        for path in target.get("paths", [])
+    }
     results: list[dict[str, Any]] = []
     for item in files:
         if item.get("path") == source.get("path"):
@@ -177,11 +212,15 @@ def build_context_related(
         path_value = str(item.get("path", ""))
         shared_terms = sorted(source_terms & (set(item.get("path_terms", [])) | set(item.get("symbols", []))))
         shared_imports = sorted(source_imports & set(item.get("imports", [])))
+        shared_calls = sorted(source_call_paths & {path_value})
         reasons: list[str] = []
         score = 0
         if path_value in source_tests:
             score += 30
             reasons.append("nearby-test")
+        if shared_calls:
+            score += 24
+            reasons.append("call-graph-hint")
         if shared_terms:
             score += min(len(shared_terms), 5) * 5
             reasons.append("shared-path-or-symbol")
@@ -197,7 +236,7 @@ def build_context_related(
             _result_item(
                 item,
                 score=score,
-                matched_terms=shared_terms[:8],
+                matched_terms=[*shared_terms[:8], *shared_calls[:2]],
                 reasons=reasons,
             )
         )
@@ -230,17 +269,57 @@ def context_hits_for_prompt(root: Path | str, prompt: str, *, limit: int = 5) ->
     return str(report.get("index_status", "missing")), list(report.get("results", []))
 
 
+def watch_context_index(
+    root: Path | str,
+    *,
+    output_file: Path | str | None = None,
+    once: bool = False,
+    interval_seconds: float = 2.0,
+    max_iterations: int | None = None,
+) -> dict[str, Any]:
+    project = Path(root).resolve()
+    iterations = 0
+    last_signature: tuple[int, int] | None = None
+    last_output: Path | None = None
+    while True:
+        signature = _tree_signature(project)
+        if signature != last_signature:
+            report = build_context_index(project)
+            last_output = write_context_index(project, report, output_file=output_file)
+            last_signature = signature
+        iterations += 1
+        if once or (max_iterations is not None and iterations >= max_iterations):
+            return {
+                "schema_version": INDEX_SCHEMA_VERSION,
+                "engine_version": INDEX_ENGINE_VERSION,
+                "status": "pass",
+                "project_path": str(project),
+                "iterations": iterations,
+                "output_file": str(last_output) if last_output else None,
+                "signature": {
+                    "file_count": signature[0],
+                    "mtime_total": signature[1],
+                },
+            }
+        time.sleep(max(interval_seconds, 0.1))
+
+
 def render_context_index(report: Mapping[str, Any]) -> str:
     summary = report.get("summary", {})
+    capabilities = report.get("capabilities", {})
     return "\n".join(
         [
             "Relay-kit context index",
             f"- status: {report.get('status')}",
+            f"- engine: {report.get('engine_version', 'legacy')}",
             f"- files: {summary.get('file_count', 0)}",
             f"- symbols: {summary.get('symbol_count', 0)}",
             f"- imports: {summary.get('import_count', 0)}",
+            f"- chunks: {summary.get('chunk_count', 0)}",
+            f"- call hints: {summary.get('call_hint_count', 0)}",
             f"- tests: {summary.get('test_file_count', 0)}",
             f"- docs: {summary.get('doc_file_count', 0)}",
+            f"- optional local embeddings: {capabilities.get('optional_local_embeddings', False)}",
         ]
     )
 
@@ -277,6 +356,18 @@ def render_context_related(report: Mapping[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def render_context_watch(report: Mapping[str, Any]) -> str:
+    return "\n".join(
+        [
+            "Relay-kit context watch",
+            f"- status: {report.get('status')}",
+            f"- engine: {report.get('engine_version', 'legacy')}",
+            f"- iterations: {report.get('iterations', 0)}",
+            f"- output: {report.get('output_file')}",
+        ]
+    )
+
+
 def _iter_indexable_files(project: Path) -> Iterable[Path]:
     for path in project.rglob("*"):
         if not path.is_file():
@@ -290,6 +381,19 @@ def _iter_indexable_files(project: Path) -> Iterable[Path]:
         if path.suffix.lower() not in INDEX_EXTENSIONS:
             continue
         yield path
+
+
+def _tree_signature(project: Path) -> tuple[int, int]:
+    file_count = 0
+    mtime_total = 0
+    for path in _iter_indexable_files(project):
+        try:
+            stat = path.stat()
+        except OSError:
+            continue
+        file_count += 1
+        mtime_total += int(stat.st_mtime)
+    return file_count, mtime_total
 
 
 def _is_skipped(relative_path: str) -> bool:
@@ -309,6 +413,7 @@ def _index_file(project: Path, path: Path) -> dict[str, Any] | None:
     relative = path.relative_to(project).as_posix()
     symbols = _extract_symbols(relative, text)
     imports = _extract_imports(relative, text)
+    call_hints = _extract_call_hints(relative, text)
     text_terms = _terms_from_text(text, limit=80)
     path_terms = _path_terms(relative)
     return {
@@ -318,9 +423,13 @@ def _index_file(project: Path, path: Path) -> dict[str, Any] | None:
         "kind": _file_kind(relative),
         "symbols": symbols,
         "imports": imports,
+        "call_hints": call_hints,
+        "call_targets": [],
         "path_terms": path_terms,
         "text_terms": text_terms,
+        "chunks": _extract_chunks(relative, text, symbols),
         "nearby_tests": [],
+        "git_history": {"recent_change_count": 0},
         "line_count": len(text.splitlines()),
     }
 
@@ -373,6 +482,127 @@ def _extract_imports(relative: str, text: str) -> list[str]:
     return imports[:80]
 
 
+def _extract_call_hints(relative: str, text: str) -> list[str]:
+    suffix = Path(relative).suffix.lower()
+    if suffix not in {".py", ".js", ".jsx", ".ts", ".tsx", ".go", ".rs"}:
+        return []
+    ignored = {
+        "if",
+        "for",
+        "while",
+        "switch",
+        "catch",
+        "return",
+        "function",
+        "def",
+        "class",
+        "new",
+        "await",
+        "async",
+        "test",
+        "describe",
+    }
+    hints: list[str] = []
+    for match in re.findall(r"\b([A-Za-z_][$A-Za-z0-9_]*)\s*\(", text[:MAX_TEXT_CHARS]):
+        if match in ignored or match in hints:
+            continue
+        hints.append(match)
+        if len(hints) >= 100:
+            break
+    return hints
+
+
+def _extract_chunks(relative: str, text: str, symbols: Sequence[str]) -> list[dict[str, Any]]:
+    lines = text.splitlines()
+    chunks: list[dict[str, Any]] = []
+    symbol_set = set(symbols)
+    for index, line in enumerate(lines, start=1):
+        if len(chunks) >= 16:
+            break
+        names = [symbol for symbol in symbol_set if re.search(rf"\b{re.escape(symbol)}\b", line)]
+        if not names and index != 1 and index % 80 != 0:
+            continue
+        start = max(index - 4, 1)
+        end = min(index + 12, len(lines))
+        text_slice = "\n".join(lines[start - 1 : end])
+        chunks.append(
+            {
+                "id": f"{relative}:{start}-{end}",
+                "path": relative,
+                "line_start": start,
+                "line_end": end,
+                "symbols": names[:8],
+                "text_terms": _terms_from_text(text_slice, limit=40),
+            }
+        )
+    if not chunks and lines:
+        text_slice = "\n".join(lines[: min(40, len(lines))])
+        chunks.append(
+            {
+                "id": f"{relative}:1-{min(40, len(lines))}",
+                "path": relative,
+                "line_start": 1,
+                "line_end": min(40, len(lines)),
+                "symbols": [],
+                "text_terms": _terms_from_text(text_slice, limit=40),
+            }
+        )
+    return chunks
+
+
+def _build_symbol_index(files: Sequence[Mapping[str, Any]]) -> dict[str, list[str]]:
+    index: dict[str, list[str]] = {}
+    for item in files:
+        path = str(item.get("path", ""))
+        for symbol in item.get("symbols", []):
+            key = _normalize_term(str(symbol))
+            if not key:
+                continue
+            index.setdefault(key, [])
+            if path not in index[key]:
+                index[key].append(path)
+    return index
+
+
+def _resolve_call_targets(item: Mapping[str, Any], symbol_index: Mapping[str, Sequence[str]]) -> list[dict[str, Any]]:
+    source_path = str(item.get("path", ""))
+    targets: list[dict[str, Any]] = []
+    for call in item.get("call_hints", []):
+        key = _normalize_term(str(call))
+        paths = [path for path in symbol_index.get(key, []) if path != source_path]
+        if not paths:
+            continue
+        targets.append({"symbol": call, "paths": paths[:5]})
+        if len(targets) >= 20:
+            break
+    return targets
+
+
+def _git_history_counts(project: Path) -> dict[str, int]:
+    if not (project / ".git").exists():
+        return {}
+    try:
+        completed = subprocess.run(
+            ["git", "log", "--name-only", "--max-count", "50", "--pretty=format:"],
+            cwd=project,
+            text=True,
+            capture_output=True,
+            timeout=5,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return {}
+    if completed.returncode != 0:
+        return {}
+    counts: dict[str, int] = {}
+    for raw in completed.stdout.splitlines():
+        value = raw.strip().replace("\\", "/")
+        if not value or _is_skipped(value):
+            continue
+        counts[value] = counts.get(value, 0) + 1
+    return counts
+
+
 def _nearby_tests(files: Sequence[Mapping[str, Any]]) -> dict[str, list[str]]:
     tests = [item for item in files if item.get("kind") == "test"]
     result: dict[str, list[str]] = {}
@@ -399,6 +629,12 @@ def _score_file(item: Mapping[str, Any], terms: Sequence[str], query: str) -> di
     symbol_terms = {_normalize_term(str(symbol)) for symbol in item.get("symbols", [])}
     import_terms = {_normalize_term(str(value)) for value in item.get("imports", [])}
     text_terms = set(item.get("text_terms", []))
+    chunk_terms = {
+        str(term)
+        for chunk in item.get("chunks", [])
+        for term in chunk.get("text_terms", [])
+    }
+    call_terms = {_normalize_term(str(value)) for value in item.get("call_hints", [])}
     path_value = str(item.get("path", "")).casefold()
     phrase = normalize_text(query)
     score = 0
@@ -415,6 +651,12 @@ def _score_file(item: Mapping[str, Any], terms: Sequence[str], query: str) -> di
         if term in import_terms:
             term_score += 12
             reasons.append("import")
+        if term in call_terms:
+            term_score += 10
+            reasons.append("call-hint")
+        if term in chunk_terms:
+            term_score += 8
+            reasons.append("chunk")
         if term in text_terms:
             term_score += 5
             reasons.append("text")
@@ -445,7 +687,10 @@ def _result_item(
         "reasons": sorted(set(reasons)),
         "symbols": list(item.get("symbols", []))[:10],
         "imports": list(item.get("imports", []))[:10],
+        "call_hints": list(item.get("call_hints", []))[:10],
+        "call_targets": list(item.get("call_targets", []))[:5],
         "nearby_tests": list(item.get("nearby_tests", []))[:5],
+        "git_history": dict(item.get("git_history", {})),
     }
 
 

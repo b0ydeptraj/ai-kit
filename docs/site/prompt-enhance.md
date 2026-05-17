@@ -22,4 +22,4 @@ Output includes:
 - `ask_or_act`
 - context index status and graph hits when available
 
-This is prompt enhancement with local project context. It is not a semantic codebase engine, automatic correctness proof, or expert guarantee.
+This is prompt enhancement with local project context. It is not a semantic codebase engine, automatic correctness proof, or guarantee of expertise.

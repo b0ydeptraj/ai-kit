@@ -1,23 +1,41 @@
 [
   {
-    "id": "api-integration-context-anchored-output",
+    "id": "api-integration-battle-read-first",
     "skill": "api-integration",
-    "task": "Handle a compact api integration request and anchor the answer in HTTP or RPC client code.",
+    "repo_profile": "public Python service repo with serializer, retry, cache, and session tests",
+    "task": "trace a backend behavior bug from source file to test anchor without guessing from filenames only Use `api-integration` and cite the first files before advice.",
+    "expected_files": [
+      "src/service/session.py",
+      "src/service/retry.py",
+      "tests/test_session.py"
+    ],
+    "expected_symbols": [
+      "SessionManager",
+      "retry_request"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "session",
+      "retry",
       "verified",
-      "api-integration"
+      "residual risk"
     ]
   },
   {
-    "id": "api-integration-handoff-and-risk-control",
+    "id": "api-integration-public-repo-benchmark-anchor",
     "skill": "api-integration",
-    "task": "Review a api integration lane before producing .relay-kit/references/api-integration.md.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `api-integration` and explain what evidence is still missing.",
+    "expected_files": [
+      "src/service/session.py",
+      "tests/test_session.py"
+    ],
+    "expected_symbols": [
+      "SessionManager"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "cache",
+      "transaction boundary",
+      "read-only",
       "unverified"
     ]
   }

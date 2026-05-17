@@ -1,11 +1,25 @@
-# automation-ops Good Output
+# automation-ops Battle-Calibrated Output
 
-Good output names the trigger, runbook owner, dry-run command, idempotency key, retry policy, rollback path, and evidence artifacts.
+Request: plan an operational automation change with rollback and dry-run evidence before enabling it
 
-Example summary:
+Recommended skill: `automation-ops` because the request matches `automation` work and has concrete repo anchors.
 
-- Trigger: hourly scheduler with manual override.
-- Safety: dry-run default, write mode requires explicit flag.
-- Idempotency: `job_id + target_id + action`.
-- Failure: three bounded retries with backoff, then dead-letter.
-- Evidence: run id, redacted action log, skipped action reasons, rollback checklist.
+Read first:
+
+- `.github/workflows/validate-runtime.yml`
+- `scripts/runtime_doctor.py`
+- `docs/site/readiness.md`
+
+Evidence gathered:
+
+- Confirmed `main` or nearby ownership before recommending changes.
+- Checked `dry run` and `rollback` against the relevant source path.
+- Identified `workflow log` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `idempotency` remains unverified until the focused gate or benchmark hit is captured.

@@ -1,23 +1,41 @@
 [
   {
-    "id": "vietnamese-product-localization-context-anchored-output",
+    "id": "vietnamese-product-localization-battle-read-first",
     "skill": "vietnamese-product-localization",
-    "task": "Handle a compact vietnamese product localization request and anchor the answer in source content or request.",
+    "repo_profile": "public docs repo with README, localized docs, static GitHub catalog, and encoding tests",
+    "task": "review public docs for overclaim, broken localization, and missing evidence labels Use `vietnamese-product-localization` and cite the first files before advice.",
+    "expected_files": [
+      "README.md",
+      "README.vi.md",
+      "docs/site/index.md"
+    ],
+    "expected_symbols": [
+      "test_readme_files_are_utf8_without_mojibake",
+      "render_battle_audit"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "utf-8",
+      "public copy",
       "verified",
-      "vietnamese-product-localization"
+      "residual risk"
     ]
   },
   {
-    "id": "vietnamese-product-localization-handoff-and-risk-control",
+    "id": "vietnamese-product-localization-public-repo-benchmark-anchor",
     "skill": "vietnamese-product-localization",
-    "task": "Review a vietnamese product localization lane before producing Vietnamese or bilingual product artifacts with terminology and quality notes.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `vietnamese-product-localization` and explain what evidence is still missing.",
+    "expected_files": [
+      "README.md",
+      "tests/test_readme_encoding.py"
+    ],
+    "expected_symbols": [
+      "test_readme_files_are_utf8_without_mojibake"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "overclaim",
+      "evidence label",
+      "read-only",
       "unverified"
     ]
   }

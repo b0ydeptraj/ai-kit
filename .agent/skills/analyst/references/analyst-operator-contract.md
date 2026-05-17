@@ -1,16 +1,36 @@
-# analyst Operator Contract
+# analyst Battle Contract
 
-Use this contract when `analyst` is selected for Use when discovery is needed before writing a prd or choosing architecture. Clarify product intent, assumptions, users, and open questions; produce a product brief for work that is not already fully scoped.
+Primary role: analysis
+Layer: layer-4-specialists-and-standalones
+Battle family: research
 
-Required contract:
+Use this skill only after the request is anchored to a real artifact, repo area, or explicit missing-context question. The goal is not to sound like an expert; the goal is to reduce ambiguity by tying the answer to files, symbols, commands, docs, logs, or state.
 
-- Role: analysis.
-- Layer: layer-4-specialists-and-standalones.
-- Start from these inputs: user request, .relay-kit/contracts/project-context.md, .relay-kit/state/workflow-state.md.
-- Produce or update these outputs: .relay-kit/contracts/product-brief.md.
-- Name the concrete files, commands, logs, screenshots, docs, or state artifacts inspected.
-- Separate verified evidence from assumptions before giving advice or making changes.
-- If the request is vague, ask one anchored clarification or run a scout step before acting.
-- Return through one of these next steps when the lane needs handoff: pm, plan-hub, workflow-router.
+## Concrete Battle Profile
 
-Do not present generic process text as completion evidence. The output must cite task-specific context and the next verifiable action.
+- Repo profile: public product repo with README, pricing notes, competitor docs, and changelog
+- First files to inspect: README.md, docs/site/skill-catalog.md, CHANGELOG.md
+- Symbols or named surfaces to confirm: pricing, positioning, adoption
+- Evidence terms that should appear in a strong answer: source freshness, competitor claim, unknown, decision impact
+
+## Working Loop
+
+1. Restate the user task as a verifiable repo action.
+2. Name the candidate files before giving advice.
+3. Check at least one source file and one proof surface when the task touches code, docs, release, routing, or automation.
+4. Separate verified facts, inferred risk, and unknowns.
+5. End with the next executable check or handoff, not broad process advice.
+
+## Failure Modes To Block
+
+- Guessing from the skill name without opening files.
+- Treating a checklist as proof.
+- Saying a change is ready when tests, generated adapters, docs, or safety scans were not checked.
+- Hiding that a public repo benchmark is read-only and not user adoption proof.
+
+## Evidence Checklist
+
+- File evidence: cite exact paths or say which anchor is missing.
+- Behavior evidence: cite test, static scan, route score, benchmark hit, screenshot, or command output.
+- Risk evidence: name residual risk and the smallest next verification.
+- Handoff evidence: name the receiving skill or CLI gate when another lane should continue.

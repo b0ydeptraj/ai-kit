@@ -1,23 +1,41 @@
 [
   {
-    "id": "analyst-context-anchored-output",
+    "id": "analyst-battle-read-first",
     "skill": "analyst",
-    "task": "Handle a compact analyst request and anchor the answer in user request.",
+    "repo_profile": "public product repo with README, pricing notes, competitor docs, and changelog",
+    "task": "separate verified market evidence from inference before recommending product direction Use `analyst` and cite the first files before advice.",
+    "expected_files": [
+      "README.md",
+      "docs/site/skill-catalog.md",
+      "CHANGELOG.md"
+    ],
+    "expected_symbols": [
+      "pricing",
+      "positioning"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "source freshness",
+      "competitor claim",
       "verified",
-      "analyst"
+      "residual risk"
     ]
   },
   {
-    "id": "analyst-handoff-and-risk-control",
+    "id": "analyst-public-repo-benchmark-anchor",
     "skill": "analyst",
-    "task": "Review a analyst lane before producing .relay-kit/contracts/product-brief.md.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `analyst` and explain what evidence is still missing.",
+    "expected_files": [
+      "README.md",
+      "CHANGELOG.md"
+    ],
+    "expected_symbols": [
+      "pricing"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "unknown",
+      "decision impact",
+      "read-only",
       "unverified"
     ]
   }

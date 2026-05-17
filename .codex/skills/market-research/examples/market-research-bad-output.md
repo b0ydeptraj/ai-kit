@@ -1,11 +1,18 @@
-# market-research Bad Output
+# market-research Weak Output Anti-Example
 
-Bad output sounds confident while hiding evidence quality.
+Request: separate verified market evidence from inference before recommending product direction
 
-Red flags:
+Weak answer:
 
-- "The market wants this" without sources.
-- Old or low-authority sources drive current recommendations.
-- Competitor names are listed without feature-level comparison.
-- Pricing claims are not tied to buyer segment.
-- Unknowns are smoothed into recommendations.
+This looks like `market-research`, so follow the usual checklist and it should be fine.
+
+Why this fails:
+
+- No file path from `public product repo with README, pricing notes, competitor docs, and changelog` was inspected.
+- No symbol such as `pricing` was confirmed.
+- No proof surface was named for `source freshness`.
+- It blurs verified evidence and inference, which is exactly how overclaim slips back into Relay-kit.
+
+Correction:
+
+Name the concrete path, inspect or search it, state what is verified, and leave unverified claims labeled until a gate proves them.

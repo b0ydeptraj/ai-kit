@@ -1,14 +1,25 @@
-# go-service-engineering Good Output Example
+# go-service-engineering Battle-Calibrated Output
 
-Request: Use `go-service-engineering` for a go service engineering lane where the user gave a compact request.
+Request: trace a backend behavior bug from source file to test anchor without guessing from filenames only
 
-Good response shape:
+Recommended skill: `go-service-engineering` because the request matches `go-engineering` work and has concrete repo anchors.
 
-- Recommended skill: `go-service-engineering` because the request matches `go-engineering` work.
-- Read first: go service requirements, existing Go module structure, architecture or tech-spec when available.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: Go service implementation plan or code delta with test and runtime evidence.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: developer.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `src/service/session.py`
+- `src/service/retry.py`
+- `tests/test_session.py`
+
+Evidence gathered:
+
+- Confirmed `SessionManager` or nearby ownership before recommending changes.
+- Checked `session` and `retry` against the relevant source path.
+- Identified `cache` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `transaction boundary` remains unverified until the focused gate or benchmark hit is captured.

@@ -24,6 +24,15 @@ DOMAIN_RESOURCE_SKILLS = [
 ]
 RESOURCE_SKILLS = sorted(ALL_V3_SKILLS)
 READ_ONLY_RESOURCE_SKILLS = {"market-research", "growth-marketing"}
+GENERIC_RESOURCE_PHRASES = {
+    "Good response shape",
+    "Bad response shape",
+    "Handle a compact",
+    "context-anchored-output",
+    "handoff-and-risk-control",
+    "Use this contract when",
+    "Use this reference when",
+}
 
 
 def test_domain_skill_resources_exist_and_have_eval_cases() -> None:
@@ -40,7 +49,25 @@ def test_domain_skill_resources_exist_and_have_eval_cases() -> None:
         assert len(cases) >= 2, skill_name
         for case in cases:
             assert case["skill"] == skill_name
+            assert case["repo_profile"]
+            assert case["task"]
+            assert case["expected_files"]
+            assert case["expected_symbols"]
             assert case["expected_evidence_terms"]
+            assert len(case["expected_evidence_terms"]) >= 3
+
+
+def test_skill_resources_are_not_generic_skeletons() -> None:
+    for skill_name in RESOURCE_SKILLS:
+        skill_root = ROOT / "relay_kit_v3" / "skill_resources" / skill_name
+        for path in [
+            skill_root / "references" / f"{skill_name}-operator-contract.md",
+            skill_root / "examples" / f"{skill_name}-good-output.md",
+            skill_root / "examples" / f"{skill_name}-bad-output.md",
+        ]:
+            text = path.read_text(encoding="utf-8")
+            for phrase in GENERIC_RESOURCE_PHRASES:
+                assert phrase not in text, f"{skill_name}: {phrase}"
 
 
 def test_domain_skill_resources_copy_to_all_adapters(tmp_path: Path) -> None:

@@ -1,14 +1,25 @@
-# brainstorm-hub Good Output Example
+# brainstorm-hub Battle-Calibrated Output
 
-Request: Use `brainstorm-hub` for a brainstorm hub lane where the user gave a compact request.
+Request: separate verified market evidence from inference before recommending product direction
 
-Good response shape:
+Recommended skill: `brainstorm-hub` because the request matches `ideation-hub` work and has concrete repo anchors.
 
-- Recommended skill: `brainstorm-hub` because the request matches `ideation-hub` work.
-- Read first: user idea or opportunity, .relay-kit/state/workflow-state.md, any existing brief or context.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: .relay-kit/contracts/product-brief.md or a decision not to proceed.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: analyst.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `README.md`
+- `docs/site/skill-catalog.md`
+- `CHANGELOG.md`
+
+Evidence gathered:
+
+- Confirmed `pricing` or nearby ownership before recommending changes.
+- Checked `source freshness` and `competitor claim` against the relevant source path.
+- Identified `unknown` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `decision impact` remains unverified until the focused gate or benchmark hit is captured.

@@ -1,14 +1,25 @@
-# team Good Output Example
+# team Battle-Calibrated Output
 
-Request: Use `team` for a team lane where the user gave a compact request.
+Request: audit a Relay-kit runtime change and prove the generated surfaces are still synchronized
 
-Good response shape:
+Recommended skill: `team` because the request matches `meta-orchestrator` work and has concrete repo anchors.
 
-- Recommended skill: `team` because the request matches `meta-orchestrator` work.
-- Read first: .relay-kit/state/workflow-state.md, .relay-kit/state/team-board.md, active artifacts and blockers.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: .relay-kit/state/team-board.md, .relay-kit/state/workflow-state.md.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: cook.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `relay_kit_public_cli.py`
+- `relay_kit_v3/registry/skills.py`
+- `tests/test_skill_resources.py`
+
+Evidence gathered:
+
+- Confirmed `main` or nearby ownership before recommending changes.
+- Checked `adapter surface` and `readiness gate` against the relevant source path.
+- Identified `generated skill` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `strict evidence` remains unverified until the focused gate or benchmark hit is captured.

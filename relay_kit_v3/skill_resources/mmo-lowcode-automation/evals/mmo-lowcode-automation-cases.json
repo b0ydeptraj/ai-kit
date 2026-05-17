@@ -1,14 +1,42 @@
 [
   {
-    "id": "mmo-lowcode-error-workflow",
+    "id": "mmo-lowcode-automation-battle-read-first",
     "skill": "mmo-lowcode-automation",
-    "task": "Design a low-code workflow with error handling and execution history.",
-    "expected_evidence_terms": ["node", "error handler", "execution list", "redaction"]
+    "repo_profile": "operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails",
+    "task": "review an operator-owned MMO automation lane for safety, repeatability, and evidence logging Use `mmo-lowcode-automation` and cite the first files before advice.",
+    "expected_files": [
+      "ops/accounts.csv",
+      "workers/session_runner.ts",
+      "logs/run-2026-05-17.json"
+    ],
+    "expected_symbols": [
+      "SessionRunner",
+      "AccountHealth"
+    ],
+    "expected_evidence_terms": [
+      "operator queue",
+      "quota",
+      "verified",
+      "residual risk"
+    ]
   },
   {
-    "id": "mmo-lowcode-publish-control",
+    "id": "mmo-lowcode-automation-public-repo-benchmark-anchor",
     "skill": "mmo-lowcode-automation",
-    "task": "Review safe deployment of a draft low-code automation.",
-    "expected_evidence_terms": ["draft", "published", "rollback", "rate-limit"]
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `mmo-lowcode-automation` and explain what evidence is still missing.",
+    "expected_files": [
+      "ops/accounts.csv",
+      "logs/run-2026-05-17.json"
+    ],
+    "expected_symbols": [
+      "SessionRunner"
+    ],
+    "expected_evidence_terms": [
+      "dedupe",
+      "recovery runbook",
+      "read-only",
+      "unverified"
+    ]
   }
 ]

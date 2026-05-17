@@ -1,16 +1,36 @@
-# vietnamese-product-localization Operator Contract
+# vietnamese-product-localization Battle Contract
 
-Use this contract when `vietnamese-product-localization` is selected for Use when product output must be localized for Vietnamese users. Produce Vietnamese or bilingual docs, support copy, release notes, and communication artifacts with quality constraints.
+Primary role: localization
+Layer: layer-4-specialists-and-standalones
+Battle family: docs
 
-Required contract:
+Use this skill only after the request is anchored to a real artifact, repo area, or explicit missing-context question. The goal is not to sound like an expert; the goal is to reduce ambiguity by tying the answer to files, symbols, commands, docs, logs, or state.
 
-- Role: localization.
-- Layer: layer-4-specialists-and-standalones.
-- Start from these inputs: source content or request, target audience context, localization policy profile.
-- Produce or update these outputs: Vietnamese or bilingual product artifacts with terminology and quality notes.
-- Name the concrete files, commands, logs, screenshots, docs, or state artifacts inspected.
-- Separate verified evidence from assumptions before giving advice or making changes.
-- If the request is vague, ask one anchored clarification or run a scout step before acting.
-- Return through one of these next steps when the lane needs handoff: growth-marketing, pm, review-hub, qa-governor.
+## Concrete Battle Profile
 
-Do not present generic process text as completion evidence. The output must cite task-specific context and the next verifiable action.
+- Repo profile: public docs repo with README, localized docs, static GitHub catalog, and encoding tests
+- First files to inspect: README.md, README.vi.md, docs/site/index.md, tests/test_readme_encoding.py
+- Symbols or named surfaces to confirm: test_readme_files_are_utf8_without_mojibake, render_battle_audit
+- Evidence terms that should appear in a strong answer: utf-8, public copy, overclaim, evidence label
+
+## Working Loop
+
+1. Restate the user task as a verifiable repo action.
+2. Name the candidate files before giving advice.
+3. Check at least one source file and one proof surface when the task touches code, docs, release, routing, or automation.
+4. Separate verified facts, inferred risk, and unknowns.
+5. End with the next executable check or handoff, not broad process advice.
+
+## Failure Modes To Block
+
+- Guessing from the skill name without opening files.
+- Treating a checklist as proof.
+- Saying a change is ready when tests, generated adapters, docs, or safety scans were not checked.
+- Hiding that a public repo benchmark is read-only and not user adoption proof.
+
+## Evidence Checklist
+
+- File evidence: cite exact paths or say which anchor is missing.
+- Behavior evidence: cite test, static scan, route score, benchmark hit, screenshot, or command output.
+- Risk evidence: name residual risk and the smallest next verification.
+- Handoff evidence: name the receiving skill or CLI gate when another lane should continue.

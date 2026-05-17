@@ -1,14 +1,25 @@
-# research Good Output Example
+# research Battle-Calibrated Output
 
-Request: Use `research` for a research lane where the user gave a compact request.
+Request: separate verified market evidence from inference before recommending product direction
 
-Good response shape:
+Recommended skill: `research` because the request matches `utility-provider` work and has concrete repo anchors.
 
-- Recommended skill: `research` because the request matches `utility-provider` work.
-- Read first: active hub or orchestrator request, current authoritative artifact, only the evidence relevant to this pass.
-- Evidence gathered: list exact files, command output, docs, or state artifacts inspected.
-- Output: evidence bullets appended to the active artifact, assumption checks or citations for the current decision, a short list of unresolved questions only when they block the next decision.
-- Residual risk: name what is still unverified and the smallest next check.
-- Handoff: brainstorm-hub.
+Read first:
 
-This is good because it is anchored to project evidence, limits the claim, and makes the next action executable.
+- `README.md`
+- `docs/site/skill-catalog.md`
+- `CHANGELOG.md`
+
+Evidence gathered:
+
+- Confirmed `pricing` or nearby ownership before recommending changes.
+- Checked `source freshness` and `competitor claim` against the relevant source path.
+- Identified `unknown` as a required proof term before completion.
+
+Answer:
+
+The safe next move is to inspect the named file path, compare it with the expected test or docs surface, and only then choose implementation, review, or planning. If the anchor is missing, ask one question that names the missing file, PR, log, screen, or workflow.
+
+Residual risk:
+
+- `decision impact` remains unverified until the focused gate or benchmark hit is captured.

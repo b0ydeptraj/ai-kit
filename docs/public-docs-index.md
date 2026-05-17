@@ -9,6 +9,7 @@ Use this page as the public entrypoint for current runtime behavior.
 - `docs/site/skill-catalog.md`
 - `docs/site/context-graph.md`
 - `docs/site/prompt-enhance.md`
+- `docs/site/battle-benchmark.md`
 - `docs/site/install.md`
 - `docs/site/readiness.md`
 - `docs/relay-kit-start-flow.md`

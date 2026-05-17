@@ -1,23 +1,41 @@
 [
   {
-    "id": "go-service-engineering-context-anchored-output",
+    "id": "go-service-engineering-battle-read-first",
     "skill": "go-service-engineering",
-    "task": "Handle a compact go service engineering request and anchor the answer in go service requirements.",
+    "repo_profile": "public Python service repo with serializer, retry, cache, and session tests",
+    "task": "trace a backend behavior bug from source file to test anchor without guessing from filenames only Use `go-service-engineering` and cite the first files before advice.",
+    "expected_files": [
+      "src/service/session.py",
+      "src/service/retry.py",
+      "tests/test_session.py"
+    ],
+    "expected_symbols": [
+      "SessionManager",
+      "retry_request"
+    ],
     "expected_evidence_terms": [
-      "read first",
-      "evidence",
+      "session",
+      "retry",
       "verified",
-      "go-service-engineering"
+      "residual risk"
     ]
   },
   {
-    "id": "go-service-engineering-handoff-and-risk-control",
+    "id": "go-service-engineering-public-repo-benchmark-anchor",
     "skill": "go-service-engineering",
-    "task": "Review a go service engineering lane before producing Go service implementation plan or code delta with test and runtime evidence.",
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `go-service-engineering` and explain what evidence is still missing.",
+    "expected_files": [
+      "src/service/session.py",
+      "tests/test_session.py"
+    ],
+    "expected_symbols": [
+      "SessionManager"
+    ],
     "expected_evidence_terms": [
-      "residual risk",
-      "handoff",
-      "next step",
+      "cache",
+      "transaction boundary",
+      "read-only",
       "unverified"
     ]
   }

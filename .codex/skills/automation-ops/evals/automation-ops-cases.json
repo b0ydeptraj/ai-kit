@@ -1,14 +1,42 @@
 [
   {
-    "id": "automation-ops-scheduler-safety",
+    "id": "automation-ops-battle-read-first",
     "skill": "automation-ops",
-    "task": "Design a scheduled cleanup automation that can be previewed before mutation.",
-    "expected_evidence_terms": ["trigger model", "dry-run", "idempotency", "rollback"]
+    "repo_profile": "public automation repo with GitHub Actions, scheduled jobs, rollback docs, and dry-run mode",
+    "task": "plan an operational automation change with rollback and dry-run evidence before enabling it Use `automation-ops` and cite the first files before advice.",
+    "expected_files": [
+      ".github/workflows/validate-runtime.yml",
+      "scripts/runtime_doctor.py",
+      "docs/site/readiness.md"
+    ],
+    "expected_symbols": [
+      "main",
+      "build_report"
+    ],
+    "expected_evidence_terms": [
+      "dry run",
+      "rollback",
+      "verified",
+      "residual risk"
+    ]
   },
   {
-    "id": "automation-ops-webhook-failure",
+    "id": "automation-ops-public-repo-benchmark-anchor",
     "skill": "automation-ops",
-    "task": "Review a webhook automation that retries failed external API calls.",
-    "expected_evidence_terms": ["retry", "backoff", "redacted logs", "failure-path"]
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `automation-ops` and explain what evidence is still missing.",
+    "expected_files": [
+      ".github/workflows/validate-runtime.yml",
+      "docs/site/readiness.md"
+    ],
+    "expected_symbols": [
+      "main"
+    ],
+    "expected_evidence_terms": [
+      "workflow log",
+      "idempotency",
+      "read-only",
+      "unverified"
+    ]
   }
 ]

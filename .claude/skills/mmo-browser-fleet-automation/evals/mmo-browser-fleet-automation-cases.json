@@ -1,14 +1,42 @@
 [
   {
-    "id": "mmo-browser-selector-drift",
+    "id": "mmo-browser-fleet-automation-battle-read-first",
     "skill": "mmo-browser-fleet-automation",
-    "task": "Plan browser automation that can diagnose selector drift.",
-    "expected_evidence_terms": ["selector", "DOM snapshot", "screenshot", "retry"]
+    "repo_profile": "operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails",
+    "task": "review an operator-owned MMO automation lane for safety, repeatability, and evidence logging Use `mmo-browser-fleet-automation` and cite the first files before advice.",
+    "expected_files": [
+      "ops/accounts.csv",
+      "workers/session_runner.ts",
+      "logs/run-2026-05-17.json"
+    ],
+    "expected_symbols": [
+      "SessionRunner",
+      "AccountHealth"
+    ],
+    "expected_evidence_terms": [
+      "operator queue",
+      "quota",
+      "verified",
+      "residual risk"
+    ]
   },
   {
-    "id": "mmo-browser-profile-lease",
+    "id": "mmo-browser-fleet-automation-public-repo-benchmark-anchor",
     "skill": "mmo-browser-fleet-automation",
-    "task": "Design session orchestration for profile and proxy affinity.",
-    "expected_evidence_terms": ["profile-to-proxy", "lease", "proxy health", "stop control"]
+    "repo_profile": "safe public repo benchmark clone; shallow, read-only, no install, no build, no tests",
+    "task": "Run a read-only battle benchmark style review for `mmo-browser-fleet-automation` and explain what evidence is still missing.",
+    "expected_files": [
+      "ops/accounts.csv",
+      "logs/run-2026-05-17.json"
+    ],
+    "expected_symbols": [
+      "SessionRunner"
+    ],
+    "expected_evidence_terms": [
+      "dedupe",
+      "recovery runbook",
+      "read-only",
+      "unverified"
+    ]
   }
 ]
