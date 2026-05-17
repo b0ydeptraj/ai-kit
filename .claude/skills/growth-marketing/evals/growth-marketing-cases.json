@@ -1,0 +1,14 @@
+[
+  {
+    "id": "growth-marketing-proof-bounded-launch",
+    "skill": "growth-marketing",
+    "task": "Prepare launch copy for a governance bundle with only local evidence.",
+    "expected_evidence_terms": ["proof boundary", "ICP", "KPI", "campaign QA"]
+  },
+  {
+    "id": "growth-marketing-funnel-plan",
+    "skill": "growth-marketing",
+    "task": "Build a funnel plan for converting README visitors to successful installs.",
+    "expected_evidence_terms": ["channel", "funnel", "measurement", "review cadence"]
+  }
+]

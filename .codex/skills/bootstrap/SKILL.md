@@ -39,6 +39,9 @@ Prepare the runtime so later steps have an authoritative baseline instead of rel
 - If the codebase is unfamiliar, route immediately to scout-hub after bootstrapping.
 - Do not invent project-context facts; mark unknowns and hand off to scout-hub.
 - Use context-continuity rehydrate when resuming across thread or session boundaries.
+- Open `references/bootstrap-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/bootstrap-good-output.md` and `examples/bootstrap-bad-output.md` to calibrate output quality.
+- Use `evals/bootstrap-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - workflow-router

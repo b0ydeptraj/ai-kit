@@ -34,6 +34,9 @@ End with one of only three outcomes:
 ## Reference skills and rules
 - Use analyst for structured discovery and pm only once the shape is coherent enough to plan.
 - Prefer narrowing the problem over generating a giant feature wish list.
+- Open `references/brainstorm-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/brainstorm-hub-good-output.md` and `examples/brainstorm-hub-bad-output.md` to calibrate output quality.
+- Use `evals/brainstorm-hub-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - analyst

@@ -50,6 +50,9 @@ If implementation reveals missing architecture, unclear acceptance criteria, a b
 - Prefer the smallest diff that fixes the failing reproduction; name rollback notes and one edge case before completion.
 - Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data unless the repo or product explicitly requires non-ASCII content.
 - If tasks are truly independent and the platform supports collaboration, follow `.relay-kit/docs/parallel-execution.md` before using subagent-style execution.
+- Open `references/developer-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/developer-good-output.md` and `examples/developer-bad-output.md` to calibrate output quality.
+- Use `evals/developer-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - execution-loop

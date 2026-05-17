@@ -62,12 +62,12 @@ Latest verified implementation evidence:
 - PR #90: query search and service-boundary mapping with `relay-kit query search` and `relay-kit service boundaries`.
 - Local context-governance slice evidence: `python -m pytest tests -q` passed 200 tests.
 - Local context-governance slice evidence: `python relay_kit_public_cli.py context audit . --strict --json` returned `status: pass`.
-- Local context-governance slice evidence: enterprise readiness returned `commercial-ready-candidate`.
+- Local context-governance slice evidence: enterprise profile readiness returned `local-governance-ready-candidate`.
 - Local lane-coordination slice evidence: `python -m pytest tests -q` passed 209 tests, live lane audit returned `status: pass`, and main CI `25620406371` passed.
 - Local adapter-diagnostics slice evidence: `python relay_kit_public_cli.py adapter diagnose . --adapter all --strict --json` returned `status: pass`; enterprise readiness included required `adapter-diagnostics` gate with 0 findings.
 - Local query/service slice evidence: live query search returned ranked hits with source metadata, live service boundaries returned `status: pass` with 0 findings, full pytest passed with 221 tests, and main CI `25621218408` passed.
 - PR #92: dashboard/eval polish advanced with Pulse governance health, governance signal metrics, and 60 workflow eval scenarios.
-- Local dashboard/eval slice evidence: focused Pulse/signal/eval tests passed; full pytest passed with 223 tests; runtime doctor live returned 0 findings; semantic gauntlet checked 60 scenario fixtures; enterprise readiness returned `commercial-ready-candidate`; live Pulse returned `governance_health.status: pass`; workflow eval returned 60/60 scenarios; signal export emitted the five governance metrics.
+- Local dashboard/eval slice evidence: focused Pulse/signal/eval tests passed; full pytest passed with 223 tests; runtime doctor live returned 0 findings; semantic gauntlet checked 60 scenario fixtures; enterprise profile readiness returned `local-governance-ready-candidate`; live Pulse returned `governance_health.status: pass`; workflow eval returned 60/60 scenarios; signal export emitted the five governance metrics.
 - Main CI after PR #92: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25632979363, conclusion `success`.
 - PR #93: post-dashboard state refresh merged with Claude-adoption phase 2 completion note.
 - PR #94-#97: domain skills, command registry, agent profiles, and token economy shipped in final differentiation phase; main CI after PR #97: https://github.com/b0ydeptraj/Relay-kit/actions/runs/25684183141 (success).

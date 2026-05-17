@@ -1,0 +1,24 @@
+[
+  {
+    "id": "developer-context-anchored-output",
+    "skill": "developer",
+    "task": "Handle a compact developer request and anchor the answer in story or tech-spec.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "developer"
+    ]
+  },
+  {
+    "id": "developer-handoff-and-risk-control",
+    "skill": "developer",
+    "task": "Review a developer lane before producing working code.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mmo-reup-dedupe-queue",
+    "skill": "mmo-reup-automation",
+    "task": "Design a reup queue with dedupe and attribution checks.",
+    "expected_evidence_terms": ["rights status", "dedupe", "publish queue", "rollback"]
+  },
+  {
+    "id": "mmo-reup-policy-review",
+    "skill": "mmo-reup-automation",
+    "task": "Review whether a bulk repost flow is safe to automate.",
+    "expected_evidence_terms": ["operator review", "frequency caps", "reject logs", "policy"]
+  }
+]

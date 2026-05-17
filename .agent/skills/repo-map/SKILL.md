@@ -43,6 +43,9 @@ Produce a compact map of the code area the lane is about to touch.
 ## Reference skills and rules
 - Good for unfamiliar areas and dependency direction.
 - Use it to orient the lane, not to replace design thinking.
+- Open `references/repo-map-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/repo-map-good-output.md` and `examples/repo-map-bad-output.md` to calibrate output quality.
+- Use `evals/repo-map-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - scout-hub

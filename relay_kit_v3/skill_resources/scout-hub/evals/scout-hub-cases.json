@@ -1,0 +1,24 @@
+[
+  {
+    "id": "scout-hub-context-anchored-output",
+    "skill": "scout-hub",
+    "task": "Handle a compact scout hub request and anchor the answer in repo tree and relevant files.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "scout-hub"
+    ]
+  },
+  {
+    "id": "scout-hub-handoff-and-risk-control",
+    "skill": "scout-hub",
+    "task": "Review a scout hub lane before producing .relay-kit/contracts/project-context.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

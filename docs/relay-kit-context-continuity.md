@@ -13,7 +13,7 @@ It adds deterministic continuity modes:
 ## Checkpoint
 
 ```bash
-python scripts/context_continuity.py checkpoint /path/to/project \
+relay-kit continuity checkpoint /path/to/project \
   --objective "phase 2 migration hardening" \
   --lane primary \
   --next-step "run validate_runtime and open release PR"
@@ -22,19 +22,19 @@ python scripts/context_continuity.py checkpoint /path/to/project \
 ## Rehydrate in a new session
 
 ```bash
-python scripts/context_continuity.py rehydrate /path/to/project
+relay-kit continuity rehydrate /path/to/project
 ```
 
 ## Handoff to another thread/AI
 
 ```bash
-python scripts/context_continuity.py handoff /path/to/project --reason "review-branch"
+relay-kit continuity handoff /path/to/project --reason "review-branch"
 ```
 
 ## Diff since last checkpoint
 
 ```bash
-python scripts/context_continuity.py diff-since-last /path/to/project
+relay-kit continuity diff-since-last /path/to/project
 ```
 
 ## Artifacts created

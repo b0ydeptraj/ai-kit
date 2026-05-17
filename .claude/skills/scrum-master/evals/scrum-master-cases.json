@@ -1,0 +1,24 @@
+[
+  {
+    "id": "scrum-master-context-anchored-output",
+    "skill": "scrum-master",
+    "task": "Handle a compact scrum master request and anchor the answer in .relay-kit/contracts/PRD.md.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "scrum-master"
+    ]
+  },
+  {
+    "id": "scrum-master-handoff-and-risk-control",
+    "skill": "scrum-master",
+    "task": "Review a scrum master lane before producing .relay-kit/contracts/stories/story-xxx.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

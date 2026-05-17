@@ -39,8 +39,11 @@ Protect routing quality by detecting skill drift early instead of waiting for be
 - explicit pass or hold verdict for SKILL.md trigger and structure discipline
 
 ## Reference skills and rules
-- Use `python scripts/skill_gauntlet.py <project> --strict` for machine-checkable gating.
+- Use `relay-kit skill gauntlet <project> --strict` for machine-checkable gating.
 - Run this before promoting large skill edits, bundle changes, or release branches.
+- Open `references/skill-gauntlet-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/skill-gauntlet-good-output.md` and `examples/skill-gauntlet-bad-output.md` to calibrate output quality.
+- Use `evals/skill-gauntlet-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - review-hub

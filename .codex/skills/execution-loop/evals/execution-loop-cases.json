@@ -1,0 +1,24 @@
+[
+  {
+    "id": "execution-loop-context-anchored-output",
+    "skill": "execution-loop",
+    "task": "Handle a compact execution loop request and anchor the answer in story or tech-spec.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "execution-loop"
+    ]
+  },
+  {
+    "id": "execution-loop-handoff-and-risk-control",
+    "skill": "execution-loop",
+    "task": "Review a execution loop lane before producing working code plus test evidence.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

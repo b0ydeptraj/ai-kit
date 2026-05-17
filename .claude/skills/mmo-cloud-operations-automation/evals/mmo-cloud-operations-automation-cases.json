@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mmo-cloud-queue-retry",
+    "skill": "mmo-cloud-operations-automation",
+    "task": "Design worker queue retries for throttled jobs.",
+    "expected_evidence_terms": ["queue depth", "backoff", "dead-letter", "idempotency key"]
+  },
+  {
+    "id": "mmo-cloud-cost-guard",
+    "skill": "mmo-cloud-operations-automation",
+    "task": "Review cloud automation scale-up risk.",
+    "expected_evidence_terms": ["cost ceiling", "quota", "scale-down", "worker health"]
+  }
+]

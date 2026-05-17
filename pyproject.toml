@@ -27,7 +27,12 @@ py-modules = [
 include = ["relay_kit_v3*", "scripts*"]
 
 [tool.setuptools.package-data]
-relay_kit_v3 = ["eval_fixtures/*.json"]
+relay_kit_v3 = [
+  "eval_fixtures/*.json",
+  "skill_resources/*/references/*.md",
+  "skill_resources/*/examples/*.md",
+  "skill_resources/*/evals/*.json",
+]
 
 [tool.pytest.ini_options]
 addopts = "-p no:cacheprovider"

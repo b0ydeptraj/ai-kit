@@ -1,0 +1,24 @@
+[
+  {
+    "id": "impact-radar-context-anchored-output",
+    "skill": "impact-radar",
+    "task": "Handle a compact impact radar request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "impact-radar"
+    ]
+  },
+  {
+    "id": "impact-radar-handoff-and-risk-control",
+    "skill": "impact-radar",
+    "task": "Review a impact radar lane before producing impact-area and changed-file breakdown appended to workflow-state or review notes.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

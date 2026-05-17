@@ -87,7 +87,7 @@ def write_pulse_report(root: Path) -> Path:
                 },
                 "readiness": {
                     "status": "pass",
-                    "verdict": "commercial-ready-candidate",
+                    "verdict": "local-governance-ready-candidate",
                 },
                 "publication": {
                     "status": "ready",

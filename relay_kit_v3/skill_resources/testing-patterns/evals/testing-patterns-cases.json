@@ -1,0 +1,24 @@
+[
+  {
+    "id": "testing-patterns-context-anchored-output",
+    "skill": "testing-patterns",
+    "task": "Handle a compact testing patterns request and anchor the answer in test folders.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "testing-patterns"
+    ]
+  },
+  {
+    "id": "testing-patterns-handoff-and-risk-control",
+    "skill": "testing-patterns",
+    "task": "Review a testing patterns lane before producing .relay-kit/references/testing-patterns.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

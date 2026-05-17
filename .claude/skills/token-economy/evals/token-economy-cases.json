@@ -1,0 +1,24 @@
+[
+  {
+    "id": "token-economy-context-anchored-output",
+    "skill": "token-economy",
+    "task": "Handle a compact token economy request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "token-economy"
+    ]
+  },
+  {
+    "id": "token-economy-handoff-and-risk-control",
+    "skill": "token-economy",
+    "task": "Review a token economy lane before producing token budget, task-scoped context pack, or token audit report artifacts under .relay-kit/context or .relay-kit/token.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

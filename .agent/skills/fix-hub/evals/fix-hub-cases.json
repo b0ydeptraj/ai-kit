@@ -1,0 +1,24 @@
+[
+  {
+    "id": "fix-hub-context-anchored-output",
+    "skill": "fix-hub",
+    "task": "Handle a compact fix hub request and anchor the answer in tech-spec or story.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "fix-hub"
+    ]
+  },
+  {
+    "id": "fix-hub-handoff-and-risk-control",
+    "skill": "fix-hub",
+    "task": "Review a fix hub lane before producing refined tech-spec or story.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

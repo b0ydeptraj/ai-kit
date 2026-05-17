@@ -1,0 +1,14 @@
+[
+  {
+    "id": "automation-ops-scheduler-safety",
+    "skill": "automation-ops",
+    "task": "Design a scheduled cleanup automation that can be previewed before mutation.",
+    "expected_evidence_terms": ["trigger model", "dry-run", "idempotency", "rollback"]
+  },
+  {
+    "id": "automation-ops-webhook-failure",
+    "skill": "automation-ops",
+    "task": "Review a webhook automation that retries failed external API calls.",
+    "expected_evidence_terms": ["retry", "backoff", "redacted logs", "failure-path"]
+  }
+]

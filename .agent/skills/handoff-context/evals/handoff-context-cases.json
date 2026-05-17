@@ -1,0 +1,24 @@
+[
+  {
+    "id": "handoff-context-context-anchored-output",
+    "skill": "handoff-context",
+    "task": "Handle a compact handoff context request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "handoff-context"
+    ]
+  },
+  {
+    "id": "handoff-context-handoff-and-risk-control",
+    "skill": "handoff-context",
+    "task": "Review a handoff context lane before producing focused context pack notes added to workflow-state, story, or handoff-log.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

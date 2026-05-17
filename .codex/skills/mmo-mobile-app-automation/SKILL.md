@@ -1,6 +1,7 @@
 ---
 name: mmo-mobile-app-automation
 description: Use when MMO mobile workflows need device inventory, emulator or device automation, stable selectors, app-state control, and repeatable run evidence.
+allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
 ---
 
 # Mission
@@ -37,6 +38,9 @@ Deliver stable mobile MMO automation for repetitive app workflows with measurabl
 - Define deterministic app-state setup and teardown to reduce flake.
 - Model the device farm like a real ops tool: hub/provider split, device status, lease owner, app version, logcat/crash/ANR evidence, and remote-control link.
 - Do not design rooted, tampered, or policy-evasion mobile automation paths.
+- Open `references/mmo-mobile-app-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/mmo-mobile-app-automation-good-output.md` and `examples/mmo-mobile-app-automation-bad-output.md` to calibrate output quality.
+- Use `evals/mmo-mobile-app-automation-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - automation-ops

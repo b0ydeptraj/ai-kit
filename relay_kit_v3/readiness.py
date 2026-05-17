@@ -28,6 +28,7 @@ from relay_kit_v3.upgrade import build_upgrade_report
 
 
 SCHEMA_VERSION = "relay-kit.readiness-report.v1"
+LOCAL_GOVERNANCE_READY_VERDICT = "local-governance-ready-candidate"
 PROFILES = {"team", "enterprise"}
 REPO_ROOT = Path(__file__).resolve().parents[1]
 COMMERCIAL_DOCS = [
@@ -96,7 +97,7 @@ def build_readiness_report(
         verdict = "limited-beta"
     else:
         status = "pass"
-        verdict = "commercial-ready-candidate"
+        verdict = LOCAL_GOVERNANCE_READY_VERDICT
 
     findings = [
         {
@@ -109,13 +110,24 @@ def build_readiness_report(
     ]
     residual_risks = [
         "Remote CI result, release upload, and paid support operations are not verified by this local gate.",
-        "This gate produces a commercial-ready candidate verdict, not a cryptographic release attestation.",
+        "This gate produces a local governance candidate verdict, not a cryptographic release attestation or field validation.",
     ]
+    external_evidence = {
+        "status": "missing",
+        "missing": [
+            "remote_ci_result",
+            "release_upload_evidence",
+            "paid_support_operation",
+            "user_or_field_validation",
+        ],
+    }
 
     return {
         "schema_version": SCHEMA_VERSION,
         "status": status,
         "verdict": verdict,
+        "external_evidence_status": external_evidence["status"],
+        "external_evidence": external_evidence,
         "profile": selected_profile,
         "project_path": str(root),
         "gates": gates,
@@ -131,6 +143,7 @@ def render_readiness_report(report: Mapping[str, Any]) -> str:
         f"- profile: {report.get('profile')}",
         f"- status: {report.get('status')}",
         f"- verdict: {report.get('verdict')}",
+        f"- external evidence: {report.get('external_evidence_status', 'unknown')}",
         f"- gates: {len(report.get('gates', []))}",
         f"- findings: {len(report.get('findings', []))}",
     ]
@@ -204,7 +217,9 @@ def _run_command_gates(root: Path, profile: str, skip_tests: bool, runner: Comma
             f"policy {policy_pack}",
             [
                 sys.executable,
-                str(REPO_ROOT / "scripts" / "policy_guard.py"),
+                str(REPO_ROOT / "relay_kit_public_cli.py"),
+                "policy",
+                "check",
                 str(root),
                 "--strict",
                 "--pack",

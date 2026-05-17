@@ -1,6 +1,7 @@
 ---
 name: mmo-account-operations
 description: Use when MMO account operations need profile inventory, lifecycle automation, health checks, risk segmentation, and recovery runbooks.
+allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
 ---
 
 # Mission
@@ -38,6 +39,9 @@ Operate MMO account fleets with deterministic controls, safety gates, and clear 
 - Never design flows for CAPTCHA bypass, identity spoofing, or policy circumvention.
 - Mirror real account tools: folder/tag filters, owner columns, proxy binding, account health, cooldown, quarantine, and bulk action review.
 - Separate routine lifecycle automation from high-risk actions that require manual approval.
+- Open `references/mmo-account-operations-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/mmo-account-operations-good-output.md` and `examples/mmo-account-operations-bad-output.md` to calibrate output quality.
+- Use `evals/mmo-account-operations-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - automation-ops

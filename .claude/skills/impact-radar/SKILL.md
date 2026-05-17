@@ -38,8 +38,11 @@ Make change blast radius explicit before merge so gate selection is evidence-bas
 - risk level plus recommended verification gates for the current diff
 
 ## Reference skills and rules
-- Use `python scripts/impact_radar.py <project>` for deterministic working-tree analysis.
+- Use `relay-kit impact radar <project>` for deterministic working-tree analysis.
 - Use `--base` and `--head` when the lane needs commit-range impact evidence for review.
+- Open `references/impact-radar-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/impact-radar-good-output.md` and `examples/impact-radar-bad-output.md` to calibrate output quality.
+- Use `evals/impact-radar-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - plan-hub

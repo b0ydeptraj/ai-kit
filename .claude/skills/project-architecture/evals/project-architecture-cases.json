@@ -1,0 +1,24 @@
+[
+  {
+    "id": "project-architecture-context-anchored-output",
+    "skill": "project-architecture",
+    "task": "Handle a compact project architecture request and anchor the answer in repository tree.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "project-architecture"
+    ]
+  },
+  {
+    "id": "project-architecture-handoff-and-risk-control",
+    "skill": "project-architecture",
+    "task": "Review a project architecture lane before producing .relay-kit/references/project-architecture.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

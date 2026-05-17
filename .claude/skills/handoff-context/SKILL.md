@@ -44,6 +44,9 @@ Prepare the smallest complete context pack for the next handoff.
 - Minimize irrelevant context.
 - Package only what the receiving skill needs to act safely.
 - Use context-continuity when the handoff must survive thread, model, or session boundaries.
+- Open `references/handoff-context-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/handoff-context-good-output.md` and `examples/handoff-context-bad-output.md` to calibrate output quality.
+- Use `evals/handoff-context-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - workflow-router

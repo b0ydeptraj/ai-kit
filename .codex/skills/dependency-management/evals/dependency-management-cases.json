@@ -1,0 +1,24 @@
+[
+  {
+    "id": "dependency-management-context-anchored-output",
+    "skill": "dependency-management",
+    "task": "Handle a compact dependency management request and anchor the answer in package metadata files.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "dependency-management"
+    ]
+  },
+  {
+    "id": "dependency-management-handoff-and-risk-control",
+    "skill": "dependency-management",
+    "task": "Review a dependency management lane before producing .relay-kit/references/dependency-management.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

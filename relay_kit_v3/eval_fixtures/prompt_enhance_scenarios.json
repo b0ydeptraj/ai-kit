@@ -1,0 +1,44 @@
+[
+  {
+    "id": "short-login-fix",
+    "prompt": "sửa login",
+    "expected_skill": "debug-hub",
+    "expected_ask_or_act": "scout_first",
+    "expected_terms": ["reproduction", "root-cause", "verification"]
+  },
+  {
+    "id": "vague-review-this",
+    "prompt": "cái này có ổn không",
+    "expected_skill": "review-hub",
+    "expected_ask_or_act": "ask_one_question",
+    "expected_terms": ["file-specific", "unverified", "clarification"]
+  },
+  {
+    "id": "repo-ai-smell-review",
+    "prompt": "đọc repo xem còn mùi AI không",
+    "expected_skill": "review-hub",
+    "expected_ask_or_act": "act",
+    "expected_terms": ["overclaims", "file-specific", "unverified"]
+  },
+  {
+    "id": "fix-ci",
+    "prompt": "fix CI",
+    "expected_skill": "debug-hub",
+    "expected_ask_or_act": "scout_first",
+    "expected_terms": ["CI log", "root-cause", "passing verification"]
+  },
+  {
+    "id": "continue-build",
+    "prompt": "tiếp tục build đi",
+    "expected_skill": "cook",
+    "expected_ask_or_act": "act",
+    "expected_terms": ["active lane", "next step", "handoff"]
+  },
+  {
+    "id": "analyze-this-file",
+    "prompt": "phân tích file này",
+    "expected_skill": "scout-hub",
+    "expected_ask_or_act": "ask_one_question",
+    "expected_terms": ["active file", "entrypoints", "clarification"]
+  }
+]

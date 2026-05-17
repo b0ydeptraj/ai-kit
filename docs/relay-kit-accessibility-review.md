@@ -15,7 +15,7 @@ If any critical check fails or is missing, verdict must be `HOLD`.
 ## Generate checklist template
 
 ```bash
-python scripts/accessibility_review.py /path/to/project --surface "checkout-flow"
+relay-kit accessibility review /path/to/project --surface "checkout-flow"
 ```
 
 Checklist-only output is non-strict and must not be used as an accessibility pass verdict.
@@ -35,7 +35,7 @@ Markdown report format:
 Run gate:
 
 ```bash
-python scripts/accessibility_review.py /path/to/project --report-file a11y-report.md --strict
+relay-kit accessibility review /path/to/project --report-file a11y-report.md --strict
 ```
 
 Exit code:

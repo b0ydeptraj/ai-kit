@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mmo-lowcode-error-workflow",
+    "skill": "mmo-lowcode-automation",
+    "task": "Design a low-code workflow with error handling and execution history.",
+    "expected_evidence_terms": ["node", "error handler", "execution list", "redaction"]
+  },
+  {
+    "id": "mmo-lowcode-publish-control",
+    "skill": "mmo-lowcode-automation",
+    "task": "Review safe deployment of a draft low-code automation.",
+    "expected_evidence_terms": ["draft", "published", "rollback", "rate-limit"]
+  }
+]

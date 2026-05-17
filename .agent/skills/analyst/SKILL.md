@@ -38,6 +38,9 @@ Cover these sections:
 ## Reference skills and rules
 - Lean on research-expert, problem-solving, and sequential-thinking when the scope is fuzzy.
 - Keep the brief short enough that downstream roles can actually use it.
+- Open `references/analyst-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/analyst-good-output.md` and `examples/analyst-bad-output.md` to calibrate output quality.
+- Use `evals/analyst-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - pm

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "skill-evolution-context-anchored-output",
+    "skill": "skill-evolution",
+    "task": "Handle a compact skill evolution request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "skill-evolution"
+    ]
+  },
+  {
+    "id": "skill-evolution-handoff-and-risk-control",
+    "skill": "skill-evolution",
+    "task": "Review a skill evolution lane before producing skill delta notes appended to tech-spec, qa-report, or the active artifact.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

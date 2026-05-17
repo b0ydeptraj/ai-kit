@@ -38,8 +38,11 @@ Fail closed on deterministic high-risk agent operation patterns before they reac
 - explicit pass or hold verdict for high-risk runtime operations
 
 ## Reference skills and rules
-- Use `python scripts/policy_guard.py <project> --strict` as the canonical policy gate.
+- Use `relay-kit policy check <project> --strict` as the canonical policy gate.
 - Treat policy findings as release blockers until reviewed by qa-governor or review-hub.
+- Open `references/policy-guard-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/policy-guard-good-output.md` and `examples/policy-guard-bad-output.md` to calibrate output quality.
+- Use `evals/policy-guard-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - qa-governor

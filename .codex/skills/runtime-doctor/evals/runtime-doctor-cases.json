@@ -1,0 +1,24 @@
+[
+  {
+    "id": "runtime-doctor-context-anchored-output",
+    "skill": "runtime-doctor",
+    "task": "Handle a compact runtime doctor request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "runtime-doctor"
+    ]
+  },
+  {
+    "id": "runtime-doctor-handoff-and-risk-control",
+    "skill": "runtime-doctor",
+    "task": "Review a runtime doctor lane before producing runtime drift findings with exact surface references appended to qa-report or workflow-state.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

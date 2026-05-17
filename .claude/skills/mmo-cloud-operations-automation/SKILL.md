@@ -1,6 +1,7 @@
 ---
 name: mmo-cloud-operations-automation
 description: Use when MMO automation runs in cloud infrastructure and needs worker pools, scheduler, queue, retry, idempotency, and cost-guarded operations.
+allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
 ---
 
 # Mission
@@ -38,6 +39,9 @@ Run MMO cloud automation at scale with resilient retries, safe concurrency, and 
 - Use exponential backoff with jitter for transient failures and throttling events.
 - Include queue depth, cost ceiling, and quota safeguards before scaling concurrency.
 - Expose operator controls for pause, resume, retry, drain, replay, dead-letter inspection, and safe scale-down.
+- Open `references/mmo-cloud-operations-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/mmo-cloud-operations-automation-good-output.md` and `examples/mmo-cloud-operations-automation-bad-output.md` to calibrate output quality.
+- Use `evals/mmo-cloud-operations-automation-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - automation-ops

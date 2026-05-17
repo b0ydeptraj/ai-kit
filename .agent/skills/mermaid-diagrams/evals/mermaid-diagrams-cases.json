@@ -1,0 +1,24 @@
+[
+  {
+    "id": "mermaid-diagrams-context-anchored-output",
+    "skill": "mermaid-diagrams",
+    "task": "Handle a compact mermaid diagrams request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "mermaid-diagrams"
+    ]
+  },
+  {
+    "id": "mermaid-diagrams-handoff-and-risk-control",
+    "skill": "mermaid-diagrams",
+    "task": "Review a mermaid diagrams lane before producing mermaid snippets inserted into architecture, project-context, or docs.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "vietnamese-product-localization-context-anchored-output",
+    "skill": "vietnamese-product-localization",
+    "task": "Handle a compact vietnamese product localization request and anchor the answer in source content or request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "vietnamese-product-localization"
+    ]
+  },
+  {
+    "id": "vietnamese-product-localization-handoff-and-risk-control",
+    "skill": "vietnamese-product-localization",
+    "task": "Review a vietnamese product localization lane before producing Vietnamese or bilingual product artifacts with terminology and quality notes.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

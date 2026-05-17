@@ -698,7 +698,7 @@
     ],
     "pass_rubric": [
       "Prefer read-only retrieval from authoritative artifacts over replaying chat memory.",
-      "Use `python scripts/memory_search.py <project> --query ...` for deterministic lookups.",
+      "Use `relay-kit query search <project> --query ...` for deterministic lookups.",
       "debug-hub"
     ]
   },
@@ -715,7 +715,7 @@
       "explicit go, hold, or rollback recommendation tied to machine-checkable signals"
     ],
     "pass_rubric": [
-      "Use `python scripts/release_readiness.py <project> --phase pre|post` for deterministic checklists and signal evaluation.",
+      "Use `relay-kit release readiness <project> --phase pre|post` for deterministic checklists and signal evaluation.",
       "Treat `ready-check` as review readiness, not automatic production readiness.",
       "test-hub"
     ]
@@ -733,7 +733,7 @@
       "pass or hold verdict tied to keyboard, semantics, focus, and contrast evidence"
     ],
     "pass_rubric": [
-      "Use `python scripts/accessibility_review.py <project>` to generate or evaluate the gate checklist.",
+      "Use `relay-kit accessibility review <project>` to generate or evaluate the gate checklist.",
       "Treat accessibility as a required quality bar, not cosmetic polish.",
       "test-hub"
     ]
@@ -751,7 +751,7 @@
       "explicit pass or hold verdict for SKILL.md trigger and structure discipline"
     ],
     "pass_rubric": [
-      "Use `python scripts/skill_gauntlet.py <project> --strict` for machine-checkable gating.",
+      "Use `relay-kit skill gauntlet <project> --strict` for machine-checkable gating.",
       "Run this before promoting large skill edits, bundle changes, or release branches.",
       "review-hub"
     ]
@@ -769,7 +769,7 @@
       "risk level plus recommended verification gates for the current diff"
     ],
     "pass_rubric": [
-      "Use `python scripts/impact_radar.py <project>` for deterministic working-tree analysis.",
+      "Use `relay-kit impact radar <project>` for deterministic working-tree analysis.",
       "Use `--base` and `--head` when the lane needs commit-range impact evidence for review.",
       "plan-hub"
     ]
@@ -787,7 +787,7 @@
       "pass or hold recommendation for runtime health based on parity and artifact checks"
     ],
     "pass_rubric": [
-      "Use `python scripts/runtime_doctor.py <project> --strict` for deterministic runtime diagnostics.",
+      "Use `relay-kit runtime doctor <project> --strict` for deterministic runtime diagnostics.",
       "Use `--state-mode live` when validating active project state artifacts before release claims.",
       "debug-hub"
     ]
@@ -805,7 +805,7 @@
       "explicit pass or hold verdict for migration safety before merge"
     ],
     "pass_rubric": [
-      "Use `python scripts/naming_guard.py <project> --strict` as the canonical naming gate.",
+      "Use `relay-kit migration guard <project> --strict` as the canonical naming gate.",
       "Guard verdict is fail-closed: findings require cleanup before merge.",
       "test-hub"
     ]
@@ -823,7 +823,7 @@
       "explicit pass or hold verdict for high-risk runtime operations"
     ],
     "pass_rubric": [
-      "Use `python scripts/policy_guard.py <project> --strict` as the canonical policy gate.",
+      "Use `relay-kit policy check <project> --strict` as the canonical policy gate.",
       "Treat policy findings as release blockers until reviewed by qa-governor or review-hub.",
       "qa-governor"
     ]
@@ -860,7 +860,7 @@
       "a compact resume brief with explicit next step and open loops"
     ],
     "pass_rubric": [
-      "Use `python scripts/context_continuity.py` modes for deterministic continuity artifacts.",
+      "Use `relay-kit continuity` modes for deterministic continuity artifacts.",
       "Context continuity complements `handoff-context`; it does not replace authoritative contracts and state.",
       "workflow-router"
     ]

@@ -5,6 +5,12 @@ Use this page as the public entrypoint for current runtime behavior.
 ## Current docs (recommended)
 
 - `README.md`
+- `docs/site/index.md`
+- `docs/site/skill-catalog.md`
+- `docs/site/context-graph.md`
+- `docs/site/prompt-enhance.md`
+- `docs/site/install.md`
+- `docs/site/readiness.md`
 - `docs/relay-kit-start-flow.md`
 - `docs/relay-kit-review-flow.md`
 - `docs/relay-kit-memory-search.md`
@@ -24,6 +30,7 @@ Use this page as the public entrypoint for current runtime behavior.
 - `docs/relay-kit-adapter-diagnostics.md`
 - `docs/relay-kit-locale-policy.md`
 - `docs/relay-kit-query-search.md`
+- `docs/relay-kit-prompt-enhance.md`
 - `docs/relay-kit-service-boundaries.md`
 - `docs/relay-kit-context-continuity.md`
 - `docs/relay-kit-context-continuity-design-note.md`

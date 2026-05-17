@@ -1,0 +1,24 @@
+[
+  {
+    "id": "migration-guard-context-anchored-output",
+    "skill": "migration-guard",
+    "task": "Handle a compact migration guard request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "migration-guard"
+    ]
+  },
+  {
+    "id": "migration-guard-handoff-and-risk-control",
+    "skill": "migration-guard",
+    "task": "Review a migration guard lane before producing cutover token drift findings appended to qa-report or workflow-state.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

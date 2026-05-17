@@ -55,6 +55,9 @@ Each story must include:
 - Do not create stories that hide architectural decisions or missing acceptance criteria.
 - Use `.relay-kit/docs/planning-discipline.md` to keep tasks bite-sized, testable, and explicit about verification.
 - Execution order should be explicit; stories are not considered runnable until dependencies and first verification signals are named.
+- Open `references/scrum-master-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/scrum-master-good-output.md` and `examples/scrum-master-bad-output.md` to calibrate output quality.
+- Use `evals/scrum-master-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - developer

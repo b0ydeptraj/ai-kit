@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 from pathlib import Path
 from typing import Dict, List
 
@@ -86,6 +87,24 @@ def write_text(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
+SKILL_RESOURCE_ROOT = Path(__file__).resolve().parent / "skill_resources"
+
+
+def emit_skill_resources(project_path: Path, skill_root: Path, skill_name: str) -> List[Path]:
+    source_root = SKILL_RESOURCE_ROOT / skill_name
+    if not source_root.exists():
+        return []
+    written: List[Path] = []
+    target_root = project_path / skill_root / skill_name
+    for source in sorted(path for path in source_root.rglob("*") if path.is_file()):
+        relative = source.relative_to(source_root)
+        output = target_root / relative
+        output.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, output)
+        written.append(output)
+    return written
+
+
 
 def spec_for(name: str):
     return ALL_V3_SKILLS.get(name)
@@ -130,6 +149,7 @@ def emit_core_skills(project_path: Path, ai: str, bundle: str) -> List[Path]:
             output = project_path / rel_target / name / "SKILL.md"
             write_text(output, render_skill(spec, description_override=localized_description))
             written.append(output)
+            written.extend(emit_skill_resources(project_path, rel_target, name))
     written.extend(emit_command_surfaces(project_path, ai))
     written.extend(emit_agent_surfaces(project_path, ai))
     return written

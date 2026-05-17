@@ -1,0 +1,24 @@
+[
+  {
+    "id": "analyst-context-anchored-output",
+    "skill": "analyst",
+    "task": "Handle a compact analyst request and anchor the answer in user request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "analyst"
+    ]
+  },
+  {
+    "id": "analyst-handoff-and-risk-control",
+    "skill": "analyst",
+    "task": "Review a analyst lane before producing .relay-kit/contracts/product-brief.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

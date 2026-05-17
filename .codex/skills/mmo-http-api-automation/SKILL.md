@@ -1,6 +1,7 @@
 ---
 name: mmo-http-api-automation
 description: Use when MMO workloads are primarily HTTP/API-driven and need endpoint catalog, contract-safe request orchestration, quota handling, redacted logs, and replay-safe execution.
+allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
 ---
 
 # Mission
@@ -38,6 +39,9 @@ Execute MMO API automation with contract handling that a backend reviewer can re
 - Handle 429 and transient 5xx paths with bounded retries and reset-aware backoff.
 - Use idempotency key, request id, redacted raw request/response evidence, and replay checks for write operations.
 - Mirror real API dashboards: endpoint groups, status-code filters, origin filters, retry count, duration, cost, and replay-safe request detail.
+- Open `references/mmo-http-api-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/mmo-http-api-automation-good-output.md` and `examples/mmo-http-api-automation-bad-output.md` to calibrate output quality.
+- Use `evals/mmo-http-api-automation-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - api-integration

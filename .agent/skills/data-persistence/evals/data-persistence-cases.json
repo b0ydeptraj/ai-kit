@@ -1,0 +1,24 @@
+[
+  {
+    "id": "data-persistence-context-anchored-output",
+    "skill": "data-persistence",
+    "task": "Handle a compact data persistence request and anchor the answer in model files.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "data-persistence"
+    ]
+  },
+  {
+    "id": "data-persistence-handoff-and-risk-control",
+    "skill": "data-persistence",
+    "task": "Review a data persistence lane before producing .relay-kit/references/data-persistence.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

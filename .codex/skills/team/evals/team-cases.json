@@ -1,0 +1,24 @@
+[
+  {
+    "id": "team-context-anchored-output",
+    "skill": "team",
+    "task": "Handle a compact team request and anchor the answer in .relay-kit/state/workflow-state.md.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "team"
+    ]
+  },
+  {
+    "id": "team-handoff-and-risk-control",
+    "skill": "team",
+    "task": "Review a team lane before producing .relay-kit/state/team-board.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

@@ -13,7 +13,7 @@ It helps hubs and specialists quickly find older decisions, handoffs, and debug 
 ## Command
 
 ```bash
-python scripts/memory_search.py /path/to/project --query "root cause" --scope all
+relay-kit query search /path/to/project --query "root cause" --scope all
 ```
 
 Useful options:

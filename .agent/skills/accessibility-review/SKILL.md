@@ -39,8 +39,11 @@ Turn accessibility from implicit best effort into a concrete review gate with ma
 - pass or hold verdict tied to keyboard, semantics, focus, and contrast evidence
 
 ## Reference skills and rules
-- Use `python scripts/accessibility_review.py <project>` to generate or evaluate the gate checklist.
+- Use `relay-kit accessibility review <project>` to generate or evaluate the gate checklist.
 - Treat accessibility as a required quality bar, not cosmetic polish.
+- Open `references/accessibility-review-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/accessibility-review-good-output.md` and `examples/accessibility-review-bad-output.md` to calibrate output quality.
+- Use `evals/accessibility-review-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - test-hub

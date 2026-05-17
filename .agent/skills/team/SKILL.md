@@ -45,6 +45,9 @@ Coordinate parallel work while preserving one authoritative source of truth for 
 - Require context-continuity handoff packs when ownership shifts across sessions or AIs.
 - Prefer wave-based execution: parallel inside a wave, strict dependency gate between waves.
 - Run `relay-kit lane audit <project> --strict --json` before trusting a multi-lane handoff.
+- Open `references/team-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/team-good-output.md` and `examples/team-bad-output.md` to calibrate output quality.
+- Use `evals/team-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - cook

@@ -14,7 +14,7 @@ Published: 2026-04-26T12:01:08Z
 
 Release status: published.
 Local release lane: pass.
-Enterprise readiness: commercial-ready-candidate.
+Enterprise profile readiness: local-governance-ready-candidate.
 GitHub Actions Validate Runtime: success.
 Post-release readiness: pass.
 
@@ -38,7 +38,7 @@ Post-release readiness: pass.
 - `python scripts\migration_guard.py . --strict` -> findings: 0.
 - `python scripts\package_smoke.py . --json` -> pass; wheel `relay_kit-3.3.0-py3-none-any.whl`; installed CLI smoke passed.
 - `python relay_kit_public_cli.py release verify . --require-clean --json` -> pass.
-- `python relay_kit_public_cli.py readiness check . --profile enterprise --json` -> commercial-ready-candidate, 123 passed.
+- `python relay_kit_public_cli.py readiness check . --profile enterprise --json` -> local-governance-ready-candidate, 123 passed.
 - `python scripts\release_readiness.py . --phase pre --signals-file .tmp\release-v3.3.0-signals.json --strict --json` -> pass.
 - `python scripts\release_readiness.py . --phase post --signals-file .tmp\release-v3.3.0-post-signals.json --strict --json` -> pass.
 - GitHub Actions `Validate Runtime` run `24955362678` -> success.

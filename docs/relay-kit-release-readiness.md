@@ -10,7 +10,7 @@
 ## Generate checklist only
 
 ```bash
-python scripts/release_readiness.py /path/to/project --phase both
+relay-kit release readiness /path/to/project --phase both
 ```
 
 Checklist-only output is non-strict and must not be used as a release verdict.
@@ -35,7 +35,7 @@ Prepare a JSON file with booleans:
 Run evaluation:
 
 ```bash
-python scripts/release_readiness.py /path/to/project --phase both --signals-file release-signals.json --strict
+relay-kit release readiness /path/to/project --phase both --signals-file release-signals.json --strict
 ```
 
 Exit code:

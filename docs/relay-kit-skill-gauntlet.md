@@ -12,7 +12,7 @@ It checks:
 ## Run gauntlet
 
 ```bash
-python scripts/skill_gauntlet.py /path/to/project --strict
+relay-kit skill gauntlet /path/to/project --strict
 ```
 
 Exit code:

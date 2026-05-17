@@ -1,0 +1,24 @@
+[
+  {
+    "id": "evidence-before-completion-context-anchored-output",
+    "skill": "evidence-before-completion",
+    "task": "Handle a compact evidence before completion request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "evidence-before-completion"
+    ]
+  },
+  {
+    "id": "evidence-before-completion-handoff-and-risk-control",
+    "skill": "evidence-before-completion",
+    "task": "Review a evidence before completion lane before producing fresh claim-to-evidence checks and proof output appended to workflow-state or the active artifact.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

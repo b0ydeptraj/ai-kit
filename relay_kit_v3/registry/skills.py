@@ -1,6 +1,6 @@
 ﻿from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from textwrap import dedent
 from typing import Dict, List
 
@@ -24,6 +24,14 @@ class SkillSpec:
 
 READ_ANALYZE_TOOLS = ["Read", "Grep", "Glob", "Bash"]
 EDIT_AND_TEST_TOOLS = ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
+
+
+def domain_resource_references(skill_name: str) -> list[str]:
+    return [
+        f"Open `references/{skill_name}-operator-contract.md` when scope, evidence, or operator safety is unclear.",
+        f"Use `examples/{skill_name}-good-output.md` and `examples/{skill_name}-bad-output.md` to calibrate output quality.",
+        f"Use `evals/{skill_name}-cases.json` as the minimum scenario set for behavior regression checks.",
+    ]
 
 
 LEGACY_ROLE_MAP = {
@@ -73,13 +81,16 @@ LEGACY_ROLE_MAP = {
 ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
     "workflow-router": SkillSpec(
         name="workflow-router",
-        description="Use when a request arrives, the user asks what to do next, or scope or complexity is unclear. Route a request through the right delivery track, choose the active orchestrator or hub, and keep workflow-state current.",
+        description="Use when a request arrives, the user asks what to do next, or scope or complexity is unclear. Route a request through the right delivery track, choose the active orchestrator or hub, keep workflow-state current, and turn short or ambiguous prompts into file-aware working guidance.",
         role="routing-kernel",
         layer="layer-1-orchestrators",
-        inputs=["user request", ".relay-kit/contracts/project-context.md (if present)", ".relay-kit/state/workflow-state.md (if present)", ".relay-kit/state/team-board.md (if present)"],
-        outputs=[".relay-kit/state/workflow-state.md", ".relay-kit/contracts/tech-spec.md or product-brief.md kickoff", ".relay-kit/state/team-board.md when parallel lanes are needed"],
+        inputs=["user request", "short or ambiguous user prompt", ".relay-kit/contracts/project-context.md (if present)", ".relay-kit/state/workflow-state.md (if present)", ".relay-kit/state/team-board.md (if present)"],
+        outputs=[".relay-kit/state/workflow-state.md", "prompt enhancement summary when the user request is short or unclear", ".relay-kit/contracts/tech-spec.md or product-brief.md kickoff", ".relay-kit/state/team-board.md when parallel lanes are needed"],
         references=[
             "Prefer existing project-context over assumptions.",
+            "For short prompts, expand intent into recommended skill, read-first context, required evidence, and an ask-or-act decision.",
+            "When `.relay-kit/context/index.json` exists, use local context graph hits before broad repo scans.",
+            "Prompt enhancement is not a semantic context engine, expert guarantee, or production-readiness claim.",
             "Escalate from quick-flow to product-flow whenever hidden complexity appears.",
             "Hand off to bootstrap when base artifacts are missing, to cook for a single request, and to team when multiple lanes must move in parallel.",
             "If session continuity is weak, run context-continuity checkpoint or rehydrate before routing deeper work.",
@@ -90,6 +101,15 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             """\
             # Mission
             Act as the routing kernel for the whole system: choose the track, choose the active lane, and make the next move explicit.
+
+            ## Prompt enhancement posture
+            When the user gives a short, vague, or compressed request, do not pretend the skill makes the model an expert. Treat the skill as a context-aware prompt enhancer:
+            - infer the likely work type from the request shape
+            - name the recommended skill and why
+            - name the files, state, logs, or artifacts to read first
+            - name the evidence required before coding, answering, or claiming done
+            - choose whether to act, scout first, or ask exactly one high-value clarification
+            If `.relay-kit/context/index.json` exists, treat graph hits as candidate files to inspect first. If it is missing, continue with normal repo reading; do not block the user just because the index has not been built.
 
             ## Mandatory routing procedure
             1. Read `.relay-kit/contracts/project-context.md` and `.relay-kit/state/workflow-state.md` if they exist.
@@ -756,6 +776,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Prefer App Router and server/client boundary clarity over generic React-only guidance.",
             "Keep shadcn or existing component-system usage consistent with local patterns.",
             "Collect accessibility and performance evidence before completion claims.",
+            *domain_resource_references("next-product-frontend"),
         ],
         next_steps=["developer", "ux-structure", "accessibility-review", "review-hub"],
         body=dedent(
@@ -776,6 +797,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include performance or hydration-risk notes when relevant
             """
         ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
     ),
     "growth-marketing": SkillSpec(
         name="growth-marketing",
@@ -788,6 +810,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Keep messaging claims tied to source evidence and product constraints.",
             "Define funnel goals and success metrics explicitly, not as generic marketing advice.",
             "Include campaign QA and post-launch measurement checkpoints.",
+            *domain_resource_references("growth-marketing"),
         ],
         next_steps=["market-research", "pm", "review-hub", "workflow-router"],
         body=dedent(
@@ -807,6 +830,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include campaign QA acceptance criteria
             """
         ).strip(),
+        allowed_tools=READ_ANALYZE_TOOLS,
     ),
     "market-research": SkillSpec(
         name="market-research",
@@ -819,6 +843,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Separate verified source facts from inference and assumption.",
             "Score source freshness and authority before using findings in high-impact decisions.",
             "Connect findings directly to product, pricing, or GTM decisions.",
+            *domain_resource_references("market-research"),
         ],
         next_steps=["growth-marketing", "pm", "architect", "review-hub"],
         body=dedent(
@@ -838,6 +863,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include decision impact for each major finding
             """
         ).strip(),
+        allowed_tools=READ_ANALYZE_TOOLS,
     ),
     "automation-ops": SkillSpec(
         name="automation-ops",
@@ -850,6 +876,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Prefer deterministic runbooks over one-off script behavior.",
             "Require dry-run, rollback, and failure-handling rules for any risky operation.",
             "Capture operational observability and handoff expectations for support workflows.",
+            *domain_resource_references("automation-ops"),
         ],
         next_steps=["developer", "policy-guard", "release-readiness", "qa-governor"],
         body=dedent(
@@ -869,6 +896,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include rollback or recovery instructions
             """
         ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
     ),
     "vietnamese-product-localization": SkillSpec(
         name="vietnamese-product-localization",
@@ -912,6 +940,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Use deterministic dedup keys and publish windows to avoid accidental spam bursts.",
             "Model the UI as an operator workbench: source inventory table, bulk action bar, publish queue, reject drawer, and evidence timeline.",
             "Block flows that depend on policy evasion, account abuse, or non-consensual content reuse.",
+            *domain_resource_references("mmo-reup-automation"),
         ],
         next_steps=["automation-ops", "policy-guard", "qa-governor", "review-hub"],
         body=dedent(
@@ -933,6 +962,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include rollback and disable-runbook instructions
             """
         ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
     ),
     "mmo-account-operations": SkillSpec(
         name="mmo-account-operations",
@@ -946,6 +976,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Never design flows for CAPTCHA bypass, identity spoofing, or policy circumvention.",
             "Mirror real account tools: folder/tag filters, owner columns, proxy binding, account health, cooldown, quarantine, and bulk action review.",
             "Separate routine lifecycle automation from high-risk actions that require manual approval.",
+            *domain_resource_references("mmo-account-operations"),
         ],
         next_steps=["automation-ops", "policy-guard", "release-readiness", "qa-governor"],
         body=dedent(
@@ -967,6 +998,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include quarantine, cooldown, and escalation checklist for enforcement events
             """
         ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
     ),
     "mmo-browser-fleet-automation": SkillSpec(
         name="mmo-browser-fleet-automation",
@@ -981,6 +1013,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Keep profile-to-proxy affinity explicit; validate proxy health before launch and preserve profile folders/tags for operator filtering.",
             "Design dense operator screens: live session list, lease owner, selector drift, screenshot trace, console/network tabs, retry button, and stop button.",
             "Forbid automation patterns that rely on stealth evasion or non-API scraping prohibited by policy.",
+            *domain_resource_references("mmo-browser-fleet-automation"),
         ],
         next_steps=["automation-ops", "browser-inspector", "policy-guard", "qa-governor"],
         body=dedent(
@@ -1002,6 +1035,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include policy and rate-limit guard decisions per run with raw trace pointers
             """
         ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
     ),
     "mmo-social-marketing-automation": SkillSpec(
         name="mmo-social-marketing-automation",
@@ -1015,6 +1049,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Prevent duplicate or spam-like content bursts across accounts and channels.",
             "Model campaign operations as a work queue: content calendar, asset library, approval lane, reject reasons, quota meter, and per-channel status.",
             "Keep consent, data-use transparency, and account-safety requirements explicit.",
+            *domain_resource_references("mmo-social-marketing-automation"),
         ],
         next_steps=["growth-marketing", "automation-ops", "market-research", "review-hub"],
         body=dedent(
@@ -1035,6 +1070,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include compliance checklist for each target platform
             """
         ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
     ),
     "mmo-lowcode-automation": SkillSpec(
         name="mmo-lowcode-automation",
@@ -1048,6 +1084,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Enforce per-scenario run limits and queue controls to prevent request storms.",
             "Mirror real automation tools: manual vs production execution, active/inactive state, node-level output, error workflow, redacted execution data, and execution search.",
             "Separate draft/test workflows from published production workflows.",
+            *domain_resource_references("mmo-lowcode-automation"),
         ],
         next_steps=["automation-ops", "release-readiness", "qa-governor", "review-hub"],
         body=dedent(
@@ -1069,6 +1106,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include publish-versus-draft workflow control proof
             """
         ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
     ),
     "mmo-mobile-app-automation": SkillSpec(
         name="mmo-mobile-app-automation",
@@ -1082,6 +1120,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Define deterministic app-state setup and teardown to reduce flake.",
             "Model the device farm like a real ops tool: hub/provider split, device status, lease owner, app version, logcat/crash/ANR evidence, and remote-control link.",
             "Do not design rooted, tampered, or policy-evasion mobile automation paths.",
+            *domain_resource_references("mmo-mobile-app-automation"),
         ],
         next_steps=["automation-ops", "testing-patterns", "qa-governor", "review-hub"],
         body=dedent(
@@ -1102,6 +1141,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include run artifacts: logcat, screenshots, video or trace pointers, crash/ANR markers
             """
         ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
     ),
     "mmo-cloud-operations-automation": SkillSpec(
         name="mmo-cloud-operations-automation",
@@ -1115,6 +1155,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Use exponential backoff with jitter for transient failures and throttling events.",
             "Include queue depth, cost ceiling, and quota safeguards before scaling concurrency.",
             "Expose operator controls for pause, resume, retry, drain, replay, dead-letter inspection, and safe scale-down.",
+            *domain_resource_references("mmo-cloud-operations-automation"),
         ],
         next_steps=["automation-ops", "release-readiness", "policy-guard", "qa-governor"],
         body=dedent(
@@ -1136,6 +1177,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include worker health, queue health, alerts, and SLO signal mapping for operations
             """
         ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
     ),
     "mmo-http-api-automation": SkillSpec(
         name="mmo-http-api-automation",
@@ -1149,6 +1191,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Handle 429 and transient 5xx paths with bounded retries and reset-aware backoff.",
             "Use idempotency key, request id, redacted raw request/response evidence, and replay checks for write operations.",
             "Mirror real API dashboards: endpoint groups, status-code filters, origin filters, retry count, duration, cost, and replay-safe request detail.",
+            *domain_resource_references("mmo-http-api-automation"),
         ],
         next_steps=["api-integration", "automation-ops", "policy-guard", "qa-governor"],
         body=dedent(
@@ -1170,6 +1213,7 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include contract drift checks against API schema or docs plus status-code filter evidence
             """
         ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
     ),
 }
 
@@ -1631,7 +1675,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         ],
         references=[
             "Prefer read-only retrieval from authoritative artifacts over replaying chat memory.",
-            "Use `python scripts/memory_search.py <project> --query ...` for deterministic lookups.",
+            "Use `relay-kit query search <project> --query ...` for deterministic lookups.",
             "Use intent/path/freshness filters to return high-signal context in one pass instead of broad dumps.",
         ],
         next_steps=["debug-hub", "review-hub", "plan-hub", "workflow-router"],
@@ -1659,7 +1703,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "explicit go, hold, or rollback recommendation tied to machine-checkable signals",
         ],
         references=[
-            "Use `python scripts/release_readiness.py <project> --phase pre|post` for deterministic checklists and signal evaluation.",
+            "Use `relay-kit release readiness <project> --phase pre|post` for deterministic checklists and signal evaluation.",
             "Treat `ready-check` as review readiness, not automatic production readiness.",
         ],
         next_steps=["test-hub", "review-hub", "qa-governor", "workflow-router"],
@@ -1686,7 +1730,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "pass or hold verdict tied to keyboard, semantics, focus, and contrast evidence",
         ],
         references=[
-            "Use `python scripts/accessibility_review.py <project>` to generate or evaluate the gate checklist.",
+            "Use `relay-kit accessibility review <project>` to generate or evaluate the gate checklist.",
             "Treat accessibility as a required quality bar, not cosmetic polish.",
         ],
         next_steps=["test-hub", "review-hub", "qa-governor", "fix-hub"],
@@ -1713,7 +1757,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "explicit pass or hold verdict for SKILL.md trigger and structure discipline",
         ],
         references=[
-            "Use `python scripts/skill_gauntlet.py <project> --strict` for machine-checkable gating.",
+            "Use `relay-kit skill gauntlet <project> --strict` for machine-checkable gating.",
             "Run this before promoting large skill edits, bundle changes, or release branches.",
         ],
         next_steps=["review-hub", "qa-governor", "workflow-router", "fix-hub"],
@@ -1740,7 +1784,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "risk level plus recommended verification gates for the current diff",
         ],
         references=[
-            "Use `python scripts/impact_radar.py <project>` for deterministic working-tree analysis.",
+            "Use `relay-kit impact radar <project>` for deterministic working-tree analysis.",
             "Use `--base` and `--head` when the lane needs commit-range impact evidence for review.",
         ],
         next_steps=["plan-hub", "review-hub", "qa-governor", "workflow-router"],
@@ -1766,7 +1810,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "pass or hold recommendation for runtime health based on parity and artifact checks",
         ],
         references=[
-            "Use `python scripts/runtime_doctor.py <project> --strict` for deterministic runtime diagnostics.",
+            "Use `relay-kit runtime doctor <project> --strict` for deterministic runtime diagnostics.",
             "Use `--state-mode live` when validating active project state artifacts before release claims.",
         ],
         next_steps=["debug-hub", "test-hub", "review-hub", "fix-hub"],
@@ -1793,7 +1837,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "explicit pass or hold verdict for migration safety before merge",
         ],
         references=[
-            "Use `python scripts/naming_guard.py <project> --strict` as the canonical naming gate.",
+            "Use `relay-kit migration guard <project> --strict` as the canonical naming gate.",
             "Guard verdict is fail-closed: findings require cleanup before merge.",
         ],
         next_steps=["test-hub", "review-hub", "qa-governor", "fix-hub"],
@@ -1819,7 +1863,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "explicit pass or hold verdict for high-risk runtime operations",
         ],
         references=[
-            "Use `python scripts/policy_guard.py <project> --strict` as the canonical policy gate.",
+            "Use `relay-kit policy check <project> --strict` as the canonical policy gate.",
             "Treat policy findings as release blockers until reviewed by qa-governor or review-hub.",
         ],
         next_steps=["qa-governor", "review-hub", "fix-hub"],
@@ -1875,7 +1919,7 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "a compact resume brief with explicit next step and open loops",
         ],
         references=[
-            "Use `python scripts/context_continuity.py` modes for deterministic continuity artifacts.",
+            "Use `relay-kit continuity` modes for deterministic continuity artifacts.",
             "Context continuity complements `handoff-context`; it does not replace authoritative contracts and state.",
         ],
         next_steps=["workflow-router", "cook", "team", "handoff-context", "review-hub"],
@@ -2105,6 +2149,22 @@ ALL_V3_SKILLS.update(UTILITY_PROVIDER_SKILLS)
 ALL_V3_SKILLS.update(DISCIPLINE_UTILITY_SKILLS)
 ALL_V3_SKILLS.update(CLEANUP_SKILLS)
 ALL_V3_SKILLS.update(NATIVE_SUPPORT_SKILLS)
+
+
+def _with_resource_references(skill_name: str, spec: SkillSpec) -> SkillSpec:
+    references = list(spec.references)
+    for reference in domain_resource_references(skill_name):
+        if reference not in references:
+            references.append(reference)
+    if references == spec.references:
+        return spec
+    return replace(spec, references=references)
+
+
+ALL_V3_SKILLS = {
+    skill_name: _with_resource_references(skill_name, spec)
+    for skill_name, spec in ALL_V3_SKILLS.items()
+}
 
 
 def render_skill(spec: SkillSpec, *, description_override: str | None = None) -> str:

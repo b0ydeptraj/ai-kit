@@ -38,8 +38,11 @@ Block high-risk migration drift by proving old compatibility markers are gone fr
 - explicit pass or hold verdict for migration safety before merge
 
 ## Reference skills and rules
-- Use `python scripts/naming_guard.py <project> --strict` as the canonical naming gate.
+- Use `relay-kit migration guard <project> --strict` as the canonical naming gate.
 - Guard verdict is fail-closed: findings require cleanup before merge.
+- Open `references/migration-guard-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/migration-guard-good-output.md` and `examples/migration-guard-bad-output.md` to calibrate output quality.
+- Use `evals/migration-guard-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - test-hub

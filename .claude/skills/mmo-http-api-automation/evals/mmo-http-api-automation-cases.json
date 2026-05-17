@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mmo-http-rate-limit",
+    "skill": "mmo-http-api-automation",
+    "task": "Plan API automation that handles 429 responses safely.",
+    "expected_evidence_terms": ["429", "retry-backoff", "request id", "redacted"]
+  },
+  {
+    "id": "mmo-http-replay-safe-write",
+    "skill": "mmo-http-api-automation",
+    "task": "Review replay safety for a write endpoint.",
+    "expected_evidence_terms": ["idempotency key", "replay", "contract drift", "status code"]
+  }
+]

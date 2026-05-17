@@ -1,0 +1,24 @@
+[
+  {
+    "id": "root-cause-debugging-context-anchored-output",
+    "skill": "root-cause-debugging",
+    "task": "Handle a compact root cause debugging request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "root-cause-debugging"
+    ]
+  },
+  {
+    "id": "root-cause-debugging-handoff-and-risk-control",
+    "skill": "root-cause-debugging",
+    "task": "Review a root cause debugging lane before producing root-cause notes and disproven hypotheses appended to investigation-notes or the active artifact.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

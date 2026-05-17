@@ -41,6 +41,9 @@ Cover:
 ## Reference skills and rules
 - Document what the codebase actually does today, not what the team intended six months ago.
 - Include concrete file paths, entrypoint mapping, call graph notes, ownership, dependency direction, and a boundary table.
+- Open `references/project-architecture-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/project-architecture-good-output.md` and `examples/project-architecture-bad-output.md` to calibrate output quality.
+- Use `evals/project-architecture-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - architect

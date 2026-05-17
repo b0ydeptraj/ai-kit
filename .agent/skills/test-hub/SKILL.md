@@ -34,6 +34,9 @@ Turn raw test execution into a real readiness decision.
 - Prefer evidence tied to acceptance criteria and regression surface.
 - Route back to debug-hub when verification fails unexpectedly.
 - When discipline utilities are installed, use `evidence-before-completion` before calling the lane ready.
+- Open `references/test-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/test-hub-good-output.md` and `examples/test-hub-bad-output.md` to calibrate output quality.
+- Use `evals/test-hub-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - qa-governor

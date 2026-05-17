@@ -1,0 +1,24 @@
+[
+  {
+    "id": "bootstrap-context-anchored-output",
+    "skill": "bootstrap",
+    "task": "Handle a compact bootstrap request and anchor the answer in repo root.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "bootstrap"
+    ]
+  },
+  {
+    "id": "bootstrap-handoff-and-risk-control",
+    "skill": "bootstrap",
+    "task": "Review a bootstrap lane before producing .relay-kit/state/workflow-state.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

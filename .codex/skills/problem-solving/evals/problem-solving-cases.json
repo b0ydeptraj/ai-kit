@@ -1,0 +1,24 @@
+[
+  {
+    "id": "problem-solving-context-anchored-output",
+    "skill": "problem-solving",
+    "task": "Handle a compact problem solving request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "problem-solving"
+    ]
+  },
+  {
+    "id": "problem-solving-handoff-and-risk-control",
+    "skill": "problem-solving",
+    "task": "Review a problem solving lane before producing options, hypotheses, and trade-offs appended to the active artifact.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

@@ -41,6 +41,9 @@ Include:
 - Pull in project-architecture, dependency-management, api-integration, data-persistence, security-patterns, performance-optimization, and logging-observability when relevant.
 - When stack-specific delivery is required, coordinate with go-service-engineering or next-product-frontend for implementation-level constraints.
 - Architecture must include a readiness verdict, not just diagrams or aspirations.
+- Open `references/architect-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/architect-good-output.md` and `examples/architect-bad-output.md` to calibrate output quality.
+- Use `evals/architect-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - scrum-master

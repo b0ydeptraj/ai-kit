@@ -34,6 +34,9 @@ Localize product-facing communication for Vietnamese users with consistent termi
 - Treat Vietnamese support as profile-based policy, not a forced global default.
 - Maintain terminology consistency across docs, support, and product messaging.
 - Call out any untranslated or uncertain terms explicitly.
+- Open `references/vietnamese-product-localization-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/vietnamese-product-localization-good-output.md` and `examples/vietnamese-product-localization-bad-output.md` to calibrate output quality.
+- Use `evals/vietnamese-product-localization-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - growth-marketing

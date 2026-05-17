@@ -1,6 +1,7 @@
 ---
 name: mmo-browser-fleet-automation
 description: Use when MMO browser-based operations need profile inventory, session orchestration, deterministic waits, live debug evidence, and anti-flake reliability controls.
+allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
 ---
 
 # Mission
@@ -39,6 +40,9 @@ Run browser MMO operations with high reliability, clear limits, and policy-safe 
 - Keep profile-to-proxy affinity explicit; validate proxy health before launch and preserve profile folders/tags for operator filtering.
 - Design dense operator screens: live session list, lease owner, selector drift, screenshot trace, console/network tabs, retry button, and stop button.
 - Forbid automation patterns that rely on stealth evasion or non-API scraping prohibited by policy.
+- Open `references/mmo-browser-fleet-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/mmo-browser-fleet-automation-good-output.md` and `examples/mmo-browser-fleet-automation-bad-output.md` to calibrate output quality.
+- Use `evals/mmo-browser-fleet-automation-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - automation-ops

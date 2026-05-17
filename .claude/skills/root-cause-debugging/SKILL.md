@@ -37,6 +37,9 @@ Force a root-cause-first debugging pass so the lane stops guessing and starts pr
 ## Reference skills and rules
 - No fixes before investigation.
 - Prefer evidence at component boundaries over guessed explanations.
+- Open `references/root-cause-debugging-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/root-cause-debugging-good-output.md` and `examples/root-cause-debugging-bad-output.md` to calibrate output quality.
+- Use `evals/root-cause-debugging-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - debug-hub

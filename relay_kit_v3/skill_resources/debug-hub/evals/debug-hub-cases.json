@@ -1,0 +1,24 @@
+[
+  {
+    "id": "debug-hub-context-anchored-output",
+    "skill": "debug-hub",
+    "task": "Handle a compact debug hub request and anchor the answer in failing behavior.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "debug-hub"
+    ]
+  },
+  {
+    "id": "debug-hub-handoff-and-risk-control",
+    "skill": "debug-hub",
+    "task": "Review a debug hub lane before producing .relay-kit/contracts/investigation-notes.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "repo-map-context-anchored-output",
+    "skill": "repo-map",
+    "task": "Handle a compact repo map request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "repo-map"
+    ]
+  },
+  {
+    "id": "repo-map-handoff-and-risk-control",
+    "skill": "repo-map",
+    "task": "Review a repo map lane before producing repo map notes appended to project-context or architecture.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

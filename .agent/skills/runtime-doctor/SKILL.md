@@ -39,8 +39,11 @@ Catch adapter parity and runtime artifact drift early so regressions are blocked
 - pass or hold recommendation for runtime health based on parity and artifact checks
 
 ## Reference skills and rules
-- Use `python scripts/runtime_doctor.py <project> --strict` for deterministic runtime diagnostics.
+- Use `relay-kit runtime doctor <project> --strict` for deterministic runtime diagnostics.
 - Use `--state-mode live` when validating active project state artifacts before release claims.
+- Open `references/runtime-doctor-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/runtime-doctor-good-output.md` and `examples/runtime-doctor-bad-output.md` to calibrate output quality.
+- Use `evals/runtime-doctor-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - debug-hub

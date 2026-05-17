@@ -212,13 +212,13 @@ def owner_check(check_id: str, label: str, value: str | None) -> dict[str, Any]:
 def readiness_check(report: Mapping[str, Any]) -> dict[str, Any]:
     status = str(report.get("status") or "")
     verdict = str(report.get("verdict") or "")
-    passed = status == "pass" and verdict == "commercial-ready-candidate"
+    passed = status == "pass" and verdict == "local-governance-ready-candidate"
     summary = f"readiness status={status or 'unknown'}, verdict={verdict or 'unknown'}"
     return check(
         "readiness",
         "readiness gate",
         "pass" if passed else "hold",
-        summary if not passed else "commercial-ready candidate verified",
+        summary if not passed else "local governance candidate verified",
         details={"status": status, "verdict": verdict, "findings_count": _findings_count(report)},
     )
 
@@ -326,7 +326,7 @@ def next_actions(checks: list[Mapping[str, Any]]) -> list[str]:
         "support-url": "Attach the paid-support intake or escalation workflow URL.",
         "legal-owner": "Record the owner who approved the SLA/legal support commitments.",
         "support-owner": "Record the support owner accountable for triage targets.",
-        "readiness": "Run relay-kit readiness check with tests enabled until it returns commercial-ready-candidate.",
+        "readiness": "Run relay-kit readiness check with tests enabled until it returns local-governance-ready-candidate.",
         "publication-status": "Complete relay-kit publish trail/status with local dist, twine, upload, and evidence files.",
         "package-index": "Run relay-kit publish index-check until the package index confirms the target version is published and latest.",
         "support-triage": "Run relay-kit support request, support bundle, and support triage until triage is ready.",

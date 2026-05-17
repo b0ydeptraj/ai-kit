@@ -65,7 +65,7 @@ def sample_readiness_report() -> dict[str, object]:
     return {
         "schema_version": "relay-kit.readiness-report.v1",
         "status": "pass",
-        "verdict": "commercial-ready-candidate",
+        "verdict": "local-governance-ready-candidate",
         "profile": "enterprise",
         "findings": [],
         "gates": [
@@ -260,7 +260,7 @@ def test_pulse_report_summarizes_eval_readiness_and_evidence(tmp_path: Path) -> 
     assert report["workflow_eval"]["quality"]["average_route_margin"] == 8.5
     assert report["workflow_focus"]["weak_route_count"] == 1
     assert report["workflow_focus"]["coverage_gap_count"] == 1
-    assert report["readiness"]["verdict"] == "commercial-ready-candidate"
+    assert report["readiness"]["verdict"] == "local-governance-ready-candidate"
     assert report["evidence"]["status_counts"]["fail"] == 1
 
 

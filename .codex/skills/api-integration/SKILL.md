@@ -41,6 +41,9 @@ Cover:
 ## Reference skills and rules
 - Prefer concrete service names, client classes, and endpoint groups over generic summaries.
 - Make request id propagation, timeout budget, retries, 429 handling, idempotency, redacted logs, and error translation explicit.
+- Open `references/api-integration-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/api-integration-good-output.md` and `examples/api-integration-bad-output.md` to calibrate output quality.
+- Use `evals/api-integration-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - architect

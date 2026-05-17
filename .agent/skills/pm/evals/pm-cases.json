@@ -1,0 +1,24 @@
+[
+  {
+    "id": "pm-context-anchored-output",
+    "skill": "pm",
+    "task": "Handle a compact pm request and anchor the answer in .relay-kit/contracts/product-brief.md or direct scoped request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "pm"
+    ]
+  },
+  {
+    "id": "pm-handoff-and-risk-control",
+    "skill": "pm",
+    "task": "Review a pm lane before producing .relay-kit/contracts/PRD.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

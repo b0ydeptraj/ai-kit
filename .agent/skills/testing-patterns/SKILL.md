@@ -41,6 +41,9 @@ Cover:
 ## Reference skills and rules
 - Explain how to produce evidence locally, not only what frameworks exist.
 - Map tests to risk areas and brittle zones where regressions cluster.
+- Open `references/testing-patterns-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/testing-patterns-good-output.md` and `examples/testing-patterns-bad-output.md` to calibrate output quality.
+- Use `evals/testing-patterns-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - developer

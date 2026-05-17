@@ -46,6 +46,9 @@ Turn a messy question into a short sequence of evidence-backed steps.
 ## Reference skills and rules
 - Break work into explicit steps and checkpoints.
 - Reasoning should support a decision, not become the decision owner.
+- Open `references/sequential-thinking-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/sequential-thinking-good-output.md` and `examples/sequential-thinking-bad-output.md` to calibrate output quality.
+- Use `evals/sequential-thinking-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - debug-hub

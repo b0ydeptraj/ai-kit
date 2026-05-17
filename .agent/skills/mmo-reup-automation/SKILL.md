@@ -1,6 +1,7 @@
 ---
 name: mmo-reup-automation
 description: Use when controlled MMO reup workflows need operator-run queues, scheduling windows, deduplication, attribution tracking, and policy-safe publishing controls.
+allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
 ---
 
 # Mission
@@ -38,6 +39,9 @@ Build safe, measurable content reup automation for MMO operations without violat
 - Use deterministic dedup keys and publish windows to avoid accidental spam bursts.
 - Model the UI as an operator workbench: source inventory table, bulk action bar, publish queue, reject drawer, and evidence timeline.
 - Block flows that depend on policy evasion, account abuse, or non-consensual content reuse.
+- Open `references/mmo-reup-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/mmo-reup-automation-good-output.md` and `examples/mmo-reup-automation-bad-output.md` to calibrate output quality.
+- Use `evals/mmo-reup-automation-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - automation-ops

@@ -47,6 +47,9 @@ Collect browser-native evidence that narrows a web issue fast.
 ## Reference skills and rules
 - Collect evidence first, then suggest the next move.
 - Capture the smallest reproducible browser path.
+- Open `references/browser-inspector-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/browser-inspector-good-output.md` and `examples/browser-inspector-bad-output.md` to calibrate output quality.
+- Use `evals/browser-inspector-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - debug-hub

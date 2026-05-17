@@ -1,0 +1,24 @@
+[
+  {
+    "id": "context-continuity-context-anchored-output",
+    "skill": "context-continuity",
+    "task": "Handle a compact context continuity request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "context-continuity"
+    ]
+  },
+  {
+    "id": "context-continuity-handoff-and-risk-control",
+    "skill": "context-continuity",
+    "task": "Review a context continuity lane before producing checkpoint, rehydrate, handoff, or diff artifacts under .relay-kit/state and .relay-kit/handoffs.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

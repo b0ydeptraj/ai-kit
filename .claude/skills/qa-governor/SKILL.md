@@ -47,6 +47,9 @@ Include:
 - Use `.relay-kit/docs/review-loop.md` when review feedback must be validated before action.
 - Coverage must be explained against acceptance criteria and risk, not just number of tests.
 - Use context-continuity when readiness evidence must survive a new thread or handoff before final sign-off.
+- Open `references/qa-governor-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/qa-governor-good-output.md` and `examples/qa-governor-bad-output.md` to calibrate output quality.
+- Use `evals/qa-governor-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - review-hub

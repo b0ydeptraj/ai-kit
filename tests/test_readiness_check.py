@@ -23,7 +23,7 @@ def passing_command_runner(command: list[str], cwd: Path) -> subprocess.Complete
 
 def failing_policy_runner(command: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
     text = " ".join(command)
-    if "policy_guard.py" in text:
+    if "policy check" in text:
         return subprocess.CompletedProcess(command, 2, stdout="Policy guard report\n- findings: 1\n", stderr="")
     if "eval_workflows.py" in text:
         return subprocess.CompletedProcess(command, 0, stdout=json.dumps(healthy_workflow_eval_payload()) + "\n", stderr="")
@@ -105,11 +105,11 @@ include = ["relay_kit_v3*", "scripts*"]
         "\n".join(
             [
                 "python scripts/validate_runtime.py",
-                "python scripts/runtime_doctor.py . --strict",
-                "python scripts/runtime_doctor.py . --strict --state-mode live",
-                "python scripts/naming_guard.py . --strict",
-                "python scripts/policy_guard.py . --strict",
-                "python scripts/skill_gauntlet.py . --strict --semantic",
+                "python relay_kit_public_cli.py runtime doctor . --strict",
+                "python relay_kit_public_cli.py runtime doctor . --strict --state-mode live",
+                "python relay_kit_public_cli.py migration guard . --strict",
+                "python relay_kit_public_cli.py policy check . --strict --pack enterprise",
+                "python relay_kit_public_cli.py skill gauntlet . --strict --semantic",
                 "python scripts/eval_workflows.py . --strict",
                 "python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise",
                 "python -m pip wheel . --no-deps -w .tmp/wheelhouse",
@@ -178,7 +178,9 @@ def test_readiness_report_returns_candidate_when_required_gates_pass(tmp_path: P
 
     assert report["schema_version"] == "relay-kit.readiness-report.v1"
     assert report["status"] == "pass"
-    assert report["verdict"] == "commercial-ready-candidate"
+    assert report["verdict"] == "local-governance-ready-candidate"
+    assert report["external_evidence_status"] == "missing"
+    assert "user_or_field_validation" in report["external_evidence"]["missing"]
     assert {gate["id"] for gate in report["gates"]} >= {
         "pytest",
         "doctor-enterprise",
@@ -478,7 +480,7 @@ def test_readiness_report_team_profile_uses_non_enterprise_manifest_gate(tmp_pat
 
     gate_ids = {gate["id"] for gate in report["gates"]}
 
-    assert report["verdict"] == "commercial-ready-candidate"
+    assert report["verdict"] == "local-governance-ready-candidate"
     assert "doctor-team" in gate_ids
     assert "policy-team" in gate_ids
     assert "bundle-manifest" in gate_ids
@@ -490,7 +492,8 @@ def test_public_cli_readiness_check_json(monkeypatch, capsys) -> None:
         return {
             "schema_version": "relay-kit.readiness-report.v1",
             "status": "pass",
-            "verdict": "commercial-ready-candidate",
+            "verdict": "local-governance-ready-candidate",
+            "external_evidence_status": "missing",
             "project_path": str(Path(project_root).resolve()),
             "profile": profile,
             "gates": [],
@@ -504,4 +507,4 @@ def test_public_cli_readiness_check_json(monkeypatch, capsys) -> None:
 
     assert exit_code == 0
     assert payload["profile"] == "enterprise"
-    assert payload["verdict"] == "commercial-ready-candidate"
+    assert payload["verdict"] == "local-governance-ready-candidate"

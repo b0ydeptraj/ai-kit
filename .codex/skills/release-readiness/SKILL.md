@@ -39,8 +39,11 @@ Convert release confidence into concrete pre and post deploy evidence instead of
 - explicit go, hold, or rollback recommendation tied to machine-checkable signals
 
 ## Reference skills and rules
-- Use `python scripts/release_readiness.py <project> --phase pre|post` for deterministic checklists and signal evaluation.
+- Use `relay-kit release readiness <project> --phase pre|post` for deterministic checklists and signal evaluation.
 - Treat `ready-check` as review readiness, not automatic production readiness.
+- Open `references/release-readiness-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/release-readiness-good-output.md` and `examples/release-readiness-bad-output.md` to calibrate output quality.
+- Use `evals/release-readiness-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - test-hub

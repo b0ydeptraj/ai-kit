@@ -207,7 +207,7 @@ def metric_signals(pulse_report: Mapping[str, Any]) -> list[dict[str, Any]]:
         metric("relay.evidence.failures_recent", _number(recent_status_counts.get("fail")), "1", base_attrs),
         metric(
             "relay.readiness.ready",
-            1 if readiness.get("verdict") == "commercial-ready-candidate" else 0,
+            1 if readiness.get("verdict") == "local-governance-ready-candidate" else 0,
             "1",
             {**base_attrs, "relay.readiness_verdict": str(readiness.get("verdict", "not-run"))},
         ),

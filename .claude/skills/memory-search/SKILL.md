@@ -41,8 +41,11 @@ Recover prior context quickly so the lane can reuse proven decisions and avoid r
 
 ## Reference skills and rules
 - Prefer read-only retrieval from authoritative artifacts over replaying chat memory.
-- Use `python scripts/memory_search.py <project> --query ...` for deterministic lookups.
+- Use `relay-kit query search <project> --query ...` for deterministic lookups.
 - Use intent/path/freshness filters to return high-signal context in one pass instead of broad dumps.
+- Open `references/memory-search-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/memory-search-good-output.md` and `examples/memory-search-bad-output.md` to calibrate output quality.
+- Use `evals/memory-search-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - debug-hub

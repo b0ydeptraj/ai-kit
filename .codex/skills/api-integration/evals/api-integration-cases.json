@@ -1,0 +1,24 @@
+[
+  {
+    "id": "api-integration-context-anchored-output",
+    "skill": "api-integration",
+    "task": "Handle a compact api integration request and anchor the answer in HTTP or RPC client code.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "api-integration"
+    ]
+  },
+  {
+    "id": "api-integration-handoff-and-risk-control",
+    "skill": "api-integration",
+    "task": "Review a api integration lane before producing .relay-kit/references/api-integration.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

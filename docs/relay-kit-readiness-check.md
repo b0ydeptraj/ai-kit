@@ -1,6 +1,6 @@
 # Relay-kit Readiness Check
 
-`relay-kit readiness check` is the top-level paid/team gate. It does not replace the lower gates; it runs them together and returns one release verdict.
+`relay-kit readiness check` is the top-level local governance gate. It does not replace the lower gates; it runs them together and returns one local verdict.
 
 ## Command
 
@@ -28,11 +28,11 @@ Use `--profile team` for non-enterprise projects. Use `--skip-tests` only after 
 - `skill-proof-audit`: classifies every canonical skill as theoretical, validated, or field-tested, and fails when any production skill remains theoretical.
 - `signal-export`: builds a local Pulse source and verifies Relay signal JSON, JSONL, and OTLP artifacts.
 - `release-lane`: verifies local package, CI workflow, docs, manifest/trust/version, and artifact-ignore prerequisites.
-- `commercial-docs`: checks SLA, enterprise bundle, contract sync, commercial dossier, and support request docs.
+- `commercial-docs`: checks SLA, enterprise bundle, contract sync, commercial dossier, and support request docs. This is a documentation presence check, not proof that paid support has operated.
 
 ## Verdicts
 
-- `commercial-ready-candidate`: all required gates passed.
+- `local-governance-ready-candidate`: all required local gates passed; external evidence is still tracked separately.
 - `limited-beta`: no required gate failed, but at least one required gate was explicitly skipped.
 - `hold`: at least one required gate failed.
 
@@ -40,11 +40,11 @@ The command returns exit code `0` for pass status and `2` for hold status.
 
 ## Workflow Route-Quality Policy
 
-Enterprise readiness treats workflow routing quality as a release gate, not a dashboard-only signal. A `workflow-eval` command that exits `0` can still fail readiness if its JSON report contains any weak routes or reports `min_route_margin < 4`.
+The enterprise profile treats workflow routing quality as a release gate, not a dashboard-only signal. A `workflow-eval` command that exits `0` can still fail readiness if its JSON report contains any weak routes or reports `min_route_margin < 4`.
 
 ## Release Use
 
-For an enterprise release candidate, run this sequence:
+For a full governance release candidate, run this sequence:
 
 ```bash
 relay-kit manifest write /path/to/project
@@ -55,6 +55,6 @@ relay-kit publish plan /path/to/project --channel pypi --json
 relay-kit commercial dossier /path/to/project --channel pypi --strict --json
 ```
 
-Do not call a package commercial-ready from local docs alone. The readiness report is the local proof artifact for runtime readiness. `relay-kit publish plan` records package-index prerequisites, while `relay-kit commercial dossier` binds remote CI, release, package, SLA, support ownership, publication status, and support handoff evidence into the final proof artifact.
+Do not call a package commercial-ready from local docs alone. The readiness report is the local proof artifact for governance readiness and reports `external_evidence_status: missing` until remote CI, release upload, paid support operation, and user or field validation evidence are attached. `relay-kit publish plan` records package-index prerequisites, while `relay-kit commercial dossier` binds remote CI, release, package, SLA, support ownership, publication status, and support handoff evidence into the final proof artifact.
 
 The readiness `signal-export` gate writes `.relay-kit/signals/relay-signals.json`, `.relay-kit/signals/relay-signals.jsonl`, and `.relay-kit/signals/relay-signals-otlp.json`.

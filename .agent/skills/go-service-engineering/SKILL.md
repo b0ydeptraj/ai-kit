@@ -38,6 +38,9 @@ Deliver Go service work the way a backend owner would review it: boundaries firs
 - Prefer established local service patterns over introducing a new framework by default.
 - Cover routing table, handler boundary, repository interface, transaction boundary, cache ownership, background jobs, and observability in one coherent service contract.
 - Include evidence commands for unit tests, httptest or handler tests, integration tests, context cancellation, and migration rollback safety where relevant.
+- Open `references/go-service-engineering-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/go-service-engineering-good-output.md` and `examples/go-service-engineering-bad-output.md` to calibrate output quality.
+- Use `evals/go-service-engineering-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - developer

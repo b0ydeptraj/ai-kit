@@ -37,6 +37,9 @@ Name exactly what became clearer, what is still unknown, which sources might be 
 - Prefer concrete file paths, commands, and entrypoints over summaries.
 - When the problem starts from a failure, capture findings in investigation-notes.
 - Run a freshness pass first: stale assumptions or stale artifacts should be called out explicitly before planning.
+- Open `references/scout-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/scout-hub-good-output.md` and `examples/scout-hub-bad-output.md` to calibrate output quality.
+- Use `evals/scout-hub-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - plan-hub

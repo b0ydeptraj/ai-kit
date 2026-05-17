@@ -12,7 +12,7 @@ def ready_readiness(root: Path, profile: str, skip_tests: bool) -> dict[str, Any
     return {
         "schema_version": "relay-kit.readiness-report.v1",
         "status": "pass",
-        "verdict": "commercial-ready-candidate",
+        "verdict": "local-governance-ready-candidate",
         "profile": profile,
         "project_path": str(root),
         "findings": [],

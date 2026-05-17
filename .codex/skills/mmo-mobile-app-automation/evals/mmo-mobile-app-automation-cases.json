@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mmo-mobile-device-matrix",
+    "skill": "mmo-mobile-app-automation",
+    "task": "Plan mobile automation across emulator and device targets.",
+    "expected_evidence_terms": ["device matrix", "app-state", "selector", "logcat"]
+  },
+  {
+    "id": "mmo-mobile-failure-triage",
+    "skill": "mmo-mobile-app-automation",
+    "task": "Review how failed mobile runs should be diagnosed.",
+    "expected_evidence_terms": ["crash", "ANR", "timeout", "trace"]
+  }
+]

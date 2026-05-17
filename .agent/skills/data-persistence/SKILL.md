@@ -41,6 +41,9 @@ Cover:
 ## Reference skills and rules
 - Cover both primary storage and auxiliary state like caches, queues, or object stores when relevant.
 - Document transaction boundary, isolation assumptions, rollback, backfill, and migration risks, not only happy-path structure.
+- Open `references/data-persistence-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/data-persistence-good-output.md` and `examples/data-persistence-bad-output.md` to calibrate output quality.
+- Use `evals/data-persistence-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - architect

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "go-service-engineering-context-anchored-output",
+    "skill": "go-service-engineering",
+    "task": "Handle a compact go service engineering request and anchor the answer in go service requirements.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "go-service-engineering"
+    ]
+  },
+  {
+    "id": "go-service-engineering-handoff-and-risk-control",
+    "skill": "go-service-engineering",
+    "task": "Review a go service engineering lane before producing Go service implementation plan or code delta with test and runtime evidence.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "id": "cook-context-anchored-output",
+    "skill": "cook",
+    "task": "Handle a compact cook request and anchor the answer in .relay-kit/state/workflow-state.md.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "cook"
+    ]
+  },
+  {
+    "id": "cook-handoff-and-risk-control",
+    "skill": "cook",
+    "task": "Review a cook lane before producing updated workflow-state.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

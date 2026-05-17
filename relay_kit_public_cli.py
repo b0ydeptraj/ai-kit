@@ -24,6 +24,9 @@ This wrapper exposes a friendlier command surface:
   relay-kit signal export <project_path>
   relay-kit contract import <project_path> --contract-file <relay-contract.json>
   relay-kit context audit <project_path>
+  relay-kit context index <project_path>
+  relay-kit context search <project_path> --query "..."
+  relay-kit context related <project_path> --path src/auth/login.ts
   relay-kit context budget <project_path>
   relay-kit context pack <project_path>
   relay-kit token audit <project_path>
@@ -39,7 +42,15 @@ This wrapper exposes a friendlier command surface:
   relay-kit agent list <project_path>
   relay-kit agent diagnose <project_path>
   relay-kit query search <project_path> --query "..."
+  relay-kit prompt enhance <project_path> --prompt "..."
   relay-kit service boundaries <project_path>
+  relay-kit runtime doctor <project_path>
+  relay-kit skill gauntlet <project_path>
+  relay-kit impact radar <project_path>
+  relay-kit accessibility review <project_path>
+  relay-kit release readiness <project_path>
+  relay-kit continuity checkpoint <project_path>
+  relay-kit migration guard <project_path>
 
 It maps to the existing canonical runtime entrypoint (`relay_kit.py`)
 without changing the underlying generation flow.
@@ -110,6 +121,15 @@ from relay_kit_v3.skill_proof import (
 from relay_kit_v3.contract_export import write_contract_export
 from relay_kit_v3.contract_import import import_contracts, render_contract_import_report
 from relay_kit_v3.context_governance import build_context_audit, render_context_audit, write_context_audit
+from relay_kit_v3.context_index import (
+    build_context_index,
+    build_context_related,
+    build_context_search,
+    render_context_index,
+    render_context_related,
+    render_context_search,
+    write_context_index,
+)
 from relay_kit_v3.lane_audit import build_lane_audit, render_lane_audit, write_lane_audit
 from relay_kit_v3.adapter_diagnostics import (
     build_adapter_diagnostics,
@@ -127,6 +147,11 @@ from relay_kit_v3.command_registry import (
     lifecycle_command_records,
     render_command_diagnostics,
     write_command_diagnostics,
+)
+from relay_kit_v3.intent_enhancer import (
+    build_prompt_enhancement,
+    render_prompt_enhancement,
+    write_prompt_enhancement,
 )
 from relay_kit_v3.query_search import build_query_search, render_query_search, write_query_search
 from relay_kit_v3.runtime_locale import (
@@ -297,7 +322,7 @@ def _parse_contract_args(argv: list[str]) -> argparse.Namespace:
 def _parse_context_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="relay-kit context",
-        description="Audit Relay-kit context and memory governance surfaces.",
+        description="Audit Relay-kit context governance and build a local no-API context graph.",
     )
     subparsers = parser.add_subparsers(dest="action", required=True)
     audit = subparsers.add_parser("audit", help="Audit source freshness and authority")
@@ -306,6 +331,29 @@ def _parse_context_args(argv: list[str]) -> argparse.Namespace:
     audit.add_argument("--output-file", default=None, help="Optional context audit JSON output path")
     audit.add_argument("--strict", action="store_true", help="Return non-zero unless context audit passes")
     audit.add_argument("--json", action="store_true", help="Emit machine-readable context audit")
+
+    index = subparsers.add_parser("index", help="Build a local file, symbol, import, test, and docs index")
+    index.add_argument("project_path", nargs="?", default=".", help="Project root to index")
+    index.add_argument(
+        "--output-file",
+        default=None,
+        help="Optional index JSON output path (default: <project>/.relay-kit/context/index.json)",
+    )
+    index.add_argument("--json", action="store_true", help="Emit machine-readable context index summary")
+
+    search = subparsers.add_parser("search", help="Search the local context graph")
+    search.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    search.add_argument("--query", required=True, help="Query text")
+    search.add_argument("--limit", type=int, default=10, help="Maximum result count")
+    search.add_argument("--index-file", default=None, help="Optional context index JSON path")
+    search.add_argument("--json", action="store_true", help="Emit machine-readable search results")
+
+    related = subparsers.add_parser("related", help="Find files related to a path in the local context graph")
+    related.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    related.add_argument("--path", required=True, help="Source path to inspect")
+    related.add_argument("--limit", type=int, default=10, help="Maximum related file count")
+    related.add_argument("--index-file", default=None, help="Optional context index JSON path")
+    related.add_argument("--json", action="store_true", help="Emit machine-readable related-file results")
 
     budget = subparsers.add_parser("budget", help="Estimate token budget and compression safety")
     budget.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
@@ -520,6 +568,21 @@ def _parse_query_args(argv: list[str]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def _parse_prompt_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit prompt",
+        description="Enhance short or ambiguous user prompts with Relay-kit skill context.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    enhance = subparsers.add_parser("enhance", help="Turn a short request into a skill-aware working prompt")
+    enhance.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    enhance.add_argument("--prompt", required=True, help="User prompt to enhance")
+    enhance.add_argument("--top-limit", type=int, default=5, help="Number of route candidates to include")
+    enhance.add_argument("--output-file", default=None, help="Optional prompt enhancement JSON output path")
+    enhance.add_argument("--json", action="store_true", help="Emit machine-readable prompt enhancement")
+    return parser.parse_args(argv)
+
+
 def _parse_service_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="relay-kit service",
@@ -531,6 +594,65 @@ def _parse_service_args(argv: list[str]) -> argparse.Namespace:
     boundaries.add_argument("--output-file", default=None, help="Optional service-boundary JSON output path")
     boundaries.add_argument("--strict", action="store_true", help="Return non-zero when boundary findings exist")
     boundaries.add_argument("--json", action="store_true", help="Emit machine-readable boundary report")
+    return parser.parse_args(argv)
+
+
+def _parse_runtime_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit runtime",
+        description="Run Relay-kit runtime diagnostics through portable public commands.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    doctor = subparsers.add_parser("doctor", help="Detect runtime drift in generated skill surfaces")
+    doctor.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    doctor.add_argument("--state-mode", choices=["template", "live"], default="template")
+    doctor.add_argument("--adapters", nargs="+", choices=["all", "claude", "agent", "codex"], default=["all"])
+    doctor.add_argument("--strict", action="store_true", help="Return non-zero when findings exist")
+    return parser.parse_args(argv)
+
+
+def _parse_skill_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit skill",
+        description="Run Relay-kit skill behavior gates through portable public commands.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    gauntlet = subparsers.add_parser("gauntlet", help="Run SKILL.md behavior regression checks")
+    gauntlet.add_argument("project_path", nargs="?", default=".", help="Target project root")
+    gauntlet.add_argument("--json", action="store_true", help="Emit JSON report")
+    gauntlet.add_argument("--strict", action="store_true", help="Return non-zero when findings exist")
+    gauntlet.add_argument("--semantic", action="store_true", help="Also check registry parity and routing scenarios")
+    gauntlet.add_argument("--scenario-fixtures", default=None, help="Optional scenario fixture JSON path")
+    return parser.parse_args(argv)
+
+
+def _parse_impact_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit impact",
+        description="Run Relay-kit blast-radius utilities through portable public commands.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    radar = subparsers.add_parser("radar", help="Generate a compact blast-radius report")
+    radar.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    radar.add_argument("--base", default=None, help="Optional base ref for git diff")
+    radar.add_argument("--head", default="HEAD", help="Head ref for git diff")
+    radar.add_argument("--json", action="store_true", help="Emit JSON output")
+    return parser.parse_args(argv)
+
+
+def _parse_accessibility_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit accessibility",
+        description="Run Relay-kit accessibility gates through portable public commands.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    review = subparsers.add_parser("review", help="Generate or evaluate an accessibility checklist")
+    review.add_argument("project_path", nargs="?", default=".", help="Target project root")
+    review.add_argument("--surface", default=None, help="Screen, flow, or surface under review")
+    review.add_argument("--report-file", default=None, help="Optional checklist evidence file")
+    review.add_argument("--output-file", default=None, help="Optional generated report output path")
+    review.add_argument("--strict", action="store_true", help="Fail when evidence report is missing")
+    review.add_argument("--json", action="store_true", help="Emit JSON output")
     return parser.parse_args(argv)
 
 
@@ -745,7 +867,7 @@ def _parse_support_args(argv: list[str]) -> argparse.Namespace:
 def _parse_readiness_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="relay-kit readiness",
-        description="Run the commercial readiness gate suite.",
+        description="Run the local governance readiness gate suite.",
     )
     subparsers = parser.add_subparsers(dest="action", required=True)
     check = subparsers.add_parser("check", help="Check whether Relay-kit is ready for paid/team use")
@@ -767,6 +889,57 @@ def _parse_release_args(argv: list[str]) -> argparse.Namespace:
     verify.add_argument("--require-clean", action="store_true", help="Fail when the git worktree is dirty")
     verify.add_argument("--output-file", default=None, help="Optional JSON report output path")
     verify.add_argument("--json", action="store_true", help="Emit machine-readable release-lane report")
+    readiness = subparsers.add_parser("readiness", help="Generate release readiness checklists and deploy signals")
+    readiness.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    readiness.add_argument("--phase", choices=["pre", "post", "both"], default="both")
+    readiness.add_argument("--signals-file", default=None, help="Optional JSON file with boolean release signals")
+    readiness.add_argument("--output-file", default=None, help="Optional checklist report output path")
+    readiness.add_argument("--strict", action="store_true", help="Fail when no machine-checkable signals file is supplied")
+    readiness.add_argument("--json", action="store_true", help="Emit JSON result")
+    return parser.parse_args(argv)
+
+
+def _parse_continuity_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit continuity",
+        description="Preserve and restore Relay-kit continuity across long chats and sessions.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    checkpoint = subparsers.add_parser("checkpoint", help="Capture continuity snapshot")
+    checkpoint.add_argument("project_path", nargs="?", default=".", help="Target project root")
+    checkpoint.add_argument("--json", action="store_true", help="Emit JSON output")
+    checkpoint.add_argument("--objective", default=None, help="Current objective summary")
+    checkpoint.add_argument("--lane", default=None, help="Active lane id")
+    checkpoint.add_argument("--blocker", default=None, help="Current blocker")
+    checkpoint.add_argument("--next-step", default=None, help="Exact next step")
+    checkpoint.add_argument("--note", default=None, help="Optional checkpoint note")
+
+    rehydrate = subparsers.add_parser("rehydrate", help="Rehydrate context from last checkpoint")
+    rehydrate.add_argument("project_path", nargs="?", default=".", help="Target project root")
+    rehydrate.add_argument("--json", action="store_true", help="Emit JSON output")
+
+    handoff = subparsers.add_parser("handoff", help="Create handoff pack from latest manifest")
+    handoff.add_argument("project_path", nargs="?", default=".", help="Target project root")
+    handoff.add_argument("--json", action="store_true", help="Emit JSON output")
+    handoff.add_argument("--reason", default=None, help="Reason for handoff file naming")
+    handoff.add_argument("--receiver", default=None, help="Intended receiver")
+
+    diff = subparsers.add_parser("diff-since-last", help="Diff tracked continuity files since last checkpoint")
+    diff.add_argument("project_path", nargs="?", default=".", help="Target project root")
+    diff.add_argument("--json", action="store_true", help="Emit JSON output")
+    return parser.parse_args(argv)
+
+
+def _parse_migration_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit migration",
+        description="Run Relay-kit migration and naming guards through portable public commands.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+    guard = subparsers.add_parser("guard", help="Detect retired naming tokens")
+    guard.add_argument("project_path", nargs="?", default=".", help="Target project root")
+    guard.add_argument("--strict", action="store_true", help="Return non-zero when findings exist")
+    guard.add_argument("--json", action="store_true", help="Emit JSON report")
     return parser.parse_args(argv)
 
 
@@ -1262,6 +1435,44 @@ def run_context(args: argparse.Namespace) -> int:
             return 1
         return 0
 
+    if args.action == "index":
+        report = build_context_index(args.project_path)
+        output_path = write_context_index(args.project_path, report, output_file=args.output_file)
+        if args.json:
+            payload = dict(report)
+            payload["output_file"] = str(output_path)
+            print(json.dumps(payload, ensure_ascii=True, indent=2))
+        else:
+            print(render_context_index(report))
+            print(f"Wrote {output_path}")
+        return 0
+
+    if args.action == "search":
+        report = build_context_search(
+            args.project_path,
+            query=args.query,
+            limit=args.limit,
+            index_file=args.index_file,
+        )
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_context_search(report))
+        return 0 if report["status"] in {"pass", "empty"} else 2
+
+    if args.action == "related":
+        report = build_context_related(
+            args.project_path,
+            path=args.path,
+            limit=args.limit,
+            index_file=args.index_file,
+        )
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_context_related(report))
+        return 0 if report["status"] in {"pass", "empty"} else 2
+
     if args.action == "budget":
         report = build_context_budget(
             args.project_path,
@@ -1522,6 +1733,29 @@ def run_query(args: argparse.Namespace) -> int:
     return 0 if report["status"] in {"pass", "empty"} else 2
 
 
+def run_prompt(args: argparse.Namespace) -> int:
+    if args.action != "enhance":
+        return 2
+    report = build_prompt_enhancement(
+        args.project_path,
+        prompt=args.prompt,
+        top_limit=args.top_limit,
+    )
+    output_path = None
+    if args.output_file:
+        output_path = write_prompt_enhancement(args.project_path, report, args.output_file)
+    if args.json:
+        payload = dict(report)
+        if output_path is not None:
+            payload["output_file"] = str(output_path)
+        print(json.dumps(payload, ensure_ascii=True, indent=2))
+    else:
+        print(render_prompt_enhancement(report))
+        if output_path is not None:
+            print(f"Wrote {output_path}")
+    return 0
+
+
 def run_service(args: argparse.Namespace) -> int:
     if args.action != "boundaries":
         return 2
@@ -1537,6 +1771,99 @@ def run_service(args: argparse.Namespace) -> int:
     if args.strict and report["status"] != "pass":
         return 1
     return 0
+
+
+def _run_script_main(module: object, program: str, argv: list[str]) -> int:
+    original_argv = sys.argv[:]
+    try:
+        sys.argv = [program, *argv]
+        return int(module.main())  # type: ignore[attr-defined]
+    finally:
+        sys.argv = original_argv
+
+
+def run_runtime(args: argparse.Namespace) -> int:
+    if args.action != "doctor":
+        return 2
+    from scripts import runtime_doctor
+
+    doctor_argv = [args.project_path, "--state-mode", args.state_mode, "--adapters", *args.adapters]
+    if args.strict:
+        doctor_argv.append("--strict")
+    return _run_script_main(runtime_doctor, "runtime_doctor.py", doctor_argv)
+
+
+def run_skill(args: argparse.Namespace) -> int:
+    if args.action != "gauntlet":
+        return 2
+    from scripts import skill_gauntlet
+
+    gauntlet_argv = [args.project_path]
+    if args.json:
+        gauntlet_argv.append("--json")
+    if args.strict:
+        gauntlet_argv.append("--strict")
+    if args.semantic:
+        gauntlet_argv.append("--semantic")
+    if args.scenario_fixtures:
+        gauntlet_argv.extend(["--scenario-fixtures", args.scenario_fixtures])
+    return _run_script_main(skill_gauntlet, "skill_gauntlet.py", gauntlet_argv)
+
+
+def run_impact(args: argparse.Namespace) -> int:
+    if args.action != "radar":
+        return 2
+    from scripts import impact_radar
+
+    radar_argv = [args.project_path, "--head", args.head]
+    if args.base:
+        radar_argv.extend(["--base", args.base])
+    if args.json:
+        radar_argv.append("--json")
+    return _run_script_main(impact_radar, "impact_radar.py", radar_argv)
+
+
+def run_accessibility(args: argparse.Namespace) -> int:
+    if args.action != "review":
+        return 2
+    from scripts import accessibility_review
+
+    review_argv = [args.project_path]
+    for option_name in ("surface", "report_file", "output_file"):
+        value = getattr(args, option_name)
+        if value:
+            review_argv.extend([f"--{option_name.replace('_', '-')}", value])
+    if args.strict:
+        review_argv.append("--strict")
+    if args.json:
+        review_argv.append("--json")
+    return _run_script_main(accessibility_review, "accessibility_review.py", review_argv)
+
+
+def run_continuity(args: argparse.Namespace) -> int:
+    from scripts import context_continuity
+
+    continuity_argv = [args.action, args.project_path]
+    if getattr(args, "json", False):
+        continuity_argv.append("--json")
+    for option_name in ("objective", "lane", "blocker", "next_step", "note", "reason", "receiver"):
+        value = getattr(args, option_name, None)
+        if value:
+            continuity_argv.extend([f"--{option_name.replace('_', '-')}", value])
+    return _run_script_main(context_continuity, "context_continuity.py", continuity_argv)
+
+
+def run_migration(args: argparse.Namespace) -> int:
+    if args.action != "guard":
+        return 2
+    from scripts import naming_guard
+
+    guard_argv = [args.project_path]
+    if args.strict:
+        guard_argv.append("--strict")
+    if args.json:
+        guard_argv.append("--json")
+    return _run_script_main(naming_guard, "naming_guard.py", guard_argv)
 
 
 def run_manifest(args: argparse.Namespace) -> int:
@@ -1767,6 +2094,19 @@ def run_readiness(args: argparse.Namespace) -> int:
 
 
 def run_release(args: argparse.Namespace) -> int:
+    if args.action == "readiness":
+        from scripts import release_readiness
+
+        readiness_argv = [args.project_path, "--phase", args.phase]
+        if args.signals_file:
+            readiness_argv.extend(["--signals-file", args.signals_file])
+        if args.output_file:
+            readiness_argv.extend(["--output-file", args.output_file])
+        if args.strict:
+            readiness_argv.append("--strict")
+        if args.json:
+            readiness_argv.append("--json")
+        return _run_script_main(release_readiness, "release_readiness.py", readiness_argv)
     if args.action != "verify":
         return 2
     report = build_release_lane_report(args.project_path, require_clean=args.require_clean)
@@ -2052,8 +2392,18 @@ def main(argv: list[str] | None = None) -> int:
         return run_agent_surface(_parse_agent_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "query":
         return run_query(_parse_query_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "prompt":
+        return run_prompt(_parse_prompt_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "service":
         return run_service(_parse_service_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "runtime":
+        return run_runtime(_parse_runtime_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "skill":
+        return run_skill(_parse_skill_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "impact":
+        return run_impact(_parse_impact_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "accessibility":
+        return run_accessibility(_parse_accessibility_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "manifest":
         return run_manifest(_parse_manifest_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "eval":
@@ -2070,6 +2420,10 @@ def main(argv: list[str] | None = None) -> int:
         return run_readiness(_parse_readiness_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "release":
         return run_release(_parse_release_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "continuity":
+        return run_continuity(_parse_continuity_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "migration":
+        return run_migration(_parse_migration_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "publish":
         return run_publish(_parse_publish_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "commercial":

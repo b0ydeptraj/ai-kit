@@ -60,6 +60,9 @@ Evolve Relay-kit skills as versioned runtime capabilities with explicit trigger,
 - Treat SKILL.md as a progressively disclosed command surface, not generic documentation.
 - Prefer path-scoped activation, forked context, and tight tool profiles for specialized or high-risk skills.
 - Do not copy external skill names or prompts; translate proven patterns into Relay-kit-owned names and contracts.
+- Open `references/skill-evolution-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/skill-evolution-good-output.md` and `examples/skill-evolution-bad-output.md` to calibrate output quality.
+- Use `evals/skill-evolution-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - skill-gauntlet

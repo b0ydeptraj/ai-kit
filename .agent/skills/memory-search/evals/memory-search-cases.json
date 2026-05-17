@@ -1,0 +1,24 @@
+[
+  {
+    "id": "memory-search-context-anchored-output",
+    "skill": "memory-search",
+    "task": "Handle a compact memory search request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "memory-search"
+    ]
+  },
+  {
+    "id": "memory-search-handoff-and-risk-control",
+    "skill": "memory-search",
+    "task": "Review a memory search lane before producing matching evidence excerpts from .relay-kit/state or .relay-kit/contracts appended to the active artifact.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

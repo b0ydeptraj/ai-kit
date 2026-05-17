@@ -1,0 +1,24 @@
+[
+  {
+    "id": "architect-context-anchored-output",
+    "skill": "architect",
+    "task": "Handle a compact architect request and anchor the answer in .relay-kit/contracts/PRD.md.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "architect"
+    ]
+  },
+  {
+    "id": "architect-handoff-and-risk-control",
+    "skill": "architect",
+    "task": "Review a architect lane before producing .relay-kit/contracts/architecture.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

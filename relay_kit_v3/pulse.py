@@ -592,7 +592,7 @@ def pulse_status(
         return "hold"
     if readiness is not None and readiness.get("status") != "pass":
         return "hold"
-    if readiness is not None and readiness.get("verdict") not in {None, "commercial-ready-candidate"}:
+    if readiness is not None and readiness.get("verdict") not in {None, "local-governance-ready-candidate"}:
         return "attention"
     if publication is not None and publication.get("status") != "ready":
         return "attention"
@@ -622,7 +622,7 @@ def pulse_score(
     evidence_coverage = _float(quality.get("evidence_term_coverage"), default=1.0)
     if readiness is None:
         readiness_score = 8
-    elif readiness.get("status") == "pass" and readiness.get("verdict") == "commercial-ready-candidate":
+    elif readiness.get("status") == "pass" and readiness.get("verdict") == "local-governance-ready-candidate":
         readiness_score = 15
     elif readiness.get("status") == "pass":
         readiness_score = 10
@@ -916,7 +916,7 @@ def _readiness_gate(readiness: Mapping[str, Any] | None) -> dict[str, Any]:
     findings = readiness.get("findings", [])
     if readiness.get("status") != "pass":
         status = "hold"
-    elif readiness.get("verdict") == "commercial-ready-candidate":
+    elif readiness.get("verdict") == "local-governance-ready-candidate":
         status = "pass"
     else:
         status = "attention"
@@ -1058,7 +1058,7 @@ def _evidence_gate(evidence: Mapping[str, Any]) -> dict[str, Any]:
 def _gate_next_actions(gates: list[Mapping[str, Any]]) -> list[dict[str, str]]:
     action_by_gate = {
         "workflow-eval": "Fix failing workflow scenarios before trusting the Pulse score.",
-        "readiness": "Run or fix readiness check until the enterprise verdict is commercial-ready-candidate.",
+        "readiness": "Run or fix readiness check until the enterprise profile returns local-governance-ready-candidate.",
         "publication": "Resolve publication findings or generate a fresh publication status before release.",
         "package-index": "Run relay-kit publish index-check and confirm the package index exposes the target version.",
         "support-request": "Complete support request diagnostics and clear support findings before paid handoff.",

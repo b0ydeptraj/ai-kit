@@ -1,0 +1,24 @@
+[
+  {
+    "id": "review-hub-context-anchored-output",
+    "skill": "review-hub",
+    "task": "Handle a compact review hub request and anchor the answer in active artifacts.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "review-hub"
+    ]
+  },
+  {
+    "id": "review-hub-handoff-and-risk-control",
+    "skill": "review-hub",
+    "task": "Review a review hub lane before producing updated workflow-state.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

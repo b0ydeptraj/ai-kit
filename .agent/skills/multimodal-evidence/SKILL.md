@@ -47,6 +47,9 @@ Translate visual or media evidence into concrete observations the active lane ca
 ## Reference skills and rules
 - Describe what is visible and why it matters.
 - Feed observations back to the owning hub.
+- Open `references/multimodal-evidence-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/multimodal-evidence-good-output.md` and `examples/multimodal-evidence-bad-output.md` to calibrate output quality.
+- Use `evals/multimodal-evidence-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - debug-hub

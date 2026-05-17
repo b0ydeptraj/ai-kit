@@ -45,6 +45,9 @@ After three failed fix attempts, stop and question the story, architecture, or a
 - If discipline utilities are installed, use `root-cause-debugging` before repeated fix attempts.
 - If discipline utilities are installed, use `evidence-before-completion` before claiming success.
 - State the slice objective and expected files before each cycle so context does not rot across long loops.
+- Open `references/execution-loop-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/execution-loop-good-output.md` and `examples/execution-loop-bad-output.md` to calibrate output quality.
+- Use `evals/execution-loop-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - test-hub

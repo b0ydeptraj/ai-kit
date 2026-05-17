@@ -1,0 +1,24 @@
+[
+  {
+    "id": "plan-hub-context-anchored-output",
+    "skill": "plan-hub",
+    "task": "Handle a compact plan hub request and anchor the answer in workflow-state.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "plan-hub"
+    ]
+  },
+  {
+    "id": "plan-hub-handoff-and-risk-control",
+    "skill": "plan-hub",
+    "task": "Review a plan hub lane before producing product-brief, PRD, architecture, epics, and stories or tech-spec depending track.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

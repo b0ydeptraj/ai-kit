@@ -1,0 +1,14 @@
+[
+  {
+    "id": "market-research-competitor-positioning",
+    "skill": "market-research",
+    "task": "Compare competitor skill systems before changing public positioning.",
+    "expected_evidence_terms": ["source authority", "freshness", "verified", "decision impact"]
+  },
+  {
+    "id": "market-research-pricing-signal",
+    "skill": "market-research",
+    "task": "Assess whether a governance bundle can support paid packaging.",
+    "expected_evidence_terms": ["pricing signals", "ICP", "unknowns", "recommendation"]
+  }
+]

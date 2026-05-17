@@ -1,0 +1,24 @@
+[
+  {
+    "id": "brainstorm-hub-context-anchored-output",
+    "skill": "brainstorm-hub",
+    "task": "Handle a compact brainstorm hub request and anchor the answer in user idea or opportunity.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "brainstorm-hub"
+    ]
+  },
+  {
+    "id": "brainstorm-hub-handoff-and-risk-control",
+    "skill": "brainstorm-hub",
+    "task": "Review a brainstorm hub lane before producing .relay-kit/contracts/product-brief.md or a decision not to proceed.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

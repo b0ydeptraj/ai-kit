@@ -28,11 +28,11 @@ REQUIRED_RELEASE_DOCS = [
 ]
 REQUIRED_CI_PATTERNS = [
     "python scripts/validate_runtime.py",
-    "python scripts/runtime_doctor.py . --strict",
-    "python scripts/runtime_doctor.py . --strict --state-mode live",
-    "python scripts/naming_guard.py . --strict",
-    "python scripts/policy_guard.py . --strict",
-    "python scripts/skill_gauntlet.py . --strict --semantic",
+    "python relay_kit_public_cli.py runtime doctor . --strict",
+    "python relay_kit_public_cli.py runtime doctor . --strict --state-mode live",
+    "python relay_kit_public_cli.py migration guard . --strict",
+    "python relay_kit_public_cli.py policy check . --strict --pack enterprise",
+    "python relay_kit_public_cli.py skill gauntlet . --strict --semantic",
     "python scripts/eval_workflows.py . --strict",
     "python relay_kit_public_cli.py doctor . --skip-tests --policy-pack enterprise",
     "python -m pip wheel . --no-deps -w .tmp/wheelhouse",

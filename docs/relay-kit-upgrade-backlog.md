@@ -25,7 +25,7 @@ Source audit status:
 - Fixed in Pulse report pass: `relay-kit pulse build` writes static JSON/HTML quality reports from workflow eval, optional readiness, and evidence ledger signals.
 - Fixed in Pulse history pass: Pulse now appends compact history snapshots and reports trend deltas for score, pass rate, evidence coverage, route margin, and status changes.
 - Fixed in signal export pass: `relay-kit signal export` writes local JSON/JSONL telemetry-style signals from Pulse and the evidence ledger.
-- Fixed in readiness signal gate pass: `relay-kit readiness check` now requires the local signal export gate before returning a commercial-ready candidate.
+- Fixed in readiness signal gate pass: `relay-kit readiness check` now requires the local signal export gate before returning a local governance candidate.
 - Fixed in release-lane verification pass: `relay-kit release verify` checks package metadata, CI gate coverage, commercial docs, manifest/trust/version artifacts, and generated artifact ignore policy; readiness now includes this local gate.
 - Fixed in package smoke pass: release-lane CI coverage now requires `python -m pip wheel . --no-deps -w .tmp/wheelhouse`, and local wheel build was verified.
 - Fixed in package install smoke pass: `scripts/package_smoke.py` builds a wheel, installs it into a temporary virtualenv, and runs the installed `relay-kit --list-skills` console script.
@@ -41,7 +41,7 @@ Source audit status:
 - Fixed in governance reference pass: enterprise policy guard now fails required governance files that still contain unresolved `TBD` or template markers.
 - Fixed in contract import pass: `relay-kit contract import` can dry-run or apply Relay contract JSON back into PRD, story, tech-spec, and QA contracts without overwriting concrete sections unless `--force` is used.
 - Fixed in readiness gate pass: `relay-kit readiness check` aggregates pytest, doctor, trusted manifest, policy, workflow eval, support bundle, upgrade, contract sync, signal export, and commercial docs into one paid/team verdict.
-- Verified in local support-soak pass: `relay-kit support soak . --strict` passes P0/P1/P2 fixtures; `relay-kit readiness check . --profile enterprise` returns `commercial-ready-candidate`; `python -m pytest tests -q` passes with 160 tests.
+- Verified in local support-soak pass: `relay-kit support soak . --strict` passes P0/P1/P2 fixtures; `relay-kit readiness check . --profile enterprise` returns `local-governance-ready-candidate`; `python -m pytest tests -q` passes with 160 tests.
 - Fixed in release publication pass: `v3.3.0` is published with PR #1, CI success, release-lane proof, package smoke, enterprise readiness, post-release readiness, and rollback evidence.
 - Fixed in Relay OTLP export pass: `relay-kit signal export --otlp` writes dependency-free OTLP-compatible `relay-signals-otlp.json` with `resourceMetrics` and `resourceLogs` for external observability pipelines.
 - Fixed in OTLP readiness/support pass: readiness and support diagnostics now generate and report the OTLP signal artifact, not only JSON and JSONL exports.
@@ -819,7 +819,7 @@ Relay-kit should not be called commercial-ready until all of these are true:
 - `relay-kit support request --strict` reaches `ready` only when severity, environment, behavior details, recent changes, workaround, and diagnostic artifacts are present.
 - `relay-kit support triage --strict` reaches `ready` only when the support request and support bundle artifacts are locally valid.
 - `relay-kit support soak --strict` passes P0/P1/P2 handoff fixtures only when support bundle diagnostics are locally healthy.
-- `relay-kit readiness check --profile enterprise` returns `commercial-ready-candidate` for the release candidate.
+- `relay-kit readiness check --profile enterprise` returns `local-governance-ready-candidate` for the release candidate.
 - `relay-kit readiness check` proves signal export artifacts can be generated locally.
 - `relay-kit release verify` passes for local release-lane prerequisites.
 - `relay-kit publish plan --channel pypi --strict` reaches `ready` only after release-lane, dist artifacts, version/channel policy, and external CI/release/package evidence are present.

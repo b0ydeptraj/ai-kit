@@ -36,6 +36,9 @@ Turn a symptom into evidence and a decision, not into random edits.
 - Use testing-patterns and problem-solving to turn evidence into a fix path.
 - Root cause beats guess-and-patch.
 - Escalate to plan-hub if the 'bug' is actually an unclear requirement or architectural mismatch.
+- Open `references/debug-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/debug-hub-good-output.md` and `examples/debug-hub-bad-output.md` to calibrate output quality.
+- Use `evals/debug-hub-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - fix-hub

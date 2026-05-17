@@ -38,8 +38,11 @@ Preserve lane continuity with explicit artifacts so the next session can continu
 - a compact resume brief with explicit next step and open loops
 
 ## Reference skills and rules
-- Use `python scripts/context_continuity.py` modes for deterministic continuity artifacts.
+- Use `relay-kit continuity` modes for deterministic continuity artifacts.
 - Context continuity complements `handoff-context`; it does not replace authoritative contracts and state.
+- Open `references/context-continuity-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/context-continuity-good-output.md` and `examples/context-continuity-bad-output.md` to calibrate output quality.
+- Use `evals/context-continuity-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - workflow-router

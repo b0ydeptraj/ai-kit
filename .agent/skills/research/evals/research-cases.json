@@ -1,0 +1,24 @@
+[
+  {
+    "id": "research-context-anchored-output",
+    "skill": "research",
+    "task": "Handle a compact research request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "research"
+    ]
+  },
+  {
+    "id": "research-handoff-and-risk-control",
+    "skill": "research",
+    "task": "Review a research lane before producing evidence bullets appended to the active artifact.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

@@ -46,6 +46,9 @@ Turn evidence into plausible options and ranked next moves.
 ## Reference skills and rules
 - Root cause beats guess-and-patch.
 - Surface trade-offs before implementation starts.
+- Open `references/problem-solving-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/problem-solving-good-output.md` and `examples/problem-solving-bad-output.md` to calibrate output quality.
+- Use `evals/problem-solving-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - debug-hub

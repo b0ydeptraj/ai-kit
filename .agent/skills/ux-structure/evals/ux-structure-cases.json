@@ -1,0 +1,24 @@
+[
+  {
+    "id": "ux-structure-context-anchored-output",
+    "skill": "ux-structure",
+    "task": "Handle a compact ux structure request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "ux-structure"
+    ]
+  },
+  {
+    "id": "ux-structure-handoff-and-risk-control",
+    "skill": "ux-structure",
+    "task": "Review a ux structure lane before producing ux notes appended to product-brief, PRD, architecture, or qa-report.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

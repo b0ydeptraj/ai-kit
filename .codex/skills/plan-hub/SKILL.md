@@ -43,6 +43,9 @@ Route to `developer` only when the active story or tech-spec is ready for implem
 - Route to review-hub if artifacts disagree with one another.
 - Use `.relay-kit/docs/planning-discipline.md` to keep plans artifact-first, bite-sized, and verification-aware.
 - Lock key UX, API, and behavior assumptions before story slicing so implementation does not drift.
+- Open `references/plan-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/plan-hub-good-output.md` and `examples/plan-hub-bad-output.md` to calibrate output quality.
+- Use `evals/plan-hub-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - analyst

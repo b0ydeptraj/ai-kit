@@ -41,7 +41,7 @@ External proof:
 
 Local proof:
 
-- `relay-kit readiness check` returns `commercial-ready-candidate`
+- `relay-kit readiness check` returns `local-governance-ready-candidate`
 - `relay-kit publish status` returns `complete`
 - `relay-kit publish index-check` returns `published` for the target package version when validating a public package-index release
 - `relay-kit support triage` returns `ready`
@@ -58,7 +58,7 @@ Use `--skip-readiness-tests` only when pytest has already run in the same releas
 
 The commercial dossier is the final binder, not the source of truth for each gate:
 
-- `readiness check` proves local paid/team runtime readiness.
+- `readiness check` proves local governance readiness; external validation remains separate.
 - `publish trail`, `publish evidence`, and `publish status` prove local package publication progress.
 - `publish index-check` proves the package index currently exposes the target version as latest with release files.
 - `support request`, `support triage`, and `support soak` prove paid-support handoff readiness.

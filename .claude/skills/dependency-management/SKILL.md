@@ -40,6 +40,9 @@ Cover:
 ## Reference skills and rules
 - Record both the official package manager and what contributors actually use day to day.
 - Make transitive risk and pinning policy explicit.
+- Open `references/dependency-management-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/dependency-management-good-output.md` and `examples/dependency-management-bad-output.md` to calibrate output quality.
+- Use `evals/dependency-management-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - architect

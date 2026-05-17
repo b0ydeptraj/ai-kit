@@ -1,6 +1,7 @@
 ---
 name: next-product-frontend
 description: Use when work is primarily Next.js product UI or frontend architecture. Plan and implement App Router flows, server and client boundaries, server actions, data fetching, and quality gates for user-facing delivery.
+allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
 ---
 
 # Mission
@@ -36,6 +37,9 @@ Build or refactor Next.js product surfaces with explicit server/client architect
 - Prefer App Router and server/client boundary clarity over generic React-only guidance.
 - Keep shadcn or existing component-system usage consistent with local patterns.
 - Collect accessibility and performance evidence before completion claims.
+- Open `references/next-product-frontend-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/next-product-frontend-good-output.md` and `examples/next-product-frontend-bad-output.md` to calibrate output quality.
+- Use `evals/next-product-frontend-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - developer

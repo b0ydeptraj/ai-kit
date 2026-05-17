@@ -1,6 +1,7 @@
 ---
 name: mmo-social-marketing-automation
 description: Use when MMO social media or marketing automation needs official API routing, campaign workspace, content calendar, moderation safeguards, and quota-aware execution.
+allowed-tools: ["Read", "Write", "Edit", "Grep", "Glob", "Bash"]
 ---
 
 # Mission
@@ -37,6 +38,9 @@ Execute social MMO automation that can scale marketing outcomes without crossing
 - Prevent duplicate or spam-like content bursts across accounts and channels.
 - Model campaign operations as a work queue: content calendar, asset library, approval lane, reject reasons, quota meter, and per-channel status.
 - Keep consent, data-use transparency, and account-safety requirements explicit.
+- Open `references/mmo-social-marketing-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/mmo-social-marketing-automation-good-output.md` and `examples/mmo-social-marketing-automation-bad-output.md` to calibrate output quality.
+- Use `evals/mmo-social-marketing-automation-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - growth-marketing

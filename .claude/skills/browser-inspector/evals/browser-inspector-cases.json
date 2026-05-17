@@ -1,0 +1,24 @@
+[
+  {
+    "id": "browser-inspector-context-anchored-output",
+    "skill": "browser-inspector",
+    "task": "Handle a compact browser inspector request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "browser-inspector"
+    ]
+  },
+  {
+    "id": "browser-inspector-handoff-and-risk-control",
+    "skill": "browser-inspector",
+    "task": "Review a browser inspector lane before producing browser-side evidence appended to investigation-notes or qa-report.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

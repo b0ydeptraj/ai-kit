@@ -1,0 +1,14 @@
+[
+  {
+    "id": "next-product-frontend-server-action-form",
+    "skill": "next-product-frontend",
+    "task": "Plan a settings form using server actions and App Router.",
+    "expected_evidence_terms": ["server action", "client component", "error state", "accessibility"]
+  },
+  {
+    "id": "next-product-frontend-data-cache",
+    "skill": "next-product-frontend",
+    "task": "Review a dashboard route with cached data and loading states.",
+    "expected_evidence_terms": ["data fetching", "cache", "loading", "performance"]
+  }
+]

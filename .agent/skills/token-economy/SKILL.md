@@ -45,6 +45,9 @@ Reduce context cost without reducing execution signal quality.
 - Use `relay-kit context budget`, `relay-kit context pack`, and `relay-kit token audit` as canonical entrypoints.
 - Never hide failing command details without a raw path pointer.
 - Fail open to raw-required when signal retention is uncertain.
+- Open `references/token-economy-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/token-economy-good-output.md` and `examples/token-economy-bad-output.md` to calibrate output quality.
+- Use `evals/token-economy-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - workflow-router

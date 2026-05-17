@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mmo-browser-selector-drift",
+    "skill": "mmo-browser-fleet-automation",
+    "task": "Plan browser automation that can diagnose selector drift.",
+    "expected_evidence_terms": ["selector", "DOM snapshot", "screenshot", "retry"]
+  },
+  {
+    "id": "mmo-browser-profile-lease",
+    "skill": "mmo-browser-fleet-automation",
+    "task": "Design session orchestration for profile and proxy affinity.",
+    "expected_evidence_terms": ["profile-to-proxy", "lease", "proxy health", "stop control"]
+  }
+]

@@ -1,6 +1,7 @@
 ---
 name: market-research
 description: Use when the request needs competitor intelligence, ICP refinement, pricing signal analysis, or market hypothesis validation before execution decisions.
+allowed-tools: ["Read", "Grep", "Glob", "Bash"]
 ---
 
 # Mission
@@ -35,6 +36,9 @@ Provide decision-grade market findings with explicit evidence quality.
 - Separate verified source facts from inference and assumption.
 - Score source freshness and authority before using findings in high-impact decisions.
 - Connect findings directly to product, pricing, or GTM decisions.
+- Open `references/market-research-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/market-research-good-output.md` and `examples/market-research-bad-output.md` to calibrate output quality.
+- Use `evals/market-research-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - growth-marketing

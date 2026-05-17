@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mmo-social-api-quota",
+    "skill": "mmo-social-marketing-automation",
+    "task": "Design campaign automation with API quota safeguards.",
+    "expected_evidence_terms": ["official API", "quota", "approval", "moderation"]
+  },
+  {
+    "id": "mmo-social-duplicate-guard",
+    "skill": "mmo-social-marketing-automation",
+    "task": "Review duplicate and frequency risks in a social campaign queue.",
+    "expected_evidence_terms": ["duplicate", "frequency", "reject reasons", "incident"]
+  }
+]

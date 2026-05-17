@@ -49,6 +49,9 @@ Stop premature completion claims by forcing a claim-to-evidence check.
 - No completion claims without fresh verification output.
 - Match every claim to the command or evidence that proves it.
 - Hand formal readiness verdicts to qa-governor or ready-check.
+- Open `references/evidence-before-completion-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/evidence-before-completion-good-output.md` and `examples/evidence-before-completion-bad-output.md` to calibrate output quality.
+- Use `evals/evidence-before-completion-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - test-hub

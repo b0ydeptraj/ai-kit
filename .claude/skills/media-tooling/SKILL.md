@@ -37,6 +37,9 @@ Handle media-specific steps that support the current lane without creating a par
 ## Reference skills and rules
 - Useful for evidence packaging and asset-heavy workflows.
 - Should stay stateless and task-scoped.
+- Open `references/media-tooling-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/media-tooling-good-output.md` and `examples/media-tooling-bad-output.md` to calibrate output quality.
+- Use `evals/media-tooling-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - test-hub

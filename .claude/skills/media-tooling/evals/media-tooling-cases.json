@@ -1,0 +1,24 @@
+[
+  {
+    "id": "media-tooling-context-anchored-output",
+    "skill": "media-tooling",
+    "task": "Handle a compact media tooling request and anchor the answer in active hub or orchestrator request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "media-tooling"
+    ]
+  },
+  {
+    "id": "media-tooling-handoff-and-risk-control",
+    "skill": "media-tooling",
+    "task": "Review a media tooling lane before producing media processing notes or asset instructions appended to the active artifact.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

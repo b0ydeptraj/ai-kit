@@ -38,6 +38,9 @@ Drive implementation through the smallest useful red-green-refactor loop.
 ## Reference skills and rules
 - Write the failing test first when the behavior is testable.
 - Keep the change minimal until the new test is green.
+- Open `references/test-first-development-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/test-first-development-good-output.md` and `examples/test-first-development-bad-output.md` to calibrate output quality.
+- Use `evals/test-first-development-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - developer

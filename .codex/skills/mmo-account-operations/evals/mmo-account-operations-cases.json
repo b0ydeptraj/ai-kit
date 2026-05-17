@@ -1,0 +1,14 @@
+[
+  {
+    "id": "mmo-account-health-inventory",
+    "skill": "mmo-account-operations",
+    "task": "Design an account inventory with health scoring and cooldown controls.",
+    "expected_evidence_terms": ["health score", "cooldown", "proxy binding", "audit"]
+  },
+  {
+    "id": "mmo-account-bulk-approval",
+    "skill": "mmo-account-operations",
+    "task": "Review a bulk account action before execution.",
+    "expected_evidence_terms": ["dry-run", "approval", "budget", "quarantine"]
+  }
+]

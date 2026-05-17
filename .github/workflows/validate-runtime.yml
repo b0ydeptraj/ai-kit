@@ -25,22 +25,22 @@ jobs:
         run: python scripts/validate_runtime.py
 
       - name: Run runtime doctor template mode
-        run: python scripts/runtime_doctor.py . --strict
+        run: python relay_kit_public_cli.py runtime doctor . --strict
 
       - name: Run runtime doctor live mode
-        run: python scripts/runtime_doctor.py . --strict --state-mode live
+        run: python relay_kit_public_cli.py runtime doctor . --strict --state-mode live
 
-      - name: Run naming guard
-        run: python scripts/naming_guard.py . --strict
+      - name: Run migration guard
+        run: python relay_kit_public_cli.py migration guard . --strict
 
       - name: Run policy guard
-        run: python scripts/policy_guard.py . --strict
+        run: python relay_kit_public_cli.py policy check . --strict --pack enterprise
 
       - name: Run SRS guard
         run: python scripts/srs_guard.py . --strict
 
       - name: Run skill gauntlet
-        run: python scripts/skill_gauntlet.py . --strict --semantic
+        run: python relay_kit_public_cli.py skill gauntlet . --strict --semantic
 
       - name: Run workflow eval
         run: python scripts/eval_workflows.py . --strict

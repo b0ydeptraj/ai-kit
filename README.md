@@ -15,6 +15,8 @@ With Relay-kit, an agent gets:
 
 The result is simple: agents work with more structure, fewer random moves, and stronger proof before anything is called done.
 
+GitHub docs site: [`docs/site/index.md`](docs/site/index.md)
+
 ## 5-minute start
 
 For users who just want to install Relay-kit and generate one runtime:
@@ -27,7 +29,7 @@ relay-kit doctor "C:\\path\\to\\my-app"
 ```
 
 Use one adapter flag per run. Replace `--codex` with `--claude` or `--antigravity` when that is the target agent.
-The default install is the full enterprise governance bundle. Use `--baseline` only when you want the smaller first-install surface.
+The default install is the full governance bundle. The bundle name is still `enterprise` for CLI compatibility, but the local gate proves governance coverage only; it does not prove private-registry operations, signed external release upload, paid support execution, or user field validation. Use `--baseline` only when you want the smaller first-install surface.
 
 For a local repo checkout:
 
@@ -65,7 +67,7 @@ It makes agents behave less like improvising interns and more like engineers wor
 
 ## Domain Skill Pack
 
-PR 1 expands the enterprise runtime with Relay-kit-owned domain skills:
+The full governance runtime includes Relay-kit-owned domain skills:
 
 - `go-service-engineering`
 - `next-product-frontend`
@@ -121,6 +123,8 @@ relay-kit init /path/to/project --codex --locale vi
 - explicit `relay-engineer` and `relay-growth` agent profiles with deterministic surfaces for `.relay-kit`, `.claude`, `.codex`, and `.agent`
 - an `agent diagnose` gate for strict profile parity and profile-contract drift
 - a `query search` utility for ranked lookup across state, contracts, docs, evidence, and registry sources
+- a local `context index/search/related` graph for file, symbol, import, docs, config, and nearby-test hints without API keys
+- a `prompt enhance` utility that turns short or vague user requests into skill-aware working guidance and uses the local context graph when it exists
 - a `service boundaries` gate for checking module ownership and static dependency rules
 - a `release-readiness` utility for pre/post deploy smoke gates and rollback signals
 - an `accessibility-review` gate so frontend quality is not only visual
@@ -155,6 +159,8 @@ relay-kit doctor /path/to/project --policy-pack enterprise
 relay-kit upgrade mark-current /path/to/project --adapter all
 relay-kit readiness check /path/to/project --profile enterprise
 ```
+
+The readiness verdict for a clean local run is `local-governance-ready-candidate`. External evidence remains separate and is reported as missing until remote CI, release upload, paid support operation, and user or field validation are attached.
 
 Run the support gate:
 
@@ -226,6 +232,13 @@ Search Relay-kit sources without broad context dumping:
 relay-kit query search /path/to/project --query "support handoff" --json
 ```
 
+Enhance a short user request into skill-aware working guidance:
+
+```bash
+relay-kit prompt enhance /path/to/project --prompt "fix CI"
+relay-kit prompt enhance /path/to/project --prompt "sửa login" --json
+```
+
 Check service-boundary drift:
 
 ```bash
@@ -294,7 +307,7 @@ relay-kit signal export /path/to/project
 relay-kit signal export /path/to/project --json
 ```
 
-Run the paid/team readiness gate:
+Run the local governance readiness gate:
 
 ```bash
 relay-kit readiness check /path/to/project --profile enterprise

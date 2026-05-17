@@ -1,0 +1,24 @@
+[
+  {
+    "id": "workflow-router-context-anchored-output",
+    "skill": "workflow-router",
+    "task": "Handle a compact workflow router request and anchor the answer in user request.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "workflow-router"
+    ]
+  },
+  {
+    "id": "workflow-router-handoff-and-risk-control",
+    "skill": "workflow-router",
+    "task": "Review a workflow router lane before producing .relay-kit/state/workflow-state.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

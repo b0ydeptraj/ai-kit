@@ -1,0 +1,24 @@
+[
+  {
+    "id": "qa-governor-context-anchored-output",
+    "skill": "qa-governor",
+    "task": "Handle a compact qa governor request and anchor the answer in PRD or tech-spec.",
+    "expected_evidence_terms": [
+      "read first",
+      "evidence",
+      "verified",
+      "qa-governor"
+    ]
+  },
+  {
+    "id": "qa-governor-handoff-and-risk-control",
+    "skill": "qa-governor",
+    "task": "Review a qa governor lane before producing .relay-kit/contracts/qa-report.md.",
+    "expected_evidence_terms": [
+      "residual risk",
+      "handoff",
+      "next step",
+      "unverified"
+    ]
+  }
+]

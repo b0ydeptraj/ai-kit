@@ -44,6 +44,9 @@ The PRD is not ready if any of the following is missing:
 - Do not hand wave acceptance criteria.
 - Separate must-have requirements from stretch goals and out-of-scope ideas.
 - Use UX and research support skills when the user experience is part of the risk.
+- Open `references/pm-operator-contract.md` when scope, evidence, or operator safety is unclear.
+- Use `examples/pm-good-output.md` and `examples/pm-bad-output.md` to calibrate output quality.
+- Use `evals/pm-cases.json` as the minimum scenario set for behavior regression checks.
 
 ## Likely next step
 - architect
