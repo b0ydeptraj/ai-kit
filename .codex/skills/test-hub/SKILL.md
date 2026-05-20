@@ -37,6 +37,7 @@ Turn raw test execution into a real readiness decision.
 - Open `references/test-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/test-hub-good-output.md` and `examples/test-hub-bad-output.md` to calibrate output quality.
 - Use `evals/test-hub-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/test-hub-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - qa-governor

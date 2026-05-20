@@ -3,7 +3,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_SWITCHER = "[English](README.md) | [Tiếng Việt](README.vi.md)"
-MOJIBAKE_MARKERS = ("Ã", "Â", "áº", "Ä", "Æ", "â†", "�")
+MOJIBAKE_MARKERS = ("Ã", "Â", "áº", "á»", "Ä", "Æ", "â€", "â†", "�")
 
 
 def test_readmes_are_valid_utf8_without_bom_or_mojibake() -> None:

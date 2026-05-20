@@ -41,6 +41,7 @@ Drive implementation through the smallest useful red-green-refactor loop.
 - Open `references/test-first-development-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/test-first-development-good-output.md` and `examples/test-first-development-bad-output.md` to calibrate output quality.
 - Use `evals/test-first-development-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/test-first-development-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - developer

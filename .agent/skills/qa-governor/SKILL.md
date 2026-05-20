@@ -50,6 +50,7 @@ Include:
 - Open `references/qa-governor-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/qa-governor-good-output.md` and `examples/qa-governor-bad-output.md` to calibrate output quality.
 - Use `evals/qa-governor-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/qa-governor-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - review-hub

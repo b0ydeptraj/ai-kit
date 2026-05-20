@@ -13,11 +13,19 @@
       "LoginForm",
       "submitLogin"
     ],
+    "expected_tests": [
+      "tests/login.spec.ts"
+    ],
     "expected_evidence_terms": [
       "login flow",
       "component boundary",
       "verified",
       "residual risk"
+    ],
+    "bad_answer_traps": [
+      "usual checklist",
+      "guess from the name",
+      "should be fine"
     ]
   },
   {
@@ -32,11 +40,49 @@
     "expected_symbols": [
       "LoginForm"
     ],
+    "expected_tests": [
+      "tests/login.spec.ts"
+    ],
     "expected_evidence_terms": [
       "accessibility state",
       "visual regression",
       "read-only",
       "unverified"
+    ],
+    "bad_answer_traps": [
+      "checklist only",
+      "expert guarantee",
+      "field-tested"
+    ]
+  },
+  {
+    "id": "ux-structure-deep-weakness-trap",
+    "skill": "ux-structure",
+    "repo_profile": "deep frontend suite fixture with source, test, docs, and an explicit overclaim trap",
+    "task": "Score `ux-structure` against a deep battle case, identify weak evidence, and avoid claiming maximum strength until files, symbols, tests, and residual risk are proven.",
+    "expected_files": [
+      "src/app/login/page.tsx",
+      "src/components/LoginForm.tsx",
+      "tests/login.spec.ts"
+    ],
+    "expected_symbols": [
+      "LoginForm",
+      "submitLogin"
+    ],
+    "expected_tests": [
+      "tests/login.spec.ts"
+    ],
+    "expected_evidence_terms": [
+      "login flow",
+      "visual regression",
+      "weak evidence",
+      "claim status",
+      "residual risk"
+    ],
+    "bad_answer_traps": [
+      "looks like",
+      "usual checklist",
+      "battle-max-on-suite without proof"
     ]
   }
 ]

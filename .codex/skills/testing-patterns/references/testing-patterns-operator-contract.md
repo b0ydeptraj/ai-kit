@@ -2,16 +2,16 @@
 
 Primary role: quality-support
 Layer: layer-4-specialists-and-standalones
-Battle family: relay
+Battle family: test-strategy
 
 Use this skill only after the request is anchored to a real artifact, repo area, or explicit missing-context question. The goal is not to sound like an expert; the goal is to reduce ambiguity by tying the answer to files, symbols, commands, docs, logs, or state.
 
 ## Concrete Battle Profile
 
-- Repo profile: Relay-kit public repo with generated adapters, readiness gates, docs, and runtime tests
-- First files to inspect: relay_kit_public_cli.py, relay_kit_v3/registry/skills.py, tests/test_skill_resources.py
-- Symbols or named surfaces to confirm: main, SkillSpec, emit_core_skills
-- Evidence terms that should appear in a strong answer: adapter surface, readiness gate, generated skill, strict evidence
+- Repo profile: public test-heavy repo with fixtures, factories, unit tests, integration tests, and a flaky e2e lane
+- First files to inspect: tests/fixtures/user_factory.py, tests/integration/test_checkout.py, tests/unit/test_price_rules.py, tests/e2e/test_checkout_flow.py
+- Symbols or named surfaces to confirm: user_factory, TestCheckoutFlow, PriceRuleTest
+- Evidence terms that should appear in a strong answer: fixture, factory, integration boundary, flake
 
 ## Working Loop
 

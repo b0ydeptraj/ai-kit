@@ -52,6 +52,7 @@ Stop premature completion claims by forcing a claim-to-evidence check.
 - Open `references/evidence-before-completion-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/evidence-before-completion-good-output.md` and `examples/evidence-before-completion-bad-output.md` to calibrate output quality.
 - Use `evals/evidence-before-completion-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/evidence-before-completion-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - test-hub

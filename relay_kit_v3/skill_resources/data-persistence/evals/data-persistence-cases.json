@@ -13,11 +13,19 @@
       "SessionManager",
       "retry_request"
     ],
+    "expected_tests": [
+      "tests/test_session.py"
+    ],
     "expected_evidence_terms": [
       "session",
       "retry",
       "verified",
       "residual risk"
+    ],
+    "bad_answer_traps": [
+      "usual checklist",
+      "guess from the name",
+      "should be fine"
     ]
   },
   {
@@ -32,11 +40,49 @@
     "expected_symbols": [
       "SessionManager"
     ],
+    "expected_tests": [
+      "tests/test_session.py"
+    ],
     "expected_evidence_terms": [
       "cache",
       "transaction boundary",
       "read-only",
       "unverified"
+    ],
+    "bad_answer_traps": [
+      "checklist only",
+      "expert guarantee",
+      "field-tested"
+    ]
+  },
+  {
+    "id": "data-persistence-deep-weakness-trap",
+    "skill": "data-persistence",
+    "repo_profile": "deep backend suite fixture with source, test, docs, and an explicit overclaim trap",
+    "task": "Score `data-persistence` against a deep battle case, identify weak evidence, and avoid claiming maximum strength until files, symbols, tests, and residual risk are proven.",
+    "expected_files": [
+      "src/service/session.py",
+      "src/service/retry.py",
+      "tests/test_session.py"
+    ],
+    "expected_symbols": [
+      "SessionManager",
+      "retry_request"
+    ],
+    "expected_tests": [
+      "tests/test_session.py"
+    ],
+    "expected_evidence_terms": [
+      "session",
+      "transaction boundary",
+      "weak evidence",
+      "claim status",
+      "residual risk"
+    ],
+    "bad_answer_traps": [
+      "looks like",
+      "usual checklist",
+      "battle-max-on-suite without proof"
     ]
   }
 ]

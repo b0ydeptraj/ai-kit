@@ -63,6 +63,7 @@ Evolve Relay-kit skills as versioned runtime capabilities with explicit trigger,
 - Open `references/skill-evolution-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/skill-evolution-good-output.md` and `examples/skill-evolution-bad-output.md` to calibrate output quality.
 - Use `evals/skill-evolution-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/skill-evolution-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - skill-gauntlet

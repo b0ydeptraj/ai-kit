@@ -1,20 +1,20 @@
 # repo-map Battle-Calibrated Output
 
-Request: audit a Relay-kit runtime change and prove the generated surfaces are still synchronized
+Request: map the repo area for a session bug, naming entrypoints, ownership boundary, dependency direction, and nearby tests/docs
 
 Recommended skill: `repo-map` because the request matches `utility-provider` work and has concrete repo anchors.
 
 Read first:
 
-- `relay_kit_public_cli.py`
-- `relay_kit_v3/registry/skills.py`
-- `tests/test_skill_resources.py`
+- `src/main.ts`
+- `src/auth/session.ts`
+- `docs/architecture.md`
 
 Evidence gathered:
 
 - Confirmed `main` or nearby ownership before recommending changes.
-- Checked `adapter surface` and `readiness gate` against the relevant source path.
-- Identified `generated skill` as a required proof term before completion.
+- Checked `entrypoint` and `ownership` against the relevant source path.
+- Identified `dependency direction` as a required proof term before completion.
 
 Answer:
 
@@ -22,4 +22,4 @@ The safe next move is to inspect the named file path, compare it with the expect
 
 Residual risk:
 
-- `strict evidence` remains unverified until the focused gate or benchmark hit is captured.
+- `nearby test` remains unverified until the focused gate or benchmark hit is captured.

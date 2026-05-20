@@ -48,6 +48,7 @@ End with one explicit verdict:
 - Open `references/review-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/review-hub-good-output.md` and `examples/review-hub-bad-output.md` to calibrate output quality.
 - Use `evals/review-hub-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/review-hub-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - plan-hub

@@ -44,6 +44,7 @@ Turn accessibility from implicit best effort into a concrete review gate with ma
 - Open `references/accessibility-review-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/accessibility-review-good-output.md` and `examples/accessibility-review-bad-output.md` to calibrate output quality.
 - Use `evals/accessibility-review-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/accessibility-review-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - test-hub

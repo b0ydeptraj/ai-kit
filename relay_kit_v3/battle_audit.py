@@ -50,14 +50,17 @@ def build_battle_audit(
     *,
     resource_root: Path | str | None = None,
     skill_names: Sequence[str] | None = None,
+    skill_battle_file: Path | str | None = None,
 ) -> dict[str, Any]:
     project = Path(project_root).resolve()
     resources = Path(resource_root).resolve() if resource_root else RESOURCE_ROOT
     names = sorted(skill_names or ALL_V3_SKILLS)
     skill_reports = [_audit_skill(resources, name) for name in names]
     surface_findings = _audit_public_surfaces(project)
+    battle_findings = _audit_skill_battle_report(project, skill_battle_file)
     all_findings = [finding for report in skill_reports for finding in report["findings"]]
     all_findings.extend(surface_findings)
+    all_findings.extend(battle_findings)
     summary = {
         "skill_count": len(skill_reports),
         "resource_complete_count": sum(1 for report in skill_reports if report["resource_complete"]),
@@ -206,6 +209,47 @@ def _audit_public_surfaces(project: Path) -> list[dict[str, Any]]:
                         "Replace with local benchmark evidence and explicit non-field-tested wording.",
                     )
                 )
+    return findings
+
+
+def _audit_skill_battle_report(project: Path, skill_battle_file: Path | str | None) -> list[dict[str, Any]]:
+    if not skill_battle_file:
+        return []
+    path = Path(skill_battle_file)
+    if not path.is_absolute():
+        path = project / path
+    if not path.exists():
+        return [_finding("medium", "skill-battle", path, "Skill battle report is missing.", "Run relay-kit eval skill-battle before claiming battle status.")]
+    try:
+        report = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return [_finding("high", "skill-battle", path, "Skill battle report is invalid JSON.", "Regenerate the report.")]
+    findings: list[dict[str, Any]] = []
+    for item in report.get("skills", []):
+        if not isinstance(item, Mapping):
+            continue
+        skill = str(item.get("skill", "unknown"))
+        score = float(item.get("score", 0))
+        if score < 8:
+            findings.append(
+                _finding(
+                    "high",
+                    skill,
+                    path,
+                    f"Skill battle score is below hardening threshold: {score}/10.",
+                    "Rewrite the skill resource/eval/route anchors and rerun skill-battle.",
+                )
+            )
+        elif score < 10:
+            findings.append(
+                _finding(
+                    "low",
+                    skill,
+                    path,
+                    f"Skill battle score is strong but not maxed: {score}/10.",
+                    "Keep docs at battle-tested-on-suite until the skill reaches 10/10.",
+                )
+            )
     return findings
 
 

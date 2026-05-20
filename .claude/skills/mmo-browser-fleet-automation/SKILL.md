@@ -43,6 +43,7 @@ Run browser MMO operations with high reliability, clear limits, and policy-safe 
 - Open `references/mmo-browser-fleet-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/mmo-browser-fleet-automation-good-output.md` and `examples/mmo-browser-fleet-automation-bad-output.md` to calibrate output quality.
 - Use `evals/mmo-browser-fleet-automation-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/mmo-browser-fleet-automation-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - automation-ops

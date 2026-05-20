@@ -42,6 +42,7 @@ Run the day-to-day loop for one request without letting it skip gates or get stu
 - Open `references/cook-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/cook-good-output.md` and `examples/cook-bad-output.md` to calibrate output quality.
 - Use `evals/cook-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/cook-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - brainstorm-hub

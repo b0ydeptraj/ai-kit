@@ -37,6 +37,7 @@ End with one of only three outcomes:
 - Open `references/brainstorm-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/brainstorm-hub-good-output.md` and `examples/brainstorm-hub-bad-output.md` to calibrate output quality.
 - Use `evals/brainstorm-hub-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/brainstorm-hub-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - analyst

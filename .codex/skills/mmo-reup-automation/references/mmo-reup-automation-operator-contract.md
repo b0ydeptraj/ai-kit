@@ -2,16 +2,16 @@
 
 Primary role: mmo-reup
 Layer: layer-4-specialists-and-standalones
-Battle family: mmo
+Battle family: mmo-reup-source-inventory
 
 Use this skill only after the request is anchored to a real artifact, repo area, or explicit missing-context question. The goal is not to sound like an expert; the goal is to reduce ambiguity by tying the answer to files, symbols, commands, docs, logs, or state.
 
 ## Concrete Battle Profile
 
-- Repo profile: operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails
-- First files to inspect: ops/accounts.csv, workers/session_runner.ts, logs/run-2026-05-17.json
-- Symbols or named surfaces to confirm: SessionRunner, AccountHealth, enqueueRun
-- Evidence terms that should appear in a strong answer: operator queue, quota, dedupe, recovery runbook
+- Repo profile: operator-owned reup repo with source inventory, publish queue, dedupe controls, reject drawer, and evidence timeline
+- First files to inspect: ops/source_inventory.csv, workers/reup_queue.ts, logs/reup-ledger.json, docs/reup-source-policy.md
+- Symbols or named surfaces to confirm: SourceInventory, PublishQueue, dedupeSource
+- Evidence terms that should appear in a strong answer: source inventory, publish queue, dedupe, evidence timeline
 
 ## Working Loop
 

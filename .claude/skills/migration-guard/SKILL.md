@@ -43,6 +43,7 @@ Block high-risk migration drift by proving old compatibility markers are gone fr
 - Open `references/migration-guard-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/migration-guard-good-output.md` and `examples/migration-guard-bad-output.md` to calibrate output quality.
 - Use `evals/migration-guard-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/migration-guard-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - test-hub

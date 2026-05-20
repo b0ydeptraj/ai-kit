@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import re
+import sqlite3
 import subprocess
 import time
 import unicodedata
@@ -12,15 +14,21 @@ from typing import Any, Iterable, Mapping, Sequence
 
 
 INDEX_SCHEMA_VERSION = "relay-kit.context-index.v1"
-INDEX_ENGINE_VERSION = "hybrid-local-v2"
+INDEX_ENGINE_VERSION = "hybrid-local-v3"
 SEARCH_SCHEMA_VERSION = "relay-kit.context-search.v1"
 RELATED_SCHEMA_VERSION = "relay-kit.context-related.v1"
+EXPLAIN_SYMBOL_SCHEMA_VERSION = "relay-kit.context-explain-symbol.v1"
+ACTIVE_CONTEXT_SCHEMA_VERSION = "relay-kit.context-active.v1"
+MCP_SCHEMA_VERSION = "relay-kit.context-mcp.v1"
 
 DEFAULT_INDEX_PATH = ".relay-kit/context/index.json"
+DEFAULT_SQLITE_INDEX_PATH = ".relay-kit/context/index.sqlite"
+DEFAULT_ACTIVE_CONTEXT_PATH = ".relay-kit/context/active.json"
 MAX_TEXT_CHARS = 80_000
 
 INDEX_EXTENSIONS = {
     ".css",
+    ".csv",
     ".go",
     ".html",
     ".js",
@@ -69,7 +77,21 @@ CONFIG_NAMES = {
 
 def build_context_index(root: Path | str) -> dict[str, Any]:
     project = Path(root).resolve()
-    files = [_index_file(project, path) for path in _iter_indexable_files(project)]
+    previous = load_context_index(project)
+    previous_by_path = {
+        str(item.get("path")): item
+        for item in (previous or {}).get("files", [])
+        if isinstance(item, Mapping) and item.get("path")
+    }
+    reused_count = 0
+    files: list[dict[str, Any]] = []
+    for path in _iter_indexable_files(project):
+        item, reused = _index_file(project, path, previous_by_path=previous_by_path)
+        if item is None:
+            continue
+        files.append(item)
+        if reused:
+            reused_count += 1
     files = [item for item in files if item is not None]
     files.sort(key=lambda item: item["path"])
     related_tests = _nearby_tests(files)
@@ -87,6 +109,11 @@ def build_context_index(root: Path | str) -> dict[str, Any]:
         "status": "pass",
         "project_path": str(project),
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "storage": {
+            "json_path": str((project / DEFAULT_INDEX_PATH).resolve()),
+            "sqlite_path": str((project / DEFAULT_SQLITE_INDEX_PATH).resolve()),
+            "sqlite_fts": True,
+        },
         "capabilities": {
             "path_name": True,
             "symbols": True,
@@ -96,8 +123,14 @@ def build_context_index(root: Path | str) -> dict[str, Any]:
             "local_chunks": True,
             "call_graph_hints": True,
             "git_history_hints": bool(git_history),
+            "sqlite_fts": True,
+            "incremental_index": True,
+            "ast_parser": True,
+            "active_context": True,
+            "mcp_local": True,
             "optional_local_embeddings": find_spec("fastembed") is not None,
         },
+        "ast": _ast_status(),
         "semantic": {
             "provider": "fastembed",
             "status": "available" if find_spec("fastembed") is not None else "unavailable",
@@ -113,6 +146,7 @@ def build_context_index(root: Path | str) -> dict[str, Any]:
             "test_file_count": sum(1 for item in files if item["kind"] == "test"),
             "doc_file_count": sum(1 for item in files if item["kind"] == "doc"),
             "config_file_count": sum(1 for item in files if item["kind"] == "config"),
+            "reused_file_count": reused_count,
         },
         "files": files,
     }
@@ -129,6 +163,60 @@ def write_context_index(
         target = project / target
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(report, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+    write_sqlite_context_index(project, report)
+    return target
+
+
+def write_sqlite_context_index(root: Path | str, report: Mapping[str, Any], output_file: Path | str | None = None) -> Path:
+    project = Path(root).resolve()
+    target = Path(output_file) if output_file else project / DEFAULT_SQLITE_INDEX_PATH
+    if not target.is_absolute():
+        target = project / target
+    target.parent.mkdir(parents=True, exist_ok=True)
+    connection = sqlite3.connect(target)
+    try:
+        connection.execute("PRAGMA journal_mode=WAL")
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS files ("
+            "path TEXT PRIMARY KEY, kind TEXT, name TEXT, extension TEXT, "
+            "symbols TEXT, imports TEXT, call_hints TEXT, nearby_tests TEXT, "
+            "content_hash TEXT, mtime_ns INTEGER, size INTEGER)"
+        )
+        connection.execute("CREATE VIRTUAL TABLE IF NOT EXISTS chunks_fts USING fts5(path, chunk_id, content)")
+        connection.execute("DELETE FROM files")
+        connection.execute("DELETE FROM chunks_fts")
+        for item in report.get("files", []):
+            if not isinstance(item, Mapping):
+                continue
+            connection.execute(
+                "INSERT OR REPLACE INTO files VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (
+                    item.get("path"),
+                    item.get("kind"),
+                    item.get("name"),
+                    item.get("extension"),
+                    json.dumps(item.get("symbols", []), ensure_ascii=True),
+                    json.dumps(item.get("imports", []), ensure_ascii=True),
+                    json.dumps(item.get("call_hints", []), ensure_ascii=True),
+                    json.dumps(item.get("nearby_tests", []), ensure_ascii=True),
+                    item.get("content_hash"),
+                    int(item.get("mtime_ns", 0)),
+                    int(item.get("size", 0)),
+                ),
+            )
+            for chunk in item.get("chunks", []):
+                if not isinstance(chunk, Mapping):
+                    continue
+                terms = " ".join(str(term) for term in chunk.get("text_terms", []))
+                symbols = " ".join(str(symbol) for symbol in chunk.get("symbols", []))
+                content = f"{item.get('path')} {item.get('name')} {terms} {symbols}"
+                connection.execute(
+                    "INSERT INTO chunks_fts(path, chunk_id, content) VALUES (?, ?, ?)",
+                    (item.get("path"), chunk.get("id"), content),
+                )
+        connection.commit()
+    finally:
+        connection.close()
     return target
 
 
@@ -162,7 +250,8 @@ def build_context_search(
         return _empty_search(project, query, "missing-index")
     if not terms:
         return _empty_search(project, query, "empty-query", indexed=index)
-    results = [_score_file(item, terms, query) for item in index.get("files", [])]
+    fts_matches = _sqlite_fts_matches(project, query)
+    results = [_score_file(item, terms, query, fts_matches=fts_matches) for item in index.get("files", [])]
     results = [item for item in results if item["score"] > 0]
     results.sort(key=lambda item: (-item["score"], item["path"]))
     limited = results[: max(limit, 0)]
@@ -172,6 +261,10 @@ def build_context_search(
         "project_path": str(project),
         "query": query,
         "index_status": "available",
+        "storage": {
+            "sqlite_fts": bool(fts_matches),
+            "sqlite_path": str((project / DEFAULT_SQLITE_INDEX_PATH).resolve()),
+        },
         "summary": {
             "indexed_file_count": index.get("summary", {}).get("file_count", 0),
             "hit_count": len(results),
@@ -261,6 +354,155 @@ def build_context_related(
             "returned": len(limited),
         },
         "results": limited,
+    }
+
+
+def build_context_explain_symbol(
+    root: Path | str,
+    *,
+    symbol: str,
+    limit: int = 10,
+    index_file: Path | str | None = None,
+) -> dict[str, Any]:
+    project = Path(root).resolve()
+    index = load_context_index(project, index_file=index_file)
+    normalized = _normalize_term(symbol)
+    if index is None:
+        return {
+            "schema_version": EXPLAIN_SYMBOL_SCHEMA_VERSION,
+            "status": "empty",
+            "project_path": str(project),
+            "symbol": symbol,
+            "index_status": "missing",
+            "definitions": [],
+            "references": [],
+            "related_tests": [],
+            "summary": {"reason": "missing-index", "definition_count": 0, "reference_count": 0},
+        }
+    definitions: list[dict[str, Any]] = []
+    references: list[dict[str, Any]] = []
+    related_tests: list[str] = []
+    for item in index.get("files", []):
+        if not isinstance(item, Mapping):
+            continue
+        item_symbols = {str(value): _normalize_term(str(value)) for value in item.get("symbols", [])}
+        item_calls = {str(value): _normalize_term(str(value)) for value in item.get("call_hints", [])}
+        if normalized in item_symbols.values():
+            definitions.append(_result_item(item, score=100, matched_terms=[symbol], reasons=["symbol-definition"]))
+            for test_path in item.get("nearby_tests", []):
+                if test_path not in related_tests:
+                    related_tests.append(str(test_path))
+        if normalized in item_calls.values():
+            references.append(_result_item(item, score=50, matched_terms=[symbol], reasons=["call-reference"]))
+            for test_path in item.get("nearby_tests", []):
+                if test_path not in related_tests:
+                    related_tests.append(str(test_path))
+    definitions.sort(key=lambda item: item["path"])
+    references.sort(key=lambda item: item["path"])
+    status = "pass" if definitions or references else "empty"
+    return {
+        "schema_version": EXPLAIN_SYMBOL_SCHEMA_VERSION,
+        "status": status,
+        "project_path": str(project),
+        "symbol": symbol,
+        "index_status": "available",
+        "definitions": definitions[: max(limit, 0)],
+        "references": references[: max(limit, 0)],
+        "related_tests": related_tests[: max(limit, 0)],
+        "summary": {
+            "definition_count": len(definitions),
+            "reference_count": len(references),
+            "related_test_count": len(related_tests),
+        },
+    }
+
+
+def write_active_context(
+    root: Path | str,
+    *,
+    file_path: str,
+    selection: str | None = None,
+    output_file: Path | str | None = None,
+) -> dict[str, Any]:
+    project = Path(root).resolve()
+    target = Path(output_file) if output_file else project / DEFAULT_ACTIVE_CONTEXT_PATH
+    if not target.is_absolute():
+        target = project / target
+    display_path = _normalize_display_path(project, file_path)
+    payload = {
+        "schema_version": ACTIVE_CONTEXT_SCHEMA_VERSION,
+        "status": "pass",
+        "project_path": str(project),
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "active_file": display_path,
+        "selection": selection or "",
+    }
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(json.dumps(payload, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
+    return payload
+
+
+def read_active_context(root: Path | str, *, active_file: Path | str | None = None) -> dict[str, Any]:
+    project = Path(root).resolve()
+    target = Path(active_file) if active_file else project / DEFAULT_ACTIVE_CONTEXT_PATH
+    if not target.is_absolute():
+        target = project / target
+    if not target.exists():
+        return {
+            "schema_version": ACTIVE_CONTEXT_SCHEMA_VERSION,
+            "status": "empty",
+            "project_path": str(project),
+            "active_file": None,
+            "selection": "",
+            "summary": {"reason": "missing-active-context"},
+        }
+    try:
+        payload = json.loads(target.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {
+            "schema_version": ACTIVE_CONTEXT_SCHEMA_VERSION,
+            "status": "empty",
+            "project_path": str(project),
+            "active_file": None,
+            "selection": "",
+            "summary": {"reason": "invalid-active-context"},
+        }
+    if payload.get("schema_version") != ACTIVE_CONTEXT_SCHEMA_VERSION:
+        payload["schema_version"] = ACTIVE_CONTEXT_SCHEMA_VERSION
+    payload.setdefault("status", "pass")
+    payload.setdefault("project_path", str(project))
+    return payload
+
+
+def build_context_mcp_tool_result(root: Path | str, tool_name: str, arguments: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    args = dict(arguments or {})
+    if tool_name == "context.search":
+        return build_context_search(root, query=str(args.get("query", "")), limit=int(args.get("limit", 10)))
+    if tool_name == "context.related":
+        return build_context_related(root, path=str(args.get("path", "")), limit=int(args.get("limit", 10)))
+    if tool_name == "context.explain_symbol":
+        return build_context_explain_symbol(root, symbol=str(args.get("symbol", "")), limit=int(args.get("limit", 10)))
+    if tool_name == "context.active":
+        return read_active_context(root)
+    return {
+        "schema_version": MCP_SCHEMA_VERSION,
+        "status": "error",
+        "project_path": str(Path(root).resolve()),
+        "error": f"unknown tool: {tool_name}",
+    }
+
+
+def context_mcp_manifest(root: Path | str) -> dict[str, Any]:
+    return {
+        "schema_version": MCP_SCHEMA_VERSION,
+        "status": "pass",
+        "project_path": str(Path(root).resolve()),
+        "tools": [
+            {"name": "context.search", "description": "Search the local Relay-kit context index."},
+            {"name": "context.related", "description": "Find files related to a path."},
+            {"name": "context.explain_symbol", "description": "Explain definitions, references, and tests for a symbol."},
+            {"name": "context.active", "description": "Read the active file/selection context."},
+        ],
     }
 
 
@@ -368,6 +610,44 @@ def render_context_watch(report: Mapping[str, Any]) -> str:
     )
 
 
+def render_context_explain_symbol(report: Mapping[str, Any]) -> str:
+    lines = [
+        "Relay-kit context explain-symbol",
+        f"- status: {report.get('status')}",
+        f"- index: {report.get('index_status')}",
+        f"- symbol: {report.get('symbol')}",
+        f"- definitions: {report.get('summary', {}).get('definition_count', 0)}",
+        f"- references: {report.get('summary', {}).get('reference_count', 0)}",
+    ]
+    for result in report.get("definitions", [])[:5]:
+        lines.append(f"  - def {result.get('path')} [{result.get('kind')}]")
+    for result in report.get("references", [])[:5]:
+        lines.append(f"  - ref {result.get('path')} [{result.get('kind')}]")
+    return "\n".join(lines)
+
+
+def render_active_context(report: Mapping[str, Any]) -> str:
+    return "\n".join(
+        [
+            "Relay-kit context active",
+            f"- status: {report.get('status')}",
+            f"- active file: {report.get('active_file')}",
+            f"- selection: {'present' if report.get('selection') else 'empty'}",
+        ]
+    )
+
+
+def render_context_mcp(report: Mapping[str, Any]) -> str:
+    lines = [
+        "Relay-kit context MCP",
+        f"- status: {report.get('status')}",
+        f"- project: {report.get('project_path')}",
+    ]
+    for tool in report.get("tools", []):
+        lines.append(f"  - {tool.get('name')}: {tool.get('description')}")
+    return "\n".join(lines)
+
+
 def _iter_indexable_files(project: Path) -> Iterable[Path]:
     for path in project.rglob("*"):
         if not path.is_file():
@@ -405,12 +685,27 @@ def _is_skipped(relative_path: str) -> bool:
     return False
 
 
-def _index_file(project: Path, path: Path) -> dict[str, Any] | None:
+def _index_file(
+    project: Path,
+    path: Path,
+    *,
+    previous_by_path: Mapping[str, Mapping[str, Any]] | None = None,
+) -> tuple[dict[str, Any] | None, bool]:
+    previous_by_path = previous_by_path or {}
     try:
-        text = path.read_text(encoding="utf-8", errors="replace")[:MAX_TEXT_CHARS]
+        stat = path.stat()
     except OSError:
-        return None
+        return None, False
     relative = path.relative_to(project).as_posix()
+    previous = previous_by_path.get(relative)
+    if previous and previous.get("engine_version") == INDEX_ENGINE_VERSION:
+        if int(previous.get("mtime_ns", -1)) == int(stat.st_mtime_ns) and int(previous.get("size", -1)) == int(stat.st_size):
+            return dict(previous), True
+    try:
+        raw_text = path.read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return None, False
+    text = raw_text[:MAX_TEXT_CHARS]
     symbols = _extract_symbols(relative, text)
     imports = _extract_imports(relative, text)
     call_hints = _extract_call_hints(relative, text)
@@ -420,6 +715,7 @@ def _index_file(project: Path, path: Path) -> dict[str, Any] | None:
         "path": relative,
         "name": path.name,
         "extension": path.suffix.lower(),
+        "engine_version": INDEX_ENGINE_VERSION,
         "kind": _file_kind(relative),
         "symbols": symbols,
         "imports": imports,
@@ -431,7 +727,10 @@ def _index_file(project: Path, path: Path) -> dict[str, Any] | None:
         "nearby_tests": [],
         "git_history": {"recent_change_count": 0},
         "line_count": len(text.splitlines()),
-    }
+        "content_hash": hashlib.sha256(raw_text.encode("utf-8", errors="replace")).hexdigest(),
+        "mtime_ns": int(stat.st_mtime_ns),
+        "size": int(stat.st_size),
+    }, False
 
 
 def _extract_symbols(relative: str, text: str) -> list[str]:
@@ -453,6 +752,12 @@ def _extract_symbols(relative: str, text: str) -> list[str]:
         patterns = [r"\bfunc\s+(?:\([^)]+\)\s*)?([A-Za-z_][A-Za-z0-9_]*)\s*\(", r"\btype\s+([A-Za-z_][A-Za-z0-9_]*)\s+"]
     elif suffix == ".rs":
         patterns = [r"\bfn\s+([A-Za-z_][A-Za-z0-9_]*)\s*\(", r"\b(?:struct|enum|trait)\s+([A-Za-z_][A-Za-z0-9_]*)\b"]
+    elif suffix in {".md", ".mdx", ".txt", ".json", ".yaml", ".yml", ".csv"}:
+        patterns = [
+            r"^\s*#+\s+([A-Za-z_][A-Za-z0-9_-]*)\b",
+            r"`([A-Za-z_][A-Za-z0-9_-]*)`",
+            r"\b([A-Z][A-Za-z0-9_]{3,})\b",
+        ]
     symbols: list[str] = []
     for pattern in patterns:
         for match in re.findall(pattern, text, flags=re.MULTILINE):
@@ -624,7 +929,13 @@ def _nearby_tests(files: Sequence[Mapping[str, Any]]) -> dict[str, list[str]]:
     return result
 
 
-def _score_file(item: Mapping[str, Any], terms: Sequence[str], query: str) -> dict[str, Any]:
+def _score_file(
+    item: Mapping[str, Any],
+    terms: Sequence[str],
+    query: str,
+    *,
+    fts_matches: Mapping[str, int] | None = None,
+) -> dict[str, Any]:
     path_terms = set(item.get("path_terms", []))
     symbol_terms = {_normalize_term(str(symbol)) for symbol in item.get("symbols", [])}
     import_terms = {_normalize_term(str(value)) for value in item.get("imports", [])}
@@ -666,10 +977,38 @@ def _score_file(item: Mapping[str, Any], terms: Sequence[str], query: str) -> di
     if phrase and phrase in path_value:
         score += 30
         reasons.append("path-phrase")
+    if fts_matches and item.get("path") in fts_matches:
+        score += int(fts_matches[str(item.get("path"))])
+        reasons.append("sqlite-fts")
     if item.get("kind") == "test" and any(term in {"test", "spec", "ci", "login"} for term in terms):
         score += 6
         reasons.append("nearby-test")
     return _result_item(item, score=score, matched_terms=matched, reasons=reasons)
+
+
+def _sqlite_fts_matches(project: Path, query: str) -> dict[str, int]:
+    target = project / DEFAULT_SQLITE_INDEX_PATH
+    if not target.exists() or not query.strip():
+        return {}
+    normalized_terms = _query_terms(query)
+    if not normalized_terms:
+        return {}
+    fts_query = " OR ".join(term.replace('"', "") for term in normalized_terms[:8])
+    matches: dict[str, int] = {}
+    try:
+        connection = sqlite3.connect(target)
+        try:
+            rows = connection.execute(
+                "SELECT path, COUNT(*) FROM chunks_fts WHERE chunks_fts MATCH ? GROUP BY path",
+                (fts_query,),
+            ).fetchall()
+        finally:
+            connection.close()
+    except sqlite3.Error:
+        return {}
+    for path, count in rows:
+        matches[str(path)] = min(int(count), 5) * 6
+    return matches
 
 
 def _result_item(
@@ -813,3 +1152,16 @@ def _normalize_display_path(project: Path, path: str) -> str:
         except ValueError:
             return candidate.as_posix()
     return candidate.as_posix().replace("\\", "/")
+
+
+def _ast_status() -> dict[str, Any]:
+    tree_sitter_available = find_spec("tree_sitter") is not None
+    language_pack_available = find_spec("tree_sitter_language_pack") is not None
+    return {
+        "provider": "tree-sitter",
+        "status": "available" if tree_sitter_available and language_pack_available else "fallback-regex",
+        "tree_sitter_available": tree_sitter_available,
+        "language_pack_available": language_pack_available,
+        "fallback": not (tree_sitter_available and language_pack_available),
+        "note": "tree-sitter is optional; Relay-kit keeps regex AST fallback when the extra is not installed.",
+    }

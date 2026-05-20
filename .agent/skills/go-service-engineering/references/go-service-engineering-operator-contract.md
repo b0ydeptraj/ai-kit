@@ -2,16 +2,16 @@
 
 Primary role: go-engineering
 Layer: layer-4-specialists-and-standalones
-Battle family: backend
+Battle family: service-boundary
 
 Use this skill only after the request is anchored to a real artifact, repo area, or explicit missing-context question. The goal is not to sound like an expert; the goal is to reduce ambiguity by tying the answer to files, symbols, commands, docs, logs, or state.
 
 ## Concrete Battle Profile
 
-- Repo profile: public Python service repo with serializer, retry, cache, and session tests
-- First files to inspect: src/service/session.py, src/service/retry.py, tests/test_session.py
-- Symbols or named surfaces to confirm: SessionManager, retry_request, serialize_session
-- Evidence terms that should appear in a strong answer: session, retry, cache, transaction boundary
+- Repo profile: public Go API service with handler, service, repository, middleware, and httptest coverage
+- First files to inspect: cmd/api/main.go, internal/http/user_handler.go, internal/service/user_service.go, internal/service/user_service_test.go
+- Symbols or named surfaces to confirm: UserHandler, UserService, TestUserService
+- Evidence terms that should appear in a strong answer: handler boundary, context cancellation, transaction boundary, httptest
 
 ## Working Loop
 

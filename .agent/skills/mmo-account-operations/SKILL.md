@@ -42,6 +42,7 @@ Operate MMO account fleets with deterministic controls, safety gates, and clear 
 - Open `references/mmo-account-operations-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/mmo-account-operations-good-output.md` and `examples/mmo-account-operations-bad-output.md` to calibrate output quality.
 - Use `evals/mmo-account-operations-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/mmo-account-operations-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - automation-ops

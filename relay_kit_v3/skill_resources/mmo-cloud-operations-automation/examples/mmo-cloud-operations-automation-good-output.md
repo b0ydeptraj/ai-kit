@@ -1,20 +1,20 @@
 # mmo-cloud-operations-automation Battle-Calibrated Output
 
-Request: review an operator-owned MMO automation lane for safety, repeatability, and evidence logging
+Request: review cloud automation with worker pool, queue depth, stalled jobs, dead-letter handling, pause control, and operator ledger evidence
 
 Recommended skill: `mmo-cloud-operations-automation` because the request matches `mmo-cloud-automation` work and has concrete repo anchors.
 
 Read first:
 
-- `ops/accounts.csv`
-- `workers/session_runner.ts`
-- `logs/run-2026-05-17.json`
+- `ops/queues.yaml`
+- `workers/cloud_worker.ts`
+- `docs/cloud-worker-runbook.md`
 
 Evidence gathered:
 
-- Confirmed `SessionRunner` or nearby ownership before recommending changes.
-- Checked `operator queue` and `quota` against the relevant source path.
-- Identified `dedupe` as a required proof term before completion.
+- Confirmed `CloudWorker` or nearby ownership before recommending changes.
+- Checked `worker queue` and `queue depth` against the relevant source path.
+- Identified `dead-letter` as a required proof term before completion.
 
 Answer:
 
@@ -22,4 +22,4 @@ The safe next move is to inspect the named file path, compare it with the expect
 
 Residual risk:
 
-- `recovery runbook` remains unverified until the focused gate or benchmark hit is captured.
+- `pause` remains unverified until the focused gate or benchmark hit is captured.

@@ -1,6 +1,6 @@
 # mmo-lowcode-automation Weak Output Anti-Example
 
-Request: review an operator-owned MMO automation lane for safety, repeatability, and evidence logging
+Request: review low-code automation with node graph, execution history, manual versus production execution, redacted logs, and rollback evidence
 
 Weak answer:
 
@@ -8,9 +8,9 @@ This looks like `mmo-lowcode-automation`, so follow the usual checklist and it s
 
 Why this fails:
 
-- No file path from `operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails` was inspected.
-- No symbol such as `SessionRunner` was confirmed.
-- No proof surface was named for `operator queue`.
+- No file path from `operator-owned low-code orchestration repo with node graph, execution history, redacted execution logs, and rollback notes` was inspected.
+- No symbol such as `NodeGraph` was confirmed.
+- No proof surface was named for `node graph`.
 - It blurs verified evidence and inference, which is exactly how overclaim slips back into Relay-kit.
 
 Correction:

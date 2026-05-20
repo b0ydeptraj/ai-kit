@@ -2,16 +2,16 @@
 
 Primary role: mmo-cloud-automation
 Layer: layer-4-specialists-and-standalones
-Battle family: mmo
+Battle family: mmo-cloud-worker-queue
 
 Use this skill only after the request is anchored to a real artifact, repo area, or explicit missing-context question. The goal is not to sound like an expert; the goal is to reduce ambiguity by tying the answer to files, symbols, commands, docs, logs, or state.
 
 ## Concrete Battle Profile
 
-- Repo profile: operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails
-- First files to inspect: ops/accounts.csv, workers/session_runner.ts, logs/run-2026-05-17.json
-- Symbols or named surfaces to confirm: SessionRunner, AccountHealth, enqueueRun
-- Evidence terms that should appear in a strong answer: operator queue, quota, dedupe, recovery runbook
+- Repo profile: operator-owned cloud worker repo with queue dashboard, worker pool, dead-letter queue, cost ceiling, and pause control
+- First files to inspect: ops/queues.yaml, workers/cloud_worker.ts, logs/dead-letter.json, docs/cloud-worker-runbook.md
+- Symbols or named surfaces to confirm: CloudWorker, DeadLetterQueue, pauseQueue
+- Evidence terms that should appear in a strong answer: worker queue, queue depth, dead-letter, pause
 
 ## Working Loop
 

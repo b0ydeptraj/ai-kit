@@ -2,16 +2,16 @@
 
 Primary role: mmo-api-automation
 Layer: layer-4-specialists-and-standalones
-Battle family: mmo
+Battle family: mmo-api-request-ledger
 
 Use this skill only after the request is anchored to a real artifact, repo area, or explicit missing-context question. The goal is not to sound like an expert; the goal is to reduce ambiguity by tying the answer to files, symbols, commands, docs, logs, or state.
 
 ## Concrete Battle Profile
 
-- Repo profile: operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails
-- First files to inspect: ops/accounts.csv, workers/session_runner.ts, logs/run-2026-05-17.json
-- Symbols or named surfaces to confirm: SessionRunner, AccountHealth, enqueueRun
-- Evidence terms that should appear in a strong answer: operator queue, quota, dedupe, recovery runbook
+- Repo profile: operator-owned HTTP automation repo with endpoint catalog, request ledger, retry budget, redacted logs, and idempotency keys
+- First files to inspect: ops/endpoints.yaml, workers/api_client.ts, logs/request-ledger.json, tests/request-ledger.test.ts
+- Symbols or named surfaces to confirm: EndpointCatalog, RequestLedger, idempotencyKey
+- Evidence terms that should appear in a strong answer: request ledger, idempotency key, retry count, redacted
 
 ## Working Loop
 

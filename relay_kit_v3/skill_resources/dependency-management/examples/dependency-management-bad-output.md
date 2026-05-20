@@ -1,6 +1,6 @@
 # dependency-management Weak Output Anti-Example
 
-Request: trace a backend behavior bug from source file to test anchor without guessing from filenames only
+Request: review a dependency drift report, compare manifest to lockfile, and name rollback or pin evidence before recommending an upgrade
 
 Weak answer:
 
@@ -8,9 +8,9 @@ This looks like `dependency-management`, so follow the usual checklist and it sh
 
 Why this fails:
 
-- No file path from `public Python service repo with serializer, retry, cache, and session tests` was inspected.
-- No symbol such as `SessionManager` was confirmed.
-- No proof surface was named for `session`.
+- No file path from `public package repo with package manifest, lockfile, dependency policy, and upgrade notes` was inspected.
+- No symbol such as `resolveDependencyPlan` was confirmed.
+- No proof surface was named for `dependency drift`.
 - It blurs verified evidence and inference, which is exactly how overclaim slips back into Relay-kit.
 
 Correction:

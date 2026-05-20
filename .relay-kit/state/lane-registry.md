@@ -15,7 +15,4 @@
 ## Released locks
 | Lane | Artifact | Previous scope | Released because |
 |---|---|---|---|
-| primary | runtime/docs/tests naming surfaces | relay-only hard-cut scope | PR #100 merged; lane returned to idle baseline |
-| primary | shell compaction and skill proof surfaces | real-world-token-proof scope | PR #103 merged; main CI `25922588929` green |
-| primary | registry and generated skill surfaces | backend realism and skill proof eval scope | PR #105 merged; main CI `25925848766` green |
-| primary | MMO/API registry, generated skill surfaces, docs, and tests | operator realism hardening scope | PR #107 merged; main CI `25953297284` green |
+| none | none | none | none |

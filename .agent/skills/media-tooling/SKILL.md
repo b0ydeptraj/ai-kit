@@ -40,6 +40,7 @@ Handle media-specific steps that support the current lane without creating a par
 - Open `references/media-tooling-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/media-tooling-good-output.md` and `examples/media-tooling-bad-output.md` to calibrate output quality.
 - Use `evals/media-tooling-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/media-tooling-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - test-hub

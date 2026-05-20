@@ -35,6 +35,7 @@ Convert a known problem into a bounded implementation path that can be executed 
 - Open `references/fix-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/fix-hub-good-output.md` and `examples/fix-hub-bad-output.md` to calibrate output quality.
 - Use `evals/fix-hub-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/fix-hub-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - developer

@@ -20,6 +20,9 @@ It provides public-repo benchmark evidence, not proof of external commercial ado
 ```bash
 relay-kit eval battle-audit . --json
 relay-kit eval battle-benchmark . --suite curated --cleanup --json
+relay-kit eval competency-battle . --skill all --suite core --json
+relay-kit eval repo-profile . --json
+relay-kit eval domain-pack list . --json
 ```
 
 ## What It Measures
@@ -27,6 +30,8 @@ relay-kit eval battle-benchmark . --suite curated --cleanup --json
 - Can context index find expected files?
 - Can local symbol extraction see relevant symbols?
 - Does prompt enhancement include file-aware evidence?
+- Does the repo profile map the repo to an archetype instead of pretending every industry is known?
+- Does the expected public repo case map to competencies?
 - Does the answer stay clear that this is read-only benchmark evidence?
 
 This is not a semantic codebase engine, not an Augment clone, and not a guarantee that every repo task will route perfectly.

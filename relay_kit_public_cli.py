@@ -32,6 +32,9 @@ This wrapper exposes a friendlier command surface:
   relay-kit token audit <project_path>
   relay-kit shell compact <project_path> -- <command...>
   relay-kit eval real-world <project_path>
+  relay-kit eval competency-battle <project_path> --skill all --suite core
+  relay-kit eval repo-profile <project_path>
+  relay-kit eval domain-pack list <project_path>
   relay-kit proof audit <project_path>
   relay-kit locale show <project_path>
   relay-kit locale set <project_path> --locale <code>
@@ -115,6 +118,25 @@ from relay_kit_v3.real_world_eval import (
 )
 from relay_kit_v3.battle_audit import build_battle_audit, render_battle_audit, write_battle_audit
 from relay_kit_v3.battle_benchmark import build_battle_benchmark, render_battle_benchmark, write_battle_benchmark
+from relay_kit_v3.competency_battle import (
+    build_competency_battle,
+    render_competency_battle,
+    write_competency_battle,
+)
+from relay_kit_v3.domain_packs import (
+    build_domain_pack_list,
+    render_domain_pack_report,
+    run_domain_pack,
+    write_domain_pack_report,
+)
+from relay_kit_v3.repo_profile import build_repo_profile, render_repo_profile, write_repo_profile
+from relay_kit_v3.skill_battle import (
+    build_skill_battle,
+    build_skill_weakness_report,
+    render_skill_battle,
+    render_skill_weakness_report,
+    write_skill_battle,
+)
 from relay_kit_v3.skill_proof import (
     build_report as build_skill_proof_report,
     render_report as render_skill_proof_report,
@@ -124,14 +146,22 @@ from relay_kit_v3.contract_export import write_contract_export
 from relay_kit_v3.contract_import import import_contracts, render_contract_import_report
 from relay_kit_v3.context_governance import build_context_audit, render_context_audit, write_context_audit
 from relay_kit_v3.context_index import (
+    build_context_explain_symbol,
+    build_context_mcp_tool_result,
     build_context_index,
     build_context_related,
     build_context_search,
+    context_mcp_manifest,
+    read_active_context,
+    render_active_context,
+    render_context_explain_symbol,
     render_context_index,
+    render_context_mcp,
     render_context_related,
     render_context_search,
     render_context_watch,
     watch_context_index,
+    write_active_context,
     write_context_index,
 )
 from relay_kit_v3.lane_audit import build_lane_audit, render_lane_audit, write_lane_audit
@@ -358,6 +388,34 @@ def _parse_context_args(argv: list[str]) -> argparse.Namespace:
     related.add_argument("--limit", type=int, default=10, help="Maximum related file count")
     related.add_argument("--index-file", default=None, help="Optional context index JSON path")
     related.add_argument("--json", action="store_true", help="Emit machine-readable related-file results")
+
+    explain = subparsers.add_parser("explain-symbol", help="Explain definitions, references, and tests for a symbol")
+    explain.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    explain.add_argument("--symbol", required=True, help="Symbol name to explain")
+    explain.add_argument("--limit", type=int, default=10, help="Maximum definition/reference count")
+    explain.add_argument("--index-file", default=None, help="Optional context index JSON path")
+    explain.add_argument("--json", action="store_true", help="Emit machine-readable symbol explanation")
+
+    active = subparsers.add_parser("active", help="Set or show active file/selection context")
+    active_sub = active.add_subparsers(dest="active_action", required=True)
+    active_set = active_sub.add_parser("set", help="Set active context")
+    active_set.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    active_set.add_argument("--file", required=True, help="Active file path")
+    active_set.add_argument("--selection", default=None, help="Optional active selection text")
+    active_set.add_argument("--json", action="store_true", help="Emit machine-readable active context")
+    active_show = active_sub.add_parser("show", help="Show active context")
+    active_show.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    active_show.add_argument("--json", action="store_true", help="Emit machine-readable active context")
+
+    mcp = subparsers.add_parser("mcp", help="Expose local context tools for MCP-style clients")
+    mcp.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    mcp.add_argument("--list-tools", action="store_true", help="Print local context tool manifest and exit")
+    mcp.add_argument("--tool", choices=["context.search", "context.related", "context.explain_symbol", "context.active"], default=None)
+    mcp.add_argument("--query", default=None, help="Query for context.search")
+    mcp.add_argument("--path", default=None, help="Path for context.related")
+    mcp.add_argument("--symbol", default=None, help="Symbol for context.explain_symbol")
+    mcp.add_argument("--limit", type=int, default=10, help="Tool result limit")
+    mcp.add_argument("--json", action="store_true", help="Emit machine-readable MCP manifest or tool result")
 
     watch = subparsers.add_parser("watch", help="Refresh the local context index when indexed files change")
     watch.add_argument("project_path", nargs="?", default=".", help="Project root to watch")
@@ -740,20 +798,65 @@ def _parse_eval_args(argv: list[str]) -> argparse.Namespace:
     real_world.add_argument("--json", action="store_true", help="Emit JSON report")
     real_world.add_argument("--strict", action="store_true", help="Return non-zero unless all cases pass")
 
+    skill_battle = subparsers.add_parser("skill-battle", help="Score skills against deep battle cases")
+    skill_battle.add_argument("project_path", nargs="?", default=".", help="Project root that owns temporary battle fixtures")
+    skill_battle.add_argument("--skill", default="all", help="Skill name or `all`")
+    skill_battle.add_argument("--suite", default="deep", choices=["deep"], help="Skill battle suite to run")
+    skill_battle.add_argument("--cleanup", action="store_true", help="Delete temporary skill battle fixtures after the run")
+    skill_battle.add_argument("--min-score", type=float, default=8.0, help="Minimum accepted per-skill score")
+    skill_battle.add_argument("--output-file", default=None, help="Optional JSON report output path")
+    skill_battle.add_argument("--json", action="store_true", help="Emit JSON report")
+    skill_battle.add_argument("--strict", action="store_true", help="Return non-zero unless all selected skills meet min score")
+
+    competency_battle = subparsers.add_parser(
+        "competency-battle",
+        help="Score skills by competency coverage and optional deep battle evidence",
+    )
+    competency_battle.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    competency_battle.add_argument("--skill", default="all", help="Skill name or `all`")
+    competency_battle.add_argument("--suite", default="core", choices=["core", "deep"], help="Competency suite to run")
+    competency_battle.add_argument("--cleanup", action="store_true", help="Delete temporary deep battle fixtures after the run")
+    competency_battle.add_argument("--output-file", default=None, help="Optional JSON report output path")
+    competency_battle.add_argument("--json", action="store_true", help="Emit JSON report")
+    competency_battle.add_argument("--strict", action="store_true", help="Return non-zero unless all selected skills are competency-covered")
+
+    weakness = subparsers.add_parser("skill-weakness-report", help="Summarize weak skill battle findings")
+    weakness.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    weakness.add_argument("--battle-file", default=None, help="Optional skill battle JSON report to summarize")
+    weakness.add_argument("--output-file", default=None, help="Optional JSON report output path")
+    weakness.add_argument("--json", action="store_true", help="Emit JSON report")
+    weakness.add_argument("--strict", action="store_true", help="Return non-zero when weaknesses exist")
+
     battle_audit = subparsers.add_parser("battle-audit", help="Audit skill resources and public surfaces for battle readiness")
     battle_audit.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    battle_audit.add_argument("--skill-battle-file", default=None, help="Optional skill battle JSON report to fold into audit findings")
     battle_audit.add_argument("--output-file", default=None, help="Optional JSON report output path")
     battle_audit.add_argument("--json", action="store_true", help="Emit JSON report")
     battle_audit.add_argument("--strict", action="store_true", help="Return non-zero when high-severity findings exist")
 
     battle_benchmark = subparsers.add_parser("battle-benchmark", help="Run safe read-only public repo benchmark cases")
     battle_benchmark.add_argument("project_path", nargs="?", default=".", help="Project root that owns the temp benchmark folder")
-    battle_benchmark.add_argument("--suite", default="curated", choices=["curated"], help="Benchmark suite to run")
+    battle_benchmark.add_argument("--suite", default="curated", choices=["curated", "deep"], help="Benchmark suite to run")
     battle_benchmark.add_argument("--cleanup", action="store_true", help="Delete temporary cloned repos after the run")
     battle_benchmark.add_argument("--repo-limit", type=int, default=None, help="Limit the number of repos from the suite")
     battle_benchmark.add_argument("--output-file", default=None, help="Optional JSON report output path")
     battle_benchmark.add_argument("--json", action="store_true", help="Emit JSON report")
     battle_benchmark.add_argument("--strict", action="store_true", help="Return non-zero unless benchmark cases pass")
+
+    repo_profile = subparsers.add_parser("repo-profile", help="Classify repo archetype from the local context index")
+    repo_profile.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    repo_profile.add_argument("--write-index", action="store_true", help="Persist a context index while profiling")
+    repo_profile.add_argument("--output-file", default=None, help="Optional JSON report output path")
+    repo_profile.add_argument("--json", action="store_true", help="Emit JSON report")
+    repo_profile.add_argument("--strict", action="store_true", help="Return non-zero when domain coverage is unknown")
+
+    domain_pack = subparsers.add_parser("domain-pack", help="List or run optional domain competency packs")
+    domain_pack.add_argument("domain_action", choices=["list", "run"], help="Domain pack action")
+    domain_pack.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    domain_pack.add_argument("--pack", default=None, help="Domain pack name for `run`")
+    domain_pack.add_argument("--output-file", default=None, help="Optional JSON report output path")
+    domain_pack.add_argument("--json", action="store_true", help="Emit JSON report")
+    domain_pack.add_argument("--strict", action="store_true", help="Return non-zero unless the pack action passes")
     return parser.parse_args(argv)
 
 
@@ -1500,6 +1603,48 @@ def run_context(args: argparse.Namespace) -> int:
             print(render_context_related(report))
         return 0 if report["status"] in {"pass", "empty"} else 2
 
+    if args.action == "explain-symbol":
+        report = build_context_explain_symbol(
+            args.project_path,
+            symbol=args.symbol,
+            limit=args.limit,
+            index_file=args.index_file,
+        )
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_context_explain_symbol(report))
+        return 0 if report["status"] in {"pass", "empty"} else 2
+
+    if args.action == "active":
+        if args.active_action == "set":
+            report = write_active_context(args.project_path, file_path=args.file, selection=args.selection)
+        else:
+            report = read_active_context(args.project_path)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_active_context(report))
+        return 0 if report["status"] in {"pass", "empty"} else 2
+
+    if args.action == "mcp":
+        if args.tool:
+            tool_args = {"limit": args.limit}
+            if args.query is not None:
+                tool_args["query"] = args.query
+            if args.path is not None:
+                tool_args["path"] = args.path
+            if args.symbol is not None:
+                tool_args["symbol"] = args.symbol
+            report = build_context_mcp_tool_result(args.project_path, args.tool, tool_args)
+        else:
+            report = context_mcp_manifest(args.project_path)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_context_mcp(report) if report.get("schema_version") == "relay-kit.context-mcp.v1" else json.dumps(report, indent=2))
+        return 0 if report["status"] in {"pass", "empty"} else 2
+
     if args.action == "watch":
         report = watch_context_index(
             args.project_path,
@@ -1944,14 +2089,94 @@ def run_manifest(args: argparse.Namespace) -> int:
 
 
 def run_eval(args: argparse.Namespace) -> int:
+    if args.action == "skill-battle":
+        report = build_skill_battle(
+            args.project_path,
+            skill=args.skill,
+            suite=args.suite,
+            cleanup=args.cleanup,
+            min_score=args.min_score,
+        )
+        if args.output_file:
+            write_skill_battle(args.project_path, report, args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_skill_battle(report))
+        if args.strict and report["status"] != "pass":
+            return 2
+        return 0
+
+    if args.action == "competency-battle":
+        report = build_competency_battle(
+            args.project_path,
+            skill=args.skill,
+            suite=args.suite,
+            cleanup=args.cleanup,
+        )
+        if args.output_file:
+            write_competency_battle(args.project_path, report, args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_competency_battle(report))
+        if args.strict and report["status"] != "pass":
+            return 2
+        return 0
+
+    if args.action == "skill-weakness-report":
+        battle_report = None
+        if args.battle_file:
+            battle_report = json.loads(Path(args.battle_file).read_text(encoding="utf-8"))
+        report = build_skill_weakness_report(args.project_path, battle_report=battle_report)
+        if args.output_file:
+            write_skill_battle(args.project_path, report, args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_skill_weakness_report(report))
+        if args.strict and report["status"] != "pass":
+            return 2
+        return 0
+
     if args.action == "battle-audit":
-        report = build_battle_audit(args.project_path)
+        report = build_battle_audit(args.project_path, skill_battle_file=args.skill_battle_file)
         if args.output_file:
             write_battle_audit(args.project_path, report, args.output_file)
         if args.json:
             print(json.dumps(report, ensure_ascii=True, indent=2))
         else:
             print(render_battle_audit(report))
+        if args.strict and report["status"] != "pass":
+            return 2
+        return 0
+
+    if args.action == "repo-profile":
+        report = build_repo_profile(args.project_path, write_index=args.write_index)
+        if args.output_file:
+            write_repo_profile(args.project_path, report, args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_repo_profile(report))
+        if args.strict and report.get("unknown_domain_mode"):
+            return 2
+        return 0
+
+    if args.action == "domain-pack":
+        if args.domain_action == "list":
+            report = build_domain_pack_list(args.project_path)
+        else:
+            if not args.pack:
+                print("relay-kit eval domain-pack run requires --pack <name>")
+                return 2
+            report = run_domain_pack(args.project_path, args.pack)
+        if args.output_file:
+            write_domain_pack_report(args.project_path, report, args.output_file)
+        if args.json:
+            print(json.dumps(report, ensure_ascii=True, indent=2))
+        else:
+            print(render_domain_pack_report(report))
         if args.strict and report["status"] != "pass":
             return 2
         return 0

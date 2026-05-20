@@ -40,6 +40,7 @@ Name exactly what became clearer, what is still unknown, which sources might be 
 - Open `references/scout-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/scout-hub-good-output.md` and `examples/scout-hub-bad-output.md` to calibrate output quality.
 - Use `evals/scout-hub-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/scout-hub-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - plan-hub

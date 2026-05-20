@@ -47,6 +47,7 @@ Prepare the smallest complete context pack for the next handoff.
 - Open `references/handoff-context-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/handoff-context-good-output.md` and `examples/handoff-context-bad-output.md` to calibrate output quality.
 - Use `evals/handoff-context-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/handoff-context-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - workflow-router

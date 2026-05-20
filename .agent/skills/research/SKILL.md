@@ -45,6 +45,7 @@ Gather the minimum useful research needed for the next decision, then hand contr
 - Open `references/research-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/research-good-output.md` and `examples/research-bad-output.md` to calibrate output quality.
 - Use `evals/research-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/research-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - brainstorm-hub

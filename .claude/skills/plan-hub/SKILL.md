@@ -46,6 +46,7 @@ Route to `developer` only when the active story or tech-spec is ready for implem
 - Open `references/plan-hub-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/plan-hub-good-output.md` and `examples/plan-hub-bad-output.md` to calibrate output quality.
 - Use `evals/plan-hub-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/plan-hub-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - analyst

@@ -1,20 +1,20 @@
 # go-service-engineering Battle-Calibrated Output
 
-Request: trace a backend behavior bug from source file to test anchor without guessing from filenames only
+Request: trace a Go request from handler to service and repo, then identify context cancellation and httptest evidence before changing behavior
 
 Recommended skill: `go-service-engineering` because the request matches `go-engineering` work and has concrete repo anchors.
 
 Read first:
 
-- `src/service/session.py`
-- `src/service/retry.py`
-- `tests/test_session.py`
+- `cmd/api/main.go`
+- `internal/http/user_handler.go`
+- `internal/service/user_service_test.go`
 
 Evidence gathered:
 
-- Confirmed `SessionManager` or nearby ownership before recommending changes.
-- Checked `session` and `retry` against the relevant source path.
-- Identified `cache` as a required proof term before completion.
+- Confirmed `UserHandler` or nearby ownership before recommending changes.
+- Checked `handler boundary` and `context cancellation` against the relevant source path.
+- Identified `transaction boundary` as a required proof term before completion.
 
 Answer:
 
@@ -22,4 +22,4 @@ The safe next move is to inspect the named file path, compare it with the expect
 
 Residual risk:
 
-- `transaction boundary` remains unverified until the focused gate or benchmark hit is captured.
+- `httptest` remains unverified until the focused gate or benchmark hit is captured.

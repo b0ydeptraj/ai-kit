@@ -1,8 +1,10 @@
 # Relay-kit Docs Site
 
-This folder is the GitHub-native docs site for Relay-kit. It is meant to render cleanly as Markdown inside the repository, so teams can inspect the installer, skill catalog, context graph, prompt enhancement, and readiness gates without a separate web dashboard.
+![Relay-kit runtime skill system](assets/relay-kit-hero.svg)
 
-Start here:
+Relay-kit is a portable runtime skill system for coding agents: route the request, pull local context, apply the right skill, and prove the result before calling work done.
+
+## Start Here
 
 - [Install](install.md)
 - [Skill catalog](skill-catalog.md)
@@ -11,4 +13,13 @@ Start here:
 - [Battle benchmark](battle-benchmark.md)
 - [Readiness](readiness.md)
 
-Relay-kit is a runtime skill and governance bundle. It does not claim to be an IDE, hosted marketplace, cloud semantic indexing system, or guarantee of expertise. The value is portable skill routing, adapter generation, local evidence gates, and inspectable resources.
+## Public Story
+
+| Pillar | What to inspect |
+| --- | --- |
+| Routing | `workflow-router`, `repo-map`, prompt enhancement, ask / scout / act decisions |
+| Context | local graph index, SQLite FTS, file-symbol-test adjacency, active context |
+| Skill depth | competency catalog, good/bad examples, evals, battle cases |
+| Governance | adapter generation, manifest trust, policy guard, runtime doctor, readiness |
+
+Specialized extension packs are cataloged for completeness, but the front-door value is the core runtime: portable skill routing, local context, adapter parity, and evidence gates.

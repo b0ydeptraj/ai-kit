@@ -42,6 +42,7 @@ Build safe, measurable content reup automation for MMO operations without violat
 - Open `references/mmo-reup-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/mmo-reup-automation-good-output.md` and `examples/mmo-reup-automation-bad-output.md` to calibrate output quality.
 - Use `evals/mmo-reup-automation-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/mmo-reup-automation-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - automation-ops

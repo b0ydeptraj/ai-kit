@@ -5,6 +5,8 @@ from pathlib import Path
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS, render_skill
 
 
+ROOT = Path(__file__).resolve().parents[1]
+RESOURCE_ROOT = ROOT / "relay_kit_v3" / "skill_resources"
 MMO_MARKET_REALISM_TERMS = {
     "mmo-reup-automation": [
         "source inventory",
@@ -65,6 +67,18 @@ MMO_MARKET_REALISM_TERMS = {
 }
 
 
+MMO_OPS_LEDGER_CASE_TERMS = {
+    "mmo-reup-automation": ["source inventory", "publish queue", "dedupe", "evidence timeline"],
+    "mmo-account-operations": ["account health", "quarantine", "cooldown", "operator ledger"],
+    "mmo-browser-fleet-automation": ["session lease", "profile-to-proxy affinity", "console logs", "operator ledger"],
+    "mmo-social-marketing-automation": ["approval lane", "quota meter", "reject reason", "operator ledger"],
+    "mmo-lowcode-automation": ["node graph", "execution history", "redacted execution", "operator ledger"],
+    "mmo-mobile-app-automation": ["device lease", "logcat", "app-state", "operator ledger"],
+    "mmo-cloud-operations-automation": ["worker queue", "queue depth", "dead-letter", "pause"],
+    "mmo-http-api-automation": ["request ledger", "idempotency key", "retry count", "redacted"],
+}
+
+
 FORBIDDEN_OPERATOR_UI_SMELLS = [
     "hero layout",
     "landing page",
@@ -96,6 +110,18 @@ def test_mmo_skills_avoid_fake_dashboard_language() -> None:
             offenders[skill_name] = phrases
 
     assert offenders == {}
+
+
+def test_mmo_battle_cases_include_distinct_ops_ledger_patterns() -> None:
+    missing_by_skill: dict[str, list[str]] = {}
+    for skill_name, required_terms in MMO_OPS_LEDGER_CASE_TERMS.items():
+        cases_path = RESOURCE_ROOT / skill_name / "evals" / f"{skill_name}-cases.json"
+        cases_text = cases_path.read_text(encoding="utf-8").lower()
+        missing = [term for term in required_terms if term.lower() not in cases_text]
+        if missing:
+            missing_by_skill[skill_name] = missing
+
+    assert missing_by_skill == {}
 
 
 def test_research_note_keeps_public_source_and_safety_boundary() -> None:

@@ -1,20 +1,20 @@
 # mmo-account-operations Battle-Calibrated Output
 
-Request: review an operator-owned MMO automation lane for safety, repeatability, and evidence logging
+Request: review account health automation with profile table, proxy binding, cooldown, quarantine, and operator ledger evidence
 
 Recommended skill: `mmo-account-operations` because the request matches `mmo-account-ops` work and has concrete repo anchors.
 
 Read first:
 
 - `ops/accounts.csv`
-- `workers/session_runner.ts`
-- `logs/run-2026-05-17.json`
+- `ops/account_health.ts`
+- `docs/account-runbook.md`
 
 Evidence gathered:
 
-- Confirmed `SessionRunner` or nearby ownership before recommending changes.
-- Checked `operator queue` and `quota` against the relevant source path.
-- Identified `dedupe` as a required proof term before completion.
+- Confirmed `AccountHealth` or nearby ownership before recommending changes.
+- Checked `account health` and `quarantine` against the relevant source path.
+- Identified `cooldown` as a required proof term before completion.
 
 Answer:
 
@@ -22,4 +22,4 @@ The safe next move is to inspect the named file path, compare it with the expect
 
 Residual risk:
 
-- `recovery runbook` remains unverified until the focused gate or benchmark hit is captured.
+- `operator ledger` remains unverified until the focused gate or benchmark hit is captured.

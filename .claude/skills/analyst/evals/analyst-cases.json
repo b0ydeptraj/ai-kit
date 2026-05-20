@@ -13,11 +13,19 @@
       "pricing",
       "positioning"
     ],
+    "expected_tests": [
+      "CHANGELOG.md"
+    ],
     "expected_evidence_terms": [
       "source freshness",
       "competitor claim",
       "verified",
       "residual risk"
+    ],
+    "bad_answer_traps": [
+      "usual checklist",
+      "guess from the name",
+      "should be fine"
     ]
   },
   {
@@ -32,11 +40,49 @@
     "expected_symbols": [
       "pricing"
     ],
+    "expected_tests": [
+      "CHANGELOG.md"
+    ],
     "expected_evidence_terms": [
       "unknown",
       "decision impact",
       "read-only",
       "unverified"
+    ],
+    "bad_answer_traps": [
+      "checklist only",
+      "expert guarantee",
+      "field-tested"
+    ]
+  },
+  {
+    "id": "analyst-deep-weakness-trap",
+    "skill": "analyst",
+    "repo_profile": "deep research suite fixture with source, test, docs, and an explicit overclaim trap",
+    "task": "Score `analyst` against a deep battle case, identify weak evidence, and avoid claiming maximum strength until files, symbols, tests, and residual risk are proven.",
+    "expected_files": [
+      "README.md",
+      "docs/site/skill-catalog.md",
+      "CHANGELOG.md"
+    ],
+    "expected_symbols": [
+      "pricing",
+      "positioning"
+    ],
+    "expected_tests": [
+      "CHANGELOG.md"
+    ],
+    "expected_evidence_terms": [
+      "source freshness",
+      "decision impact",
+      "weak evidence",
+      "claim status",
+      "residual risk"
+    ],
+    "bad_answer_traps": [
+      "looks like",
+      "usual checklist",
+      "battle-max-on-suite without proof"
     ]
   }
 ]

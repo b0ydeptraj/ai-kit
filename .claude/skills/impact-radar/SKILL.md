@@ -43,6 +43,7 @@ Make change blast radius explicit before merge so gate selection is evidence-bas
 - Open `references/impact-radar-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/impact-radar-good-output.md` and `examples/impact-radar-bad-output.md` to calibrate output quality.
 - Use `evals/impact-radar-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/impact-radar-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - plan-hub

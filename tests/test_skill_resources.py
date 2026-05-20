@@ -42,18 +42,25 @@ def test_domain_skill_resources_exist_and_have_eval_cases() -> None:
         assert (skill_root / "references" / f"{skill_name}-operator-contract.md").exists(), skill_name
         assert (skill_root / "examples" / f"{skill_name}-good-output.md").exists(), skill_name
         assert (skill_root / "examples" / f"{skill_name}-bad-output.md").exists(), skill_name
+        competency_path = skill_root / "competencies" / f"{skill_name}-competencies.json"
+        competencies = json.loads(competency_path.read_text(encoding="utf-8"))
+        assert competencies["schema_version"] == "relay-kit.skill-competency.v1"
+        assert len(competencies["core_competencies"]) >= 5
+        assert len(competencies["failure_traps"]) >= 2
         cases_path = skill_root / "evals" / f"{skill_name}-cases.json"
         cases = json.loads(cases_path.read_text(encoding="utf-8"))
 
         assert isinstance(cases, list), skill_name
-        assert len(cases) >= 2, skill_name
+        assert len(cases) >= 3, skill_name
         for case in cases:
             assert case["skill"] == skill_name
             assert case["repo_profile"]
             assert case["task"]
             assert case["expected_files"]
             assert case["expected_symbols"]
+            assert case["expected_tests"]
             assert case["expected_evidence_terms"]
+            assert case["bad_answer_traps"]
             assert len(case["expected_evidence_terms"]) >= 3
 
 
@@ -81,6 +88,19 @@ def test_domain_skill_resources_copy_to_all_adapters(tmp_path: Path) -> None:
             assert (skill_root / "examples" / f"{skill_name}-good-output.md").exists()
             assert (skill_root / "examples" / f"{skill_name}-bad-output.md").exists()
             assert (skill_root / "evals" / f"{skill_name}-cases.json").exists()
+            assert (skill_root / "competencies" / f"{skill_name}-competencies.json").exists()
+            source_profile = json.loads(
+                (ROOT / "relay_kit_v3" / "skill_resources" / skill_name / "competencies" / f"{skill_name}-competencies.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            copied_profile = json.loads(
+                (skill_root / "competencies" / f"{skill_name}-competencies.json").read_text(encoding="utf-8")
+            )
+            assert copied_profile["category"] == source_profile["category"]
+            assert {item["id"] for item in copied_profile["core_competencies"]} == {
+                item["id"] for item in source_profile["core_competencies"]
+            }
 
 
 def test_all_skills_reference_their_resource_pack() -> None:
@@ -88,6 +108,7 @@ def test_all_skills_reference_their_resource_pack() -> None:
         spec = ALL_V3_SKILLS[skill_name]
         assert f"references/{skill_name}-operator-contract.md" in "\n".join(spec.references)
         assert f"evals/{skill_name}-cases.json" in "\n".join(spec.references)
+        assert f"competencies/{skill_name}-competencies.json" in "\n".join(spec.references)
 
 
 def test_hardened_domain_skills_keep_explicit_tool_stance() -> None:

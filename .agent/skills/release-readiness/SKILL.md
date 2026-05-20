@@ -44,6 +44,7 @@ Convert release confidence into concrete pre and post deploy evidence instead of
 - Open `references/release-readiness-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/release-readiness-good-output.md` and `examples/release-readiness-bad-output.md` to calibrate output quality.
 - Use `evals/release-readiness-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/release-readiness-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - test-hub

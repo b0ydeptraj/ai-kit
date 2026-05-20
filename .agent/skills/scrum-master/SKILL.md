@@ -58,6 +58,7 @@ Each story must include:
 - Open `references/scrum-master-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/scrum-master-good-output.md` and `examples/scrum-master-bad-output.md` to calibrate output quality.
 - Use `evals/scrum-master-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/scrum-master-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - developer

@@ -2,7 +2,9 @@
 
 # Relay-kit
 
-Relay-kit is a workflow operating system for teams that build with coding agents.
+![Relay-kit runtime skill system](docs/site/assets/relay-kit-hero.svg)
+
+Relay-kit is a runtime skill system for teams that build with coding agents.
 
 It does not try to make the model magically smarter. It makes the work more disciplined.
 
@@ -29,7 +31,7 @@ relay-kit doctor "C:\\path\\to\\my-app"
 ```
 
 Use one adapter flag per run. Replace `--codex` with `--claude` or `--antigravity` when that is the target agent.
-The default install is the full governance bundle. The bundle name is still `enterprise` for CLI compatibility, but the local gate proves governance coverage only; it does not prove private-registry operations, signed external release upload, paid support execution, or user field validation. Use `--baseline` only when you want the smaller first-install surface.
+The default install is the full governance bundle. The bundle name is still `enterprise` for CLI compatibility, while external release and support evidence stays in the readiness JSON instead of being folded into README claims. Use `--baseline` only when you want the smaller first-install surface.
 
 For a local repo checkout:
 
@@ -65,29 +67,20 @@ Relay-kit gives them a clear operating flow for:
 
 It makes agents behave less like improvising interns and more like engineers working inside a defined system.
 
-## Domain Skill Pack
+## Core Skill System
 
-The full governance runtime includes Relay-kit-owned domain skills:
+The public surface focuses on the skills that make Relay-kit useful in real coding work:
 
-- `go-service-engineering`
-- `next-product-frontend`
-- `growth-marketing`
-- `market-research`
-- `automation-ops`
-- `vietnamese-product-localization`
-- `mmo-reup-automation`
-- `mmo-account-operations`
-- `mmo-browser-fleet-automation`
-- `mmo-social-marketing-automation`
-- `mmo-lowcode-automation`
-- `mmo-mobile-app-automation`
-- `mmo-cloud-operations-automation`
-- `mmo-http-api-automation`
+| Runtime layer | Flagship skills | What they do |
+| --- | --- | --- |
+| Intent routing | `workflow-router`, `repo-map`, `prompt enhance` | turn vague requests into a clear ask / scout / act path with files to read first |
+| Codebase context | `context index`, `context search`, `context related`, `context explain-symbol` | find relevant paths, symbols, tests, docs, configs, call hints, and active context locally |
+| Implementation flow | `developer`, `fix-hub`, `execution-loop`, `test-first-development` | keep code changes bounded, testable, and tied to the current repo shape |
+| Debug and review | `debug-hub`, `root-cause-debugging`, `review-hub`, `qa-governor` | move from symptoms to evidence, then from evidence to a defensible verdict |
+| Engineering specialists | `api-integration`, `data-persistence`, `dependency-management`, `testing-patterns`, `go-service-engineering`, `next-product-frontend` | apply battle-tested competency patterns for common backend, frontend, dependency, and test problems |
+| Proof gates | `policy-guard`, `runtime-doctor`, `skill-gauntlet`, `readiness check`, `skill-battle`, `competency-battle` | verify generated adapters, skill behavior, local governance, and claim boundaries |
 
-These names and contracts are Relay-kit-owned and are not copied from external kits.
-Vietnamese support remains explicit/opt-in; use one global locale switch when you want runtime-wide language enforcement.
-Reference note for MMO automation sources:
-- [`docs/relay-kit-mmo-automation-references.md`](docs/relay-kit-mmo-automation-references.md)
+Specialized extension packs exist, but they are not the front-door story. The catalog keeps them separate from the core runtime surface so the public README highlights Relay-kit's strongest value: routing, context, battle proof, and adapter governance.
 
 ## Global Locale Switch
 
@@ -123,10 +116,11 @@ relay-kit init /path/to/project --codex --locale vi
 - explicit `relay-engineer` and `relay-growth` agent profiles with deterministic surfaces for `.relay-kit`, `.claude`, `.codex`, and `.agent`
 - an `agent diagnose` gate for strict profile parity and profile-contract drift
 - a `query search` utility for ranked lookup across state, contracts, docs, evidence, and registry sources
-- a local `context index/search/related` graph for file, symbol, import, docs, config, and nearby-test hints without API keys
-- hybrid local context hints for chunks, call graph hints, and git history hints, with optional local embedding support via `relay-kit[context]`
+- a local `context index/search/related/explain-symbol` engine for file, symbol, import, docs, config, nearby-test, active-context, and SQLite FTS hints without API keys
+- hybrid local context hints for chunks, call graph hints, git history hints, and MCP-style local tools, with optional local embedding and tree-sitter support via `relay-kit[context]`
 - a `prompt enhance` utility that turns short or vague user requests into skill-aware working guidance and uses the local context graph when it exists
-- `battle-audit` and `battle-benchmark` gates for finding generic skill resources and testing read-only public repo retrieval quality
+- `battle-audit`, `battle-benchmark`, `skill-battle`, and `competency-battle` gates for finding generic skill resources, testing read-only public repo retrieval quality, and scoring each skill by competency evidence
+- a local `repo-profile` classifier that maps a repo to archetypes such as backend API, frontend app, CLI tool, automation worker, database-heavy, security/policy, docs/product, library core, or test runner
 - a `service boundaries` gate for checking module ownership and static dependency rules
 - a `release-readiness` utility for pre/post deploy smoke gates and rollback signals
 - an `accessibility-review` gate so frontend quality is not only visual
@@ -162,7 +156,7 @@ relay-kit upgrade mark-current /path/to/project --adapter all
 relay-kit readiness check /path/to/project --profile enterprise
 ```
 
-The readiness verdict for a clean local run is `local-governance-ready-candidate`. External evidence remains separate and is reported as missing until remote CI, release upload, paid support operation, and user or field validation are attached.
+The readiness verdict for a clean local run is `local-governance-ready-candidate`. Attach remote CI, release, support, and user-validation evidence to the readiness output when those proofs exist.
 
 Run the support gate:
 
@@ -197,13 +191,17 @@ Prove skill behavior beyond routing claims:
 relay-kit eval real-world /path/to/project --strict --json
 relay-kit proof audit /path/to/project --strict --json
 relay-kit eval battle-audit /path/to/project --strict --json
-relay-kit eval battle-benchmark /path/to/project --suite curated --cleanup --json
+relay-kit eval battle-benchmark /path/to/project --suite deep --cleanup --json
+relay-kit eval skill-battle /path/to/project --skill all --suite deep --cleanup --json
+relay-kit eval competency-battle /path/to/project --skill all --suite core --json
+relay-kit eval repo-profile /path/to/project --json
+relay-kit eval domain-pack list /path/to/project --json
+relay-kit eval skill-weakness-report /path/to/project --json
 ```
 
-`eval real-world` requires practical fixture coverage for every registered skill. It is not a field-tested deployment claim; `proof audit` keeps `field-tested` at zero until explicit field evidence is recorded.
-`battle-benchmark` adds public-repo benchmark evidence from safe read-only clones. It does not install dependencies, build, test, run foreign scripts, claim field-tested/user proof, or claim parity with Augment-style hosted context engines.
+`eval real-world`, `battle-benchmark`, `skill-battle`, and `competency-battle` are evidence gates, not marketing badges. They check whether Relay-kit can find the right files, symbols, tests, evidence terms, competency patterns, and overclaim traps in the current suite.
 
-MMO/API skills are guarded by public ecosystem realism checks. They must model dense operator workflows such as profile inventories, bulk actions, session/proxy affinity, run queues, redacted request ledgers, queue health, live debug evidence, and manual review gates; see `docs/relay-kit-mmo-api-realism-research.md`.
+The clean local readiness verdict is `local-governance-ready-candidate`. External release evidence stays separate in machine-readable readiness output, so the README can stay focused on what Relay-kit actually ships: local routing, context, skills, adapters, and proof gates.
 
 Audit lane coordination before trusting parallel work:
 

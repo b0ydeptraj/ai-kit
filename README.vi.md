@@ -2,9 +2,11 @@
 
 # Relay-kit
 
-Relay-kit là hệ điều hành quy trình cho các team xây dựng bằng coding agent.
+![Hệ thống runtime skill của Relay-kit](docs/site/assets/relay-kit-hero.svg)
 
-Nó không cố làm model "thông minh thần kỳ" hơn. Nó làm cách làm việc có kỷ luật hơn: khởi động rõ hơn, dùng skill có hợp đồng hơn, plan/build/debug/review chặt hơn, và giữ bằng chứng trong artifact thay vì chỉ nằm trong chat.
+Relay-kit là hệ thống runtime skill cho các team xây dựng bằng coding agent.
+
+Nó không cố làm model “thông minh thần kỳ” hơn. Nó làm cách làm việc có kỷ luật hơn: khởi động rõ hơn, dùng skill có hợp đồng hơn, plan/build/debug/review chặt hơn, và giữ bằng chứng trong artifact thay vì chỉ nằm trong chat.
 
 ## Cài nhanh
 
@@ -17,7 +19,7 @@ relay-kit doctor "C:\\path\\to\\my-app"
 
 Mỗi lần chạy chỉ chọn một adapter: `--codex`, `--claude`, hoặc `--antigravity`. Có thể dùng `--all` khi muốn sinh cả ba surface.
 
-Mặc định Relay-kit cài full governance bundle. Tên bundle vẫn là `enterprise` để giữ tương thích CLI, nhưng local gate chỉ chứng minh độ phủ governance tại máy: chưa chứng minh private registry, upload release đã ký, vận hành paid support, hoặc user/field validation. Dùng `--baseline` nếu muốn surface nhỏ hơn.
+Mặc định Relay-kit cài full governance bundle. Tên bundle vẫn là `enterprise` để giữ tương thích CLI, còn bằng chứng release/support bên ngoài được tách vào readiness JSON thay vì biến thành claim trên README. Dùng `--baseline` nếu muốn surface nhỏ hơn.
 
 ## Vì sao dùng Relay-kit
 
@@ -26,7 +28,7 @@ Workflow agent thường hỏng ở các điểm giống nhau:
 - bắt đầu làm khi vấn đề còn mơ hồ
 - implementation lệch khỏi hướng đã chốt
 - bug bị vá tạm mà không tìm nguyên nhân gốc
-- "done" được claim trước khi có đủ bằng chứng
+- “done” được claim trước khi có đủ bằng chứng
 
 Relay-kit chặn các điểm đó bằng routing, skill contracts, state chung, readiness gates, và proof audit.
 
@@ -37,31 +39,26 @@ Relay-kit chặn các điểm đó bằng routing, skill contracts, state chung,
 - `memory-search` để tìm lại quyết định và handoff cũ
 - `context audit`, `lane audit`, `adapter diagnose`, `command diagnose`, và `agent diagnose`
 - `release-readiness`, `accessibility-review`, `skill-gauntlet`, và `context-continuity`
-- local context graph cho path, symbol, import, test, docs, chunk, call hint, và git history hint mà không cần API key
-- `battle-audit` và `battle-benchmark` để bắt resource còn generic và đo chất lượng tìm context trên repo public ở chế độ chỉ đọc
+- local context engine cho path, symbol, import, test, docs, chunk, call hint, git history, SQLite FTS, active context, và MCP local mà không cần API key
+- `battle-audit`, `battle-benchmark`, `skill-battle`, và `competency-battle` để bắt resource còn generic, đo chất lượng tìm context, và chấm điểm từng skill theo competency evidence
+- `repo-profile` để phân loại repo theo archetype như backend API, frontend app, CLI tool, automation worker, database-heavy, security/policy, docs/product, library core, hoặc test runner
 - `readiness check` cho local governance proof
 - Pulse report và signal export để review chất lượng
 
-## Domain Skill Pack
+## Hệ thống skill cốt lõi
 
-Full governance runtime có các domain skill do Relay-kit sở hữu:
+Mặt tiền public nên nói về phần Relay-kit mạnh nhất: routing, context, battle proof, adapter governance, và readiness gate.
 
-- `go-service-engineering`
-- `next-product-frontend`
-- `growth-marketing`
-- `market-research`
-- `automation-ops`
-- `vietnamese-product-localization`
-- `mmo-reup-automation`
-- `mmo-account-operations`
-- `mmo-browser-fleet-automation`
-- `mmo-social-marketing-automation`
-- `mmo-lowcode-automation`
-- `mmo-mobile-app-automation`
-- `mmo-cloud-operations-automation`
-- `mmo-http-api-automation`
+| Lớp runtime | Skill / lệnh nổi bật | Việc nó làm |
+| --- | --- | --- |
+| Định tuyến intent | `workflow-router`, `repo-map`, `prompt enhance` | biến yêu cầu ngắn hoặc mơ hồ thành hướng ask / scout / act rõ ràng, kèm file cần đọc trước |
+| Hiểu codebase local | `context index`, `context search`, `context related`, `context explain-symbol` | tìm path, symbol, test, docs, config, call hint, và active context ngay trong máy, không cần API key |
+| Triển khai code | `developer`, `fix-hub`, `execution-loop`, `test-first-development` | giữ thay đổi gọn, có test, và bám vào cấu trúc repo thật |
+| Debug và review | `debug-hub`, `root-cause-debugging`, `review-hub`, `qa-governor` | đi từ triệu chứng sang bằng chứng, rồi từ bằng chứng sang verdict rõ ràng |
+| Chuyên môn kỹ thuật | `api-integration`, `data-persistence`, `dependency-management`, `testing-patterns`, `go-service-engineering`, `next-product-frontend` | áp dụng competency pattern đã battle-test cho backend, frontend, dependency, và testing |
+| Proof gate | `policy-guard`, `runtime-doctor`, `skill-gauntlet`, `readiness check`, `skill-battle`, `competency-battle` | kiểm adapter, skill behavior, governance local, và giới hạn claim |
 
-Các skill này có contract riêng và không được copy nguyên xi từ kit bên ngoài. Các skill domain đang được mở rộng bằng `references/`, `examples/`, và `evals/`; chỉ thêm script khi có hành vi deterministic thật.
+Các extension pack chuyên biệt vẫn có trong catalog kỹ thuật, nhưng không phải câu chuyện chính ở README. Trang đầu phải làm người đọc thấy Relay-kit là runtime skill system có kỷ luật, không phải một danh sách skill rời rạc.
 
 ## Lệnh hữu ích
 
@@ -75,20 +72,40 @@ relay-kit upgrade mark-current /path/to/project --adapter all
 relay-kit readiness check /path/to/project --profile enterprise --json
 ```
 
-Khi local gate sạch, verdict là `local-governance-ready-candidate`. Trạng thái external evidence vẫn là `missing` cho tới khi có remote CI, release upload, paid support operation, và user hoặc field validation.
+Khi local gate sạch, verdict là `local-governance-ready-candidate`. Khi có bằng chứng remote CI, release, support, hoặc user validation thì gắn vào readiness output.
 
-Prove skill behavior:
+## Prove skill behavior
 
 ```bash
 relay-kit eval real-world /path/to/project --strict --json
 relay-kit proof audit /path/to/project --strict --json
 relay-kit eval battle-audit /path/to/project --strict --json
-relay-kit eval battle-benchmark /path/to/project --suite curated --cleanup --json
+relay-kit eval battle-benchmark /path/to/project --suite deep --cleanup --json
+relay-kit eval skill-battle /path/to/project --skill all --suite deep --cleanup --json
+relay-kit eval competency-battle /path/to/project --skill all --suite core --json
+relay-kit eval repo-profile /path/to/project --json
+relay-kit eval domain-pack list /path/to/project --json
+relay-kit eval skill-weakness-report /path/to/project --json
 ```
 
-`battle-benchmark` tạo public-repo benchmark evidence bằng clone tạm an toàn: không install, không build, không test, không chạy script của repo ngoài. Đây không phải user proof, field validation proof, hoặc claim ngang context engine thương mại.
+`eval real-world`, `battle-benchmark`, `skill-battle`, và `competency-battle` là evidence gate, không phải badge marketing. Chúng kiểm tra Relay-kit có tìm đúng file, symbol, test, evidence term, competency pattern, và overclaim trap trong suite hiện tại hay không.
 
-Runtime utility wrappers:
+Verdict local sạch là `local-governance-ready-candidate`. Bằng chứng release bên ngoài được tách vào output readiness dạng máy đọc, để README tập trung vào thứ Relay-kit thật sự ship: routing, context, skill, adapter, và proof gate local.
+
+## Local context engine
+
+```bash
+relay-kit context index /path/to/project
+relay-kit context search /path/to/project --query "login"
+relay-kit context related /path/to/project --path src/auth/LoginForm.tsx
+relay-kit context explain-symbol /path/to/project --symbol login
+relay-kit context active set /path/to/project --file src/auth/LoginForm.tsx --selection "submit handler"
+relay-kit context mcp /path/to/project --list-tools
+```
+
+Base install chạy local bằng JSON + SQLite FTS + lexical/graph scoring. Optional `relay-kit[context]` có thể thêm `fastembed` và `tree-sitter`, nhưng không bắt buộc và không dùng API trả phí.
+
+## Runtime utility wrappers
 
 ```bash
 relay-kit runtime doctor /path/to/project --strict
@@ -115,6 +132,7 @@ relay-kit migration guard /path/to/project --strict
 
 ## Tài liệu sâu hơn
 
+- [`docs/site/index.md`](docs/site/index.md)
 - [`docs/public-docs-index.md`](docs/public-docs-index.md)
 - [`docs/relay-kit-start-flow.md`](docs/relay-kit-start-flow.md)
 - [`docs/relay-kit-review-flow.md`](docs/relay-kit-review-flow.md)

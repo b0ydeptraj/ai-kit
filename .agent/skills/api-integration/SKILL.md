@@ -44,6 +44,7 @@ Cover:
 - Open `references/api-integration-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/api-integration-good-output.md` and `examples/api-integration-bad-output.md` to calibrate output quality.
 - Use `evals/api-integration-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/api-integration-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - architect

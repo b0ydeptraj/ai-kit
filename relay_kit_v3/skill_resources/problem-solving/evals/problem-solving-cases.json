@@ -84,36 +84,5 @@
       "usual checklist",
       "battle-max-on-suite without proof"
     ]
-  },
-  {
-    "id": "problem-solving-constraint-reconciliation",
-    "skill": "problem-solving",
-    "repo_profile": "real-world operations task with conflicting artifacts, counts, ordering, and user workflow cues",
-    "task": "Explain a mismatch between two artifact lists where the strict diff says many items are missing, but the user's process cues and leftover counts imply a smaller workflow-level correction. Use `problem-solving` to compare models before recommending the next action.",
-    "expected_files": [
-      "source artifact",
-      "observed state",
-      "user process notes"
-    ],
-    "expected_symbols": [
-      "strict comparison model",
-      "workflow constraint model"
-    ],
-    "expected_tests": [
-      "cheapest disproof check"
-    ],
-    "expected_evidence_terms": [
-      "competing models",
-      "counts",
-      "ordering",
-      "workflow cues",
-      "constraints",
-      "residual risk"
-    ],
-    "bad_answer_traps": [
-      "set-diff only",
-      "first extraction is final",
-      "ignore the user's process"
-    ]
   }
 ]

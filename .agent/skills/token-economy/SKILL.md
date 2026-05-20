@@ -48,6 +48,7 @@ Reduce context cost without reducing execution signal quality.
 - Open `references/token-economy-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/token-economy-good-output.md` and `examples/token-economy-bad-output.md` to calibrate output quality.
 - Use `evals/token-economy-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/token-economy-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - workflow-router

@@ -42,6 +42,7 @@ Run MMO cloud automation at scale with resilient retries, safe concurrency, and 
 - Open `references/mmo-cloud-operations-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/mmo-cloud-operations-automation-good-output.md` and `examples/mmo-cloud-operations-automation-bad-output.md` to calibrate output quality.
 - Use `evals/mmo-cloud-operations-automation-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/mmo-cloud-operations-automation-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - automation-ops

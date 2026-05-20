@@ -49,6 +49,7 @@ Turn a messy question into a short sequence of evidence-backed steps.
 - Open `references/sequential-thinking-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/sequential-thinking-good-output.md` and `examples/sequential-thinking-bad-output.md` to calibrate output quality.
 - Use `evals/sequential-thinking-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/sequential-thinking-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - debug-hub

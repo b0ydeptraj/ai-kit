@@ -60,6 +60,14 @@ Role specialists, native support skills, and domain standalones that actually pr
 - market-research
 - automation-ops
 - vietnamese-product-localization
+- mmo-reup-automation
+- mmo-account-operations
+- mmo-browser-fleet-automation
+- mmo-social-marketing-automation
+- mmo-lowcode-automation
+- mmo-mobile-app-automation
+- mmo-cloud-operations-automation
+- mmo-http-api-automation
 - execution-loop
 - project-architecture
 - dependency-management

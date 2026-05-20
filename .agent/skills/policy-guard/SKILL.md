@@ -43,6 +43,7 @@ Fail closed on deterministic high-risk agent operation patterns before they reac
 - Open `references/policy-guard-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/policy-guard-good-output.md` and `examples/policy-guard-bad-output.md` to calibrate output quality.
 - Use `evals/policy-guard-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/policy-guard-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - qa-governor

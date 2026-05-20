@@ -44,6 +44,7 @@ Protect routing quality by detecting skill drift early instead of waiting for be
 - Open `references/skill-gauntlet-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/skill-gauntlet-good-output.md` and `examples/skill-gauntlet-bad-output.md` to calibrate output quality.
 - Use `evals/skill-gauntlet-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/skill-gauntlet-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - review-hub

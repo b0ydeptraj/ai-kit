@@ -81,6 +81,7 @@ Never end with vague advice. Always name the next skill, the artifact it should 
 - Open `references/workflow-router-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/workflow-router-good-output.md` and `examples/workflow-router-bad-output.md` to calibrate output quality.
 - Use `evals/workflow-router-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/workflow-router-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - bootstrap

@@ -50,6 +50,7 @@ Translate visual or media evidence into concrete observations the active lane ca
 - Open `references/multimodal-evidence-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/multimodal-evidence-good-output.md` and `examples/multimodal-evidence-bad-output.md` to calibrate output quality.
 - Use `evals/multimodal-evidence-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/multimodal-evidence-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - debug-hub

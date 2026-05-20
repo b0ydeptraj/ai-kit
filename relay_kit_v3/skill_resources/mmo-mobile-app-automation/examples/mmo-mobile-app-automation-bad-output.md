@@ -1,6 +1,6 @@
 # mmo-mobile-app-automation Weak Output Anti-Example
 
-Request: review an operator-owned MMO automation lane for safety, repeatability, and evidence logging
+Request: review mobile automation with device inventory, hub, provider, lease owner, logcat, and app-state recovery evidence
 
 Weak answer:
 
@@ -8,9 +8,9 @@ This looks like `mmo-mobile-app-automation`, so follow the usual checklist and i
 
 Why this fails:
 
-- No file path from `operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails` was inspected.
-- No symbol such as `SessionRunner` was confirmed.
-- No proof surface was named for `operator queue`.
+- No file path from `operator-owned mobile automation repo with device inventory, hub/provider mapping, device lease, logcat, and app-state recovery` was inspected.
+- No symbol such as `DeviceLease` was confirmed.
+- No proof surface was named for `device lease`.
 - It blurs verified evidence and inference, which is exactly how overclaim slips back into Relay-kit.
 
 Correction:

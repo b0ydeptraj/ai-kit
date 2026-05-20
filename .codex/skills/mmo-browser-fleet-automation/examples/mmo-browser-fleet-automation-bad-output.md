@@ -1,6 +1,6 @@
 # mmo-browser-fleet-automation Weak Output Anti-Example
 
-Request: review an operator-owned MMO automation lane for safety, repeatability, and evidence logging
+Request: review browser fleet automation for profile-to-proxy affinity, session lease, live debug, screenshot, and console log evidence
 
 Weak answer:
 
@@ -8,9 +8,9 @@ This looks like `mmo-browser-fleet-automation`, so follow the usual checklist an
 
 Why this fails:
 
-- No file path from `operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails` was inspected.
-- No symbol such as `SessionRunner` was confirmed.
-- No proof surface was named for `operator queue`.
+- No file path from `operator-owned browser fleet repo with profile inventory, proxy affinity, session lease, screenshot, and console logs` was inspected.
+- No symbol such as `SessionLease` was confirmed.
+- No proof surface was named for `session lease`.
 - It blurs verified evidence and inference, which is exactly how overclaim slips back into Relay-kit.
 
 Correction:

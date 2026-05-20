@@ -1,6 +1,6 @@
 # mmo-account-operations Weak Output Anti-Example
 
-Request: review an operator-owned MMO automation lane for safety, repeatability, and evidence logging
+Request: review account health automation with profile table, proxy binding, cooldown, quarantine, and operator ledger evidence
 
 Weak answer:
 
@@ -8,9 +8,9 @@ This looks like `mmo-account-operations`, so follow the usual checklist and it s
 
 Why this fails:
 
-- No file path from `operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails` was inspected.
-- No symbol such as `SessionRunner` was confirmed.
-- No proof surface was named for `operator queue`.
+- No file path from `operator-owned account operations repo with account inventory, health scoring, cooldown windows, and quarantine ledger` was inspected.
+- No symbol such as `AccountHealth` was confirmed.
+- No proof surface was named for `account health`.
 - It blurs verified evidence and inference, which is exactly how overclaim slips back into Relay-kit.
 
 Correction:

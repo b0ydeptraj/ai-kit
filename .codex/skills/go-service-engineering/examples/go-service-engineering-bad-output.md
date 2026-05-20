@@ -1,6 +1,6 @@
 # go-service-engineering Weak Output Anti-Example
 
-Request: trace a backend behavior bug from source file to test anchor without guessing from filenames only
+Request: trace a Go request from handler to service and repo, then identify context cancellation and httptest evidence before changing behavior
 
 Weak answer:
 
@@ -8,9 +8,9 @@ This looks like `go-service-engineering`, so follow the usual checklist and it s
 
 Why this fails:
 
-- No file path from `public Python service repo with serializer, retry, cache, and session tests` was inspected.
-- No symbol such as `SessionManager` was confirmed.
-- No proof surface was named for `session`.
+- No file path from `public Go API service with handler, service, repository, middleware, and httptest coverage` was inspected.
+- No symbol such as `UserHandler` was confirmed.
+- No proof surface was named for `handler boundary`.
 - It blurs verified evidence and inference, which is exactly how overclaim slips back into Relay-kit.
 
 Correction:

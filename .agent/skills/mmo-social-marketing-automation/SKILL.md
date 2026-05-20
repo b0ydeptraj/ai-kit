@@ -41,6 +41,7 @@ Execute social MMO automation that can scale marketing outcomes without crossing
 - Open `references/mmo-social-marketing-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/mmo-social-marketing-automation-good-output.md` and `examples/mmo-social-marketing-automation-bad-output.md` to calibrate output quality.
 - Use `evals/mmo-social-marketing-automation-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/mmo-social-marketing-automation-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - growth-marketing

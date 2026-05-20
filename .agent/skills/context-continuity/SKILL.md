@@ -43,6 +43,7 @@ Preserve lane continuity with explicit artifacts so the next session can continu
 - Open `references/context-continuity-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/context-continuity-good-output.md` and `examples/context-continuity-bad-output.md` to calibrate output quality.
 - Use `evals/context-continuity-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/context-continuity-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - workflow-router

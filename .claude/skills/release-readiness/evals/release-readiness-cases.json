@@ -13,11 +13,19 @@
       "main",
       "build_report"
     ],
+    "expected_tests": [
+      "docs/site/readiness.md"
+    ],
     "expected_evidence_terms": [
       "dry run",
       "rollback",
       "verified",
       "residual risk"
+    ],
+    "bad_answer_traps": [
+      "usual checklist",
+      "guess from the name",
+      "should be fine"
     ]
   },
   {
@@ -32,11 +40,49 @@
     "expected_symbols": [
       "main"
     ],
+    "expected_tests": [
+      "docs/site/readiness.md"
+    ],
     "expected_evidence_terms": [
       "workflow log",
       "idempotency",
       "read-only",
       "unverified"
+    ],
+    "bad_answer_traps": [
+      "checklist only",
+      "expert guarantee",
+      "field-tested"
+    ]
+  },
+  {
+    "id": "release-readiness-deep-weakness-trap",
+    "skill": "release-readiness",
+    "repo_profile": "deep ops suite fixture with source, test, docs, and an explicit overclaim trap",
+    "task": "Score `release-readiness` against a deep battle case, identify weak evidence, and avoid claiming maximum strength until files, symbols, tests, and residual risk are proven.",
+    "expected_files": [
+      ".github/workflows/validate-runtime.yml",
+      "scripts/runtime_doctor.py",
+      "docs/site/readiness.md"
+    ],
+    "expected_symbols": [
+      "main",
+      "build_report"
+    ],
+    "expected_tests": [
+      "docs/site/readiness.md"
+    ],
+    "expected_evidence_terms": [
+      "dry run",
+      "idempotency",
+      "weak evidence",
+      "claim status",
+      "residual risk"
+    ],
+    "bad_answer_traps": [
+      "looks like",
+      "usual checklist",
+      "battle-max-on-suite without proof"
     ]
   }
 ]

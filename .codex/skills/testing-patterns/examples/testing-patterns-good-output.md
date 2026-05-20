@@ -1,20 +1,20 @@
 # testing-patterns Battle-Calibrated Output
 
-Request: audit a Relay-kit runtime change and prove the generated surfaces are still synchronized
+Request: design the test strategy for a checkout regression, choosing fixture/factory, mock versus integration, and flake controls by risk
 
 Recommended skill: `testing-patterns` because the request matches `quality-support` work and has concrete repo anchors.
 
 Read first:
 
-- `relay_kit_public_cli.py`
-- `relay_kit_v3/registry/skills.py`
-- `tests/test_skill_resources.py`
+- `tests/fixtures/user_factory.py`
+- `tests/integration/test_checkout.py`
+- `tests/e2e/test_checkout_flow.py`
 
 Evidence gathered:
 
-- Confirmed `main` or nearby ownership before recommending changes.
-- Checked `adapter surface` and `readiness gate` against the relevant source path.
-- Identified `generated skill` as a required proof term before completion.
+- Confirmed `user_factory` or nearby ownership before recommending changes.
+- Checked `fixture` and `factory` against the relevant source path.
+- Identified `integration boundary` as a required proof term before completion.
 
 Answer:
 
@@ -22,4 +22,4 @@ The safe next move is to inspect the named file path, compare it with the expect
 
 Residual risk:
 
-- `strict evidence` remains unverified until the focused gate or benchmark hit is captured.
+- `flake` remains unverified until the focused gate or benchmark hit is captured.

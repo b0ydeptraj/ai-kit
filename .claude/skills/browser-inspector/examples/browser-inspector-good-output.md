@@ -1,20 +1,20 @@
 # browser-inspector Battle-Calibrated Output
 
-Request: audit a Relay-kit runtime change and prove the generated surfaces are still synchronized
+Request: inspect a browser login runtime issue with console, network, DOM state, screenshot, and reproduction trace evidence
 
 Recommended skill: `browser-inspector` because the request matches `utility-provider` work and has concrete repo anchors.
 
 Read first:
 
-- `relay_kit_public_cli.py`
-- `relay_kit_v3/registry/skills.py`
-- `tests/test_skill_resources.py`
+- `src/app/login/page.tsx`
+- `tests/e2e/login.spec.ts`
+- `artifacts/login-screenshot.md`
 
 Evidence gathered:
 
-- Confirmed `main` or nearby ownership before recommending changes.
-- Checked `adapter surface` and `readiness gate` against the relevant source path.
-- Identified `generated skill` as a required proof term before completion.
+- Confirmed `LoginPage` or nearby ownership before recommending changes.
+- Checked `console` and `network` against the relevant source path.
+- Identified `dom` as a required proof term before completion.
 
 Answer:
 
@@ -22,4 +22,4 @@ The safe next move is to inspect the named file path, compare it with the expect
 
 Residual risk:
 
-- `strict evidence` remains unverified until the focused gate or benchmark hit is captured.
+- `screenshot` remains unverified until the focused gate or benchmark hit is captured.

@@ -40,10 +40,13 @@ def test_short_bug_prompt_routes_to_debug_without_overconfidence(tmp_path: Path)
     assert report["read_first"]
     assert report["evidence_required"]
     assert report["context_index_status"] == "missing"
+    assert report["domain_coverage"] == "unknown"
+    assert report["unknown_domain_mode"] is True
     text = combined_text(report)
     assert "reproduction" in text
     assert "root-cause" in text
     assert "not a semantic context engine" in text
+    assert "domain coverage" in text
 
 
 def test_short_bug_prompt_includes_context_graph_hits_when_index_exists(tmp_path: Path) -> None:
@@ -56,6 +59,7 @@ def test_short_bug_prompt_includes_context_graph_hits_when_index_exists(tmp_path
 
     assert report["recommended_skill"] == "debug-hub"
     assert report["context_index_status"] == "available"
+    assert report["repo_profile"]["domain_coverage"] == "known-archetype"
     hit_paths = {hit["path"] for hit in report["context_hits"]}
     assert "src/auth/LoginForm.tsx" in hit_paths
     assert "src/auth/authService.ts" in hit_paths
@@ -69,8 +73,19 @@ def test_vague_deictic_prompt_asks_one_question(tmp_path: Path) -> None:
 
     assert report["recommended_skill"] == "review-hub"
     assert report["ask_or_act"] == "ask_one_question"
+    assert report["domain_coverage"] == "unknown"
     assert "missing_context_question" in report
     assert "Which file" in str(report["missing_context_question"])
+
+
+def test_read_only_code_mapping_does_not_route_to_developer(tmp_path: Path) -> None:
+    report = build_prompt_enhancement(
+        tmp_path,
+        prompt="map command parsing architecture and test anchors without running code",
+    )
+
+    assert report["recommended_skill"] == "scout-hub"
+    assert report["ask_or_act"] == "scout_first"
 
 
 def test_prompt_enhance_scenarios_cover_short_real_prompts(tmp_path: Path) -> None:

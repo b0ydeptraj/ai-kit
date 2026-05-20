@@ -41,6 +41,7 @@ Deliver Go service work the way a backend owner would review it: boundaries firs
 - Open `references/go-service-engineering-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/go-service-engineering-good-output.md` and `examples/go-service-engineering-bad-output.md` to calibrate output quality.
 - Use `evals/go-service-engineering-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/go-service-engineering-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - developer

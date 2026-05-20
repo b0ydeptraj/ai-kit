@@ -2,22 +2,32 @@
   {
     "id": "mmo-account-operations-battle-read-first",
     "skill": "mmo-account-operations",
-    "repo_profile": "operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails",
-    "task": "review an operator-owned MMO automation lane for safety, repeatability, and evidence logging Use `mmo-account-operations` and cite the first files before advice.",
+    "repo_profile": "operator-owned account operations repo with account inventory, health scoring, cooldown windows, and quarantine ledger",
+    "task": "review account health automation with profile table, proxy binding, cooldown, quarantine, and operator ledger evidence Use `mmo-account-operations` and cite the first files before advice.",
     "expected_files": [
       "ops/accounts.csv",
-      "workers/session_runner.ts",
-      "logs/run-2026-05-17.json"
+      "ops/account_health.ts",
+      "logs/account-health.json"
     ],
     "expected_symbols": [
-      "SessionRunner",
-      "AccountHealth"
+      "AccountHealth",
+      "quarantineAccount"
+    ],
+    "expected_tests": [
+      "docs/account-runbook.md"
     ],
     "expected_evidence_terms": [
-      "operator queue",
-      "quota",
+      "account health",
+      "quarantine",
       "verified",
       "residual risk"
+    ],
+    "bad_answer_traps": [
+      "bulk action without health score",
+      "proxy binding ignored",
+      "usual checklist",
+      "guess from the name",
+      "should be fine"
     ]
   },
   {
@@ -27,16 +37,59 @@
     "task": "Run a read-only battle benchmark style review for `mmo-account-operations` and explain what evidence is still missing.",
     "expected_files": [
       "ops/accounts.csv",
-      "logs/run-2026-05-17.json"
+      "docs/account-runbook.md"
     ],
     "expected_symbols": [
-      "SessionRunner"
+      "AccountHealth"
+    ],
+    "expected_tests": [
+      "docs/account-runbook.md"
     ],
     "expected_evidence_terms": [
-      "dedupe",
-      "recovery runbook",
+      "cooldown",
+      "operator ledger",
       "read-only",
       "unverified"
+    ],
+    "bad_answer_traps": [
+      "proxy binding ignored",
+      "manual review skipped",
+      "checklist only",
+      "expert guarantee",
+      "field-tested"
+    ]
+  },
+  {
+    "id": "mmo-account-operations-deep-weakness-trap",
+    "skill": "mmo-account-operations",
+    "repo_profile": "deep mmo-account-health suite fixture with source, test, docs, and an explicit overclaim trap",
+    "task": "Score `mmo-account-operations` against a deep battle case, identify weak evidence, and avoid claiming maximum strength until files, symbols, tests, and residual risk are proven.",
+    "expected_files": [
+      "ops/accounts.csv",
+      "ops/account_health.ts",
+      "docs/account-runbook.md"
+    ],
+    "expected_symbols": [
+      "AccountHealth",
+      "quarantineAccount"
+    ],
+    "expected_tests": [
+      "docs/account-runbook.md"
+    ],
+    "expected_evidence_terms": [
+      "account health",
+      "operator ledger",
+      "weak evidence",
+      "claim status",
+      "residual risk"
+    ],
+    "bad_answer_traps": [
+      "bulk action without health score",
+      "proxy binding ignored",
+      "manual review skipped",
+      "looks like",
+      "usual checklist",
+      "battle-max-on-suite without proof"
     ]
   }
 ]

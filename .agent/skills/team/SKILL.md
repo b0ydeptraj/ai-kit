@@ -48,6 +48,7 @@ Coordinate parallel work while preserving one authoritative source of truth for 
 - Open `references/team-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/team-good-output.md` and `examples/team-bad-output.md` to calibrate output quality.
 - Use `evals/team-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/team-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - cook

@@ -44,6 +44,7 @@ Cover:
 - Open `references/project-architecture-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/project-architecture-good-output.md` and `examples/project-architecture-bad-output.md` to calibrate output quality.
 - Use `evals/project-architecture-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/project-architecture-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - architect

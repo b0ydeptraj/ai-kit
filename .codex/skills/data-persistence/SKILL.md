@@ -44,6 +44,7 @@ Cover:
 - Open `references/data-persistence-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/data-persistence-good-output.md` and `examples/data-persistence-bad-output.md` to calibrate output quality.
 - Use `evals/data-persistence-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/data-persistence-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - architect

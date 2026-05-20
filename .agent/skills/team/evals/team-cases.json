@@ -13,11 +13,19 @@
       "main",
       "SkillSpec"
     ],
+    "expected_tests": [
+      "tests/test_skill_resources.py"
+    ],
     "expected_evidence_terms": [
       "adapter surface",
       "readiness gate",
       "verified",
       "residual risk"
+    ],
+    "bad_answer_traps": [
+      "usual checklist",
+      "guess from the name",
+      "should be fine"
     ]
   },
   {
@@ -32,11 +40,49 @@
     "expected_symbols": [
       "main"
     ],
+    "expected_tests": [
+      "tests/test_skill_resources.py"
+    ],
     "expected_evidence_terms": [
       "generated skill",
       "strict evidence",
       "read-only",
       "unverified"
+    ],
+    "bad_answer_traps": [
+      "checklist only",
+      "expert guarantee",
+      "field-tested"
+    ]
+  },
+  {
+    "id": "team-deep-weakness-trap",
+    "skill": "team",
+    "repo_profile": "deep relay suite fixture with source, test, docs, and an explicit overclaim trap",
+    "task": "Score `team` against a deep battle case, identify weak evidence, and avoid claiming maximum strength until files, symbols, tests, and residual risk are proven.",
+    "expected_files": [
+      "relay_kit_public_cli.py",
+      "relay_kit_v3/registry/skills.py",
+      "tests/test_skill_resources.py"
+    ],
+    "expected_symbols": [
+      "main",
+      "SkillSpec"
+    ],
+    "expected_tests": [
+      "tests/test_skill_resources.py"
+    ],
+    "expected_evidence_terms": [
+      "adapter surface",
+      "strict evidence",
+      "weak evidence",
+      "claim status",
+      "residual risk"
+    ],
+    "bad_answer_traps": [
+      "looks like",
+      "usual checklist",
+      "battle-max-on-suite without proof"
     ]
   }
 ]

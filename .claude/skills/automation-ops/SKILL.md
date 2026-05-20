@@ -39,6 +39,7 @@ Deliver automation workflows that are reliable, auditable, and reversible.
 - Open `references/automation-ops-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/automation-ops-good-output.md` and `examples/automation-ops-bad-output.md` to calibrate output quality.
 - Use `evals/automation-ops-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/automation-ops-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - developer

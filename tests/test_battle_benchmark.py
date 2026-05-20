@@ -34,6 +34,9 @@ def write_fixture_repo(repo: Path) -> None:
 def test_battle_benchmark_scores_fixture_repo_and_cleans_up(tmp_path: Path) -> None:
     case = BenchmarkCase(
         id="fixture-login",
+        domain="backend-api",
+        archetype="backend-api",
+        competencies=("api-integration.client-endpoint-contract", "debugging.affected-surface"),
         repo_url="https://github.com/example/login-fixture.git",
         repo_name="fixture-login",
         task="fix login cache retry bug without running code",
@@ -41,6 +44,7 @@ def test_battle_benchmark_scores_fixture_repo_and_cleans_up(tmp_path: Path) -> N
         expected_skill="debug-hub",
         expected_files=("src/auth/LoginForm.tsx", "src/auth/authService.ts"),
         expected_symbols=("LoginForm", "login"),
+        expected_tests=("src/auth/login.test.ts",),
         expected_evidence_terms=("login", "auth", "test"),
     )
 
@@ -55,12 +59,21 @@ def test_battle_benchmark_scores_fixture_repo_and_cleans_up(tmp_path: Path) -> N
     assert report["status"] == "pass"
     assert report["summary"]["passed"] == 1
     assert report["safety_policy"]["runs_foreign_code"] is False
+    assert report["cases"][0]["score"] >= 8
+    assert report["cases"][0]["claim_status"] == "public-repo-benchmark-tested"
+    assert report["cases"][0]["archetype"] == "backend-api"
+    assert report["cases"][0]["competencies"]
+    assert report["cases"][0]["repo_profile"]["domain_coverage"] in {"known-archetype", "unknown"}
+    assert report["cases"][0]["matched_tests"] == ["src/auth/login.test.ts"]
     assert not (tmp_path / ".tmp" / "relay-kit-battle-benchmark").exists()
 
 
 def test_battle_benchmark_skips_dangerous_fixture(tmp_path: Path) -> None:
     case = BenchmarkCase(
         id="fixture-danger",
+        domain="security-policy",
+        archetype="security-policy",
+        competencies=("policy-security.policy-rule-map", "policy-security.secret-scope"),
         repo_url="https://github.com/example/danger-fixture.git",
         repo_name="danger-fixture",
         task="inspect repo",
@@ -68,6 +81,7 @@ def test_battle_benchmark_skips_dangerous_fixture(tmp_path: Path) -> None:
         expected_skill="scout-hub",
         expected_files=("src/login.ts",),
         expected_symbols=("login",),
+        expected_tests=("src/login.test.ts",),
         expected_evidence_terms=("login",),
     )
 
@@ -107,15 +121,16 @@ def test_public_cli_battle_benchmark_json_smoke(monkeypatch, capsys, tmp_path: P
             "project_path": str(project_path),
             "suite": suite,
             "safety_policy": {"runs_foreign_code": False},
-            "summary": {"case_count": 1, "passed": 1, "skipped": 0, "failed": 0},
+            "summary": {"case_count": 1, "passed": 1, "skipped": 0, "failed": 0, "weakest_case": None, "weakest_score": None},
             "cases": [],
         }
 
     monkeypatch.setattr(cli, "build_battle_benchmark", fake_build)
 
-    code = relay_kit_public_cli.main(["eval", "battle-benchmark", str(tmp_path), "--suite", "curated", "--cleanup", "--json"])
+    code = relay_kit_public_cli.main(["eval", "battle-benchmark", str(tmp_path), "--suite", "deep", "--cleanup", "--json"])
     payload = json.loads(capsys.readouterr().out)
 
     assert code == 0
     assert payload["schema_version"] == "relay-kit.battle-benchmark.v1"
+    assert payload["suite"] == "deep"
     assert payload["safety_policy"]["runs_foreign_code"] is False

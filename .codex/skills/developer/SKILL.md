@@ -53,6 +53,7 @@ If implementation reveals missing architecture, unclear acceptance criteria, a b
 - Open `references/developer-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/developer-good-output.md` and `examples/developer-bad-output.md` to calibrate output quality.
 - Use `evals/developer-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/developer-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - execution-loop

@@ -1,20 +1,20 @@
 # mmo-mobile-app-automation Battle-Calibrated Output
 
-Request: review an operator-owned MMO automation lane for safety, repeatability, and evidence logging
+Request: review mobile automation with device inventory, hub, provider, lease owner, logcat, and app-state recovery evidence
 
 Recommended skill: `mmo-mobile-app-automation` because the request matches `mmo-mobile-automation` work and has concrete repo anchors.
 
 Read first:
 
-- `ops/accounts.csv`
-- `workers/session_runner.ts`
-- `logs/run-2026-05-17.json`
+- `ops/devices.json`
+- `workers/mobile_runner.ts`
+- `docs/mobile-recovery-runbook.md`
 
 Evidence gathered:
 
-- Confirmed `SessionRunner` or nearby ownership before recommending changes.
-- Checked `operator queue` and `quota` against the relevant source path.
-- Identified `dedupe` as a required proof term before completion.
+- Confirmed `DeviceLease` or nearby ownership before recommending changes.
+- Checked `device lease` and `logcat` against the relevant source path.
+- Identified `app-state` as a required proof term before completion.
 
 Answer:
 
@@ -22,4 +22,4 @@ The safe next move is to inspect the named file path, compare it with the expect
 
 Residual risk:
 
-- `recovery runbook` remains unverified until the focused gate or benchmark hit is captured.
+- `operator ledger` remains unverified until the focused gate or benchmark hit is captured.

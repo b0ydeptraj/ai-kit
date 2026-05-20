@@ -47,6 +47,7 @@ The PRD is not ready if any of the following is missing:
 - Open `references/pm-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/pm-good-output.md` and `examples/pm-bad-output.md` to calibrate output quality.
 - Use `evals/pm-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/pm-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - architect

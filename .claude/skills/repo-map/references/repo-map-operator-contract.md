@@ -2,16 +2,16 @@
 
 Primary role: utility-provider
 Layer: layer-3-utility-providers
-Battle family: relay
+Battle family: repo-discovery
 
 Use this skill only after the request is anchored to a real artifact, repo area, or explicit missing-context question. The goal is not to sound like an expert; the goal is to reduce ambiguity by tying the answer to files, symbols, commands, docs, logs, or state.
 
 ## Concrete Battle Profile
 
-- Repo profile: Relay-kit public repo with generated adapters, readiness gates, docs, and runtime tests
-- First files to inspect: relay_kit_public_cli.py, relay_kit_v3/registry/skills.py, tests/test_skill_resources.py
-- Symbols or named surfaces to confirm: main, SkillSpec, emit_core_skills
-- Evidence terms that should appear in a strong answer: adapter surface, readiness gate, generated skill, strict evidence
+- Repo profile: public mixed frontend/backend repo where the task is to map entrypoints, ownership, tests, docs, and dependency direction
+- First files to inspect: src/main.ts, src/auth/session.ts, tests/session.test.ts, docs/architecture.md
+- Symbols or named surfaces to confirm: main, SessionService, sessionFlow
+- Evidence terms that should appear in a strong answer: entrypoint, ownership, dependency direction, nearby test
 
 ## Working Loop
 

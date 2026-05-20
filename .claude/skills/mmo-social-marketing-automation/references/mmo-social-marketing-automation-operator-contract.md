@@ -2,16 +2,16 @@
 
 Primary role: mmo-social-automation
 Layer: layer-4-specialists-and-standalones
-Battle family: mmo
+Battle family: mmo-social-campaign-approval
 
 Use this skill only after the request is anchored to a real artifact, repo area, or explicit missing-context question. The goal is not to sound like an expert; the goal is to reduce ambiguity by tying the answer to files, symbols, commands, docs, logs, or state.
 
 ## Concrete Battle Profile
 
-- Repo profile: operator-owned automation repo with account inventory, worker queue, run logs, and policy guardrails
-- First files to inspect: ops/accounts.csv, workers/session_runner.ts, logs/run-2026-05-17.json
-- Symbols or named surfaces to confirm: SessionRunner, AccountHealth, enqueueRun
-- Evidence terms that should appear in a strong answer: operator queue, quota, dedupe, recovery runbook
+- Repo profile: operator-owned social campaign repo with content calendar, approval lane, quota meter, reject reason, and campaign ledger
+- First files to inspect: ops/campaign_calendar.md, workers/social_scheduler.ts, logs/approval-ledger.json, docs/social-approval-runbook.md
+- Symbols or named surfaces to confirm: CampaignApproval, QuotaMeter, rejectReason
+- Evidence terms that should appear in a strong answer: approval lane, quota meter, reject reason, operator ledger
 
 ## Working Loop
 

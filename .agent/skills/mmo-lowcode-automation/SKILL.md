@@ -42,6 +42,7 @@ Build MMO low-code automation that stays debuggable, recoverable, and cost-aware
 - Open `references/mmo-lowcode-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/mmo-lowcode-automation-good-output.md` and `examples/mmo-lowcode-automation-bad-output.md` to calibrate output quality.
 - Use `evals/mmo-lowcode-automation-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/mmo-lowcode-automation-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - automation-ops

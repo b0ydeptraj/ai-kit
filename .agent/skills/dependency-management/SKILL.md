@@ -43,6 +43,7 @@ Cover:
 - Open `references/dependency-management-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/dependency-management-good-output.md` and `examples/dependency-management-bad-output.md` to calibrate output quality.
 - Use `evals/dependency-management-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/dependency-management-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - architect

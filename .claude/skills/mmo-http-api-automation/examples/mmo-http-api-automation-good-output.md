@@ -1,20 +1,20 @@
 # mmo-http-api-automation Battle-Calibrated Output
 
-Request: review an operator-owned MMO automation lane for safety, repeatability, and evidence logging
+Request: review HTTP API automation with endpoint catalog, request ledger, status code, retry count, and idempotency key evidence
 
 Recommended skill: `mmo-http-api-automation` because the request matches `mmo-api-automation` work and has concrete repo anchors.
 
 Read first:
 
-- `ops/accounts.csv`
-- `workers/session_runner.ts`
-- `logs/run-2026-05-17.json`
+- `ops/endpoints.yaml`
+- `workers/api_client.ts`
+- `tests/request-ledger.test.ts`
 
 Evidence gathered:
 
-- Confirmed `SessionRunner` or nearby ownership before recommending changes.
-- Checked `operator queue` and `quota` against the relevant source path.
-- Identified `dedupe` as a required proof term before completion.
+- Confirmed `EndpointCatalog` or nearby ownership before recommending changes.
+- Checked `request ledger` and `idempotency key` against the relevant source path.
+- Identified `retry count` as a required proof term before completion.
 
 Answer:
 
@@ -22,4 +22,4 @@ The safe next move is to inspect the named file path, compare it with the expect
 
 Residual risk:
 
-- `recovery runbook` remains unverified until the focused gate or benchmark hit is captured.
+- `redacted` remains unverified until the focused gate or benchmark hit is captured.

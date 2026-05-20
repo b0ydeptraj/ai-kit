@@ -46,6 +46,7 @@ Recover prior context quickly so the lane can reuse proven decisions and avoid r
 - Open `references/memory-search-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/memory-search-good-output.md` and `examples/memory-search-bad-output.md` to calibrate output quality.
 - Use `evals/memory-search-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/memory-search-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - debug-hub

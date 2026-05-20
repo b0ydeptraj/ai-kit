@@ -44,6 +44,7 @@ Catch adapter parity and runtime artifact drift early so regressions are blocked
 - Open `references/runtime-doctor-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/runtime-doctor-good-output.md` and `examples/runtime-doctor-bad-output.md` to calibrate output quality.
 - Use `evals/runtime-doctor-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/runtime-doctor-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - debug-hub

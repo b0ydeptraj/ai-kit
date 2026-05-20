@@ -9,6 +9,7 @@ from typing import Any, Mapping, Sequence
 
 from relay_kit_v3.context_index import context_hits_for_prompt
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
+from relay_kit_v3.repo_profile import build_repo_profile
 from relay_kit_v3.route_scoring import rank_prompt_routes
 
 
@@ -81,9 +82,117 @@ INTENT_HINTS: tuple[IntentHint, ...] = (
         ),
     ),
     IntentHint(
+        id="api-surface-analysis",
+        target_skill="api-integration",
+        markers=("fastapi", "api client", "http client", "endpoint", "webhook", "request response", "request/response", "transport"),
+        routing_text=(
+            "Use api-integration when the request is about endpoints, clients, transports, webhooks, or "
+            "request/response contracts. Name contract boundaries and related tests before edits."
+        ),
+        read_first=(
+            "API client, endpoint, or transport files",
+            "contract tests and request/response fixtures",
+            "external service docs or local integration notes",
+        ),
+        evidence=(
+            "request/response contract",
+            "error and retry behavior",
+            "integration or contract test anchor",
+        ),
+    ),
+    IntentHint(
+        id="data-persistence-analysis",
+        target_skill="data-persistence",
+        markers=("sqlalchemy", "database", "transaction", "schema", "migration", "engine connection"),
+        routing_text=(
+            "Use data-persistence when schemas, transactions, repositories, caches, query behavior, or engine "
+            "boundaries are central. Tie conclusions to storage files and tests."
+        ),
+        read_first=(
+            "schema/model/repository/engine files",
+            "migration or transaction tests",
+            "cache and persistence configuration",
+        ),
+        evidence=(
+            "transaction or persistence boundary",
+            "schema/query evidence",
+            "related test anchor",
+        ),
+    ),
+    IntentHint(
+        id="policy-security-analysis",
+        target_skill="policy-guard",
+        markers=("gitleaks", "secret", "security policy", "policy", "permission scope"),
+        routing_text=(
+            "Use policy-guard when security policy, secret handling, permissions, or high-risk operations are "
+            "being reviewed. Treat missing evidence as a blocker."
+        ),
+        read_first=(
+            "policy/config/rule files",
+            "security tests or static checks",
+            "docs that define allowed and blocked behavior",
+        ),
+        evidence=(
+            "policy rule or permission scope",
+            "blocked-risk evidence",
+            "test or audit command anchor",
+        ),
+    ),
+    IntentHint(
+        id="automation-ops-analysis",
+        target_skill="automation-ops",
+        markers=("workflow template", "ci workflow", "package jobs", "scheduler", "automation"),
+        routing_text=(
+            "Use automation-ops when workflow templates, scheduled jobs, queues, webhooks, or operational "
+            "runbooks are central. Require dry-run or rollback evidence before enabling automation."
+        ),
+        read_first=(
+            "workflow/job/runbook files",
+            "scheduler or queue configuration",
+            "dry-run, rollback, and execution-history evidence",
+        ),
+        evidence=(
+            "idempotency and retry behavior",
+            "dry-run or rollback evidence",
+            "operator-visible execution history",
+        ),
+    ),
+    IntentHint(
+        id="architecture-shape-analysis",
+        target_skill="project-architecture",
+        markers=("class generation", "module boundary", "dependency direction", "architecture map"),
+        routing_text=(
+            "Use project-architecture when the request is to map current module shape, class generation, "
+            "dependency direction, or architectural drift before planning or coding."
+        ),
+        read_first=(
+            "entrypoint and module boundary files",
+            "related tests and configuration",
+            "architecture or project-context docs if present",
+        ),
+        evidence=(
+            "entrypoint and ownership map",
+            "dependency direction",
+            "architecture drift or residual risk",
+        ),
+    ),
+    IntentHint(
         id="repo-or-file-analysis",
         target_skill="scout-hub",
-        markers=("doc repo", "doc thu muc", "phan tich file", "phan tich repo", "read repo", "analyze file"),
+        markers=(
+            "doc repo",
+            "doc thu muc",
+            "phan tich file",
+            "phan tich repo",
+            "read repo",
+            "analyze file",
+            "without running code",
+            "without installing",
+            "read-only",
+            "test anchors",
+            "map architecture",
+            "map command",
+        ),
         routing_text=(
             "Use scout-hub for unfamiliar repo or file analysis. Inspect entrypoints, structure, ownership, and "
             "route to repo-map, review-hub, or plan-hub with evidence."
@@ -156,6 +265,7 @@ def build_prompt_enhancement(
         for item in context_hits
         if item.get("path")
     ]
+    repo_profile = build_repo_profile(root)
     read_first = context_to_read(root, spec, hints, explicit_paths, normalized, context_hit_paths)
     evidence = evidence_required(spec, hints)
     ask_or_act = decide_ask_or_act(
@@ -166,6 +276,8 @@ def build_prompt_enhancement(
         route_margin=route_margin,
         recommended_skill=str(recommended_skill),
     )
+    if repo_profile.get("unknown_domain_mode") and ask_or_act == "act":
+        ask_or_act = "scout_first"
     missing_context_question = missing_question(ask_or_act, normalized)
 
     report: dict[str, Any] = {
@@ -180,6 +292,14 @@ def build_prompt_enhancement(
         "ask_or_act": ask_or_act,
         "context_index_status": context_index_status,
         "context_hits": context_hits,
+        "repo_profile": {
+            "dominant_archetype": repo_profile.get("dominant_archetype"),
+            "domain_coverage": repo_profile.get("domain_coverage"),
+            "unknown_domain_mode": repo_profile.get("unknown_domain_mode"),
+            "suggested_competencies": repo_profile.get("suggested_competencies", []),
+        },
+        "domain_coverage": repo_profile.get("domain_coverage"),
+        "unknown_domain_mode": repo_profile.get("unknown_domain_mode"),
         "why": why_lines(hints, str(recommended_skill), top_score, route_margin),
         "read_first": read_first,
         "evidence_required": evidence,
@@ -187,6 +307,8 @@ def build_prompt_enhancement(
             original_prompt=original_prompt,
             recommended_skill=str(recommended_skill),
             ask_or_act=ask_or_act,
+            domain_coverage=str(repo_profile.get("domain_coverage")),
+            suggested_competencies=repo_profile.get("suggested_competencies", []),
             read_first=read_first,
             evidence_required=evidence,
             missing_context_question=missing_context_question,
@@ -208,10 +330,25 @@ def matched_hints(normalized_prompt: str) -> list[IntentHint]:
         hint
         for hint in INTENT_HINTS
         if any(marker in normalized_prompt for marker in hint.markers)
+        and not (hint.target_skill == "developer" and implementation_marker_is_negated(normalized_prompt))
     ]
     if not hints and normalized_prompt:
         hints.append(INTENT_HINTS[3])
     return hints
+
+
+def implementation_marker_is_negated(normalized_prompt: str) -> bool:
+    return any(
+        marker in normalized_prompt
+        for marker in (
+            "without running code",
+            "without code",
+            "no code",
+            "read-only",
+            "khong chay code",
+            "khong code",
+        )
+    )
 
 
 def build_routing_prompt(original_prompt: str, hints: Sequence[IntentHint]) -> str:
@@ -320,6 +457,8 @@ def render_enhanced_prompt(
     original_prompt: str,
     recommended_skill: str,
     ask_or_act: str,
+    domain_coverage: str,
+    suggested_competencies: Sequence[str],
     read_first: Sequence[str],
     evidence_required: Sequence[str],
     missing_context_question: str | None,
@@ -328,14 +467,21 @@ def render_enhanced_prompt(
         f"User request: {original_prompt}",
         f"Recommended skill: {recommended_skill}",
         f"Decision: {ask_or_act}",
+        f"Domain coverage: {domain_coverage}",
         "",
-        "Use the skill to turn the short request into a file-aware workflow.",
-        "Read first:",
-        *[f"- {item}" for item in read_first],
-        "",
-        "Evidence required before answering or claiming done:",
-        *[f"- {item}" for item in evidence_required],
+        "Use the skill to turn the short request into a file-aware workflow based on competency evidence.",
     ]
+    if suggested_competencies:
+        lines.extend(["Competency hints:", *[f"- {item}" for item in suggested_competencies[:6]], ""])
+    lines.extend(
+        [
+            "Read first:",
+            *[f"- {item}" for item in read_first],
+            "",
+            "Evidence required before answering or claiming done:",
+            *[f"- {item}" for item in evidence_required],
+        ]
+    )
     if missing_context_question:
         lines.extend(["", f"Ask this one clarification first: {missing_context_question}"])
     return "\n".join(lines).strip()
@@ -347,6 +493,7 @@ def render_prompt_enhancement(report: Mapping[str, Any]) -> str:
         f"- Recommended skill: {report.get('recommended_skill')}",
         f"- Ask or act: {report.get('ask_or_act')}",
         f"- Context index: {report.get('context_index_status')}",
+        f"- Domain coverage: {report.get('domain_coverage')}",
         f"- Route margin: {report.get('route_margin')}",
         "- Why:",
     ]

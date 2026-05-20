@@ -1,6 +1,6 @@
 # testing-patterns Weak Output Anti-Example
 
-Request: audit a Relay-kit runtime change and prove the generated surfaces are still synchronized
+Request: design the test strategy for a checkout regression, choosing fixture/factory, mock versus integration, and flake controls by risk
 
 Weak answer:
 
@@ -8,9 +8,9 @@ This looks like `testing-patterns`, so follow the usual checklist and it should 
 
 Why this fails:
 
-- No file path from `Relay-kit public repo with generated adapters, readiness gates, docs, and runtime tests` was inspected.
-- No symbol such as `main` was confirmed.
-- No proof surface was named for `adapter surface`.
+- No file path from `public test-heavy repo with fixtures, factories, unit tests, integration tests, and a flaky e2e lane` was inspected.
+- No symbol such as `user_factory` was confirmed.
+- No proof surface was named for `fixture`.
 - It blurs verified evidence and inference, which is exactly how overclaim slips back into Relay-kit.
 
 Correction:

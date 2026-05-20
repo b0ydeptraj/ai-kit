@@ -42,6 +42,7 @@ Prepare the runtime so later steps have an authoritative baseline instead of rel
 - Open `references/bootstrap-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/bootstrap-good-output.md` and `examples/bootstrap-bad-output.md` to calibrate output quality.
 - Use `evals/bootstrap-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/bootstrap-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - workflow-router

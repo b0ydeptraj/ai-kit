@@ -17,6 +17,7 @@ Examples or likely members:
 - API-heavy services
 - jobs and queues
 - go-service-engineering
+- mmo-http-api-automation
 
 ## platform-and-infra
 Examples or likely members:
@@ -29,11 +30,18 @@ Examples or likely members:
 Examples or likely members:
 - growth-marketing
 - market-research
+- mmo-social-marketing-automation
+- mmo-reup-automation
 - vietnamese-product-localization
 
 ## automation-and-operations
 Examples or likely members:
 - automation-ops
+- mmo-account-operations
+- mmo-browser-fleet-automation
+- mmo-lowcode-automation
+- mmo-mobile-app-automation
+- mmo-cloud-operations-automation
 - runbooks
 - schedulers
 - webhooks

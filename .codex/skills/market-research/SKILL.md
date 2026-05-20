@@ -39,6 +39,7 @@ Provide decision-grade market findings with explicit evidence quality.
 - Open `references/market-research-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/market-research-good-output.md` and `examples/market-research-bad-output.md` to calibrate output quality.
 - Use `evals/market-research-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/market-research-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - growth-marketing

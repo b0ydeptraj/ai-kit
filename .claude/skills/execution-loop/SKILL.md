@@ -48,6 +48,7 @@ After three failed fix attempts, stop and question the story, architecture, or a
 - Open `references/execution-loop-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/execution-loop-good-output.md` and `examples/execution-loop-bad-output.md` to calibrate output quality.
 - Use `evals/execution-loop-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/execution-loop-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - test-hub

@@ -41,6 +41,7 @@ Deliver stable mobile MMO automation for repetitive app workflows with measurabl
 - Open `references/mmo-mobile-app-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/mmo-mobile-app-automation-good-output.md` and `examples/mmo-mobile-app-automation-bad-output.md` to calibrate output quality.
 - Use `evals/mmo-mobile-app-automation-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/mmo-mobile-app-automation-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - automation-ops

@@ -44,6 +44,7 @@ Include:
 - Open `references/architect-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/architect-good-output.md` and `examples/architect-bad-output.md` to calibrate output quality.
 - Use `evals/architect-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/architect-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - scrum-master

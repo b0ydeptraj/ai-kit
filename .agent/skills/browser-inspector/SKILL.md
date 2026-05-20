@@ -50,6 +50,7 @@ Collect browser-native evidence that narrows a web issue fast.
 - Open `references/browser-inspector-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/browser-inspector-good-output.md` and `examples/browser-inspector-bad-output.md` to calibrate output quality.
 - Use `evals/browser-inspector-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/browser-inspector-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - debug-hub

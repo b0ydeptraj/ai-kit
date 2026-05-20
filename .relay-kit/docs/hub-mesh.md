@@ -61,6 +61,8 @@ Can hand off to:
 - research
 - market-research
 - growth-marketing
+- mmo-social-marketing-automation
+- mmo-reup-automation
 - ux-structure
 
 ### scout-hub
@@ -86,6 +88,12 @@ Can hand off to:
 - research
 - market-research
 - growth-marketing
+- mmo-reup-automation
+- mmo-account-operations
+- mmo-social-marketing-automation
+- mmo-lowcode-automation
+- mmo-cloud-operations-automation
+- mmo-http-api-automation
 - impact-radar
 - token-economy
 - context-continuity
@@ -106,6 +114,10 @@ Can hand off to:
 - developer
 - go-service-engineering
 - next-product-frontend
+- mmo-account-operations
+- mmo-browser-fleet-automation
+- mmo-mobile-app-automation
+- mmo-http-api-automation
 - execution-loop
 - project-architecture
 - api-integration
@@ -119,6 +131,14 @@ Can hand off to:
 - testing-patterns
 - automation-ops
 - vietnamese-product-localization
+- mmo-reup-automation
+- mmo-account-operations
+- mmo-browser-fleet-automation
+- mmo-social-marketing-automation
+- mmo-lowcode-automation
+- mmo-mobile-app-automation
+- mmo-cloud-operations-automation
+- mmo-http-api-automation
 - execution-loop
 - multimodal-evidence
 - release-readiness
@@ -136,6 +156,14 @@ Can hand off to:
 - testing-patterns
 - automation-ops
 - vietnamese-product-localization
+- mmo-reup-automation
+- mmo-account-operations
+- mmo-browser-fleet-automation
+- mmo-social-marketing-automation
+- mmo-lowcode-automation
+- mmo-mobile-app-automation
+- mmo-cloud-operations-automation
+- mmo-http-api-automation
 - project-architecture
 - doc-pointers
 - memory-search

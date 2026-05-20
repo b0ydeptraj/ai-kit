@@ -2,16 +2,16 @@
 
 Primary role: build-support
 Layer: layer-4-specialists-and-standalones
-Battle family: backend
+Battle family: dependency-drift
 
 Use this skill only after the request is anchored to a real artifact, repo area, or explicit missing-context question. The goal is not to sound like an expert; the goal is to reduce ambiguity by tying the answer to files, symbols, commands, docs, logs, or state.
 
 ## Concrete Battle Profile
 
-- Repo profile: public Python service repo with serializer, retry, cache, and session tests
-- First files to inspect: src/service/session.py, src/service/retry.py, tests/test_session.py
-- Symbols or named surfaces to confirm: SessionManager, retry_request, serialize_session
-- Evidence terms that should appear in a strong answer: session, retry, cache, transaction boundary
+- Repo profile: public package repo with package manifest, lockfile, dependency policy, and upgrade notes
+- First files to inspect: package.json, pnpm-lock.yaml, docs/dependency-policy.md, tests/dependency-lock.test.ts
+- Symbols or named surfaces to confirm: resolveDependencyPlan, LockfileGuard, DependencyRisk
+- Evidence terms that should appear in a strong answer: dependency drift, lockfile, transitive dependency, rollback pin
 
 ## Working Loop
 

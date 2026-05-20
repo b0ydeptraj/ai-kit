@@ -40,6 +40,7 @@ Build or refactor Next.js product surfaces with explicit server/client architect
 - Open `references/next-product-frontend-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/next-product-frontend-good-output.md` and `examples/next-product-frontend-bad-output.md` to calibrate output quality.
 - Use `evals/next-product-frontend-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/next-product-frontend-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - developer

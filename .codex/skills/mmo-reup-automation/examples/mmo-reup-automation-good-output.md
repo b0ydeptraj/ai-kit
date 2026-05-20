@@ -1,19 +1,19 @@
 # mmo-reup-automation Battle-Calibrated Output
 
-Request: review an operator-owned MMO automation lane for safety, repeatability, and evidence logging
+Request: review reup workflow with source inventory, publish queue, dedupe, reject drawer, and evidence timeline before automation changes
 
 Recommended skill: `mmo-reup-automation` because the request matches `mmo-reup` work and has concrete repo anchors.
 
 Read first:
 
-- `ops/accounts.csv`
-- `workers/session_runner.ts`
-- `logs/run-2026-05-17.json`
+- `ops/source_inventory.csv`
+- `workers/reup_queue.ts`
+- `docs/reup-source-policy.md`
 
 Evidence gathered:
 
-- Confirmed `SessionRunner` or nearby ownership before recommending changes.
-- Checked `operator queue` and `quota` against the relevant source path.
+- Confirmed `SourceInventory` or nearby ownership before recommending changes.
+- Checked `source inventory` and `publish queue` against the relevant source path.
 - Identified `dedupe` as a required proof term before completion.
 
 Answer:
@@ -22,4 +22,4 @@ The safe next move is to inspect the named file path, compare it with the expect
 
 Residual risk:
 
-- `recovery runbook` remains unverified until the focused gate or benchmark hit is captured.
+- `evidence timeline` remains unverified until the focused gate or benchmark hit is captured.

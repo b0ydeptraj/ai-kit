@@ -13,11 +13,19 @@
       "test_readme_files_are_utf8_without_mojibake",
       "render_battle_audit"
     ],
+    "expected_tests": [
+      "tests/test_readme_encoding.py"
+    ],
     "expected_evidence_terms": [
       "utf-8",
       "public copy",
       "verified",
       "residual risk"
+    ],
+    "bad_answer_traps": [
+      "usual checklist",
+      "guess from the name",
+      "should be fine"
     ]
   },
   {
@@ -32,11 +40,49 @@
     "expected_symbols": [
       "test_readme_files_are_utf8_without_mojibake"
     ],
+    "expected_tests": [
+      "tests/test_readme_encoding.py"
+    ],
     "expected_evidence_terms": [
       "overclaim",
       "evidence label",
       "read-only",
       "unverified"
+    ],
+    "bad_answer_traps": [
+      "checklist only",
+      "expert guarantee",
+      "field-tested"
+    ]
+  },
+  {
+    "id": "vietnamese-product-localization-deep-weakness-trap",
+    "skill": "vietnamese-product-localization",
+    "repo_profile": "deep docs suite fixture with source, test, docs, and an explicit overclaim trap",
+    "task": "Score `vietnamese-product-localization` against a deep battle case, identify weak evidence, and avoid claiming maximum strength until files, symbols, tests, and residual risk are proven.",
+    "expected_files": [
+      "README.md",
+      "README.vi.md",
+      "tests/test_readme_encoding.py"
+    ],
+    "expected_symbols": [
+      "test_readme_files_are_utf8_without_mojibake",
+      "render_battle_audit"
+    ],
+    "expected_tests": [
+      "tests/test_readme_encoding.py"
+    ],
+    "expected_evidence_terms": [
+      "utf-8",
+      "evidence label",
+      "weak evidence",
+      "claim status",
+      "residual risk"
+    ],
+    "bad_answer_traps": [
+      "looks like",
+      "usual checklist",
+      "battle-max-on-suite without proof"
     ]
   }
 ]

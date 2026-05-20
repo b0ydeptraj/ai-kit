@@ -42,6 +42,7 @@ Execute MMO API automation with contract handling that a backend reviewer can re
 - Open `references/mmo-http-api-automation-operator-contract.md` when scope, evidence, or operator safety is unclear.
 - Use `examples/mmo-http-api-automation-good-output.md` and `examples/mmo-http-api-automation-bad-output.md` to calibrate output quality.
 - Use `evals/mmo-http-api-automation-cases.json` as the minimum scenario set for behavior regression checks.
+- Use `competencies/mmo-http-api-automation-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
 - api-integration
