@@ -19,12 +19,16 @@ Use this skill only after the request is anchored to a real artifact, repo area,
 2. Name the candidate files before giving advice.
 3. Check at least one source file and one proof surface when the task touches code, docs, release, routing, or automation.
 4. Separate verified facts, inferred risk, and unknowns.
-5. End with the next executable check or handoff, not broad process advice.
+5. When evidence disagrees, create competing models before deciding: strict artifact comparison, workflow/sequence explanation, and any constraint-based model implied by the user's process.
+6. Check each model against counts, ordering, invariants, operator cues, and impossible leftovers; reject the model that explains fewer constraints.
+7. End with the next executable check or handoff, not broad process advice.
 
 ## Failure Modes To Block
 
 - Guessing from the skill name without opening files.
 - Treating a checklist as proof.
+- Accepting the first diff, OCR extraction, log reading, or metric mismatch without testing a workflow-level explanation.
+- Ignoring human process cues such as ordering, counts, skipped steps, handoff habits, or impossible leftover state.
 - Saying a change is ready when tests, generated adapters, docs, or safety scans were not checked.
 - Hiding that a public repo benchmark is read-only and not user adoption proof.
 
@@ -32,5 +36,6 @@ Use this skill only after the request is anchored to a real artifact, repo area,
 
 - File evidence: cite exact paths or say which anchor is missing.
 - Behavior evidence: cite test, static scan, route score, benchmark hit, screenshot, or command output.
+- Reconciliation evidence: name the competing models, which constraints each model satisfies, and the cheapest check that would disprove the recommended model.
 - Risk evidence: name residual risk and the smallest next verification.
 - Handoff evidence: name the receiving skill or CLI gate when another lane should continue.

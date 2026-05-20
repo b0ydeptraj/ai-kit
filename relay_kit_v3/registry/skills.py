@@ -31,6 +31,7 @@ def domain_resource_references(skill_name: str) -> list[str]:
         f"Open `references/{skill_name}-operator-contract.md` when scope, evidence, or operator safety is unclear.",
         f"Use `examples/{skill_name}-good-output.md` and `examples/{skill_name}-bad-output.md` to calibrate output quality.",
         f"Use `evals/{skill_name}-cases.json` as the minimum scenario set for behavior regression checks.",
+        f"Use `competencies/{skill_name}-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.",
     ]
 
 
@@ -1593,10 +1594,11 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
         evidence_contract=[
             "Input must include current evidence, constraints, and the decision that needs options.",
             "Output must separate option, supporting evidence, risk, cheapest validation, and recommended next owner.",
+            "When evidence disagrees, output at least two competing models and explain which counts, order, invariants, or workflow cues each one satisfies.",
             "Mark uncertainty explicitly when evidence is weak or conflicting.",
         ],
-        tasks=["Generate root-cause hypotheses.", "Compare implementation or mitigation options.", "Call out the cheapest validating experiment."],
-        rules=["Ground every option in evidence already collected.", "State uncertainty instead of bluffing.", "Recommend escalation if the issue is really a planning problem."],
+        tasks=["Generate root-cause hypotheses.", "Compare implementation or mitigation options.", "Reconcile conflicting artifacts, counts, sequences, or human workflow cues.", "Call out the cheapest validating experiment."],
+        rules=["Ground every option in evidence already collected.", "Build a workflow-level explanation when a strict diff or first-pass extraction conflicts with real-world constraints.", "State uncertainty instead of bluffing.", "Recommend escalation if the issue is really a planning problem."],
     ),
     "multimodal-evidence": utility_provider_spec(
         name="multimodal-evidence",
