@@ -42,6 +42,9 @@ Run an explicit accessibility gate for keyboard, focus, semantic structure, labe
 ### skill-gauntlet
 Run deterministic regression checks over SKILL.md trigger wording and required structure before trusting runtime routing quality.
 
+### signal-calibration
+Calibrate overclaim-prone completion, readiness, field-tested, skill-quality, and benchmark claims against actual proof levels.
+
 ### impact-radar
 Summarize blast radius from changed files and recommend gates before merge on risky batches.
 

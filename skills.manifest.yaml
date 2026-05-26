@@ -52,6 +52,7 @@ layers:
     - release-readiness
     - accessibility-review
     - skill-gauntlet
+    - signal-calibration
     - impact-radar
     - runtime-doctor
     - migration-guard

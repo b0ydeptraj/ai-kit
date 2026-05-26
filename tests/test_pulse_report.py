@@ -219,6 +219,23 @@ def sample_token_audit(*, budget_violations: int = 0, signal_retention: float = 
     }
 
 
+def sample_signal_calibration(*, blocked_claims: int = 0) -> dict[str, object]:
+    return {
+        "schema_version": "relay-kit.signal-calibration.v1",
+        "status": "pass" if blocked_claims == 0 else "fail",
+        "summary": {
+            "claim_count": 3,
+            "proven_claims": 3 - blocked_claims,
+            "unsupported_claims": blocked_claims,
+            "blocked_claims": blocked_claims,
+            "overclaim_flags": blocked_claims,
+            "field_tested_claims": 0,
+            "findings": blocked_claims,
+        },
+        "findings": [] if blocked_claims == 0 else [{"check": "claim-calibration"}],
+    }
+
+
 def sample_query_search(*, authoritative_hits: int = 2) -> dict[str, object]:
     return {
         "schema_version": "relay-kit.query-search.v1",
@@ -278,6 +295,7 @@ def test_pulse_report_includes_governance_health_sections(tmp_path: Path) -> Non
         lane_audit_builder=lambda root: sample_lane_audit(conflicts=0),
         adapter_diagnostics_builder=lambda root: sample_adapter_diagnostics(metadata_drift=0),
         token_audit_builder=lambda root: sample_token_audit(budget_violations=0, signal_retention=1.0),
+        signal_calibration_builder=lambda root: sample_signal_calibration(blocked_claims=0),
         query_search_builder=lambda root, query: sample_query_search(authoritative_hits=2),
         service_boundaries_builder=lambda root: sample_service_boundaries(findings=0),
     )
@@ -287,6 +305,7 @@ def test_pulse_report_includes_governance_health_sections(tmp_path: Path) -> Non
     assert report["adapter_health"]["metadata_drift"] == 0
     assert report["token_health"]["budget_violations"] == 0
     assert report["token_health"]["signal_retention"] == 1.0
+    assert report["calibration_health"]["blocked_claims"] == 0
     assert report["query_health"]["authoritative_hits"] == 2
     assert report["service_boundary_health"]["findings"] == 0
     assert report["governance_health"]["status"] == "pass"
@@ -306,6 +325,7 @@ def test_pulse_html_renders_governance_sections(tmp_path: Path) -> None:
         lane_audit_builder=lambda root: sample_lane_audit(),
         adapter_diagnostics_builder=lambda root: sample_adapter_diagnostics(),
         token_audit_builder=lambda root: sample_token_audit(),
+        signal_calibration_builder=lambda root: sample_signal_calibration(),
         query_search_builder=lambda root, query: sample_query_search(),
         service_boundaries_builder=lambda root: sample_service_boundaries(),
     )
@@ -316,6 +336,7 @@ def test_pulse_html_renders_governance_sections(tmp_path: Path) -> None:
     assert "Lane Health" in html
     assert "Adapter Health" in html
     assert "Token Health" in html
+    assert "Signal Calibration" in html
     assert "Service Boundaries" in html
 
 

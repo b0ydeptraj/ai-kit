@@ -73,6 +73,15 @@ def write_pulse_report(root: Path) -> Path:
                     "raw_required_blocks": 2,
                     "budget_violations": 0,
                 },
+                "calibration_health": {
+                    "status": "pass",
+                    "claim_count": 3,
+                    "proven_claims": 3,
+                    "unsupported_claims": 0,
+                    "blocked_claims": 0,
+                    "overclaim_flags": 0,
+                    "field_tested_claims": 0,
+                },
                 "query_health": {
                     "status": "pass",
                     "authoritative_hits": 2,
@@ -173,6 +182,11 @@ def test_signal_export_builds_metrics_and_events(tmp_path: Path) -> None:
     assert "relay.context.signal_retention" in metric_names
     assert "relay.context.raw_required_blocks" in metric_names
     assert "relay.token.budget_violations" in metric_names
+    assert "relay.calibration.unsupported_claims" in metric_names
+    assert "relay.calibration.overclaim_flags" in metric_names
+    assert "relay.calibration.proven_claims" in metric_names
+    assert "relay.calibration.field_tested_claims" in metric_names
+    assert "relay.calibration.blocked_claims" in metric_names
     assert "relay.query.authoritative_hits" in metric_names
     assert "relay.service.boundary_findings" in metric_names
     assert "relay.gates.pass" in metric_names

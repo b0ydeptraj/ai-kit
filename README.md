@@ -78,7 +78,7 @@ The public surface focuses on the skills that make Relay-kit useful in real codi
 | Implementation flow | `developer`, `fix-hub`, `execution-loop`, `test-first-development` | keep code changes bounded, testable, and tied to the current repo shape |
 | Debug and review | `debug-hub`, `root-cause-debugging`, `review-hub`, `qa-governor` | move from symptoms to evidence, then from evidence to a defensible verdict |
 | Engineering specialists | `api-integration`, `data-persistence`, `dependency-management`, `testing-patterns`, `go-service-engineering`, `next-product-frontend` | apply battle-tested competency patterns for common backend, frontend, dependency, and test problems |
-| Proof gates | `policy-guard`, `runtime-doctor`, `skill-gauntlet`, `readiness check`, `skill-battle`, `competency-battle` | verify generated adapters, skill behavior, local governance, and claim boundaries |
+| Proof gates | `policy-guard`, `runtime-doctor`, `skill-gauntlet`, `signal-calibration`, `readiness check`, `skill-battle`, `competency-battle` | verify generated adapters, skill behavior, local governance, and claim boundaries |
 
 Specialized extension packs exist, but they are not the front-door story. The catalog keeps them separate from the core runtime surface so the public README highlights Relay-kit's strongest value: routing, context, battle proof, and adapter governance.
 
@@ -120,6 +120,7 @@ relay-kit init /path/to/project --codex --locale vi
 - hybrid local context hints for chunks, call graph hints, git history hints, and MCP-style local tools, with optional local embedding and tree-sitter support via `relay-kit[context]`
 - a `prompt enhance` utility that turns short or vague user requests into skill-aware working guidance and uses the local context graph when it exists
 - `battle-audit`, `battle-benchmark`, `skill-battle`, and `competency-battle` gates for finding generic skill resources, testing read-only public repo retrieval quality, and scoring each skill by competency evidence
+- a `signal-calibration` gate that downgrades unsupported production-ready, commercial-ready, field-tested, backend realism, MMO/API realism, and benchmark claims before they become confident output
 - a local `repo-profile` classifier that maps a repo to archetypes such as backend API, frontend app, CLI tool, automation worker, database-heavy, security/policy, docs/product, library core, or test runner
 - a `service boundaries` gate for checking module ownership and static dependency rules
 - a `release-readiness` utility for pre/post deploy smoke gates and rollback signals
@@ -197,9 +198,11 @@ relay-kit eval competency-battle /path/to/project --skill all --suite core --jso
 relay-kit eval repo-profile /path/to/project --json
 relay-kit eval domain-pack list /path/to/project --json
 relay-kit eval skill-weakness-report /path/to/project --json
+relay-kit calibrate readiness /path/to/project --strict --json
+relay-kit calibrate claims /path/to/project --claim "This skill is field-tested" --strict --json
 ```
 
-`eval real-world`, `battle-benchmark`, `skill-battle`, and `competency-battle` are evidence gates, not marketing badges. They check whether Relay-kit can find the right files, symbols, tests, evidence terms, competency patterns, and overclaim traps in the current suite.
+`eval real-world`, `battle-benchmark`, `skill-battle`, `competency-battle`, and `calibrate` are evidence gates, not marketing badges. They check whether Relay-kit can find the right files, symbols, tests, evidence terms, competency patterns, and overclaim traps in the current suite. `calibrate` is also the strict guard that keeps fixture-only proof from being called `field-tested`.
 
 The clean local readiness verdict is `local-governance-ready-candidate`. External release evidence stays separate in machine-readable readiness output, so the README can stay focused on what Relay-kit actually ships: local routing, context, skills, adapters, and proof gates.
 
