@@ -144,6 +144,7 @@ Can hand off to:
 - release-readiness
 - accessibility-review
 - skill-gauntlet
+- signal-calibration
 - impact-radar
 - runtime-doctor
 - migration-guard
@@ -170,6 +171,7 @@ Can hand off to:
 - release-readiness
 - accessibility-review
 - skill-gauntlet
+- signal-calibration
 - impact-radar
 - runtime-doctor
 - migration-guard

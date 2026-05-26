@@ -466,5 +466,11 @@
     "prompt": "Use mmo-http-api-automation for contract-safe endpoint orchestration with auth scope checks, 429 handling, backoff, idempotent writes, and replay safety logs.",
     "expected_skill": "mmo-http-api-automation",
     "expected_terms": ["auth", "429", "idempotency"]
+  },
+  {
+    "id": "signal-calibration-overclaim-proof",
+    "prompt": "Use signal-calibration when an answer claims field-tested, production-ready, commercial-ready, or maximum skill quality and must map the claim to proof_level, confidence, evidence_sources, overclaim flags, residual risk, and next verification before acceptance.",
+    "expected_skill": "signal-calibration",
+    "expected_terms": ["field-tested", "proof_level", "overclaim"]
   }
 ]

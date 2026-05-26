@@ -391,3 +391,32 @@ Done criteria:
 - Main CI `Validate Runtime` run `25922588929` is green after merge.
 - PR #105 merged follow-up full-skill coverage and backend realism guard to `main` at `22a9ab21bebbe1a3298e886422f6c47311f22a3b`.
 - Main CI `Validate Runtime` run `25925848766` is green after PR #105.
+
+## Signal Calibration Pack
+
+Branch: `codex/signal-calibration-pack`
+
+Status: in progress.
+
+Purpose:
+
+- package `proof audit`, `real-world eval`, `battle-audit`, and readiness claim checks into one Relay-owned `signal-calibration` skill
+- prevent agents from calling fixture-only proof `field-tested`, `real-world proven`, `production-ready`, or `commercial-ready`
+- expose CI/debug commands for claim, skill, and readiness calibration while keeping normal user flow automatic through generated skills
+- add Pulse and signal metrics for unsupported claims, overclaim flags, proven claims, field-tested claims, and blocked claims
+
+Commands:
+
+```bash
+relay-kit calibrate claims . --claim "This skill is field-tested" --strict --json
+relay-kit calibrate skill . --skill all --strict --json
+relay-kit calibrate readiness . --strict --json
+```
+
+Done criteria:
+
+- generated `.codex`, `.claude`, and `.agent` surfaces include `signal-calibration`
+- enterprise readiness includes the `signal-calibration` required gate
+- Pulse and signal export include calibration health/metrics
+- `field-tested` remains blocked unless explicit field evidence exists
+- full local gates pass before PR

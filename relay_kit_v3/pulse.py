@@ -17,6 +17,7 @@ from relay_kit_v3.publication import DEFAULT_INDEX_CHECK_OUTPUT, build_publicati
 from relay_kit_v3.query_search import build_query_search
 from relay_kit_v3.readiness import build_readiness_report
 from relay_kit_v3.service_boundaries import build_service_boundary_report
+from relay_kit_v3.signal_calibration import build_report as build_signal_calibration_report
 from relay_kit_v3.support_request import DEFAULT_OUTPUT as DEFAULT_SUPPORT_REQUEST_OUTPUT
 from relay_kit_v3.token_economy import build_token_audit
 from scripts import eval_workflows
@@ -40,6 +41,7 @@ AdapterDiagnosticsBuilder = Callable[[Path], Mapping[str, Any]]
 QuerySearchBuilder = Callable[[Path, str], Mapping[str, Any]]
 ServiceBoundariesBuilder = Callable[[Path], Mapping[str, Any]]
 TokenAuditBuilder = Callable[[Path], Mapping[str, Any]]
+SignalCalibrationBuilder = Callable[[Path], Mapping[str, Any]]
 EvidenceSummarizer = Callable[[Path, int], LedgerSummary]
 
 
@@ -62,6 +64,7 @@ def build_pulse_report(
     query_search_file: Path | str | None = None,
     service_boundaries_file: Path | str | None = None,
     token_audit_file: Path | str | None = None,
+    signal_calibration_file: Path | str | None = None,
     include_publication: bool = False,
     include_package_index: bool = False,
     include_support_request: bool = False,
@@ -70,6 +73,7 @@ def build_pulse_report(
     include_lane_audit: bool = False,
     include_adapter_diagnostics: bool = False,
     include_token_audit: bool = False,
+    include_signal_calibration: bool = True,
     include_query_search: bool = False,
     include_service_boundaries: bool = False,
     query_search_text: str = "relay governance",
@@ -87,6 +91,7 @@ def build_pulse_report(
     query_search_builder: QuerySearchBuilder | None = None,
     service_boundaries_builder: ServiceBoundariesBuilder | None = None,
     token_audit_builder: TokenAuditBuilder | None = None,
+    signal_calibration_builder: SignalCalibrationBuilder | None = None,
     evidence_summarizer: EvidenceSummarizer | None = None,
 ) -> dict[str, Any]:
     root = Path(project_root).resolve()
@@ -160,10 +165,17 @@ def build_pulse_report(
         token_audit_file=token_audit_file,
         token_audit_builder=token_audit_builder,
     )
+    signal_calibration = _load_or_build_signal_calibration(
+        root,
+        include_signal_calibration=include_signal_calibration,
+        signal_calibration_file=signal_calibration_file,
+        signal_calibration_builder=signal_calibration_builder,
+    )
     context_health = build_context_health(context_audit)
     lane_health = build_lane_health(lane_audit)
     adapter_health = build_adapter_health(adapter_diagnostics)
     token_health = build_token_health(token_audit)
+    calibration_health = build_calibration_health(signal_calibration)
     query_health = build_query_health(query_search)
     service_boundary_health = build_service_boundary_health(service_boundaries)
     governance_health = build_governance_health(
@@ -171,6 +183,7 @@ def build_pulse_report(
         lane_health,
         adapter_health,
         token_health,
+        calibration_health,
         query_health,
         service_boundary_health,
     )
@@ -213,12 +226,14 @@ def build_pulse_report(
         "lane_audit": lane_audit,
         "adapter_diagnostics": adapter_diagnostics,
         "token_audit": token_audit,
+        "signal_calibration": signal_calibration,
         "query_search": query_search,
         "service_boundaries": service_boundaries,
         "context_health": context_health,
         "lane_health": lane_health,
         "adapter_health": adapter_health,
         "token_health": token_health,
+        "calibration_health": calibration_health,
         "query_health": query_health,
         "service_boundary_health": service_boundary_health,
         "governance_health": governance_health,
@@ -265,6 +280,7 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
     lane_health = _mapping(report.get("lane_health"))
     adapter_health = _mapping(report.get("adapter_health"))
     token_health = _mapping(report.get("token_health"))
+    calibration_health = _mapping(report.get("calibration_health"))
     query_health = _mapping(report.get("query_health"))
     service_boundary_health = _mapping(report.get("service_boundary_health"))
     gate_summary = _mapping(report.get("gate_summary"))
@@ -296,6 +312,8 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
         ("Adapter drift", str(adapter_health.get("metadata_drift", 0))),
         ("Token budget violations", str(token_health.get("budget_violations", 0))),
         ("Token retention", _percent(token_health.get("signal_retention"))),
+        ("Blocked claims", str(calibration_health.get("blocked_claims", 0))),
+        ("Overclaim flags", str(calibration_health.get("overclaim_flags", 0))),
         ("Boundary findings", str(service_boundary_health.get("findings", 0))),
         ("Score delta", _signed(trend.get("pulse_score_delta"))),
         ("Ledger events", str(evidence.get("total_events", 0))),
@@ -332,6 +350,10 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
     token_health_rows = _health_rows(
         token_health,
         ("status", "estimated_tokens", "compressed_tokens", "signal_retention", "raw_required_blocks", "budget_violations"),
+    )
+    calibration_health_rows = _health_rows(
+        calibration_health,
+        ("status", "claim_count", "proven_claims", "unsupported_claims", "blocked_claims", "overclaim_flags", "field_tested_claims"),
     )
     query_health_rows = _health_rows(
         query_health,
@@ -546,6 +568,13 @@ def render_pulse_html(report: Mapping[str, Any]) -> str:
       <table>
         <tr><th>Signal</th><th>Value</th></tr>
         {token_health_rows}
+      </table>
+    </section>
+    <section class="panel">
+      <h2>Signal Calibration</h2>
+      <table>
+        <tr><th>Signal</th><th>Value</th></tr>
+        {calibration_health_rows}
       </table>
     </section>
     <section class="panel">
@@ -831,6 +860,30 @@ def build_token_health(token_audit: Mapping[str, Any] | None) -> dict[str, Any]:
         "raw_required_blocks": int(metrics.get("raw_required_blocks", 0) or 0),
         "budget_violations": int(metrics.get("budget_violations", 0) or 0),
         "findings": int(summary.get("findings", len(_list(token_audit.get("findings")))) or 0),
+    }
+
+
+def build_calibration_health(signal_calibration: Mapping[str, Any] | None) -> dict[str, Any]:
+    if signal_calibration is None:
+        return {
+            "status": "not-run",
+            "claim_count": 0,
+            "proven_claims": 0,
+            "unsupported_claims": 0,
+            "blocked_claims": 0,
+            "overclaim_flags": 0,
+            "field_tested_claims": 0,
+        }
+    summary = _mapping(signal_calibration.get("summary"))
+    return {
+        "status": str(signal_calibration.get("status", "not-run")),
+        "claim_count": int(summary.get("claim_count", 0) or 0),
+        "proven_claims": int(summary.get("proven_claims", 0) or 0),
+        "unsupported_claims": int(summary.get("unsupported_claims", 0) or 0),
+        "blocked_claims": int(summary.get("blocked_claims", 0) or 0),
+        "overclaim_flags": int(summary.get("overclaim_flags", 0) or 0),
+        "field_tested_claims": int(summary.get("field_tested_claims", 0) or 0),
+        "findings": int(summary.get("findings", len(_list(signal_calibration.get("findings")))) or 0),
     }
 
 
@@ -1548,6 +1601,21 @@ def _load_or_build_token_audit(
     if not include_token_audit:
         return None
     builder = token_audit_builder or (lambda project_root: build_token_audit(project_root))
+    return builder(root)
+
+
+def _load_or_build_signal_calibration(
+    root: Path,
+    *,
+    include_signal_calibration: bool,
+    signal_calibration_file: Path | str | None,
+    signal_calibration_builder: SignalCalibrationBuilder | None,
+) -> Mapping[str, Any] | None:
+    if signal_calibration_file is not None:
+        return _read_json(root, signal_calibration_file)
+    if not include_signal_calibration:
+        return None
+    builder = signal_calibration_builder or (lambda project_root: build_signal_calibration_report(project_root, mode="readiness"))
     return builder(root)
 
 

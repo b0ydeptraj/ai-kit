@@ -1094,5 +1094,24 @@
       "Map tests to risk areas and brittle zones where regressions cluster.",
       "developer"
     ]
+  },
+  {
+    "id": "signal-calibration-overclaim-contract",
+    "skill": "signal-calibration",
+    "task": "Use signal-calibration for a production-shaped Relay-kit lane: calibrate overclaim-prone completion, readiness, skill quality, field-tested, production-ready, commercial-ready, backend realism, UI realism, MMO/API realism, or benchmark claims before accepting them. The operator must separate validated fixture evidence from field evidence and block stronger wording when proof is missing.",
+    "required_artifacts": [
+      ".relay-kit/eval/signal-calibration.json",
+      ".relay-kit/evidence/skill-field-evidence.json when field-tested wording is used"
+    ],
+    "required_evidence": [
+      "proof_level",
+      "evidence_sources",
+      "overclaim flags"
+    ],
+    "pass_rubric": [
+      "field-tested",
+      "confidence",
+      "residual risk"
+    ]
   }
 ]

@@ -151,6 +151,7 @@ def metric_signals(pulse_report: Mapping[str, Any]) -> list[dict[str, Any]]:
     lane_health = _mapping(pulse_report.get("lane_health"))
     adapter_health = _mapping(pulse_report.get("adapter_health"))
     token_health = _mapping(pulse_report.get("token_health"))
+    calibration_health = _mapping(pulse_report.get("calibration_health"))
     query_health = _mapping(pulse_report.get("query_health"))
     service_boundary_health = _mapping(pulse_report.get("service_boundary_health"))
     coverage_gaps = _mapping(quality.get("coverage_gaps"))
@@ -195,6 +196,11 @@ def metric_signals(pulse_report: Mapping[str, Any]) -> list[dict[str, Any]]:
         metric("relay.context.signal_retention", _number(token_health.get("signal_retention")), "1", base_attrs),
         metric("relay.context.raw_required_blocks", _number(token_health.get("raw_required_blocks")), "1", base_attrs),
         metric("relay.token.budget_violations", _number(token_health.get("budget_violations")), "1", base_attrs),
+        metric("relay.calibration.unsupported_claims", _number(calibration_health.get("unsupported_claims")), "1", base_attrs),
+        metric("relay.calibration.overclaim_flags", _number(calibration_health.get("overclaim_flags")), "1", base_attrs),
+        metric("relay.calibration.proven_claims", _number(calibration_health.get("proven_claims")), "1", base_attrs),
+        metric("relay.calibration.field_tested_claims", _number(calibration_health.get("field_tested_claims")), "1", base_attrs),
+        metric("relay.calibration.blocked_claims", _number(calibration_health.get("blocked_claims")), "1", base_attrs),
         metric("relay.query.authoritative_hits", _number(query_health.get("authoritative_hits")), "1", base_attrs),
         metric("relay.service.boundary_findings", _number(service_boundary_health.get("findings")), "1", base_attrs),
         metric("relay.gates.pass", _number(gate_status_counts.get("pass")), "1", base_attrs),

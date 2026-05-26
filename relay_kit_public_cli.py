@@ -36,6 +36,7 @@ This wrapper exposes a friendlier command surface:
   relay-kit eval repo-profile <project_path>
   relay-kit eval domain-pack list <project_path>
   relay-kit proof audit <project_path>
+  relay-kit calibrate readiness <project_path>
   relay-kit locale show <project_path>
   relay-kit locale set <project_path> --locale <code>
   relay-kit lane audit <project_path>
@@ -97,6 +98,11 @@ from relay_kit_v3.publication import (
 )
 from relay_kit_v3.release_lane import build_release_lane_report, render_release_lane_report, write_release_lane_report
 from relay_kit_v3.readiness import build_readiness_report, render_readiness_report
+from relay_kit_v3.signal_calibration import (
+    build_report as build_signal_calibration_report,
+    render_report as render_signal_calibration_report,
+    write_report as write_signal_calibration_report,
+)
 from relay_kit_v3.signal_export import build_signal_export, write_signal_export
 from relay_kit_v3.token_economy import (
     DEFAULT_MAX_TOKENS,
@@ -522,6 +528,36 @@ def _parse_token_args(argv: list[str]) -> argparse.Namespace:
     audit.add_argument("--output-file", default=None, help="Optional token audit JSON output path")
     audit.add_argument("--strict", action="store_true", help="Return non-zero unless budget and retention pass")
     audit.add_argument("--json", action="store_true", help="Emit machine-readable token audit")
+    return parser.parse_args(argv)
+
+
+def _parse_calibrate_args(argv: list[str]) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        prog="relay-kit calibrate",
+        description="Calibrate overclaim-prone Relay-kit claims against proof evidence.",
+    )
+    subparsers = parser.add_subparsers(dest="action", required=True)
+
+    claims = subparsers.add_parser("claims", help="Calibrate explicit claim text")
+    claims.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    claims.add_argument("--claim", action="append", help="Exact claim text to calibrate")
+    claims.add_argument("--claim-file", default=None, help="JSON, markdown, or text file with claims")
+    claims.add_argument("--output-file", default=None, help="Optional signal calibration JSON output path")
+    claims.add_argument("--strict", action="store_true", help="Return non-zero when a claim is blocked")
+    claims.add_argument("--json", action="store_true", help="Emit machine-readable signal calibration report")
+
+    skill = subparsers.add_parser("skill", help="Calibrate skill quality claims")
+    skill.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    skill.add_argument("--skill", default="all", help="Skill name or all")
+    skill.add_argument("--output-file", default=None, help="Optional signal calibration JSON output path")
+    skill.add_argument("--strict", action="store_true", help="Return non-zero when a claim is blocked")
+    skill.add_argument("--json", action="store_true", help="Emit machine-readable signal calibration report")
+
+    readiness = subparsers.add_parser("readiness", help="Calibrate readiness and public proof claims")
+    readiness.add_argument("project_path", nargs="?", default=".", help="Project root to inspect")
+    readiness.add_argument("--output-file", default=None, help="Optional signal calibration JSON output path")
+    readiness.add_argument("--strict", action="store_true", help="Return non-zero when a claim is blocked")
+    readiness.add_argument("--json", action="store_true", help="Emit machine-readable signal calibration report")
     return parser.parse_args(argv)
 
 
@@ -1238,6 +1274,8 @@ def _parse_pulse_args(argv: list[str]) -> argparse.Namespace:
     build.add_argument("--lane-audit-file", default=None, help="Existing lane audit JSON report to include")
     build.add_argument("--adapter-diagnostics-file", default=None, help="Existing adapter diagnostics JSON report to include")
     build.add_argument("--token-audit-file", default=None, help="Existing token audit JSON report to include")
+    build.add_argument("--signal-calibration-file", default=None, help="Existing signal calibration JSON report to include")
+    build.add_argument("--skip-signal-calibration", action="store_true", help="Do not build the default signal calibration summary")
     build.add_argument("--query-search-file", default=None, help="Existing query search JSON report to include")
     build.add_argument("--service-boundaries-file", default=None, help="Existing service-boundary JSON report to include")
     build.add_argument("--query-search-text", default="relay governance", help="Query text when --include-query-search builds a report")
@@ -1773,6 +1811,29 @@ def run_token(args: argparse.Namespace) -> int:
         print(f"Wrote {output_path}")
     if args.strict and report["status"] != "pass":
         return 1
+    return 0
+
+
+def run_calibrate(args: argparse.Namespace) -> int:
+    report = build_signal_calibration_report(
+        args.project_path,
+        mode=args.action,
+        claims=getattr(args, "claim", None),
+        claim_file=getattr(args, "claim_file", None),
+        skill=getattr(args, "skill", "all"),
+        strict=args.strict,
+    )
+    output_path = None
+    if args.output_file:
+        output_path = write_signal_calibration_report(args.project_path, report, args.output_file)
+    if args.json:
+        print(json.dumps(report, ensure_ascii=True, indent=2))
+    else:
+        print(render_signal_calibration_report(report))
+        if output_path is not None:
+            print(f"Wrote {output_path}")
+    if args.strict and report["status"] != "pass":
+        return 2
     return 0
 
 
@@ -2605,6 +2666,8 @@ def run_pulse(args: argparse.Namespace) -> int:
         lane_audit_file=args.lane_audit_file,
         adapter_diagnostics_file=args.adapter_diagnostics_file,
         token_audit_file=args.token_audit_file,
+        signal_calibration_file=args.signal_calibration_file,
+        include_signal_calibration=not args.skip_signal_calibration,
         query_search_file=args.query_search_file,
         service_boundaries_file=args.service_boundaries_file,
         query_search_text=args.query_search_text,
@@ -2677,6 +2740,8 @@ def main(argv: list[str] | None = None) -> int:
         return run_locale(_parse_locale_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "token":
         return run_token(_parse_token_args(raw_argv[1:]))
+    if raw_argv and raw_argv[0] == "calibrate":
+        return run_calibrate(_parse_calibrate_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "shell":
         return run_shell(_parse_shell_args(raw_argv[1:]))
     if raw_argv and raw_argv[0] == "adapter":

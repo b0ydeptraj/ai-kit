@@ -47,6 +47,7 @@ Pulse combines:
 - lane health from `relay-kit lane audit`, including conflicts, broad locks, and incomplete handoffs
 - adapter health from `relay-kit adapter diagnose`, including missing skills and metadata drift
 - token health from `relay-kit token audit`, including estimated tokens, compressed tokens, raw-required blocks, signal retention, and budget violations
+- signal calibration health from `relay-kit calibrate readiness`, including unsupported claims, overclaim flags, proven claims, field-tested claims, and blocked claims
 - query health from `relay-kit query search`, including authoritative hit count
 - service-boundary health from `relay-kit service boundaries`, including boundary findings
 - gate summary status for workflow eval, readiness, publication, package index, support request, commercial dossier, and evidence ledger
@@ -100,11 +101,12 @@ The JSON report includes these additive top-level summaries when the matching ar
 - `lane_health`: active lanes, parked lanes, conflicts, broad locks, and incomplete handoffs
 - `adapter_health`: adapter count, missing skills, unexpected skills, and metadata drift
 - `token_health`: estimated tokens, compressed tokens, signal retention, raw-required blocks, and budget violations
+- `calibration_health`: claim count, proven claims, unsupported claims, blocked claims, overclaim flags, and field-tested claims
 - `query_health`: query text, total hits, returned hits, and authoritative hits
 - `service_boundary_health`: boundary count, module count, and finding count
-- `governance_health`: combined status across the six governance sections
+- `governance_health`: combined status across the governance sections
 
-The HTML report renders Context Health, Lane Health, Adapter Health, Token Health, Query Health, and Service Boundaries as separate sections.
+The HTML report renders Context Health, Lane Health, Adapter Health, Token Health, Signal Calibration, Query Health, and Service Boundaries as separate sections.
 
 ## History
 
@@ -153,6 +155,9 @@ Signal export includes `relay.gates.pass`, `relay.gates.attention`,
 `relay.context.estimated_tokens`, `relay.context.compressed_tokens`,
 `relay.context.signal_retention`, `relay.context.raw_required_blocks`,
 `relay.token.budget_violations`,
+`relay.calibration.unsupported_claims`, `relay.calibration.overclaim_flags`,
+`relay.calibration.proven_claims`, `relay.calibration.field_tested_claims`,
+`relay.calibration.blocked_claims`,
 `relay.query.authoritative_hits`, `relay.service.boundary_findings`,
 `relay.publication.ready`, `relay.package_index.published`,
 `relay.support_request.ready`, and `relay.commercial_dossier.ready` when a
