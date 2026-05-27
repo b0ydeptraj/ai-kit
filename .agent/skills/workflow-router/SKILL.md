@@ -91,3 +91,4 @@ Never end with vague advice. Always name the next skill, the artifact it should 
 - scout-hub
 - plan-hub
 - debug-hub
+- token-economy

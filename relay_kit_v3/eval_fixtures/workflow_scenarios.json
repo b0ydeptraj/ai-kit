@@ -3,468 +3,900 @@
     "id": "workflow-router-ambiguous-entry",
     "prompt": "A new request arrived and the scope is unclear. Choose the track, active hub, next skill, and update workflow-state.",
     "expected_skill": "workflow-router",
-    "expected_terms": ["track", "workflow-state", "next skill"]
+    "expected_terms": [
+      "track",
+      "workflow-state",
+      "next skill"
+    ]
   },
   {
     "id": "cook-active-request-handoff",
     "prompt": "One active request already has routing and state. Drive the next solid handoff without reopening planning.",
     "expected_skill": "cook",
-    "expected_terms": ["active request", "handoff", "hub"]
+    "expected_terms": [
+      "active request",
+      "handoff",
+      "hub"
+    ]
   },
   {
     "id": "plan-hub-stale-planning",
     "prompt": "This work is larger than quick-flow and planning artifacts are stale. Use the planning hub to sequence analyst, PM, architect, and story slicing without losing context.",
     "expected_skill": "plan-hub",
-    "expected_terms": ["planning", "PRD", "architecture"]
+    "expected_terms": [
+      "planning",
+      "PRD",
+      "architecture"
+    ]
   },
   {
     "id": "developer-implementation-ready",
     "prompt": "Use developer because the approved story is implementation-ready. Read the story, edit code in one controlled slice, run the execution loop, collect test evidence, and update workflow-state.",
     "expected_skill": "developer",
-    "expected_terms": ["code", "test evidence", "workflow-state"]
+    "expected_terms": [
+      "code",
+      "test evidence",
+      "workflow-state"
+    ]
   },
   {
     "id": "test-hub-risky-implementation",
     "prompt": "Use test-hub after implementation exists and confidence is lower than the change impact. Build the evidence matrix, coordinate verification, collect regression evidence, and prepare qa-report inputs.",
     "expected_skill": "test-hub",
-    "expected_terms": ["verification", "evidence", "regression"]
+    "expected_terms": [
+      "verification",
+      "evidence",
+      "regression"
+    ]
   },
   {
     "id": "qa-governor-completion-risk",
     "prompt": "Work is about to be called done. Check acceptance criteria, risk, regression scope, and write a QA report.",
     "expected_skill": "qa-governor",
-    "expected_terms": ["acceptance criteria", "risk", "qa-report"]
+    "expected_terms": [
+      "acceptance criteria",
+      "risk",
+      "qa-report"
+    ]
   },
   {
     "id": "release-readiness-predeploy",
     "prompt": "Before deploy, produce a readiness verdict with smoke signals, rollback guardrails, and release evidence.",
     "expected_skill": "release-readiness",
-    "expected_terms": ["smoke", "rollback", "readiness verdict"]
+    "expected_terms": [
+      "smoke",
+      "rollback",
+      "readiness verdict"
+    ]
   },
   {
     "id": "migration-guard-cutover",
     "prompt": "A naming cutover might leave stale compatibility tokens behind. Scan source and runtime files with a strict fail-closed naming gate.",
     "expected_skill": "migration-guard",
-    "expected_terms": ["compatibility tokens", "fail-closed", "cutover"]
+    "expected_terms": [
+      "compatibility tokens",
+      "fail-closed",
+      "cutover"
+    ]
   },
   {
     "id": "context-continuity-new-thread",
     "prompt": "The chat is getting long and may resume in a new thread. Create checkpoint, rehydrate context, handoff, and diff continuity.",
     "expected_skill": "context-continuity",
-    "expected_terms": ["checkpoint", "rehydrate", "handoff"]
+    "expected_terms": [
+      "checkpoint",
+      "rehydrate",
+      "handoff"
+    ]
   },
   {
     "id": "evidence-before-completion-proof",
     "prompt": "The agent is about to say fixed and ready. Run one last evidence pass before making the completion claim.",
     "expected_skill": "evidence-before-completion",
-    "expected_terms": ["completion claim", "evidence", "done"]
+    "expected_terms": [
+      "completion claim",
+      "evidence",
+      "done"
+    ]
   },
   {
     "id": "completion-claim-proof-output",
     "prompt": "List completion claims and map each claim to fresh proof output without deciding overall readiness.",
     "expected_skill": "evidence-before-completion",
-    "expected_terms": ["claim-to-evidence", "proof output", "not a readiness verdict"]
+    "expected_terms": [
+      "claim-to-evidence",
+      "proof output",
+      "not a readiness verdict"
+    ]
   },
   {
     "id": "qa-readiness-verdict",
     "prompt": "Implementation evidence exists. Produce a formal go or no-go readiness verdict against acceptance criteria, risk, regression scope, and qa-report.",
     "expected_skill": "qa-governor",
-    "expected_terms": ["readiness verdict", "go or no-go", "qa-report"]
+    "expected_terms": [
+      "readiness verdict",
+      "go or no-go",
+      "qa-report"
+    ]
   },
   {
     "id": "api-integration-network-client",
     "prompt": "Use api-integration for network-facing code. We are changing API clients, webhooks, auth, retries, timeouts, and error mapping for an external service.",
     "expected_skill": "api-integration",
-    "expected_terms": ["clients", "auth", "retries"]
+    "expected_terms": [
+      "clients",
+      "auth",
+      "retries"
+    ]
   },
   {
     "id": "data-persistence-schema-change",
     "prompt": "Use data-persistence before touching schemas, repositories, migrations, transactions, caches, and consistency boundaries.",
     "expected_skill": "data-persistence",
-    "expected_terms": ["schemas", "migrations", "transactions"]
+    "expected_terms": [
+      "schemas",
+      "migrations",
+      "transactions"
+    ]
   },
   {
     "id": "dependency-management-package-upgrade",
     "prompt": "Use dependency-management because a package is being added or upgraded and lockfiles, version pinning, dependency risks, toolchain, and CI drift must be checked.",
     "expected_skill": "dependency-management",
-    "expected_terms": ["lockfiles", "version pinning", "dependency risks"]
+    "expected_terms": [
+      "lockfiles",
+      "version pinning",
+      "dependency risks"
+    ]
   },
   {
     "id": "multimodal-evidence-static-screenshot",
     "prompt": "Use multimodal-evidence for a static screenshot artifact. Inspect the image, describe visible observations, confidence, affected acceptance criteria, and follow-up checks without a live browser session.",
     "expected_skill": "multimodal-evidence",
-    "expected_terms": ["visible observations", "confidence", "follow-up checks"]
+    "expected_terms": [
+      "visible observations",
+      "confidence",
+      "follow-up checks"
+    ]
   },
   {
     "id": "browser-inspector-live-dom-network",
     "prompt": "Use browser-inspector because the active hub needs live browser state from a repro route. Collect console, network, DOM, layout, performance facts, reproduction confidence, and captured artifacts.",
     "expected_skill": "browser-inspector",
-    "expected_terms": ["console", "network", "reproduction confidence"]
+    "expected_terms": [
+      "console",
+      "network",
+      "reproduction confidence"
+    ]
   },
   {
     "id": "media-tooling-evidence-assets",
     "prompt": "Use media-tooling when screenshots, assets, or content files need transformations, reversible processing, exact asset sources, outputs, and evidence packaging for the current lane.",
     "expected_skill": "media-tooling",
-    "expected_terms": ["transformations", "asset sources", "outputs"]
+    "expected_terms": [
+      "transformations",
+      "asset sources",
+      "outputs"
+    ]
   },
   {
     "id": "api-integration-payment-webhook-retry",
     "prompt": "Use api-integration for payment webhook clients. Document auth, retries, timeouts, idempotency, request and response patterns, and error mapping for the external service.",
     "expected_skill": "api-integration",
-    "expected_terms": ["clients", "auth", "retries"]
+    "expected_terms": [
+      "clients",
+      "auth",
+      "retries"
+    ]
   },
   {
     "id": "data-persistence-order-ledger-migration",
     "prompt": "Use data-persistence for order ledger schemas, repositories, migrations, transactions, caches, consistency boundaries, and rollback notes.",
     "expected_skill": "data-persistence",
-    "expected_terms": ["schemas", "migrations", "transactions"]
+    "expected_terms": [
+      "schemas",
+      "migrations",
+      "transactions"
+    ]
   },
   {
     "id": "dependency-management-driver-upgrade-ci",
     "prompt": "Use dependency-management before upgrading a browser driver package. Check package manager, lockfiles, version pinning, dependency risks, toolchain setup, CI drift, and transitive risk.",
     "expected_skill": "dependency-management",
-    "expected_terms": ["lockfiles", "version pinning", "dependency risks"]
+    "expected_terms": [
+      "lockfiles",
+      "version pinning",
+      "dependency risks"
+    ]
   },
   {
     "id": "browser-inspector-checkout-console-network",
     "prompt": "Use browser-inspector on a live checkout route. Collect console errors, network requests, DOM state, performance facts, reproduction confidence, and captured artifacts.",
     "expected_skill": "browser-inspector",
-    "expected_terms": ["console", "network", "reproduction confidence"]
+    "expected_terms": [
+      "console",
+      "network",
+      "reproduction confidence"
+    ]
   },
   {
     "id": "multimodal-evidence-design-regression",
     "prompt": "Use multimodal-evidence for before and after static screenshot artifacts. Report visible observations, confidence, affected acceptance criteria, and follow-up checks without a live browser session.",
     "expected_skill": "multimodal-evidence",
-    "expected_terms": ["visible observations", "confidence", "follow-up checks"]
+    "expected_terms": [
+      "visible observations",
+      "confidence",
+      "follow-up checks"
+    ]
   },
   {
     "id": "media-tooling-asset-normalization",
     "prompt": "Use media-tooling for content file transformations. Normalize image assets, preserve exact asset sources, write deterministic outputs, and package evidence for the active lane.",
     "expected_skill": "media-tooling",
-    "expected_terms": ["transformations", "asset sources", "outputs"]
+    "expected_terms": [
+      "transformations",
+      "asset sources",
+      "outputs"
+    ]
   },
   {
     "id": "accessibility-review-before-ready",
     "prompt": "Use accessibility-review before completion claims for frontend work. Check keyboard navigation, visible focus, semantic structure, labels, contrast, and hold verdict evidence.",
     "expected_skill": "accessibility-review",
-    "expected_terms": ["keyboard", "focus", "contrast"]
+    "expected_terms": [
+      "keyboard",
+      "focus",
+      "contrast"
+    ]
   },
   {
     "id": "policy-guard-high-risk-operation",
     "prompt": "Use policy-guard for high-risk agent operations. Scan shell commands, path traversal, hard-coded secrets, prompt-injection phrases, and enforce fail-closed handling.",
     "expected_skill": "policy-guard",
-    "expected_terms": ["path traversal", "hard-coded secrets", "fail-closed"]
+    "expected_terms": [
+      "path traversal",
+      "hard-coded secrets",
+      "fail-closed"
+    ]
   },
   {
     "id": "impact-radar-runtime-blast-radius",
     "prompt": "Use impact-radar before touching runtime, adapters, templates, scripts, docs, and packaging so blast radius and verification gates are explicit.",
     "expected_skill": "impact-radar",
-    "expected_terms": ["blast radius", "risk level", "verification gates"]
+    "expected_terms": [
+      "blast radius",
+      "risk level",
+      "verification gates"
+    ]
   },
   {
     "id": "project-architecture-drift-map",
     "prompt": "Need project-architecture support, not architect planning. Analyze existing codebase shape, entry points, execution flow, dependency direction, architecture drift, hotspots, and update the living architecture reference.",
     "expected_skill": "project-architecture",
-    "expected_terms": ["entry points", "dependency direction", "architecture drift"]
+    "expected_terms": [
+      "entry points",
+      "dependency direction",
+      "architecture drift"
+    ]
   },
   {
     "id": "ux-structure-product-flow",
     "prompt": "Use ux-structure when a user-facing flow needs sharper information hierarchy, cleaner interaction flow, loading empty error states, and less generic AI-looking UI.",
     "expected_skill": "ux-structure",
-    "expected_terms": ["information hierarchy", "loading", "empty"]
+    "expected_terms": [
+      "information hierarchy",
+      "loading",
+      "empty"
+    ]
   },
   {
     "id": "bootstrap-missing-runtime-state",
     "prompt": "Use bootstrap when starting a repo lane and workflow-state or project-context is missing or stale. Initialize or refresh the shared Relay-kit runtime, record artifacts, and create team-board if the request may split into lanes.",
     "expected_skill": "bootstrap",
-    "expected_terms": ["workflow-state", "project-context", "team-board"]
+    "expected_terms": [
+      "workflow-state",
+      "project-context",
+      "team-board"
+    ]
   },
   {
     "id": "debug-hub-regression-triage",
     "prompt": "Use debug-hub because work starts from a regression, flaky behavior, or unexplained mismatch. Reproduce the issue, collect logs and test output, write investigation-notes, and decide whether the next move is fix-hub, test-hub, or plan-hub.",
     "expected_skill": "debug-hub",
-    "expected_terms": ["reproduce", "investigation-notes", "root cause"]
+    "expected_terms": [
+      "reproduce",
+      "investigation-notes",
+      "root cause"
+    ]
   },
   {
     "id": "fix-hub-bounded-findings",
     "prompt": "Use fix-hub after debug-hub validated findings. Convert the known problem into a bounded implementation path, update tech-spec with files and verification steps, name what must not change, and hand off to developer.",
     "expected_skill": "fix-hub",
-    "expected_terms": ["bounded implementation path", "tech-spec", "developer"]
+    "expected_terms": [
+      "bounded implementation path",
+      "tech-spec",
+      "developer"
+    ]
   },
   {
     "id": "review-hub-artifact-alignment",
     "prompt": "Use review-hub when requirements, architecture, implementation, and quality evidence may disagree. Check alignment, decide go forward or bounce to planning, debugging, implementation, or hold for missing evidence.",
     "expected_skill": "review-hub",
-    "expected_terms": ["requirements", "architecture", "quality evidence"]
+    "expected_terms": [
+      "requirements",
+      "architecture",
+      "quality evidence"
+    ]
   },
   {
     "id": "pm-buildable-scope",
     "prompt": "Use pm after discovery when the work needs buildable scope. Translate product brief or scoped request into PRD, release slices, acceptance criteria, risks, mitigations, and epics.",
     "expected_skill": "pm",
-    "expected_terms": ["acceptance criteria", "release slices", "PRD.md"]
+    "expected_terms": [
+      "acceptance criteria",
+      "release slices",
+      "PRD.md"
+    ]
   },
   {
     "id": "architect-module-boundaries",
     "prompt": "Use architect when PRD exists or a change alters module boundaries, data flow, security, or operations. Convert requirements into implementation-ready architecture with trade-offs and a readiness verdict.",
     "expected_skill": "architect",
-    "expected_terms": ["module boundaries", "data flow", "readiness verdict"]
+    "expected_terms": [
+      "module boundaries",
+      "data flow",
+      "readiness verdict"
+    ]
   },
   {
     "id": "scrum-master-story-slicing",
     "prompt": "Use scrum-master when planning is done and work must be sliced into safe verifiable increments. Turn PRD, architecture, epics, or tech-spec into story files with acceptance criteria and verification steps.",
     "expected_skill": "scrum-master",
-    "expected_terms": ["story files", "acceptance criteria", "verification"]
+    "expected_terms": [
+      "story files",
+      "acceptance criteria",
+      "verification"
+    ]
   },
   {
     "id": "runtime-doctor-adapter-parity",
     "prompt": "Use runtime-doctor when runtime integrity may have drifted. Run deterministic diagnostics for adapter parity, generated artifacts, live state-mode checks, missing skills, extra skills, and placeholder state markers.",
     "expected_skill": "runtime-doctor",
-    "expected_terms": ["adapter parity", "runtime diagnostics", "state-mode live"]
+    "expected_terms": [
+      "adapter parity",
+      "runtime diagnostics",
+      "state-mode live"
+    ]
   },
   {
     "id": "analyst-product-discovery-brief",
     "prompt": "Use analyst before PRD or architecture. Clarify product intent, assumptions, target users, open questions, constraints, and produce a product brief for an unclear opportunity.",
     "expected_skill": "analyst",
-    "expected_terms": ["product intent", "assumptions", "product brief"]
+    "expected_terms": [
+      "product intent",
+      "assumptions",
+      "product brief"
+    ]
   },
   {
     "id": "brainstorm-hub-rough-opportunity",
     "prompt": "Use brainstorm-hub because the request is still a rough idea and opportunity. Guide early ideation, explore directions, and frame the problem before formal planning.",
     "expected_skill": "brainstorm-hub",
-    "expected_terms": ["idea", "opportunity", "problem framing"]
+    "expected_terms": [
+      "idea",
+      "opportunity",
+      "problem framing"
+    ]
   },
   {
     "id": "execution-loop-iterative-fix-proof",
     "prompt": "Use execution-loop while building a code fix iteratively. Run a self-correcting development loop, collect test evidence, and do not claim completion until verification passes.",
     "expected_skill": "execution-loop",
-    "expected_terms": ["iteratively", "evidence", "completion"]
+    "expected_terms": [
+      "iteratively",
+      "evidence",
+      "completion"
+    ]
   },
   {
     "id": "scout-hub-unfamiliar-repo-area",
     "prompt": "Use scout-hub when the repo area is unfamiliar or stale. Reconnoiter code entrypoints, likely drift, dependencies, and living references before planning or debugging continues.",
     "expected_skill": "scout-hub",
-    "expected_terms": ["unfamiliar", "stale", "living references"]
+    "expected_terms": [
+      "unfamiliar",
+      "stale",
+      "living references"
+    ]
   },
   {
     "id": "team-parallel-lanes-coordination",
     "prompt": "Use team when work must proceed in parallel across multiple lanes. Coordinate owners, lane locks, handoffs, and avoid agents stepping on each other.",
     "expected_skill": "team",
-    "expected_terms": ["parallel", "lanes", "coordinate"]
+    "expected_terms": [
+      "parallel",
+      "lanes",
+      "coordinate"
+    ]
   },
   {
     "id": "testing-patterns-fixture-strategy",
     "prompt": "Use testing-patterns when adding tests or fixtures. Capture test strategy, mocks, dependency boundaries, regression coverage, and what evidence is enough for release confidence.",
     "expected_skill": "testing-patterns",
-    "expected_terms": ["tests", "fixtures", "evidence"]
+    "expected_terms": [
+      "tests",
+      "fixtures",
+      "evidence"
+    ]
   },
   {
     "id": "doc-pointers-exact-doc-fragments",
     "prompt": "Use doc-pointers because the hub needs exact docs fragments, file paths, and source references before deciding the next implementation move.",
     "expected_skill": "doc-pointers",
-    "expected_terms": ["docs fragments", "file paths", "source references"]
+    "expected_terms": [
+      "docs fragments",
+      "file paths",
+      "source references"
+    ]
   },
   {
     "id": "handoff-context-focused-pack",
     "prompt": "Use handoff-context because the next skill needs a tighter relevant context handoff, focused context pack, and include/exclude list before it can act safely.",
     "expected_skill": "handoff-context",
-    "expected_terms": ["context handoff", "focused context pack", "include/exclude list"]
+    "expected_terms": [
+      "context handoff",
+      "focused context pack",
+      "include/exclude list"
+    ]
   },
   {
     "id": "memory-search-past-decisions",
     "prompt": "Use memory-search because the hub needs past decisions, handoff breadcrumbs, and prior debug evidence from .relay-kit artifacts before planning continues.",
     "expected_skill": "memory-search",
-    "expected_terms": ["past decisions", "handoff breadcrumbs", "debug evidence"]
+    "expected_terms": [
+      "past decisions",
+      "handoff breadcrumbs",
+      "debug evidence"
+    ]
   },
   {
     "id": "mermaid-diagrams-architecture-flow",
     "prompt": "Use mermaid-diagrams because the architecture sequence needs a quick Mermaid diagram, flow, and sequencing representation inside the artifact.",
     "expected_skill": "mermaid-diagrams",
-    "expected_terms": ["mermaid", "flow", "sequencing"]
+    "expected_terms": [
+      "mermaid",
+      "flow",
+      "sequencing"
+    ]
   },
   {
     "id": "problem-solving-options-tradeoffs",
     "prompt": "Use problem-solving because the hub needs hypotheses, trade-offs, and resolution paths grounded in current evidence before choosing a fix direction.",
     "expected_skill": "problem-solving",
-    "expected_terms": ["hypotheses", "trade-offs", "resolution paths"]
+    "expected_terms": [
+      "hypotheses",
+      "trade-offs",
+      "resolution paths"
+    ]
   },
   {
     "id": "repo-map-entrypoint-overview",
     "prompt": "Use repo-map because the hub needs a quick dependency map, file tree slice, and entrypoint overview before touching this unfamiliar module.",
     "expected_skill": "repo-map",
-    "expected_terms": ["dependency map", "file tree slice", "entrypoint overview"]
+    "expected_terms": [
+      "dependency map",
+      "file tree slice",
+      "entrypoint overview"
+    ]
   },
   {
     "id": "research-fresh-evidence",
     "prompt": "Use research because the hub needs fresh evidence for a technical decision while retaining ownership of the lane and marking assumptions.",
     "expected_skill": "research",
-    "expected_terms": ["fresh evidence", "technical", "assumptions"]
+    "expected_terms": [
+      "fresh evidence",
+      "technical",
+      "assumptions"
+    ]
   },
   {
     "id": "root-cause-debugging-disciplined-investigation",
     "prompt": "Use root-cause-debugging because the hub needs disciplined investigation, disproven hypotheses, and root-cause notes before proposing fixes.",
     "expected_skill": "root-cause-debugging",
-    "expected_terms": ["root-cause notes", "disproven hypotheses", "investigation"]
+    "expected_terms": [
+      "root-cause notes",
+      "disproven hypotheses",
+      "investigation"
+    ]
   },
   {
     "id": "sequential-thinking-stepwise-checkpoints",
     "prompt": "Use sequential-thinking because the hub needs structured thought, stepwise reasoning, explicit steps, and checkpoints without changing ownership.",
     "expected_skill": "sequential-thinking",
-    "expected_terms": ["structured thought", "stepwise reasoning", "checkpoints"]
+    "expected_terms": [
+      "structured thought",
+      "stepwise reasoning",
+      "checkpoints"
+    ]
   },
   {
     "id": "skill-evolution-skill-behavior-audit",
     "prompt": "Use skill-evolution when upgrading a Relay-kit SKILL.md. Audit trigger descriptions, allowed tools, handoff contract, and scenario fixtures before changing behavior.",
     "expected_skill": "skill-evolution",
-    "expected_terms": ["trigger descriptions", "allowed tools", "scenario fixtures"]
+    "expected_terms": [
+      "trigger descriptions",
+      "allowed tools",
+      "scenario fixtures"
+    ]
   },
   {
     "id": "skill-gauntlet-routing-regression-gate",
     "prompt": "Use skill-gauntlet when runtime skill behavior may have drifted and a regression gate must validate routing and completion claims before trusting the runtime.",
     "expected_skill": "skill-gauntlet",
-    "expected_terms": ["regression gate", "routing", "completion claims"]
+    "expected_terms": [
+      "regression gate",
+      "routing",
+      "completion claims"
+    ]
   },
   {
     "id": "test-first-development-red-green-loop",
     "prompt": "Use test-first-development because implementation should follow a red-green-refactor loop: write the failing test first, make it green, then clean up one behavior.",
     "expected_skill": "test-first-development",
-    "expected_terms": ["red-green-refactor", "failing test", "one behavior"]
+    "expected_terms": [
+      "red-green-refactor",
+      "failing test",
+      "one behavior"
+    ]
   },
   {
     "id": "context-continuity-governance-health",
     "prompt": "Use context-continuity when a long Relay-kit lane needs source freshness, checkpoint, rehydrate, handoff, and diff continuity before dashboard evidence is trusted.",
     "expected_skill": "context-continuity",
-    "expected_terms": ["checkpoint", "handoff", "diff"]
+    "expected_terms": [
+      "checkpoint",
+      "handoff",
+      "diff"
+    ]
   },
   {
     "id": "team-lane-health-audit",
     "prompt": "Use team when multi-lane state needs lane locks, depends_on, wave_id, resume_condition, merge order, and a relay-kit lane audit before parallel work continues.",
     "expected_skill": "team",
-    "expected_terms": ["depends_on", "wave_id", "resume_condition"]
+    "expected_terms": [
+      "depends_on",
+      "wave_id",
+      "resume_condition"
+    ]
   },
   {
     "id": "runtime-doctor-adapter-diagnostics",
     "prompt": "Use runtime-doctor when adapter diagnostics must check adapter parity, missing skills, extra skills, metadata drift, and live mode runtime integrity before release.",
     "expected_skill": "runtime-doctor",
-    "expected_terms": ["adapter parity", "missing", "live mode"]
+    "expected_terms": [
+      "adapter parity",
+      "missing",
+      "live mode"
+    ]
   },
   {
     "id": "memory-search-query-source-lookup",
     "prompt": "Use memory-search when the hub needs ranked state and contract lookup with file paths, line-level excerpts, stale hits, and prior decisions for dashboard evidence.",
     "expected_skill": "memory-search",
-    "expected_terms": ["file paths", "line-level excerpts", "stale hits"]
+    "expected_terms": [
+      "file paths",
+      "line-level excerpts",
+      "stale hits"
+    ]
   },
   {
     "id": "repo-map-service-boundary-review",
     "prompt": "Use repo-map when service-boundary mapping needs entrypoints, modules, dependency direction, and impact surface for CLI, registry, gates, support, release, publication, and Pulse.",
     "expected_skill": "repo-map",
-    "expected_terms": ["entrypoints", "modules", "dependency direction"]
+    "expected_terms": [
+      "entrypoints",
+      "modules",
+      "dependency direction"
+    ]
   },
   {
     "id": "go-service-engineering-api-runtime",
     "prompt": "Use go-service-engineering for a Go API service update with Echo or Gin routing, GORM or sqlc persistence, Redis cache behavior, job workers, middleware, and observability.",
     "expected_skill": "go-service-engineering",
-    "expected_terms": ["routing", "persistence", "observability"]
+    "expected_terms": [
+      "routing",
+      "persistence",
+      "observability"
+    ]
   },
   {
     "id": "next-product-frontend-app-router",
     "prompt": "Use next-product-frontend for a Next.js App Router feature with server and client component boundaries, server actions, shadcn UI, Tailwind styling, cache behavior, and accessibility checks.",
     "expected_skill": "next-product-frontend",
-    "expected_terms": ["App Router", "server actions", "accessibility"]
+    "expected_terms": [
+      "App Router",
+      "server actions",
+      "accessibility"
+    ]
   },
   {
     "id": "growth-marketing-launch-funnel",
     "prompt": "Use growth-marketing to produce positioning, landing page messaging, SEO intent, launch plan, funnel metrics, and campaign QA for a product release.",
     "expected_skill": "growth-marketing",
-    "expected_terms": ["positioning", "funnel metrics", "campaign QA"]
+    "expected_terms": [
+      "positioning",
+      "funnel metrics",
+      "campaign QA"
+    ]
   },
   {
     "id": "market-research-icp-pricing-scan",
     "prompt": "Use market-research for competitor scan, ICP validation, pricing signal analysis, source authority ranking, and decision-impact notes.",
     "expected_skill": "market-research",
-    "expected_terms": ["competitor", "pricing", "source authority"]
+    "expected_terms": [
+      "competitor",
+      "pricing",
+      "source authority"
+    ]
   },
   {
     "id": "automation-ops-webhook-runbook",
     "prompt": "Use automation-ops for scheduler and webhook automation with dry-run support, retry policy, rollback runbook, failure handling, and operations ownership.",
     "expected_skill": "automation-ops",
-    "expected_terms": ["dry-run", "rollback", "runbook"]
+    "expected_terms": [
+      "dry-run",
+      "rollback",
+      "runbook"
+    ]
   },
   {
     "id": "vietnamese-product-localization-bilingual-support",
     "prompt": "Use vietnamese-product-localization for Vietnamese and bilingual product docs, support communication, release notes, terminology consistency, and localization quality checks.",
     "expected_skill": "vietnamese-product-localization",
-    "expected_terms": ["Vietnamese", "bilingual", "terminology"]
+    "expected_terms": [
+      "Vietnamese",
+      "bilingual",
+      "terminology"
+    ]
   },
   {
     "id": "token-economy-budget-overrun-detection",
     "prompt": "Use token-economy when context is too large and you must estimate tokens, classify raw-required versus compressible blocks, and report budget violations before implementation starts.",
     "expected_skill": "token-economy",
-    "expected_terms": ["budget violations", "raw-required", "compressible"]
+    "expected_terms": [
+      "budget violations",
+      "raw-required",
+      "compressible"
+    ]
   },
   {
     "id": "token-economy-task-scoped-pack",
     "prompt": "Use token-economy to build a task-scoped context pack with authority and freshness ranking, selected versus dropped sources, and max-tokens enforcement.",
     "expected_skill": "token-economy",
-    "expected_terms": ["task-scoped context pack", "authority", "max-tokens"]
+    "expected_terms": [
+      "task-scoped context pack",
+      "authority",
+      "max-tokens"
+    ]
   },
   {
     "id": "token-economy-failure-log-preservation",
     "prompt": "Use token-economy when test output includes traceback and assertion failures so strict mode keeps raw pointers and does not hide critical failure evidence.",
     "expected_skill": "token-economy",
-    "expected_terms": ["traceback", "assertion", "raw pointers"]
+    "expected_terms": [
+      "traceback",
+      "assertion",
+      "raw pointers"
+    ]
   },
   {
     "id": "token-economy-lifecycle-command-route",
     "prompt": "A user runs /relay-token-audit and expects token budget, signal retention, raw-required blocks, and context pack safety checks in one report.",
     "expected_skill": "token-economy",
-    "expected_terms": ["signal retention", "raw-required blocks", "context pack"]
+    "expected_terms": [
+      "signal retention",
+      "raw-required blocks",
+      "context pack"
+    ]
   },
   {
     "id": "mmo-reup-automation-dedupe-throttle",
     "prompt": "Use mmo-reup-automation to design a reup flow with attribution checks, deterministic dedupe keys, posting windows, and frequency controls before publish.",
     "expected_skill": "mmo-reup-automation",
-    "expected_terms": ["dedupe", "posting windows", "frequency"]
+    "expected_terms": [
+      "dedupe",
+      "posting windows",
+      "frequency"
+    ]
   },
   {
     "id": "mmo-account-operations-lifecycle-budget",
     "prompt": "Use mmo-account-operations for multi-account lifecycle control with onboarding, active and suspended states, credential rotation, per-account action budgets, and escalation runbooks.",
     "expected_skill": "mmo-account-operations",
-    "expected_terms": ["credential", "action budgets", "escalation"]
+    "expected_terms": [
+      "credential",
+      "action budgets",
+      "escalation"
+    ]
   },
   {
     "id": "mmo-browser-fleet-automation-session-isolation",
     "prompt": "Use mmo-browser-fleet-automation when profile isolation, session lease controls, stable selectors, explicit waits, and retry backoff are required for browser fleet reliability.",
     "expected_skill": "mmo-browser-fleet-automation",
-    "expected_terms": ["profile isolation", "selectors", "retry"]
+    "expected_terms": [
+      "profile isolation",
+      "selectors",
+      "retry"
+    ]
   },
   {
     "id": "mmo-social-marketing-automation-quota-compliance",
     "prompt": "Use mmo-social-marketing-automation for campaign scheduling through official APIs with quota budgets, duplicate-content guardrails, moderation checks, and policy-safe execution.",
     "expected_skill": "mmo-social-marketing-automation",
-    "expected_terms": ["quota", "duplicate", "moderation"]
+    "expected_terms": [
+      "quota",
+      "duplicate",
+      "moderation"
+    ]
   },
   {
     "id": "mmo-lowcode-automation-scenario-controls",
     "prompt": "Use mmo-lowcode-automation for no-code and low-code workflows with trigger ownership, queue pressure controls, module-level retries, and publish-versus-draft safeguards.",
     "expected_skill": "mmo-lowcode-automation",
-    "expected_terms": ["trigger", "queue", "publish-versus-draft"]
+    "expected_terms": [
+      "trigger",
+      "queue",
+      "publish-versus-draft"
+    ]
   },
   {
     "id": "mmo-mobile-app-automation-matrix-evidence",
     "prompt": "Use mmo-mobile-app-automation for emulator and device matrix execution with app-state preconditions, selector strategy, wait policy, and failure triage evidence.",
     "expected_skill": "mmo-mobile-app-automation",
-    "expected_terms": ["emulator", "app-state", "failure triage"]
+    "expected_terms": [
+      "emulator",
+      "app-state",
+      "failure triage"
+    ]
   },
   {
     "id": "mmo-cloud-operations-automation-idempotent-jobs",
     "prompt": "Use mmo-cloud-operations-automation to run scheduled jobs with queue boundaries, retry jitter, idempotency keys, duplicate prevention, and cost ceiling controls.",
     "expected_skill": "mmo-cloud-operations-automation",
-    "expected_terms": ["idempotency keys", "retry", "cost"]
+    "expected_terms": [
+      "idempotency keys",
+      "retry",
+      "cost"
+    ]
   },
   {
     "id": "mmo-http-api-automation-replay-safety",
     "prompt": "Use mmo-http-api-automation for contract-safe endpoint orchestration with auth scope checks, 429 handling, backoff, idempotent writes, and replay safety logs.",
     "expected_skill": "mmo-http-api-automation",
-    "expected_terms": ["auth", "429", "idempotency"]
+    "expected_terms": [
+      "auth",
+      "429",
+      "idempotency"
+    ]
+  },
+  {
+    "id": "signal-calibration-overclaim-proof",
+    "prompt": "Use signal-calibration when an answer claims field-tested, production-ready, commercial-ready, or maximum skill quality and must map the claim to proof_level, confidence, evidence_sources, overclaim flags, residual risk, and next verification before acceptance.",
+    "expected_skill": "signal-calibration",
+    "expected_terms": [
+      "field-tested",
+      "proof_level",
+      "overclaim"
+    ]
+  },
+  {
+    "id": "frontend-design-product-surface-realism",
+    "prompt": "Use frontend-design to build a production product surface with reference-driven hierarchy, visual density controls, loading empty error states, screenshot evidence, and anti-generic AI UI review before completion.",
+    "expected_skill": "frontend-design",
+    "expected_terms": [
+      "reference",
+      "visual density",
+      "loading",
+      "screenshot"
+    ]
+  },
+  {
+    "id": "ui-styling-component-system-accessible-states",
+    "prompt": "Use ui-styling for a responsive component system with design tokens, accessible dialog and form states, focus handling, contrast checks, and deliberate styling rather than default component-library cards.",
+    "expected_skill": "ui-styling",
+    "expected_terms": [
+      "design tokens",
+      "accessible",
+      "focus",
+      "component library"
+    ]
+  },
+  {
+    "id": "aesthetic-screenshot-anti-ai-critique",
+    "prompt": "Use aesthetic when a rendered dashboard looks obviously AI-generated. Compare screenshots against references, critique hierarchy, flag equal-card filler, and require a revision loop before visual quality claims.",
+    "expected_skill": "aesthetic",
+    "expected_terms": [
+      "screenshot",
+      "references",
+      "hierarchy",
+      "revision loop"
+    ]
+  },
+  {
+    "id": "mmo-identity-infrastructure-profile-proxy-binding",
+    "prompt": "Use mmo-identity-infrastructure for authorized multi-account operations that need profile inventory, proxy-to-profile binding, locale consistency, versioned identity specs, and policy-safe operator evidence.",
+    "expected_skill": "mmo-identity-infrastructure",
+    "expected_terms": [
+      "proxy-to-profile",
+      "locale",
+      "versioned",
+      "policy"
+    ]
+  },
+  {
+    "id": "mmo-proxy-network-ops-health-assignment",
+    "prompt": "Use mmo-proxy-network-ops for proxy pool segmentation, health monitoring, sticky session assignment, blacklist checks, cost ceiling, and an audited assignment registry for account operations.",
+    "expected_skill": "mmo-proxy-network-ops",
+    "expected_terms": [
+      "proxy pool",
+      "health monitoring",
+      "sticky session",
+      "assignment registry"
+    ]
+  },
+  {
+    "id": "mmo-nick-warmup-engine-phase-gates",
+    "prompt": "Use mmo-nick-warmup-engine for account warmup with phase gates, action budgets, trust-signal checkpoints, cooldown recovery, and readiness verdict before higher-risk account workflows.",
+    "expected_skill": "mmo-nick-warmup-engine",
+    "expected_terms": [
+      "phase gates",
+      "action budgets",
+      "trust-signal",
+      "readiness verdict"
+    ]
+  },
+  {
+    "id": "mmo-ecommerce-multichannel-sku-sync",
+    "prompt": "Use mmo-ecommerce-multichannel for marketplace automation with master SKU registry, inventory sync, buffer stock, order routing, logistics labels, and oversell prevention evidence.",
+    "expected_skill": "mmo-ecommerce-multichannel",
+    "expected_terms": [
+      "master SKU",
+      "inventory sync",
+      "buffer stock",
+      "oversell"
+    ]
+  },
+  {
+    "id": "mmo-content-factory-variant-schedule",
+    "prompt": "Use mmo-content-factory for AI-assisted bulk content production with variant diversity scores, platform-specific formats, scheduling windows, human review gates, and performance feedback loops.",
+    "expected_skill": "mmo-content-factory",
+    "expected_terms": [
+      "variant diversity",
+      "platform-specific",
+      "scheduling",
+      "human-review"
+    ]
+  },
+  {
+    "id": "mmo-crypto-wallet-farming-risk-budget",
+    "prompt": "Use mmo-crypto-wallet-farming for crypto farming operations with wallet isolation, capital risk budget, on-chain behavior variance, security controls, gas cost planning, and Sybil-risk evidence.",
+    "expected_skill": "mmo-crypto-wallet-farming",
+    "expected_terms": [
+      "wallet isolation",
+      "capital risk",
+      "behavioral variance",
+      "Sybil-risk"
+    ]
+  },
+  {
+    "id": "mmo-data-harvesting-authorized-pipeline",
+    "prompt": "Use mmo-data-harvesting for authorized data collection with source authorization, deduplication, encrypted PII handling, segmentation schema, seeding target lists, and human review gates.",
+    "expected_skill": "mmo-data-harvesting",
+    "expected_terms": [
+      "authorized",
+      "dedup",
+      "encrypted",
+      "human-review"
+    ]
   }
 ]

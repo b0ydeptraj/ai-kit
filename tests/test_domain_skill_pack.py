@@ -21,6 +21,16 @@ DOMAIN_SKILLS = {
     "mmo-mobile-app-automation",
     "mmo-cloud-operations-automation",
     "mmo-http-api-automation",
+    "mmo-identity-infrastructure",
+    "mmo-proxy-network-ops",
+    "mmo-nick-warmup-engine",
+    "mmo-ecommerce-multichannel",
+    "mmo-content-factory",
+    "mmo-crypto-wallet-farming",
+    "mmo-data-harvesting",
+    "frontend-design",
+    "ui-styling",
+    "aesthetic",
 }
 
 

@@ -21,7 +21,7 @@ from scripts.eval_workflows import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_DEFAULT_SCENARIOS = 78
+EXPECTED_DEFAULT_SCENARIOS = 89
 EXPECTED_PROFILED_SUPPORT_SCENARIOS = len(PROFILED_SUPPORT_EVIDENCE_TERMS) * 2
 
 
@@ -129,8 +129,18 @@ def test_workflow_eval_default_suite_covers_production_team_skills() -> None:
         "mmo-mobile-app-automation",
         "mmo-cloud-operations-automation",
         "mmo-http-api-automation",
+        "mmo-identity-infrastructure",
+        "mmo-proxy-network-ops",
+        "mmo-nick-warmup-engine",
+        "mmo-ecommerce-multichannel",
+        "mmo-content-factory",
+        "mmo-crypto-wallet-farming",
+        "mmo-data-harvesting",
         "multimodal-evidence",
         "next-product-frontend",
+        "frontend-design",
+        "ui-styling",
+        "aesthetic",
         "token-economy",
         "accessibility-review",
         "policy-guard",

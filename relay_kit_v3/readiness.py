@@ -18,6 +18,7 @@ from relay_kit_v3.adapter_diagnostics import build_adapter_diagnostics
 from relay_kit_v3.agent_profiles import build_agent_diagnostics
 from relay_kit_v3.runtime_locale import inspect_runtime_locale
 from relay_kit_v3.real_world_eval import build_report as build_real_world_eval_report
+from relay_kit_v3.signal_calibration import build_report as build_signal_calibration_report
 from relay_kit_v3.skill_proof import build_report as build_skill_proof_report
 from relay_kit_v3.support_bundle import SCHEMA_VERSION as SUPPORT_SCHEMA_VERSION
 from relay_kit_v3.support_bundle import build_support_bundle
@@ -79,6 +80,7 @@ def build_readiness_report(
     gates.append(_agent_profiles_gate(root))
     gates.append(_runtime_locale_gate(root))
     gates.append(_token_economy_gate(root))
+    gates.append(_signal_calibration_gate(root))
     gates.append(_real_world_skill_eval_gate(root))
     gates.append(_skill_proof_audit_gate(root))
     gates.append(_signal_export_gate(root, selected_profile))
@@ -542,6 +544,32 @@ def _token_economy_gate(root: Path) -> dict[str, Any]:
         }
     except Exception as exc:  # pragma: no cover - defensive gate summary
         return _exception_gate("token-economy", "token economy", exc)
+
+
+def _signal_calibration_gate(root: Path) -> dict[str, Any]:
+    try:
+        report = build_signal_calibration_report(root, mode="readiness", strict=True)
+        summary = report.get("summary", {})
+        findings = report.get("findings", [])
+        ok = report.get("status") == "pass"
+        return {
+            "id": "signal-calibration",
+            "label": "signal calibration",
+            "status": "pass" if ok else "fail",
+            "required": True,
+            "summary": (
+                "signal calibration ok"
+                if ok
+                else f"blocked claims: {summary.get('blocked_claims', 0)}"
+            ),
+            "details": {
+                "summary": summary,
+                "findings_count": len(findings),
+                "findings": findings[:12],
+            },
+        }
+    except Exception as exc:  # pragma: no cover - defensive gate summary
+        return _exception_gate("signal-calibration", "signal calibration", exc)
 
 
 def _real_world_skill_eval_gate(root: Path) -> dict[str, Any]:

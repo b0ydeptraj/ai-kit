@@ -197,6 +197,7 @@ def test_readiness_report_returns_candidate_when_required_gates_pass(tmp_path: P
         "agent-profiles",
         "runtime-locale",
         "token-economy",
+        "signal-calibration",
         "real-world-skill-eval",
         "skill-proof-audit",
     }
@@ -434,6 +435,31 @@ def test_readiness_report_holds_when_skill_proof_audit_finds_theoretical_skill(t
     assert report["status"] == "hold"
     assert gate["status"] == "fail"
     assert gate["details"]["summary"]["theoretical"] == 1
+
+
+def test_readiness_report_holds_when_signal_calibration_blocks_overclaim(tmp_path: Path) -> None:
+    write_required_docs(tmp_path)
+    (tmp_path / "README.md").write_text("Relay-kit has field-tested proof.\n", encoding="utf-8")
+
+    report = readiness.build_readiness_report(
+        tmp_path,
+        profile="enterprise",
+        command_runner=passing_command_runner,
+        support_builder=lambda root, policy_pack: healthy_support_bundle_payload(),
+        upgrade_builder=lambda root: {"status": "pass", "findings_count": 0},
+        contract_exporter=lambda root: {"schema_version": CONTRACT_EXPORT_SCHEMA_VERSION},
+        contract_importer=lambda root, payload: {
+            "schema_version": CONTRACT_IMPORT_SCHEMA_VERSION,
+            "status": "pass",
+            "findings": [],
+        },
+    )
+
+    gate = next(gate for gate in report["gates"] if gate["id"] == "signal-calibration")
+
+    assert report["status"] == "hold"
+    assert gate["status"] == "fail"
+    assert gate["details"]["summary"]["blocked_claims"] >= 1
 
 
 def test_readiness_report_is_limited_beta_when_tests_are_skipped(tmp_path: Path) -> None:

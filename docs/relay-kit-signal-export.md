@@ -75,6 +75,11 @@ Metric signals include:
 - `relay.context.signal_retention`
 - `relay.context.raw_required_blocks`
 - `relay.token.budget_violations`
+- `relay.calibration.unsupported_claims`
+- `relay.calibration.overclaim_flags`
+- `relay.calibration.proven_claims`
+- `relay.calibration.field_tested_claims`
+- `relay.calibration.blocked_claims`
 - `relay.query.authoritative_hits`
 - `relay.service.boundary_findings`
 

@@ -17,6 +17,7 @@ if str(REPO_ROOT) not in sys.path:
 from relay_kit_v3.localized_metadata import expected_trigger_prefixes, resolve_metadata_locale
 from relay_kit_v3.adapters import ADAPTER_TARGETS
 from relay_kit_v3.generator import BUNDLES
+from relay_kit_v3.public_entrypoints import PUBLIC_ENTRYPOINT_SHIMS
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
 from relay_kit_v3.runtime_locale import load_runtime_locale
 from relay_kit_v3.temp_paths import stable_temp_dir
@@ -28,6 +29,33 @@ from relay_kit_compat import (
 
 ALL_TARGETS = [".claude/skills", ".agent/skills", ".codex/skills"]
 EXPECTED_RUNTIME_SKILLS = set(ALL_V3_SKILLS.keys())
+EXPECTED_CHECKED_IN_SKILLS = EXPECTED_RUNTIME_SKILLS | set(PUBLIC_ENTRYPOINT_SHIMS)
+RETIRED_BUNDLE_LABELS = {
+    "round" + "2",
+    "round" + "3-core",
+    "round" + "3",
+    "round" + "4-core",
+    "round" + "4",
+    "baseline" + "-" + "next",
+    "b" + "mad-core",
+    "b" + "mad-lite",
+    "legacy" + "-native",
+}
+REQUIRED_GITIGNORE_PATTERNS = {
+    ".kilo/",
+    ".kiro/",
+    "build/",
+    "dist/",
+    "*.egg-info/",
+    ".eggs/",
+}
+REJECTED_TRACKED_PATH_PREFIXES = (
+    ".kilo/",
+    ".kiro/",
+    "build/",
+    "dist/",
+    ".eggs/",
+)
 RUNTIME_DISCIPLINE_SKILLS = {
     "root-cause-debugging",
     "evidence-before-completion",
@@ -210,16 +238,90 @@ def prompt_files(base: Path, relative_dir: str) -> dict[str, str]:
 
 
 def validate_checked_in_runtime() -> None:
-    adapter_sets = {
-        target: skill_dirs(REPO_ROOT, target) & EXPECTED_RUNTIME_SKILLS for target in ALL_TARGETS
-    }
+    adapter_sets = {target: skill_dirs(REPO_ROOT, target) for target in ALL_TARGETS}
     reference_target, reference_set = next(iter(adapter_sets.items()))
     for target, current_set in adapter_sets.items():
+        assert_set(
+            f"checked-in generated runtime for {target}",
+            current_set,
+            EXPECTED_CHECKED_IN_SKILLS,
+        )
         assert_set(
             f"checked-in runtime parity vs {reference_target} for {target}",
             current_set,
             reference_set,
         )
+
+
+def validate_bundle_integrity() -> None:
+    retired = sorted(RETIRED_BUNDLE_LABELS & set(BUNDLES))
+    if retired:
+        fail(f"Retired bundle labels are still active: {retired}")
+
+    empty = sorted(bundle for bundle, skill_names in BUNDLES.items() if not skill_names)
+    if empty:
+        fail(f"Bundles must not be empty: {empty}")
+
+    for bundle, skill_names in BUNDLES.items():
+        duplicated = sorted({name for name in skill_names if skill_names.count(name) > 1})
+        unknown = sorted(set(skill_names) - EXPECTED_RUNTIME_SKILLS)
+        if duplicated:
+            fail(f"{bundle} bundle has duplicate skills: {duplicated}")
+        if unknown:
+            fail(f"{bundle} bundle references unknown skills: {unknown}")
+
+
+def validate_skill_graph_integrity() -> None:
+    inbound: dict[str, set[str]] = {name: set() for name in EXPECTED_RUNTIME_SKILLS}
+    broken: list[str] = []
+    for skill_name, spec in ALL_V3_SKILLS.items():
+        for next_step in spec.next_steps:
+            if next_step not in ALL_V3_SKILLS:
+                broken.append(f"{skill_name} -> {next_step}")
+                continue
+            inbound[next_step].add(skill_name)
+
+    if broken:
+        fail(f"Broken next_steps references: {broken}")
+
+    orphans = sorted(name for name, sources in inbound.items() if not sources)
+    if orphans:
+        fail(f"Unintentional canonical skill orphans: {orphans}")
+
+
+def validate_repo_hygiene() -> None:
+    gitignore = REPO_ROOT / ".gitignore"
+    if not gitignore.exists():
+        fail(".gitignore is missing")
+    patterns = {
+        line.strip()
+        for line in gitignore.read_text(encoding="utf-8", errors="ignore").splitlines()
+        if line.strip() and not line.strip().startswith("#")
+    }
+    missing_patterns = sorted(REQUIRED_GITIGNORE_PATTERNS - patterns)
+    if missing_patterns:
+        fail(f".gitignore is missing artifact patterns: {missing_patterns}")
+
+    result = subprocess.run(
+        ["git", "ls-files"],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        fail(f"git ls-files failed:\n{result.stderr}")
+    tracked = result.stdout.splitlines()
+    bad = [
+        path
+        for path in tracked
+        if path.endswith(".egg-info")
+        or ".egg-info/" in path
+        or path.endswith(".pyc")
+        or any(path.startswith(prefix) for prefix in REJECTED_TRACKED_PATH_PREFIXES)
+    ]
+    if bad:
+        fail(f"Generated or bulky artifacts are tracked: {bad[:50]}")
 
 
 def validate_adapter_targets() -> None:
@@ -376,6 +478,9 @@ def validate_public_wrapper_surface() -> None:
 
 def main() -> int:
     validate_adapter_targets()
+    validate_repo_hygiene()
+    validate_bundle_integrity()
+    validate_skill_graph_integrity()
     validate_list_output()
     validate_checked_in_runtime()
     assert_skill_descriptions_trigger_first()

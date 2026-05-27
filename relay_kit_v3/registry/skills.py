@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from textwrap import dedent
@@ -97,7 +97,16 @@ ORCHESTRATOR_SKILLS: Dict[str, SkillSpec] = {
             "If session continuity is weak, run context-continuity checkpoint or rehydrate before routing deeper work.",
             "For existing codebases, prefer scout-hub plus repo-map before planning when dependency boundaries are still unclear.",
         ],
-        next_steps=["bootstrap", "cook", "team", "context-continuity", "scout-hub", "plan-hub", "debug-hub"],
+        next_steps=[
+            "bootstrap",
+            "cook",
+            "team",
+            "context-continuity",
+            "scout-hub",
+            "plan-hub",
+            "debug-hub",
+            "token-economy",
+        ],
         body=dedent(
             """\
             # Mission
@@ -270,22 +279,39 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             "Use analyst for structured discovery and pm only once the shape is coherent enough to plan.",
             "Prefer narrowing the problem over generating a giant feature wish list.",
         ],
-        next_steps=["analyst", "pm", "plan-hub", "workflow-router"],
+        next_steps=[
+            "analyst",
+            "research",
+            "market-research",
+            "growth-marketing",
+            "vietnamese-product-localization",
+            "pm",
+            "plan-hub",
+            "workflow-router",
+        ],
         body=dedent(
             """\
             # Mission
-            Turn fuzzy idea energy into something the planning flow can actually use.
+            Turn fuzzy idea energy into a bounded discovery lane that planning can actually use.
 
-            ## What this hub does
-            - Facilitate a short option scan.
-            - Expose assumptions, success signals, and obvious constraints.
-            - Decide whether to write or refresh `product-brief.md`.
+            ## Mandatory routing
+            1. Identify the decision the user is really trying to make.
+            2. Use `research` only for the freshest evidence that changes that decision.
+            3. Use `market-research` when ICP, pricing, competitor, or domain signal affects the direction.
+            4. Use `growth-marketing` when the next artifact is positioning, funnel, campaign, or launch messaging.
+            5. Use `vietnamese-product-localization` when the idea is for Vietnamese users or bilingual communication.
+            6. Route to `pm` only after the opportunity has enough shape for requirements.
+
+            ## Evidence contract
+            - name the user segment, problem, success signal, and biggest unknown
+            - separate source-backed facts from assumptions and guesses
+            - include the smallest next artifact: product brief, market note, campaign note, or stop decision
+
+            ## Failure modes
+            Hold instead of proceeding when the output becomes a giant feature wish list, generic marketing copy, or unsourced opportunity claims.
 
             ## Exit conditions
-            End with one of only three outcomes:
-            1. a brief is ready for planning,
-            2. the idea is too weak and should stop, or
-            3. one specific question must be answered before planning continues.
+            End with one of three outcomes: a brief ready for planning, a stop decision, or one exact question that blocks planning.
             """
         ).strip(),
     ),
@@ -302,21 +328,40 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             "When the problem starts from a failure, capture findings in investigation-notes.",
             "Run a freshness pass first: stale assumptions or stale artifacts should be called out explicitly before planning.",
         ],
-        next_steps=["plan-hub", "debug-hub", "review-hub", "workflow-router"],
+        next_steps=[
+            "repo-map",
+            "doc-pointers",
+            "memory-search",
+            "project-architecture",
+            "dependency-management",
+            "plan-hub",
+            "debug-hub",
+            "review-hub",
+            "workflow-router",
+        ],
         body=dedent(
             """\
             # Mission
             Gather the minimum reliable context the next lane needs so nobody plans or fixes from a false mental model.
 
-            ## Mandatory behavior
-            1. Refresh `project-context.md` when architecture, tooling, or domain constraints are unclear.
-            2. Refresh only the reference files actually relevant to the active lane.
-            3. Add file paths, commands, or modules whenever possible.
-            4. Record freshness signals (last-updated clues, stale docs, stale notes) before recommending a path.
-            5. If a failure is being investigated, start `investigation-notes.md` with reproduction steps and evidence.
+            ## Mandatory routing
+            1. Use `repo-map` for entrypoints, ownership, dependency direction, and read-first files.
+            2. Use `doc-pointers` for exact docs, anchors, and source fragments.
+            3. Use `memory-search` for prior decisions, handoff breadcrumbs, or stale state checks.
+            4. Use `project-architecture` when module boundaries or architecture drift matter.
+            5. Use `dependency-management` when tooling, lockfiles, or dependency risk affects the lane.
+
+            ## Evidence contract
+            - cite concrete paths, commands, modules, or docs instead of broad summaries
+            - mark freshness for every important source: current, stale, inferred, or missing
+            - record unknowns that still block planning or debugging
+            - start `investigation-notes.md` when the scout is attached to a failure
+
+            ## Failure modes
+            Hold if the output is a tree dump without ownership, a generic architecture summary, or a plan that skips stale evidence.
 
             ## Output contract
-            Name exactly what became clearer, what is still unknown, which sources might be stale, and which hub or specialist should use the refreshed context next.
+            Name what became clearer, what is still unknown, which sources may be stale, and which hub or specialist should use the refreshed context next.
             """
         ).strip(),
     ),
@@ -334,7 +379,23 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             "Use `.relay-kit/docs/planning-discipline.md` to keep plans artifact-first, bite-sized, and verification-aware.",
             "Lock key UX, API, and behavior assumptions before story slicing so implementation does not drift.",
         ],
-        next_steps=["analyst", "pm", "architect", "scrum-master", "developer", "review-hub"],
+        next_steps=[
+            "analyst",
+            "research",
+            "problem-solving",
+            "sequential-thinking",
+            "impact-radar",
+            "mermaid-diagrams",
+            "pm",
+            "architect",
+            "go-service-engineering",
+            "next-product-frontend",
+            "mmo-ecommerce-multichannel",
+            "mmo-crypto-wallet-farming",
+            "scrum-master",
+            "developer",
+            "review-hub",
+        ],
         body=dedent(
             """\
             # Mission
@@ -372,20 +433,37 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             "Root cause beats guess-and-patch.",
             "Escalate to plan-hub if the 'bug' is actually an unclear requirement or architectural mismatch.",
         ],
-        next_steps=["fix-hub", "test-hub", "plan-hub", "workflow-router"],
+        next_steps=[
+            "root-cause-debugging",
+            "problem-solving",
+            "sequential-thinking",
+            "memory-search",
+            "runtime-doctor",
+            "fix-hub",
+            "test-hub",
+            "plan-hub",
+            "workflow-router",
+        ],
         body=dedent(
             """\
             # Mission
             Turn a symptom into evidence and a decision, not into random edits.
 
-            ## Mandatory behavior
-            1. Reproduce the issue or explain why reproduction is not yet reliable.
-            2. Write `investigation-notes.md` with evidence, likely root cause, and non-causes ruled out.
-            3. If available, run the `root-cause-debugging` discipline before proposing a fix.
-            4. Decide whether the next move is:
-               - `fix-hub` for a real fix,
-               - `test-hub` for missing or weak evidence,
-               - `plan-hub` when the issue is upstream ambiguity.
+            ## Mandatory routing
+            1. Use `root-cause-debugging` before proposing fixes for regressions or flaky behavior.
+            2. Use `memory-search` when prior decisions or earlier failures may explain the mismatch.
+            3. Use `runtime-doctor` when generated surfaces, adapters, state, or live runtime drift might be involved.
+            4. Use `problem-solving` for competing hypotheses and `sequential-thinking` for ordered probes.
+            5. Route to `fix-hub` only when the cause and affected surface are bounded.
+
+            ## Evidence contract
+            - reproduce the issue or mark reproduction as blocked with the missing condition
+            - write `investigation-notes.md` with evidence, likely cause, non-causes ruled out, and next probe
+            - include failing command, log, trace, screenshot, or state pointer where available
+            - state whether this is a code bug, test problem, runtime drift, or planning ambiguity
+
+            ## Failure modes
+            Hold when the lane is guessing from symptoms, stacking fixes before one failing signal is understood, or hiding weak reproduction.
             """
         ).strip(),
     ),
@@ -401,17 +479,38 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             "Use developer plus execution-loop for execution, not as a replacement for scoping.",
             "If the fix expands the contract or architecture, route back through workflow-router or plan-hub.",
         ],
-        next_steps=["developer", "test-hub", "review-hub", "workflow-router"],
+        next_steps=[
+            "developer",
+            "go-service-engineering",
+            "next-product-frontend",
+            "project-architecture",
+            "data-persistence",
+            "dependency-management",
+            "test-first-development",
+            "test-hub",
+            "review-hub",
+            "workflow-router",
+        ],
         body=dedent(
             """\
             # Mission
             Convert a known problem into a bounded implementation path that can be executed safely.
 
-            ## Mandatory behavior
-            1. Update the active story or tech-spec with the real files, boundaries, and verification steps.
-            2. Name what must not change while fixing the issue.
-            3. Hand off to `developer` for execution.
-            4. Route to `test-hub` immediately after implementation evidence exists.
+            ## Mandatory routing
+            1. Use `project-architecture` when the fix touches boundaries, dependencies, or ownership.
+            2. Use `data-persistence` for schemas, migrations, transactions, caches, or backfills.
+            3. Use `dependency-management` for package, lockfile, toolchain, or environment fixes.
+            4. Use `go-service-engineering` or `next-product-frontend` for stack-specific implementation handoff.
+            5. Use `test-first-development` when behavior can be captured before the implementation pass.
+
+            ## Evidence contract
+            - update the active story or tech-spec with real files, boundaries, and verification steps
+            - name what must not change while fixing the issue
+            - include the failing signal, intended green signal, rollback note, and one edge case
+            - hand off to `developer` only after the implementation surface is bounded
+
+            ## Failure modes
+            Hold when the fix expands architecture without plan review, hides data risk, or skips the first verification command.
             """
         ).strip(),
     ),
@@ -428,18 +527,37 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             "Route back to debug-hub when verification fails unexpectedly.",
             "When discipline utilities are installed, use `evidence-before-completion` before calling the lane ready.",
         ],
-        next_steps=["qa-governor", "review-hub", "debug-hub", "workflow-router"],
+        next_steps=[
+            "testing-patterns",
+            "evidence-before-completion",
+            "signal-calibration",
+            "token-economy",
+            "mmo-mobile-app-automation",
+            "qa-governor",
+            "review-hub",
+            "debug-hub",
+            "workflow-router",
+        ],
         body=dedent(
             """\
             # Mission
             Turn raw test execution into a real readiness decision.
 
-            ## Mandatory behavior
-            1. Decide the smallest useful evidence matrix for the change.
-            2. Collect results and compare them to acceptance criteria.
-            3. Use `evidence-before-completion` if available to validate every completion claim against fresh command output.
-            4. Write or refresh `qa-report.md`.
-            5. If evidence is weak or failing, route to `debug-hub` rather than guessing.
+            ## Mandatory routing
+            1. Use `testing-patterns` to map risk to the right proof surface.
+            2. Use `evidence-before-completion` for claim-to-evidence checks before final verdicts.
+            3. Use `signal-calibration` when a claim says production-ready, field-tested, commercial-ready, or unusually strong.
+            4. Use `token-economy` when long logs or large context need compression without losing failure evidence.
+            5. Use `mmo-mobile-app-automation` for device/emulator matrix evidence when mobile MMO flows are under test.
+
+            ## Evidence contract
+            - build the smallest useful matrix that covers acceptance criteria and regression surface
+            - preserve failing command details or raw log pointers
+            - write or refresh `qa-report.md` with pass, fail, blocked, and residual-risk sections
+            - route failures to `debug-hub` with exact reproduction evidence
+
+            ## Failure modes
+            Hold when evidence is only a screenshot of success, when failed logs are summarized away, or when the test scope does not match risk.
             """
         ).strip(),
     ),
@@ -456,7 +574,22 @@ WORKFLOW_HUB_SKILLS: Dict[str, SkillSpec] = {
             "Use `.relay-kit/docs/review-loop.md` and `.relay-kit/docs/branch-completion.md` for review handling and end-of-branch discipline.",
             "If work crosses sessions, require context-continuity artifacts before accepting final completion claims.",
         ],
-        next_steps=["plan-hub", "debug-hub", "fix-hub", "test-hub", "context-continuity", "workflow-router"],
+        next_steps=[
+            "impact-radar",
+            "runtime-doctor",
+            "migration-guard",
+            "skill-evolution",
+            "signal-calibration",
+            "doc-pointers",
+            "multimodal-evidence",
+            "media-tooling",
+            "plan-hub",
+            "debug-hub",
+            "fix-hub",
+            "test-hub",
+            "context-continuity",
+            "workflow-router",
+        ],
         body=dedent(
             """\
             # Mission
@@ -573,7 +706,20 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "When stack-specific delivery is required, coordinate with go-service-engineering or next-product-frontend for implementation-level constraints.",
             "Architecture must include a readiness verdict, not just diagrams or aspirations.",
         ],
-        next_steps=["scrum-master", "review-hub", "plan-hub", "workflow-router"],
+        next_steps=[
+            "project-architecture",
+            "dependency-management",
+            "api-integration",
+            "data-persistence",
+            "go-service-engineering",
+            "next-product-frontend",
+            "mmo-ecommerce-multichannel",
+            "mermaid-diagrams",
+            "scrum-master",
+            "review-hub",
+            "plan-hub",
+            "workflow-router",
+        ],
         body=dedent(
             """\
             # Mission
@@ -663,7 +809,18 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Default to plain ASCII in source code, comments, identifiers, test names, placeholder copy, and sample data unless the repo or product explicitly requires non-ASCII content.",
             "If tasks are truly independent and the platform supports collaboration, follow `.relay-kit/docs/parallel-execution.md` before using subagent-style execution.",
         ],
-        next_steps=["execution-loop", "test-hub", "qa-governor", "review-hub"],
+        next_steps=[
+            "test-first-development",
+            "execution-loop",
+            "go-service-engineering",
+            "next-product-frontend",
+            "data-persistence",
+            "dependency-management",
+            "project-architecture",
+            "test-hub",
+            "qa-governor",
+            "review-hub",
+        ],
         allowed_tools=EDIT_AND_TEST_TOOLS,
         body=dedent(
             """\
@@ -703,7 +860,15 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             "Coverage must be explained against acceptance criteria and risk, not just number of tests.",
             "Use context-continuity when readiness evidence must survive a new thread or handoff before final sign-off.",
         ],
-        next_steps=["review-hub", "debug-hub", "context-continuity", "workflow-router"],
+        next_steps=[
+            "signal-calibration",
+            "evidence-before-completion",
+            "runtime-doctor",
+            "review-hub",
+            "debug-hub",
+            "context-continuity",
+            "workflow-router",
+        ],
         body=dedent(
             """\
             # Mission
@@ -790,15 +955,133 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - document server component versus client component decisions
             - define server actions contracts for mutation-heavy flows
             - define data fetching and cache behavior for changed screens
+            - define component ownership, styling system, and state coverage before coding
             - enforce accessibility and performance checks for user-facing risk
 
             ## Evidence contract
             - include route-level behavior proof
             - include accessibility findings or gate output
             - include performance or hydration-risk notes when relevant
+
+            ## Handoff rules
+            Hand implementation to `developer`, styling detail to `ui-styling`, visual critique to `aesthetic`, and accessibility proof to `accessibility-review`.
+
+            ## Failure modes
+            Hold when the plan treats every screen as generic client-side React, skips cache semantics, ignores error/loading states, or produces a page that looks like a template instead of a product surface.
             """
         ).strip(),
         allowed_tools=EDIT_AND_TEST_TOOLS,
+    ),
+    "frontend-design": SkillSpec(
+        name="frontend-design",
+        description="Use when the user asks to build web components, pages, or applications and visual quality matters. Create distinctive, production-grade frontend interfaces that avoid generic AI aesthetics.",
+        role="frontend-design",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["frontend request", "product context", "existing design system or reference screenshots"],
+        outputs=["implemented or reviewed frontend surface with visual direction, state coverage, and screenshot evidence"],
+        references=[
+            "Anchor visual direction in real references, existing product patterns, or component sources before styling.",
+            "Use aesthetic for critique, ui-styling for component system details, and accessibility-review for merge gates.",
+            "Prefer deliberate hierarchy, density, and state coverage over generic card-heavy layouts.",
+            *domain_resource_references("frontend-design"),
+        ],
+        next_steps=["next-product-frontend", "ui-styling", "aesthetic", "accessibility-review", "review-hub"],
+        body=dedent(
+            """\
+            # Mission
+            Ship frontend work that feels designed for the product instead of assembled from generic AI patterns.
+
+            ## Mandatory scope checks
+            - define purpose, audience, and primary task before choosing layout
+            - choose design variance, motion intensity, and visual density explicitly
+            - anchor layout in a real reference, existing screen, or trusted component source
+            - define loading, empty, error, and mobile states for real product surfaces
+            - reject oversized safe heroes, equal-card filler, default icons, and purple gradient padding when they do not serve hierarchy
+
+            ## Evidence contract
+            - include reference or screenshot notes before claiming visual quality
+            - include before/after or rendered-state evidence when implementation changed
+            - include accessibility and performance risk notes for user-facing changes
+
+            ## Handoff rules
+            Hand component-level styling to `ui-styling`, product UI architecture to `next-product-frontend`, and final visual critique to `aesthetic` or `review-hub`.
+            """
+        ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
+    ),
+    "ui-styling": SkillSpec(
+        name="ui-styling",
+        description="Use when building user interfaces, implementing design systems, creating responsive layouts, adding accessible components, customizing themes, or establishing consistent styling patterns across applications.",
+        role="ui-styling",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["component or page requirements", "design tokens or component library", "accessibility constraints"],
+        outputs=["styled UI implementation or system guidance with responsive, state, and accessibility evidence"],
+        references=[
+            "Treat component libraries as raw material; do not ship their default look without product-specific structure.",
+            "Use repo-native UI components, icon systems, and theme tokens when present.",
+            "Keep source code, comments, fixture text, and placeholder copy plain ASCII unless product content requires otherwise.",
+            *domain_resource_references("ui-styling"),
+        ],
+        next_steps=["frontend-design", "aesthetic", "accessibility-review", "test-hub", "review-hub"],
+        body=dedent(
+            """\
+            # Mission
+            Convert UI requirements into component and styling decisions that are responsive, accessible, and visually intentional.
+
+            ## Mandatory scope checks
+            - identify the component system, token source, and responsive breakpoints
+            - define corner, contrast, spacing, and type systems before composing screens
+            - design loading, empty, error, focus, disabled, and validation states when the UI is interactive
+            - avoid default library surfaces, equal-radius panels everywhere, and chart or icon defaults without a reason
+            - keep motion transform/opacity-first and respect reduced-motion needs
+
+            ## Evidence contract
+            - include component/state coverage and screenshot or browser evidence when available
+            - include accessibility notes for keyboard, labels, focus, and contrast
+            - include exact files, components, or tokens changed during implementation
+
+            ## Handoff rules
+            Route broader screen direction to `frontend-design`, screenshot critique to `aesthetic`, and release confidence to `accessibility-review` or `test-hub`.
+            """
+        ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
+    ),
+    "aesthetic": SkillSpec(
+        name="aesthetic",
+        description="Use when UI quality matters and the first-pass output risks looking obviously AI-generated. Create aesthetically strong interfaces through reference-driven design, screenshot analysis, component sourcing, and iterative review.",
+        role="aesthetic-review",
+        layer="layer-4-specialists-and-standalones",
+        inputs=["rendered UI, screenshot, or design direction", "reference examples", "product tone constraints"],
+        outputs=["aesthetic critique, revision direction, and evidence-backed visual quality verdict"],
+        references=[
+            "Reference-driven structure beats invented average structure.",
+            "Beauty without hierarchy is decoration; critique structure first and polish second.",
+            "Use multimodal-evidence for screenshot interpretation and browser-inspector for live browser facts.",
+            *domain_resource_references("aesthetic"),
+        ],
+        next_steps=["frontend-design", "ui-styling", "multimodal-evidence", "review-hub"],
+        body=dedent(
+            """\
+            # Mission
+            Prevent obviously AI-generated UI by forcing reference analysis, visual hierarchy critique, and a revision loop.
+
+            ## Mandatory scope checks
+            - identify the first focal point and whether proof sits close enough to the main claim
+            - set design variance, motion intensity, and visual density before recommending changes
+            - compare the screen against real references or project-native patterns
+            - flag over-rounded panels, decorative gradient filler, safe hero blocks, equal-weight cards, and default icon or chart choices
+            - require loading, empty, and error states for real product surfaces
+
+            ## Evidence contract
+            - include screenshot, reference, or rendered-state evidence for every visual verdict
+            - separate visible facts from taste judgments
+            - name one structural revision before minor polish when the UI still feels generic
+
+            ## Handoff rules
+            Send implementation details to `frontend-design` or `ui-styling`; send static screenshot interpretation to `multimodal-evidence`.
+            """
+        ).strip(),
+        allowed_tools=READ_ANALYZE_TOOLS,
     ),
     "growth-marketing": SkillSpec(
         name="growth-marketing",
@@ -824,11 +1107,18 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - map campaign channels to funnel stages
             - set launch checklist and QA checkpoints
             - set post-launch metrics and review cadence
+            - identify claims that need market-research evidence before copy ships
 
             ## Evidence contract
             - include source-backed messaging assumptions
             - include KPI targets and measurement method
             - include campaign QA acceptance criteria
+
+            ## Handoff rules
+            Route competitor or pricing uncertainty to `market-research`, product scope gaps to `pm`, automation setup to `automation-ops`, and claim risk to `signal-calibration`.
+
+            ## Failure modes
+            Hold when output becomes generic launch advice, unsupported superlatives, channel lists without funnel ownership, or copy that cannot be tied to a real product proof.
             """
         ).strip(),
         allowed_tools=READ_ANALYZE_TOOLS,
@@ -857,11 +1147,18 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - gather competitor, ICP, and pricing signals
             - rank findings by source authority and freshness
             - call out unknowns and unresolved assumptions
+            - name how findings will change product, marketing, or technical decisions
 
             ## Evidence contract
             - include citation-ready source list
             - mark each claim as verified, inferred, or unknown
             - include decision impact for each major finding
+
+            ## Handoff rules
+            Send go-to-market execution to `growth-marketing`, requirement implications to `pm`, technical implications to `architect`, and overclaim risk to `signal-calibration`.
+
+            ## Failure modes
+            Hold when sources are stale, claims are uncited, competitor comparisons use popularity instead of capability, or pricing signals are presented without confidence level.
             """
         ).strip(),
         allowed_tools=READ_ANALYZE_TOOLS,
@@ -890,11 +1187,18 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - define idempotency and retry behavior
             - define rollback or compensation path
             - define runbook and operational ownership
+            - define observability, queue pressure, and operator stop controls
 
             ## Evidence contract
             - include dry-run proof when supported
             - include failure-path handling proof
             - include rollback or recovery instructions
+
+            ## Handoff rules
+            Route implementation to `developer`, risky shell/path behavior to `policy-guard`, release proof to `release-readiness`, and production verdicts to `qa-governor`.
+
+            ## Failure modes
+            Hold when automation has no dry-run, no idempotency story, no retry budget, no raw failure log, or no named human owner for incident recovery.
             """
         ).strip(),
         allowed_tools=EDIT_AND_TEST_TOOLS,
@@ -921,11 +1225,18 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - confirm whether output should be Vietnamese-only or bilingual
             - apply terminology consistency across all related artifacts
             - identify locale-sensitive phrasing that can affect support or release communication
+            - verify whether runtime locale policy is opt-in and whether canonical IDs stay unchanged
 
             ## Evidence contract
             - include glossary or terminology notes for key product terms
             - mark unresolved translation ambiguities
             - keep localization policy explicitly opt-in by profile
+
+            ## Handoff rules
+            Route product positioning to `growth-marketing`, requirements changes to `pm`, readiness wording to `qa-governor`, and unsupported locale claims to `signal-calibration`.
+
+            ## Failure modes
+            Hold when localization silently changes route names, weakens technical meaning, mixes tones across support and release copy, or claims full i18n without metadata/runtime evidence.
             """
         ).strip(),
     ),
@@ -1069,6 +1380,12 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include API quota budget report and throttling behavior
             - include campaign QA checks, approval trail, and reject reasons
             - include compliance checklist for each target platform
+
+            ## Handoff rules
+            Route campaign message quality to `growth-marketing`, market assumptions to `market-research`, operational scheduling to `automation-ops`, and policy risk to `policy-guard`.
+
+            ## Failure modes
+            Hold when the plan depends on unofficial endpoints, duplicated posting bursts, missing approval lanes, weak moderation evidence, or generic social dashboard screens with no operator workflow.
             """
         ).strip(),
         allowed_tools=EDIT_AND_TEST_TOOLS,
@@ -1140,6 +1457,12 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include one full green run on target matrix
             - include one failure-path reproduction with root-cause notes
             - include run artifacts: logcat, screenshots, video or trace pointers, crash/ANR markers
+
+            ## Handoff rules
+            Route scheduler and queue concerns to `automation-ops`, proof design to `testing-patterns`, readiness verdicts to `qa-governor`, and visual/video evidence to `multimodal-evidence`.
+
+            ## Failure modes
+            Hold when the design has no device lease model, no app-state reset, no selector drift handling, no raw logcat/crash evidence, or a fake dashboard that hides operator retry controls.
             """
         ).strip(),
         allowed_tools=EDIT_AND_TEST_TOOLS,
@@ -1212,6 +1535,289 @@ ROLE_SKILLS: Dict[str, SkillSpec] = {
             - include redacted request/response samples for success and 429 throttled paths
             - include idempotency key replay proof for write endpoints
             - include contract drift checks against API schema or docs plus status-code filter evidence
+            """
+        ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
+    ),
+    "mmo-identity-infrastructure": SkillSpec(
+        name="mmo-identity-infrastructure",
+        description="Use when MMO multi-account operations need fingerprint isolation, proxy-to-profile binding, anti-detect browser setup, and consistent digital identity management per account.",
+        role="mmo-identity-infrastructure",
+        layer="layer-4-specialists-and-standalones",
+        inputs=[
+            "account inventory and risk tier classification",
+            "proxy pool inventory (type, geo, ASN, provider)",
+            "target platform fingerprint detection signals",
+        ],
+        outputs=["identity infrastructure plan: per-account profile specs, proxy assignments, consistency rules, rotation policy, and binding registry"],
+        references=[
+            "Never reuse a proxy or fingerprint profile across multiple accounts — IP clustering causes linked-account bans.",
+            "Align timezone, language, and locale with proxy geolocation; mismatches are the #1 platform detection trigger.",
+            "Use sticky sessions for established accounts; reserve proxy rotation for new profiles only.",
+            "Treat fingerprint profiles as versioned infrastructure: changes must be logged with reason and timestamp.",
+            "Anti-detect browsers (AdsPower, Multilogin, GoLogin, Hidemyacc) are the required execution environment.",
+            *domain_resource_references("mmo-identity-infrastructure"),
+        ],
+        next_steps=["mmo-browser-fleet-automation", "mmo-account-operations", "mmo-nick-warmup-engine", "mmo-proxy-network-ops", "policy-guard"],
+        body=dedent(
+            """\
+            # Mission
+            Build airtight per-account digital identities that survive platform behavioral analysis and hardware fingerprinting.
+
+            ## Mandatory scope checks
+            - define fingerprint profile strategy per account: UA, WebGL, Canvas, fonts, timezone, language, screen resolution
+            - enforce 1:1 rule: one proxy → one browser profile → one account; document each binding explicitly
+            - define proxy type selection per risk tier: residential for high-trust, mobile for highest stealth, ISP static for stable long sessions
+            - define consistency validation: timezone ↔ proxy geolocation ↔ language ↔ platform locale
+            - define fingerprint stability policy: when to keep stable (established accounts) vs when to rotate (new profiles only)
+            - define profile version control: fingerprint specs stored, tracked, and reproducible
+
+            ## Evidence contract
+            - include profile × proxy binding registry with consistency audit output
+            - include fingerprint consistency check: timezone, locale, UA, hardware coherence all validated
+            - include one controlled test: new profile passes target platform basic trust gate
+            """
+        ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
+    ),
+    "mmo-proxy-network-ops": SkillSpec(
+        name="mmo-proxy-network-ops",
+        description="Use when MMO operations need proxy pool management, health monitoring, sticky session assignment, rotation policy, and network-level isolation per account or workflow.",
+        role="mmo-proxy-ops",
+        layer="layer-4-specialists-and-standalones",
+        inputs=[
+            "proxy pool inventory (provider, type, geo, ASN, expiry, cost)",
+            "account and browser profile binding requirements",
+            "target platform sensitivity level and known detection signals",
+        ],
+        outputs=["proxy operations plan: pool segmentation, assignment registry, health check schedule, rotation triggers, and monitoring runbook"],
+        references=[
+            "Residential and mobile proxies are required for high-trust platforms; datacenter proxies fail modern detection.",
+            "Never rotate IP mid-session for established accounts — treat IP change as a trust-reset event requiring re-warmup.",
+            "Log every proxy assignment change with timestamp, reason, and operator; treat the registry as a security artifact.",
+            "Decommission proxies that appear on blacklists immediately, even if an active session is running.",
+            *domain_resource_references("mmo-proxy-network-ops"),
+        ],
+        next_steps=["mmo-identity-infrastructure", "mmo-browser-fleet-automation", "mmo-account-operations", "mmo-nick-warmup-engine", "policy-guard"],
+        body=dedent(
+            """\
+            # Mission
+            Operate a reliable, cost-efficient proxy network that supports multi-account isolation without IP clustering or session leakage.
+
+            ## Mandatory scope checks
+            - define proxy pool composition ratio: residential, mobile, ISP static — by platform risk tier
+            - define sticky session policy: duration per account tier, renewal trigger, failure fallback
+            - define health check schedule: latency, anonymity level, geo drift, blacklist status
+            - define proxy assignment registry: each proxy bound to exactly one profile/account
+            - define cost ceiling and automatic scale-down trigger
+            - define decommission protocol: blacklisted proxies removed immediately
+
+            ## Evidence contract
+            - include proxy health check report: latency, geo, ASN, blacklist status per proxy
+            - include session stability log covering at least one 24-hour window
+            - include assignment registry proving zero proxy-sharing across accounts
+            """
+        ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
+    ),
+    "mmo-nick-warmup-engine": SkillSpec(
+        name="mmo-nick-warmup-engine",
+        description="Use when MMO accounts need a structured warmup sequence to build platform trust before high-risk actions, including behavioral scripting, interaction scheduling, and trust-score monitoring.",
+        role="mmo-nick-warmup",
+        layer="layer-4-specialists-and-standalones",
+        inputs=[
+            "account batch inventory: age, source platform, current trust state, profile completeness",
+            "target platform action budget and rate limits per account tier",
+            "execution environment: boxphone / anti-detect browser / mobile emulator",
+        ],
+        outputs=["warmup program: phase plan, daily action scripts, behavioral variance config, trust checkpoints, and per-account readiness verdict"],
+        references=[
+            "Warmup is mandatory — skipping it causes mass bans on fresh accounts within 24-48 hours of high-risk actions.",
+            "Human-like variance in timing is non-negotiable: never use fixed intervals or identical action sequences across accounts.",
+            "Use AI-generated content variants for comments and posts during warmup to avoid pattern detection.",
+            "Treat warmup completion as a binary gate: no account enters seeding or monetization without passing all phase checks.",
+            "Boxphone (real physical devices) produces higher trust scores than emulator warmup for Facebook and TikTok.",
+            *domain_resource_references("mmo-nick-warmup-engine"),
+        ],
+        next_steps=["mmo-account-operations", "mmo-browser-fleet-automation", "mmo-social-marketing-automation", "mmo-identity-infrastructure", "policy-guard"],
+        body=dedent(
+            """\
+            # Mission
+            Turn newly created or recovered accounts into trusted platform citizens through a controlled, human-mimicking warmup program.
+
+            ## Mandatory scope checks
+            - define warmup duration and phase gates per account tier: 7 days (basic trust) to 14 days (high-trust seeding-ready)
+            - define daily action budget per phase: scroll, like, comment, friend-add, group-join limits with escalation curve
+            - define behavioral variance rules: randomized delays, action order shuffling, natural rest windows
+            - define trust signal targets at each phase gate: profile completeness, 2FA, friend count, post history
+            - define checkpoint recovery protocol: steps when account hits verification or restriction wall
+            - define readiness verdict: binary pass/fail gate before account enters any monetization or seeding workflow
+
+            ## Evidence contract
+            - include warmup schedule per phase with action budgets, variance parameters, and trust targets
+            - include trust-signal log at end of each phase
+            - include one full green run: account passes all phases and target platform trust gate
+            """
+        ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
+    ),
+    "mmo-ecommerce-multichannel": SkillSpec(
+        name="mmo-ecommerce-multichannel",
+        description="Use when MMO ecommerce operations need multi-store listing sync, master SKU management, order routing, inventory deduplication, and automated fulfillment across Shopee, TikTok Shop, Lazada, and similar platforms.",
+        role="mmo-ecommerce-ops",
+        layer="layer-4-specialists-and-standalones",
+        inputs=[
+            "store inventory across all platforms (Shopee, TikTok Shop, Lazada, Shopify, etc.)",
+            "platform API credentials and endpoint capabilities",
+            "logistics partner integration endpoints and supported label formats",
+        ],
+        outputs=["multi-channel ecommerce automation plan: SKU master design, sync rules, order routing, fulfillment automation, and operational runbook"],
+        references=[
+            "Always use official marketplace APIs for inventory sync — scraping-based sync desynchronizes under flash sale load.",
+            "Buffer stock is mandatory for any SKU involved in flash sales, voucher campaigns, or live-stream selling.",
+            "Master SKU is the single source of truth — mutations must go through the master registry, not individual platform portals.",
+            "Test oversell prevention explicitly before any high-traffic campaign.",
+            *domain_resource_references("mmo-ecommerce-multichannel"),
+        ],
+        next_steps=["mmo-http-api-automation", "mmo-cloud-operations-automation", "mmo-lowcode-automation", "automation-ops", "qa-governor"],
+        body=dedent(
+            """\
+            # Mission
+            Run multi-store ecommerce automation that treats inventory as a single source of truth across all channels.
+
+            ## Mandatory scope checks
+            - define Master SKU registry: one Merchant SKU maps to all platform-specific SKU variants
+            - define real-time inventory sync: deduct from master pool on any channel sale, propagate to all others within SLA
+            - define buffer stock policy per SKU per platform: minimum reserve to prevent oversell during flash sales
+            - define listing bulk-upload workflow: field mapping, image processing, platform-specific requirements
+            - define order routing: auto-confirm, label generation, logistics partner connection
+            - define exception handling: oversell recovery, out-of-stock notification, return and refund routing
+
+            ## Evidence contract
+            - include SKU mapping registry showing coverage across all active stores
+            - include inventory sync test: sale on platform A → stock update on platform B within SLA
+            - include order routing trace for one complete fulfillment cycle
+            """
+        ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
+    ),
+    "mmo-content-factory": SkillSpec(
+        name="mmo-content-factory",
+        description="Use when MMO operations need AI-assisted bulk content generation, multi-platform scheduling, video repurposing, variant creation, and cross-channel content distribution at scale.",
+        role="mmo-content-ops",
+        layer="layer-4-specialists-and-standalones",
+        inputs=[
+            "content briefs or raw assets (long-form video, images, article text, product info)",
+            "platform account inventory and per-account quota budgets",
+            "brand voice guidelines, prohibited content rules, platform-specific formatting requirements",
+        ],
+        outputs=["content production pipeline: generation config, variant specs, diversity rules, scheduling plan, review gates, and performance feedback schema"],
+        references=[
+            "Identical or near-identical content across accounts triggers spam detection — enforce minimum diversity scores between all variants.",
+            "AI-generated content variants must pass a human-review gate before deployment to high-risk accounts.",
+            "Platform-specific formatting is not optional: wrong aspect ratio or duration causes algorithmic reach penalty.",
+            "Publishing windows must be staggered across accounts — never schedule identical content to multiple accounts simultaneously.",
+            *domain_resource_references("mmo-content-factory"),
+        ],
+        next_steps=["mmo-reup-automation", "mmo-social-marketing-automation", "mmo-data-harvesting", "growth-marketing", "qa-governor"],
+        body=dedent(
+            """\
+            # Mission
+            Run a content production pipeline that converts raw assets into platform-optimized variants and schedules them without detectable spam patterns.
+
+            ## Mandatory scope checks
+            - define content brief → variant generation pipeline: text, image, short video cuts from long-form source
+            - define platform-specific output specs: TikTok (9:16, 15-60s), Facebook Reel (9:16), YouTube Shorts (<60s)
+            - define variant diversity threshold: minimum edit-distance or visual-diff score between variants
+            - define publishing schedule: posting windows, frequency caps per account, platform quota alignment
+            - define human-review gate: content types and risk tiers requiring operator approval
+            - define performance feedback loop: track per-variant reach and feed signal back into generation config
+
+            ## Evidence contract
+            - include sample batch: 1 brief → N variants with diversity diff scores
+            - include publishing schedule proof: no platform quota breach across all active accounts
+            - include human-review decision log for flagged content
+            """
+        ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
+    ),
+    "mmo-crypto-wallet-farming": SkillSpec(
+        name="mmo-crypto-wallet-farming",
+        description="Use when MMO crypto operations need multi-wallet isolation, airdrop task automation, on-chain interaction scripting, and Sybil-avoidance strategy for DeFi and airdrop farming.",
+        role="mmo-crypto-farming",
+        layer="layer-4-specialists-and-standalones",
+        inputs=[
+            "wallet inventory (address, funded status, chain, proxy assignment, age, on-chain history)",
+            "target protocol task list (swap, LP provision, governance vote, quest, bridge)",
+            "Sybil detection signals published or known for the target project",
+        ],
+        outputs=["crypto farming operations plan: wallet registry, behavioral variance config, security controls, Sybil-avoidance rules, and capital risk summary"],
+        references=[
+            "Sybil detection in 2026 uses AI behavioral analysis — identical timing or amounts across wallets causes mass disqualification.",
+            "Weekly consistent activity beats daily heavy activity for most airdrop eligibility criteria.",
+            "Never use unaudited or unverified automation scripts with wallet access — seed phrase compromise causes total asset loss.",
+            "Gas cost and capital risk must be explicitly budgeted before any farming campaign starts.",
+            *domain_resource_references("mmo-crypto-wallet-farming"),
+        ],
+        next_steps=["mmo-identity-infrastructure", "mmo-proxy-network-ops", "mmo-http-api-automation", "policy-guard", "qa-governor"],
+        body=dedent(
+            """\
+            # Mission
+            Operate a multi-wallet crypto farming program with strict identity isolation and human-mimicking on-chain behavior.
+
+            ## Mandatory scope checks
+            - define wallet isolation: one wallet = one browser profile = one proxy = one funded identity
+            - define on-chain behavioral variance: randomize swap amounts, transaction timing, gas price variation
+            - define activity consistency schedule: regular low-frequency weekly interactions preferred over burst sessions
+            - define security perimeter: farming wallets isolated from primary asset wallets
+            - define Sybil-risk assessment per project before committing wallet resources
+            - define capital budget: gas costs, minimum funding per wallet, maximum capital at risk
+
+            ## Evidence contract
+            - include wallet-to-profile-to-proxy binding registry with zero sharing verified
+            - include behavioral variance config showing non-repetitive transaction patterns
+            - include dry-run trace: wallet completes tasks with varied timing and amounts
+            """
+        ).strip(),
+        allowed_tools=EDIT_AND_TEST_TOOLS,
+    ),
+    "mmo-data-harvesting": SkillSpec(
+        name="mmo-data-harvesting",
+        description="Use when MMO operations need structured data collection, lead enrichment, UID targeting list building, or AI-assisted seeding content generation within authorized access boundaries.",
+        role="mmo-data-ops",
+        layer="layer-4-specialists-and-standalones",
+        inputs=[
+            "data source inventory (API endpoints, public pages within robots.txt scope, consent form outputs)",
+            "target segment criteria for each campaign type",
+            "seeding campaign brief and base message templates",
+        ],
+        outputs=["data pipeline: collection config, enrichment rules, segmentation schema, seeding target lists, and AI content variant batches"],
+        references=[
+            "Only collect data through explicitly authorized channels — unauthorized PII collection is a legal risk and platform ban trigger.",
+            "Deduplicate aggressively before seeding: duplicate UIDs cause redundant interactions that trigger spam detection.",
+            "AI comment variants must have minimum edit distance — identical strings across seeding accounts cause immediate detection.",
+            "Never store phone numbers, emails, or UIDs in plaintext — hash or encrypt all PII before storage.",
+            "Route all seeding content through a human-review gate before deployment to high-value accounts.",
+            *domain_resource_references("mmo-data-harvesting"),
+        ],
+        next_steps=["mmo-social-marketing-automation", "mmo-content-factory", "mmo-nick-warmup-engine", "mmo-reup-automation", "policy-guard"],
+        body=dedent(
+            """\
+            # Mission
+            Collect, enrich, and structure targeting data for MMO campaigns using authorized access, then generate AI content variants for seeding.
+
+            ## Mandatory scope checks
+            - define data source authorization per collection method: official API, robots.txt-compliant scraping, or consent-collected leads
+            - define data schema: UID, platform handle, segment tag, interaction history, collection timestamp, source
+            - define enrichment pipeline: raw collection → dedup → validation → segment tagging → encrypted storage
+            - define seeding target list criteria: segment qualifications and frequency caps per campaign type
+            - define AI seeding content generator config: base template → N variants with minimum diversity score
+            - define retention and deletion policy: data age limits, PII encryption at rest
+
+            ## Evidence contract
+            - include data source authorization proof for each collection method
+            - include enriched dataset sample with dedup count, validation pass rate, segment distribution
+            - include AI variant sample: 1 base message → N variants with diversity scores
             """
         ).strip(),
         allowed_tools=EDIT_AND_TEST_TOOLS,
@@ -1775,6 +2381,49 @@ UTILITY_PROVIDER_SKILLS: Dict[str, SkillSpec] = {
             "Prefer deterministic checks over subjective style review.",
             "Fail fast when trigger wording or core sections drift from required structure.",
             "Keep the gauntlet report small and path-specific so fixes are easy to apply.",
+        ],
+        allowed_tools=READ_ANALYZE_TOOLS,
+    ),
+    "signal-calibration": utility_provider_spec(
+        name="signal-calibration",
+        description="Use when a claim risks being overrated, guessed, or stronger than the available evidence. Calibrate readiness, skill quality, field-tested, production-ready, commercial-ready, backend realism, UI realism, MMO/API realism, or benchmark claims before accepting them.",
+        outputs=[
+            "signal calibration report with claim, claim_type, proof_level, verdict, confidence, overclaim flags, residual risk, and next verification",
+            "explicit pass or hold verdict for overclaim-prone wording before readiness, release, quality, or benchmark claims",
+            "claim-to-evidence notes appended to qa-report, workflow-state, or release artifacts",
+        ],
+        references=[
+            "Use `relay-kit calibrate readiness <project> --strict` for enterprise readiness claim calibration.",
+            "Use `relay-kit calibrate skill <project> --skill all --strict` before claiming skill quality.",
+            "Use `relay-kit calibrate claims <project> --claim \"...\" --strict` when exact wording needs proof.",
+            "Do not call fixture validation field-tested; field-tested requires `.relay-kit/evidence/skill-field-evidence.json`.",
+        ],
+        next_steps=["evidence-before-completion", "qa-governor", "review-hub", "skill-gauntlet", "release-readiness"],
+        mission="Turn confident-sounding claims into calibrated proof levels so Relay-kit does not overrate itself or the work it produces.",
+        boundary=[
+            "Use for claim calibration and overclaim detection, not for running the whole QA lane.",
+            "Do not replace evidence-before-completion for narrow completion proof or qa-governor for formal readiness verdicts.",
+            "Do not treat local fixtures, public repo benchmarks, or read-only audits as field validation.",
+        ],
+        evidence_contract=[
+            "Input must include the exact claim or the report surface being calibrated.",
+            "Output must include `claim`, `claim_type`, `proof_level`, `verdict`, `confidence`, `evidence_sources`, `overclaim_flags`, `residual_risk`, and `next_verification`.",
+            "Claims without concrete file, command, log, source, or artifact evidence must be marked inferred or unsupported.",
+            "Field-tested, production-ready, and commercial-ready wording must be blocked unless the required evidence class exists.",
+        ],
+        tasks=[
+            "Classify claims as proven, partially-proven, inferred, unsupported, or contradicted.",
+            "Map skill quality claims to proof audit, real-world eval, skill-battle, competency-battle, or battle-audit evidence.",
+            "Downgrade fixture-backed claims to validated instead of field-tested.",
+            "Detect public copy or operator answers that imply stronger evidence than Relay-kit actually has.",
+            "Name the smallest next verification needed to make the claim safe.",
+        ],
+        rules=[
+            "Confidence is not proof.",
+            "Benchmark evidence is not adoption evidence.",
+            "Validated is not field-tested.",
+            "If evidence class is unclear, block the claim instead of smoothing it over.",
+            "Keep Relay-kit-owned terminology; do not call this a confusion matrix.",
         ],
         allowed_tools=READ_ANALYZE_TOOLS,
     ),

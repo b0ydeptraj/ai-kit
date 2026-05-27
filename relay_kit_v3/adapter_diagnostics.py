@@ -8,6 +8,7 @@ from relay_kit_v3.agent_profiles import build_agent_diagnostics
 from relay_kit_v3.command_registry import build_command_diagnostics
 from relay_kit_v3.generator import BUNDLES
 from relay_kit_v3.localized_metadata import localized_skill_description, resolve_metadata_locale
+from relay_kit_v3.public_entrypoints import PUBLIC_ENTRYPOINT_SHIMS
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS, SkillSpec
 from relay_kit_v3.runtime_locale import load_runtime_locale
 
@@ -53,19 +54,7 @@ ADAPTERS: dict[str, dict[str, Any]] = {
     },
 }
 
-ALLOWED_OPTIONAL_SKILLS = {
-    "aesthetic",
-    "brainstorm",
-    "build-it",
-    "debug-systematically",
-    "frontend-design",
-    "prove-it",
-    "ready-check",
-    "review-pr",
-    "start-here",
-    "ui-styling",
-    "write-steps",
-}
+ALLOWED_OPTIONAL_SKILLS = set(PUBLIC_ENTRYPOINT_SHIMS)
 
 
 def build_adapter_diagnostics(root: Path | str, *, adapter: str = "all") -> dict[str, Any]:
@@ -90,14 +79,30 @@ def build_adapter_diagnostics(root: Path | str, *, adapter: str = "all") -> dict
     profile_summary = profile_report.get("summary", {})
     findings: list[dict[str, Any]] = []
     adapter_reports: list[dict[str, Any]] = []
+    existing_by_adapter: dict[str, set[str]] = {}
+
+    for adapter_name in selected:
+        adapter_root = project / str(ADAPTERS[adapter_name]["path"])
+        existing_by_adapter[adapter_name] = _skill_dirs(adapter_root)
+
+    require_facade_shims = any(
+        bool(existing & ALLOWED_OPTIONAL_SKILLS)
+        for existing in existing_by_adapter.values()
+    )
 
     for adapter_name in selected:
         config = ADAPTERS[adapter_name]
         relative_root = str(config["path"])
         adapter_root = project / relative_root
-        existing = _skill_dirs(adapter_root)
+        existing = existing_by_adapter[adapter_name]
         missing = sorted(expected_set - existing)
         unexpected = sorted((existing - expected_set) - ALLOWED_OPTIONAL_SKILLS)
+        facade_shims = existing & ALLOWED_OPTIONAL_SKILLS
+        missing_facade_shims = (
+            sorted(ALLOWED_OPTIONAL_SKILLS - facade_shims)
+            if require_facade_shims
+            else []
+        )
         metadata_drift = 0
         advisory_present: list[str] = []
 
@@ -121,6 +126,17 @@ def build_adapter_diagnostics(root: Path | str, *, adapter: str = "all") -> dict
                     "path": f"{relative_root}/{skill_name}/SKILL.md",
                     "skill": skill_name,
                     "summary": f"{adapter_name} has unexpected generated skill {skill_name}",
+                }
+            )
+        for skill_name in missing_facade_shims:
+            findings.append(
+                {
+                    "id": "missing-facade-shim",
+                    "status": "hold",
+                    "adapter": adapter_name,
+                    "path": f"{relative_root}/{skill_name}/SKILL.md",
+                    "skill": skill_name,
+                    "summary": f"{adapter_name} is missing public facade shim {skill_name}",
                 }
             )
 
@@ -190,7 +206,10 @@ def build_adapter_diagnostics(root: Path | str, *, adapter: str = "all") -> dict
                 "path": relative_root,
                 "expected_skill_count": len(expected),
                 "generated_skill_count": len(existing & expected_set),
-                "allowed_optional_skill_count": len(existing & ALLOWED_OPTIONAL_SKILLS),
+                "allowed_optional_skill_count": len(facade_shims),
+                "facade_shim_count": len(facade_shims),
+                "facade_shims": sorted(facade_shims),
+                "missing_facade_shim_count": len(missing_facade_shims),
                 "missing_skill_count": len(missing),
                 "unexpected_skill_count": len(unexpected),
                 "metadata_drift_count": metadata_drift,
@@ -236,6 +255,7 @@ def build_adapter_diagnostics(root: Path | str, *, adapter: str = "all") -> dict
             "expected_skill_count": len(expected),
             "missing_skills": sum(item["missing_skill_count"] for item in adapter_reports),
             "unexpected_skills": sum(item["unexpected_skill_count"] for item in adapter_reports),
+            "missing_facade_shims": sum(item["missing_facade_shim_count"] for item in adapter_reports),
             "metadata_drift": sum(item["metadata_drift_count"] for item in adapter_reports),
             "expected_command_count": int(command_summary.get("expected_command_count", 0)),
             "missing_commands": int(command_summary.get("missing_commands", 0)),

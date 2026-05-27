@@ -24,6 +24,7 @@ Use this page as the public entrypoint for current runtime behavior.
 - `docs/relay-kit-signal-export.md`
 - `docs/relay-kit-skill-gauntlet.md`
 - `docs/relay-kit-skill-evolution.md`
+- `docs/relay-kit-signal-calibration.md`
 - `docs/relay-kit-mmo-api-realism-research.md`
 - `docs/relay-kit-claude-12-adoption-matrix.md`
 - `docs/relay-kit-context-governance.md`
@@ -40,7 +41,6 @@ Use this page as the public entrypoint for current runtime behavior.
 Canonical runtime naming:
 
 - `relay_kit.py`
-- `relay_kit_legacy.py`
 - `.relay-kit/`
 - `.relay-kit-prompts/`
 

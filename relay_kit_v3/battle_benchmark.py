@@ -563,7 +563,7 @@ def _cleanup_temp_root(project: Path, target: Path) -> None:
     if resolved_target != allowed_root and allowed_root not in resolved_target.parents:
         raise ValueError(f"Refusing to remove path outside benchmark temp root: {resolved_target}")
     if resolved_target.exists():
-        shutil.rmtree(resolved_target, onexc=_chmod_and_retry_remove)
+        shutil.rmtree(resolved_target, onerror=_chmod_and_retry_remove)
 
 
 def _chmod_and_retry_remove(function, path, excinfo) -> None:

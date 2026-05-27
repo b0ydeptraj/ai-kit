@@ -35,6 +35,7 @@ Stateless capabilities and analysis helpers. These should be called by hubs or o
 - release-readiness
 - accessibility-review
 - skill-gauntlet
+- signal-calibration
 - impact-radar
 - runtime-doctor
 - migration-guard

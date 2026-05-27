@@ -14,6 +14,7 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from relay_kit_v3.registry.skills import ALL_V3_SKILLS
+from relay_kit_v3.public_entrypoints import PUBLIC_ENTRYPOINT_SHIMS
 from relay_kit_v3.lane_audit import build_lane_audit
 from relay_kit_v3.runtime_locale import inspect_runtime_locale
 
@@ -40,20 +41,8 @@ ADAPTERS = {
     "codex": ".codex/skills",
 }
 
-# Optional legacy/native skills that can coexist with canonical v3 runtime skills.
-ALLOWED_OPTIONAL_SKILLS = {
-    "brainstorm",
-    "build-it",
-    "debug-systematically",
-    "prove-it",
-    "ready-check",
-    "review-pr",
-    "start-here",
-    "write-steps",
-    "aesthetic",
-    "frontend-design",
-    "ui-styling",
-}
+# Public facade skills that can coexist with canonical registry skills.
+ALLOWED_OPTIONAL_SKILLS = set(PUBLIC_ENTRYPOINT_SHIMS)
 
 
 def parse_args() -> argparse.Namespace:

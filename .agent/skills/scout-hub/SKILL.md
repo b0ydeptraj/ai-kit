@@ -6,15 +6,24 @@ description: Use when the repo area is unfamiliar, stale, or likely to drift fro
 # Mission
 Gather the minimum reliable context the next lane needs so nobody plans or fixes from a false mental model.
 
-## Mandatory behavior
-1. Refresh `project-context.md` when architecture, tooling, or domain constraints are unclear.
-2. Refresh only the reference files actually relevant to the active lane.
-3. Add file paths, commands, or modules whenever possible.
-4. Record freshness signals (last-updated clues, stale docs, stale notes) before recommending a path.
-5. If a failure is being investigated, start `investigation-notes.md` with reproduction steps and evidence.
+## Mandatory routing
+1. Use `repo-map` for entrypoints, ownership, dependency direction, and read-first files.
+2. Use `doc-pointers` for exact docs, anchors, and source fragments.
+3. Use `memory-search` for prior decisions, handoff breadcrumbs, or stale state checks.
+4. Use `project-architecture` when module boundaries or architecture drift matter.
+5. Use `dependency-management` when tooling, lockfiles, or dependency risk affects the lane.
+
+## Evidence contract
+- cite concrete paths, commands, modules, or docs instead of broad summaries
+- mark freshness for every important source: current, stale, inferred, or missing
+- record unknowns that still block planning or debugging
+- start `investigation-notes.md` when the scout is attached to a failure
+
+## Failure modes
+Hold if the output is a tree dump without ownership, a generic architecture summary, or a plan that skips stale evidence.
 
 ## Output contract
-Name exactly what became clearer, what is still unknown, which sources might be stale, and which hub or specialist should use the refreshed context next.
+Name what became clearer, what is still unknown, which sources may be stale, and which hub or specialist should use the refreshed context next.
 
 ## Role
 - recon-hub
@@ -43,6 +52,11 @@ Name exactly what became clearer, what is still unknown, which sources might be 
 - Use `competencies/scout-hub-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
+- repo-map
+- doc-pointers
+- memory-search
+- project-architecture
+- dependency-management
 - plan-hub
 - debug-hub
 - review-hub

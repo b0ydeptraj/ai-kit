@@ -12,11 +12,18 @@ Turn a growth request into an evidence-backed campaign plan with clear measureme
 - map campaign channels to funnel stages
 - set launch checklist and QA checkpoints
 - set post-launch metrics and review cadence
+- identify claims that need market-research evidence before copy ships
 
 ## Evidence contract
 - include source-backed messaging assumptions
 - include KPI targets and measurement method
 - include campaign QA acceptance criteria
+
+## Handoff rules
+Route competitor or pricing uncertainty to `market-research`, product scope gaps to `pm`, automation setup to `automation-ops`, and claim risk to `signal-calibration`.
+
+## Failure modes
+Hold when output becomes generic launch advice, unsupported superlatives, channel lists without funnel ownership, or copy that cannot be tied to a real product proof.
 
 ## Role
 - growth

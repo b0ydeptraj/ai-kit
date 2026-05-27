@@ -19,6 +19,12 @@ Deliver stable mobile MMO automation for repetitive app workflows with measurabl
 - include one failure-path reproduction with root-cause notes
 - include run artifacts: logcat, screenshots, video or trace pointers, crash/ANR markers
 
+## Handoff rules
+Route scheduler and queue concerns to `automation-ops`, proof design to `testing-patterns`, readiness verdicts to `qa-governor`, and visual/video evidence to `multimodal-evidence`.
+
+## Failure modes
+Hold when the design has no device lease model, no app-state reset, no selector drift handling, no raw logcat/crash evidence, or a fake dashboard that hides operator retry controls.
+
 ## Role
 - mmo-mobile-automation
 
