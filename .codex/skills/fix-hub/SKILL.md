@@ -6,11 +6,21 @@ description: Use when debug-hub has validated findings or when a change request 
 # Mission
 Convert a known problem into a bounded implementation path that can be executed safely.
 
-## Mandatory behavior
-1. Update the active story or tech-spec with the real files, boundaries, and verification steps.
-2. Name what must not change while fixing the issue.
-3. Hand off to `developer` for execution.
-4. Route to `test-hub` immediately after implementation evidence exists.
+## Mandatory routing
+1. Use `project-architecture` when the fix touches boundaries, dependencies, or ownership.
+2. Use `data-persistence` for schemas, migrations, transactions, caches, or backfills.
+3. Use `dependency-management` for package, lockfile, toolchain, or environment fixes.
+4. Use `go-service-engineering` or `next-product-frontend` for stack-specific implementation handoff.
+5. Use `test-first-development` when behavior can be captured before the implementation pass.
+
+## Evidence contract
+- update the active story or tech-spec with real files, boundaries, and verification steps
+- name what must not change while fixing the issue
+- include the failing signal, intended green signal, rollback note, and one edge case
+- hand off to `developer` only after the implementation surface is bounded
+
+## Failure modes
+Hold when the fix expands architecture without plan review, hides data risk, or skips the first verification command.
 
 ## Role
 - fix-hub
@@ -39,6 +49,12 @@ Convert a known problem into a bounded implementation path that can be executed 
 
 ## Likely next step
 - developer
+- go-service-engineering
+- next-product-frontend
+- project-architecture
+- data-persistence
+- dependency-management
+- test-first-development
 - test-hub
 - review-hub
 - workflow-router

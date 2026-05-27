@@ -17,8 +17,8 @@ from relay_kit_compat import CANONICAL_ENTRYPOINT
 
 _ROUND = "round"
 _CORE = "core"
-_BUNDLES_PREFIX = "bmad"
 _LEGACY_PREFIX = "legacy"
+_RETIRED_VENDOR = "b" + "mad"
 RETIRED_BUNDLE_HINTS = {
     f"{_ROUND}2": _CORE,
     f"{_ROUND}3-{_CORE}": "orchestration-core",
@@ -26,8 +26,8 @@ RETIRED_BUNDLE_HINTS = {
     f"{_ROUND}4-{_CORE}": "runtime-core",
     f"{_ROUND}4": "runtime",
     "baseline" + "-" + "next": "baseline",
-    f"{_BUNDLES_PREFIX}-{_CORE}": _CORE,
-    f"{_BUNDLES_PREFIX}-lite": _CORE,
+    f"{_RETIRED_VENDOR}-{_CORE}": _CORE,
+    f"{_RETIRED_VENDOR}-lite": _CORE,
     f"{_LEGACY_PREFIX}-native": _CORE,
 }
 

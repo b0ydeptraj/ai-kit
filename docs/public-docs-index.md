@@ -41,7 +41,6 @@ Use this page as the public entrypoint for current runtime behavior.
 Canonical runtime naming:
 
 - `relay_kit.py`
-- `relay_kit_legacy.py`
 - `.relay-kit/`
 - `.relay-kit-prompts/`
 

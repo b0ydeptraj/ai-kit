@@ -51,6 +51,14 @@ End with one explicit verdict:
 - Use `competencies/review-hub-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
+- impact-radar
+- runtime-doctor
+- migration-guard
+- skill-evolution
+- signal-calibration
+- doc-pointers
+- multimodal-evidence
+- media-tooling
 - plan-hub
 - debug-hub
 - fix-hub

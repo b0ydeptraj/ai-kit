@@ -4,18 +4,26 @@ description: Use when the request is still an idea, an opportunity, or a loosely
 ---
 
 # Mission
-Turn fuzzy idea energy into something the planning flow can actually use.
+Turn fuzzy idea energy into a bounded discovery lane that planning can actually use.
 
-## What this hub does
-- Facilitate a short option scan.
-- Expose assumptions, success signals, and obvious constraints.
-- Decide whether to write or refresh `product-brief.md`.
+## Mandatory routing
+1. Identify the decision the user is really trying to make.
+2. Use `research` only for the freshest evidence that changes that decision.
+3. Use `market-research` when ICP, pricing, competitor, or domain signal affects the direction.
+4. Use `growth-marketing` when the next artifact is positioning, funnel, campaign, or launch messaging.
+5. Use `vietnamese-product-localization` when the idea is for Vietnamese users or bilingual communication.
+6. Route to `pm` only after the opportunity has enough shape for requirements.
+
+## Evidence contract
+- name the user segment, problem, success signal, and biggest unknown
+- separate source-backed facts from assumptions and guesses
+- include the smallest next artifact: product brief, market note, campaign note, or stop decision
+
+## Failure modes
+Hold instead of proceeding when the output becomes a giant feature wish list, generic marketing copy, or unsourced opportunity claims.
 
 ## Exit conditions
-End with one of only three outcomes:
-1. a brief is ready for planning,
-2. the idea is too weak and should stop, or
-3. one specific question must be answered before planning continues.
+End with one of three outcomes: a brief ready for planning, a stop decision, or one exact question that blocks planning.
 
 ## Role
 - ideation-hub
@@ -41,6 +49,10 @@ End with one of only three outcomes:
 
 ## Likely next step
 - analyst
+- research
+- market-research
+- growth-marketing
+- vietnamese-product-localization
 - pm
 - plan-hub
 - workflow-router

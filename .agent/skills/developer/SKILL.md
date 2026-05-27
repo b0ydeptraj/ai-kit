@@ -56,7 +56,13 @@ If implementation reveals missing architecture, unclear acceptance criteria, a b
 - Use `competencies/developer-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
+- test-first-development
 - execution-loop
+- go-service-engineering
+- next-product-frontend
+- data-persistence
+- dependency-management
+- project-architecture
 - test-hub
 - qa-governor
 - review-hub

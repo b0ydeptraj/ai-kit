@@ -6,6 +6,10 @@ __pycache__/
 .coverage.*
 .pytest_cache/
 .tmp/
+build/
+dist/
+*.egg-info/
+.eggs/
 
 # Local virtual envs
 .venv/
@@ -14,6 +18,8 @@ venv/
 # Local tooling / extracted packs
 .serena/
 .relay-kit-cycle/
+.kilo/
+.kiro/
 
 # OS junk
 .DS_Store

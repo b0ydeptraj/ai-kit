@@ -1113,5 +1113,193 @@
       "confidence",
       "residual risk"
     ]
+  },
+  {
+    "id": "aesthetic-real-world-contract",
+    "skill": "aesthetic",
+    "task": "Use aesthetic for a production-shaped Relay-kit lane: Use when UI quality matters and the first-pass output risks looking obviously AI-generated. Create aesthetically strong interfaces through reference-driven design, screenshot analysis, component sourcing, and iterative review. The operator must produce concrete artifacts, evidence, and a next-step handoff without relying on popularity or vague claims.",
+    "required_artifacts": [
+      "aesthetic critique with screenshot evidence",
+      "reference comparison notes"
+    ],
+    "required_evidence": [
+      "reference",
+      "screenshot"
+    ],
+    "pass_rubric": [
+      "hierarchy",
+      "revision"
+    ]
+  },
+  {
+    "id": "frontend-design-real-world-contract",
+    "skill": "frontend-design",
+    "task": "Use frontend-design for a production-shaped Relay-kit lane: Use when the user asks to build web components, pages, or applications and visual quality matters. Create distinctive, production-grade frontend interfaces that avoid generic AI aesthetics. The operator must produce concrete artifacts, evidence, and a next-step handoff without relying on popularity or vague claims.",
+    "required_artifacts": [
+      "frontend surface with state coverage",
+      "rendered-state evidence"
+    ],
+    "required_evidence": [
+      "reference",
+      "screenshot"
+    ],
+    "pass_rubric": [
+      "state coverage",
+      "accessibility",
+      "performance"
+    ]
+  },
+  {
+    "id": "ui-styling-real-world-contract",
+    "skill": "ui-styling",
+    "task": "Use ui-styling for a production-shaped Relay-kit lane: Use when building user interfaces, implementing design systems, creating responsive layouts, adding accessible components, customizing themes, or establishing consistent styling patterns across applications. The operator must produce concrete artifacts, evidence, and a next-step handoff without relying on popularity or vague claims.",
+    "required_artifacts": [
+      "styled UI implementation",
+      "component/state coverage"
+    ],
+    "required_evidence": [
+      "screenshot",
+      "accessibility notes"
+    ],
+    "pass_rubric": [
+      "tokens",
+      "focus",
+      "contrast",
+      "responsive"
+    ]
+  },
+  {
+    "id": "mmo-identity-infrastructure-real-world-contract",
+    "skill": "mmo-identity-infrastructure",
+    "task": "Use mmo-identity-infrastructure for a production-shaped Relay-kit lane: Use when MMO multi-account operations need fingerprint isolation, proxy-to-profile binding, anti-detect browser setup, and consistent digital identity management per account. The operator must produce concrete artifacts, evidence, and a next-step handoff without relying on popularity or vague claims.",
+    "required_artifacts": [
+      "profile x proxy binding registry",
+      "fingerprint consistency check"
+    ],
+    "required_evidence": [
+      "profile",
+      "proxy",
+      "timezone",
+      "locale"
+    ],
+    "pass_rubric": [
+      "binding registry",
+      "trust gate",
+      "fingerprint"
+    ]
+  },
+  {
+    "id": "mmo-proxy-network-ops-real-world-contract",
+    "skill": "mmo-proxy-network-ops",
+    "task": "Use mmo-proxy-network-ops for a production-shaped Relay-kit lane: Use when MMO operations need proxy pool management, health monitoring, sticky session assignment, rotation policy, and network-level isolation per account or workflow. The operator must produce concrete artifacts, evidence, and a next-step handoff without relying on popularity or vague claims.",
+    "required_artifacts": [
+      "proxy health check report",
+      "assignment registry"
+    ],
+    "required_evidence": [
+      "latency",
+      "blacklist status",
+      "assignment registry"
+    ],
+    "pass_rubric": [
+      "sticky session",
+      "zero proxy-sharing",
+      "decommission"
+    ]
+  },
+  {
+    "id": "mmo-nick-warmup-engine-real-world-contract",
+    "skill": "mmo-nick-warmup-engine",
+    "task": "Use mmo-nick-warmup-engine for a production-shaped Relay-kit lane: Use when MMO accounts need a structured warmup sequence to build platform trust before high-risk actions, including behavioral scripting, interaction scheduling, and trust-score monitoring. The operator must produce concrete artifacts, evidence, and a next-step handoff without relying on popularity or vague claims.",
+    "required_artifacts": [
+      "warmup schedule per phase",
+      "per-account readiness verdict"
+    ],
+    "required_evidence": [
+      "action budgets",
+      "trust-signal log",
+      "green run"
+    ],
+    "pass_rubric": [
+      "phase gates",
+      "behavioral variance",
+      "readiness verdict"
+    ]
+  },
+  {
+    "id": "mmo-ecommerce-multichannel-real-world-contract",
+    "skill": "mmo-ecommerce-multichannel",
+    "task": "Use mmo-ecommerce-multichannel for a production-shaped Relay-kit lane: Use when MMO ecommerce operations need multi-store listing sync, master SKU management, order routing, inventory deduplication, and automated fulfillment across Shopee, TikTok Shop, Lazada, and similar platforms. The operator must produce concrete artifacts, evidence, and a next-step handoff without relying on popularity or vague claims.",
+    "required_artifacts": [
+      "SKU mapping registry",
+      "multi-channel ecommerce automation plan"
+    ],
+    "required_evidence": [
+      "SKU mapping registry",
+      "inventory sync test",
+      "order routing trace"
+    ],
+    "pass_rubric": [
+      "Master SKU",
+      "buffer stock",
+      "fulfillment"
+    ]
+  },
+  {
+    "id": "mmo-content-factory-real-world-contract",
+    "skill": "mmo-content-factory",
+    "task": "Use mmo-content-factory for a production-shaped Relay-kit lane: Use when MMO operations need AI-assisted bulk content generation, multi-platform scheduling, video repurposing, variant creation, and cross-channel content distribution at scale. The operator must produce concrete artifacts, evidence, and a next-step handoff without relying on popularity or vague claims.",
+    "required_artifacts": [
+      "content production pipeline",
+      "sample batch"
+    ],
+    "required_evidence": [
+      "sample batch",
+      "publishing schedule proof",
+      "human-review decision log"
+    ],
+    "pass_rubric": [
+      "diversity",
+      "variant",
+      "feedback loop"
+    ]
+  },
+  {
+    "id": "mmo-crypto-wallet-farming-real-world-contract",
+    "skill": "mmo-crypto-wallet-farming",
+    "task": "Use mmo-crypto-wallet-farming for a production-shaped Relay-kit lane: Use when MMO crypto operations need multi-wallet isolation, airdrop task automation, on-chain interaction scripting, and Sybil-avoidance strategy for DeFi and airdrop farming. The operator must produce concrete artifacts, evidence, and a next-step handoff without relying on popularity or vague claims.",
+    "required_artifacts": [
+      "wallet registry",
+      "capital risk summary"
+    ],
+    "required_evidence": [
+      "wallet-to-profile-to-proxy binding registry",
+      "behavioral variance config",
+      "dry-run trace"
+    ],
+    "pass_rubric": [
+      "wallet isolation",
+      "capital risk",
+      "security"
+    ]
+  },
+  {
+    "id": "mmo-data-harvesting-real-world-contract",
+    "skill": "mmo-data-harvesting",
+    "task": "Use mmo-data-harvesting for a production-shaped Relay-kit lane: Use when MMO operations need structured data collection, lead enrichment, UID targeting list building, or AI-assisted seeding content generation within authorized access boundaries. The operator must produce concrete artifacts, evidence, and a next-step handoff without relying on popularity or vague claims.",
+    "required_artifacts": [
+      "data pipeline",
+      "seeding target lists"
+    ],
+    "required_evidence": [
+      "data source authorization proof",
+      "enriched dataset sample",
+      "AI variant sample"
+    ],
+    "pass_rubric": [
+      "dedup",
+      "encrypted storage",
+      "segmentation"
+    ]
   }
 ]

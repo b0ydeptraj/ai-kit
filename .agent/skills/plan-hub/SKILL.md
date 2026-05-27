@@ -50,8 +50,17 @@ Route to `developer` only when the active story or tech-spec is ready for implem
 
 ## Likely next step
 - analyst
+- research
+- problem-solving
+- sequential-thinking
+- impact-radar
+- mermaid-diagrams
 - pm
 - architect
+- go-service-engineering
+- next-product-frontend
+- mmo-ecommerce-multichannel
+- mmo-crypto-wallet-farming
 - scrum-master
 - developer
 - review-hub

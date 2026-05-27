@@ -12,12 +12,19 @@ Build or refactor Next.js product surfaces with explicit server/client architect
 - document server component versus client component decisions
 - define server actions contracts for mutation-heavy flows
 - define data fetching and cache behavior for changed screens
+- define component ownership, styling system, and state coverage before coding
 - enforce accessibility and performance checks for user-facing risk
 
 ## Evidence contract
 - include route-level behavior proof
 - include accessibility findings or gate output
 - include performance or hydration-risk notes when relevant
+
+## Handoff rules
+Hand implementation to `developer`, styling detail to `ui-styling`, visual critique to `aesthetic`, and accessibility proof to `accessibility-review`.
+
+## Failure modes
+Hold when the plan treats every screen as generic client-side React, skips cache semantics, ignores error/loading states, or produces a page that looks like a template instead of a product surface.
 
 ## Role
 - next-frontend

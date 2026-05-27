@@ -53,6 +53,9 @@ Include:
 - Use `competencies/qa-governor-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
+- signal-calibration
+- evidence-before-completion
+- runtime-doctor
 - review-hub
 - debug-hub
 - context-continuity

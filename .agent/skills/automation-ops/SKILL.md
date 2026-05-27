@@ -12,11 +12,18 @@ Deliver automation workflows that are reliable, auditable, and reversible.
 - define idempotency and retry behavior
 - define rollback or compensation path
 - define runbook and operational ownership
+- define observability, queue pressure, and operator stop controls
 
 ## Evidence contract
 - include dry-run proof when supported
 - include failure-path handling proof
 - include rollback or recovery instructions
+
+## Handoff rules
+Route implementation to `developer`, risky shell/path behavior to `policy-guard`, release proof to `release-readiness`, and production verdicts to `qa-governor`.
+
+## Failure modes
+Hold when automation has no dry-run, no idempotency story, no retry budget, no raw failure log, or no named human owner for incident recovery.
 
 ## Role
 - automation

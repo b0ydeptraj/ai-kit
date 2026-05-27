@@ -47,6 +47,14 @@ Include:
 - Use `competencies/architect-competencies.json` to check covered competencies, failure traps, and unknown-domain policy.
 
 ## Likely next step
+- project-architecture
+- dependency-management
+- api-integration
+- data-persistence
+- go-service-engineering
+- next-product-frontend
+- mmo-ecommerce-multichannel
+- mermaid-diagrams
 - scrum-master
 - review-hub
 - plan-hub

@@ -10,11 +10,18 @@ Localize product-facing communication for Vietnamese users with consistent termi
 - confirm whether output should be Vietnamese-only or bilingual
 - apply terminology consistency across all related artifacts
 - identify locale-sensitive phrasing that can affect support or release communication
+- verify whether runtime locale policy is opt-in and whether canonical IDs stay unchanged
 
 ## Evidence contract
 - include glossary or terminology notes for key product terms
 - mark unresolved translation ambiguities
 - keep localization policy explicitly opt-in by profile
+
+## Handoff rules
+Route product positioning to `growth-marketing`, requirements changes to `pm`, readiness wording to `qa-governor`, and unsupported locale claims to `signal-calibration`.
+
+## Failure modes
+Hold when localization silently changes route names, weakens technical meaning, mixes tones across support and release copy, or claims full i18n without metadata/runtime evidence.
 
 ## Role
 - localization

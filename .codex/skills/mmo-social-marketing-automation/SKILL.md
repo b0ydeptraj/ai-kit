@@ -19,6 +19,12 @@ Execute social MMO automation that can scale marketing outcomes without crossing
 - include campaign QA checks, approval trail, and reject reasons
 - include compliance checklist for each target platform
 
+## Handoff rules
+Route campaign message quality to `growth-marketing`, market assumptions to `market-research`, operational scheduling to `automation-ops`, and policy risk to `policy-guard`.
+
+## Failure modes
+Hold when the plan depends on unofficial endpoints, duplicated posting bursts, missing approval lanes, weak moderation evidence, or generic social dashboard screens with no operator workflow.
+
 ## Role
 - mmo-social-automation
 
