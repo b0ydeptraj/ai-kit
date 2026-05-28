@@ -8,18 +8,53 @@ Relay-kit là hệ thống runtime skill cho các team xây dựng bằng coding
 
 Nó không cố làm model “thông minh thần kỳ” hơn. Nó làm cách làm việc có kỷ luật hơn: khởi động rõ hơn, dùng skill có hợp đồng hơn, plan/build/debug/review chặt hơn, và giữ bằng chứng trong artifact thay vì chỉ nằm trong chat.
 
-## Cài nhanh
+## Cài trong 60 giây
+
+Chọn agent bạn dùng và copy đúng một block. Mặc định Relay-kit cài full runtime: skills, slash commands, agent profiles, artifact `.relay-kit`, và doctor check. Không cần thêm `--bundle enterprise`.
+
+### Codex
+
+```bash
+pip install relay-kit
+relay-kit . --codex
+relay-kit doctor .
+```
+
+### Claude
+
+```bash
+pip install relay-kit
+relay-kit . --claude
+relay-kit doctor .
+```
+
+### Antigravity / Agent
+
+```bash
+pip install relay-kit
+relay-kit . --antigravity
+relay-kit doctor .
+```
+
+Dùng `.` khi bạn đang đứng trong project cần cài. Nếu muốn cài vào folder khác, thay `.` bằng đường dẫn project.
+
+Muốn metadata skill picker hiển thị tiếng Việt:
+
+```bash
+relay-kit locale set "C:\\path\\to\\my-app" --locale vi
+```
+
+Mỗi lần chạy chỉ chọn một adapter: `--codex`, `--claude`, hoặc `--antigravity`. Dùng `--all` khi thật sự muốn sinh cả ba surface.
+
+## Cài từ GitHub source
+
+Nếu PyPI chưa sẵn hoặc bạn muốn bản mới nhất trên `main`:
 
 ```bash
 pipx install "git+https://github.com/b0ydeptraj/Relay-kit.git"
-relay-kit init "C:\\path\\to\\my-app" --codex
-relay-kit locale set "C:\\path\\to\\my-app" --locale vi
-relay-kit doctor "C:\\path\\to\\my-app"
+relay-kit . --codex
+relay-kit doctor .
 ```
-
-Mỗi lần chạy chỉ chọn một adapter: `--codex`, `--claude`, hoặc `--antigravity`. Có thể dùng `--all` khi muốn sinh cả ba surface.
-
-Mặc định Relay-kit cài full governance bundle. Tên bundle vẫn là `enterprise` để giữ tương thích CLI, còn bằng chứng release/support bên ngoài được tách vào readiness JSON thay vì biến thành claim trên README. Dùng `--baseline` nếu muốn surface nhỏ hơn.
 
 ## Vì sao dùng Relay-kit
 
