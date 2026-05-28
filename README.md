@@ -19,25 +19,61 @@ The result is simple: agents work with more structure, fewer random moves, and s
 
 GitHub docs site: [`docs/site/index.md`](docs/site/index.md)
 
-## 5-minute start
+## Install in 60 seconds
 
-For users who just want to install Relay-kit and generate one runtime:
+Pick your agent and copy one block. The default install is the full Relay-kit runtime: skills, slash commands, agent profiles, shared `.relay-kit` artifacts, and local doctor checks. You do not need `--bundle enterprise`.
+
+### Codex
+
+```bash
+pip install relay-kit
+relay-kit . --codex
+relay-kit doctor .
+```
+
+### Claude
+
+```bash
+pip install relay-kit
+relay-kit . --claude
+relay-kit doctor .
+```
+
+### Antigravity / Agent
+
+```bash
+pip install relay-kit
+relay-kit . --antigravity
+relay-kit doctor .
+```
+
+Use `.` when you are already inside the project you want to install into. Replace `.` with a path when installing into another folder.
+
+For Vietnamese metadata in generated skill pickers:
+
+```bash
+relay-kit locale set "C:\\path\\to\\my-app" --locale vi
+```
+
+Use one adapter flag per run: `--codex`, `--claude`, or `--antigravity`. Use `--all` only when you intentionally want to generate Codex, Claude, and Agent surfaces together.
+
+## Install from GitHub source
+
+If PyPI is unavailable or you want the latest `main` build:
 
 ```bash
 pipx install "git+https://github.com/b0ydeptraj/Relay-kit.git"
-relay-kit init "C:\\path\\to\\my-app" --codex
-relay-kit locale set "C:\\path\\to\\my-app" --locale vi
-relay-kit doctor "C:\\path\\to\\my-app"
+relay-kit . --codex
+relay-kit doctor .
 ```
 
-Use one adapter flag per run. Replace `--codex` with `--claude` or `--antigravity` when that is the target agent.
-The default install is the full governance bundle. The bundle name is still `enterprise` for CLI compatibility, while external release and support evidence stays in the readiness JSON instead of being folded into README claims. Use `--baseline` only when you want the smaller first-install surface.
+## Local development install
 
-For a local repo checkout:
+From a cloned Relay-kit checkout:
 
 ```bash
 pipx install .
-relay-kit init /path/to/project --codex
+relay-kit /path/to/project --codex
 relay-kit doctor /path/to/project
 ```
 
@@ -132,7 +168,22 @@ relay-kit init /path/to/project --codex --locale vi
 - an active baseline that is validated instead of loosely assembled
 - a way to make work more consistent without forcing everything through raw chat memory
 
-## Useful commands
+## Daily commands
+
+Most users only need these after installation:
+
+```bash
+relay-kit doctor .
+relay-kit adapter diagnose . --adapter all --strict
+relay-kit readiness check . --profile enterprise
+```
+
+Everything below is the deeper operator reference.
+
+<details>
+<summary>Advanced command reference</summary>
+
+## Advanced commands
 
 List active runtime bundles:
 
@@ -364,6 +415,8 @@ Maintainer-only core entrypoint:
 ```bash
 python relay_kit.py /path/to/project --bundle baseline --ai codex --emit-contracts --emit-docs --emit-reference-templates
 ```
+
+</details>
 
 ## Start flow
 
